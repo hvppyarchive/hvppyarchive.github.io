@@ -6,10 +6,14 @@
    Typography
    ========================================================================== */
 
+// $doc-font-size: 16px !default;
+// $doc-font-size-medium: $doc-font-size * 1.125 !default;
+// $doc-font-size-large: $doc-font-size * 1.25 !default;
+// $doc-font-size-x-large: $doc-font-size * 1.375 !default;
 $doc-font-size: 16px !default;
-$doc-font-size-medium: $doc-font-size * 1.125 !default;
-$doc-font-size-large: $doc-font-size * 1.25 !default;
-$doc-font-size-x-large: $doc-font-size * 1.375 !default;
+$doc-font-size-medium: $doc-font-size !default;    // hvppyarchive: keep the same font size
+$doc-font-size-large: $doc-font-size !default;     // hvppyarchive: keep the same font size
+$doc-font-size-x-large: $doc-font-size !default;   // hvppyarchive: keep the same font size
 
 /* paragraph indention */
 $paragraph-indent: false !default; // true, false (default)
@@ -52,9 +56,9 @@ $monospace-code: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consol
 $handwritten: 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual, cursive;
 
 /* Defaults used in Minimal mistakes */
-$default-sans-serif: -apple-system, BlinkMacSystemFont, /* hvppyarchive: Add font */ "Noto Serif KR", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
+$default-sans-serif: ui-sans-serif /* hvppyarchive */, -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 $default-serif: Georgia, Times, serif;
-$default-monospace: Monaco, Consolas, "Lucida Console", monospace;
+$default-monospace: ui-monospace /* hvppyarchive */, Monaco, Consolas, "Lucida Console", monospace;
 
 /* Emoji native from modern font stack - add to the end of the font-face for native emojis */
 $emoji-native: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
