@@ -128,6 +128,7 @@ blockquote {
 /* links */
 
 a {
+  text-decoration: none;        /* hvppyarchive: remove underline from links */
   &:focus {
     @extend %tab-focus;
   }
