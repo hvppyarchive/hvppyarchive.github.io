@@ -32,15 +32,17 @@ body { margin: 0; }
 
 /* Selected elements */
 
-::-moz-selection {
-  color: #fff;
-  background: #000;
-}
+// hvppyarchive: commented out selection styles
+// ::-moz-selection {
+//   color: #fff;
+//   background: #000;
+// }
 
-::selection {
-  color: #fff;
-  background: #000;
-}
+// hvppyarchive: commented out selection styles
+// ::selection {
+//   color: #fff;
+//   background: #000;
+// }
 
 /* Display HTML5 elements in IE6-9 and FF3 */
 
