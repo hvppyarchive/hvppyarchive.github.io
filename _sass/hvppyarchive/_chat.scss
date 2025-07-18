@@ -1,0 +1,22 @@
+.chat--user {
+  display: block;
+  width: fit-content;
+  margin: 1em 0;
+  padding: 0.75em 1.5em;
+  max-width: 70%;   // prevent it from being too wide
+  background-color: mix(#fff, $light-gray, 80%);
+//   border-radius: $border-radius $border-radius 0 $border-radius;
+  border-radius: 1.5rem;
+  font-family: $global-font-family;
+  font-size: $type-size-5;
+  line-height: 1.5;
+  color: $dark-gray;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  margin-left: auto !important; // align bubble to the right
+  text-align: left;
+
+  p:last-child {
+    margin-bottom: 0;   // remove bottom margin on last paragraph
+  }
+}
