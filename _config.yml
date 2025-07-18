@@ -218,7 +218,9 @@ kramdown:
   footnote_nr: 1
   entity_output: as_char
   toc_levels: 1..6
-  smart_quotes: lsquo,rsquo,ldquo,rdquo
+  # smart_quotes: lsquo,rsquo,ldquo,rdquo
+  # hvppyarchive: changed smart quotes to apostrophes and quotes
+  smart_quotes: apos,apos,quot,quot
   enable_coderay: false
 
 
