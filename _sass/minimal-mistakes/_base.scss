@@ -15,7 +15,9 @@ body {
   padding: 0;
   color: $text-color;
   font-family: $global-font-family;
-  line-height: 1.5;
+  // line-height: 1.5;
+  // hvppyarchive: changed line-height to 1.75 for better readability
+  line-height: 1.75;
 
   &.overflow--hidden {
     /* when primary navigation is visible, the content in the background won't scroll */
