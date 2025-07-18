@@ -22,7 +22,9 @@ figure.highlight {
   > pre,
   pre.highlight {
     margin: 0;
-    padding: 1em;
+    // padding: 1em;
+    // hvppyarchive: adjusted padding for code blocks
+    padding: 0.5em 1em;
   }
 }
 
