@@ -1,4 +1,500 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-01T16:32:14+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html">브라우저 설정 방법</title><link href="https://hvppyarchive.github.io/linux/setting-default-browser/" rel="alternate" type="text/html" title="브라우저 설정 방법" /><published>2025-08-01T16:32:11+09:00</published><updated>2025-08-01T16:32:11+09:00</updated><id>https://hvppyarchive.github.io/linux/setting-default-browser</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/setting-default-browser/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-03T23:54:01+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html">브라우저 설정 방법</title><link href="https://hvppyarchive.github.io/linux/setting-default-browser/" rel="alternate" type="text/html" title="브라우저 설정 방법" /><published>2025-08-03T23:53:57+09:00</published><updated>2025-08-03T23:53:57+09:00</updated><id>https://hvppyarchive.github.io/linux/setting-default-browser</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/setting-default-browser/"><![CDATA[<p class="chat--user">
+
+jupyter notebook 띄울 때 링크를 어떤 인터넷 프로그램으로 열지 설정
+
+</p>
+
+<p>Jupyter Notebook을 띄울 때 어떤 인터넷 브라우저(인터넷 프로그램)로 열지 설정하려면 아래 단계들을 순서대로 따라 하세요.</p>
+
+<hr />
+
+<h3 id="-1단계-현재-설정된-브라우저-확인-선택-사항">🧠 1단계: 현재 설정된 브라우저 확인 (선택 사항)</h3>
+
+<p>터미널에서 아래 명령어를 입력해 현재 기본 설정을 확인할 수 있습니다:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jupyter notebook <span class="nt">--generate-config</span>
+</code></pre></div></div>
+
+<p>이 명령어는 <code class="language-plaintext highlighter-rouge">~/.jupyter/jupyter_notebook_config.py</code> 파일을 생성합니다. 이 파일이 없다면 새로 생성됩니다.</p>
+
+<hr />
+
+<h3 id="-2단계-설정-파일-열기">🛠 2단계: 설정 파일 열기</h3>
+
+<p>아래 명령어로 설정 파일을 엽니다:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/.jupyter/jupyter_notebook_config.py
+</code></pre></div></div>
+
+<p>또는 원하는 텍스트 편집기(예: VSCode, vim 등)로 열어도 됩니다.</p>
+
+<hr />
+
+<h3 id="️-3단계-브라우저-설정-추가">✏️ 3단계: 브라우저 설정 추가</h3>
+
+<p>예를 들어 Chrome으로 열고 싶다면 아래 줄을 찾아서 수정하거나 추가합니다:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">browser</span> <span class="o">=</span> <span class="sh">'</span><span class="s">chrome</span><span class="sh">'</span>
+</code></pre></div></div>
+
+<p>브라우저의 정확한 실행 명령어가 필요합니다. 대표적인 예시는 다음과 같습니다:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>브라우저</th>
+      <th>설정값 예시</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Chrome (Windows)</td>
+      <td><code class="language-plaintext highlighter-rouge">'C:/Program Files/Google/Chrome/Application/chrome.exe %s'</code></td>
+    </tr>
+    <tr>
+      <td>Chrome (Mac/Linux)</td>
+      <td><code class="language-plaintext highlighter-rouge">'google-chrome %s'</code> 또는 <code class="language-plaintext highlighter-rouge">'chrome %s'</code></td>
+    </tr>
+    <tr>
+      <td>Firefox</td>
+      <td><code class="language-plaintext highlighter-rouge">'firefox %s'</code></td>
+    </tr>
+    <tr>
+      <td>Edge (Windows)</td>
+      <td><code class="language-plaintext highlighter-rouge">'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe %s'</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>예제 (Linux/Mac에서 Chrome):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">browser</span> <span class="o">=</span> <span class="sh">'</span><span class="s">google-chrome %s</span><span class="sh">'</span>
+</code></pre></div></div>
+
+<p>예제 (Windows에서 Chrome):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">browser</span> <span class="o">=</span> <span class="sa">u</span><span class="sh">'</span><span class="s">C:/Program Files/Google/Chrome/Application/chrome.exe %s</span><span class="sh">'</span>
+</code></pre></div></div>
+
+<p>※ <code class="language-plaintext highlighter-rouge">u''</code>는 유니코드 문자열로 Windows에서 필요할 수 있습니다.</p>
+
+<hr />
+
+<h3 id="-4단계-jupyter-notebook-다시-실행">🔄 4단계: Jupyter Notebook 다시 실행</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jupyter notebook
+</code></pre></div></div>
+
+<p>이제 지정한 브라우저로 자동으로 열릴 것입니다.</p>
+
+<hr />
+
+<h3 id="-참고-사항">✅ 참고 사항</h3>
+
+<ul>
+  <li>
+    <p>기본 브라우저를 시스템 전체에서 바꾸는 게 아니라, <strong>Jupyter에서만</strong> 사용하는 브라우저를 설정하는 방법입니다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">webbrowser</code> 모듈을 사용하는 Python이 이 설정을 따릅니다.</p>
+  </li>
+</ul>
+
+<p>필요하시면 OS에 따라 구체적인 명령어도 도와드릴게요. 운영체제가 무엇인가요? (Windows / Mac / Linux)</p>
+
+<p class="chat--user">
+
+쉘 스크립트 해도돼?
+
+</p>
+
+<p>네, <strong>쉘 스크립트로도 가능합니다!</strong> Jupyter Notebook을 실행하면서 원하는 브라우저로 열도록 자동화할 수 있습니다. 아래에 <strong>운영체제에 맞는 예시 쉘 스크립트</strong> 를 단계별로 설명할게요.</p>
+
+<hr />
+
+<h2 id="-예시-리눅스--맥에서-쉘-스크립트-작성하기">✅ 예시: 리눅스 / 맥에서 쉘 스크립트 작성하기</h2>
+
+<h3 id="1-원하는-브라우저로-jupyter-notebook-실행-예-chrome">1. 원하는 브라우저로 Jupyter Notebook 실행 (예: Chrome)</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="c"># 원하는 브라우저를 지정 (예: 구글 크롬)</span>
+<span class="nb">export </span><span class="nv">BROWSER</span><span class="o">=</span>google-chrome
+
+<span class="c"># 또는 다른 브라우저로 (firefox 예시)</span>
+<span class="c"># export BROWSER=firefox</span>
+
+<span class="c"># Jupyter Notebook 실행</span>
+jupyter notebook
+</code></pre></div></div>
+
+<h3 id="2-저장-및-실행">2. 저장 및 실행</h3>
+
+<ol>
+  <li>
+    <p>위 내용을 예를 들어 <code class="language-plaintext highlighter-rouge">run_jupyter.sh</code> 라는 파일에 저장하세요.</p>
+  </li>
+  <li>실행 권한을 부여합니다:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x run_jupyter.sh
+</code></pre></div>    </div>
+  </li>
+  <li>실행합니다:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./run_jupyter.sh
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="-예시-윈도우-git-bash-또는-wsl">✅ 예시: 윈도우 (Git Bash 또는 WSL)</h2>
+
+<p>Windows에서도 비슷하게 설정할 수 있지만, 경로를 명확히 지정해야 합니다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="c"># Chrome 실행 경로 지정</span>
+<span class="nb">export </span><span class="nv">BROWSER</span><span class="o">=</span><span class="s2">"C:/Program Files/Google/Chrome/Application/chrome.exe"</span>
+
+<span class="c"># Jupyter Notebook 실행</span>
+jupyter notebook
+</code></pre></div></div>
+
+<p>또는 파워셸에서는 이렇게 사용할 수 있습니다:</p>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$</span><span class="nn">env</span><span class="p">:</span><span class="nv">BROWSER</span><span class="o">=</span><span class="s2">"C:\Program Files\Google\Chrome\Application\chrome.exe"</span><span class="w">
+</span><span class="n">jupyter</span><span class="w"> </span><span class="nx">notebook</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="-자동화를-더-하고-싶다면">🔁 자동화를 더 하고 싶다면?</h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">.bashrc</code> 또는 <code class="language-plaintext highlighter-rouge">.zshrc</code>에 <code class="language-plaintext highlighter-rouge">export BROWSER=...</code> 추가해두면, 쉘마다 자동 적용됩니다.</p>
+  </li>
+  <li>
+    <p>또는 <code class="language-plaintext highlighter-rouge">alias</code>를 만들어도 됩니다:</p>
+  </li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">alias </span><span class="nv">jn</span><span class="o">=</span><span class="s1">'BROWSER=google-chrome jupyter notebook'</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>필요하시면 Firefox, Brave, Edge 등 브라우저별 실행 명령도 알려드릴 수 있어요. 사용하시는 운영체제와 브라우저를 알려주시면 맞춤 예시 드릴게요!</p>
+
+<p class="chat--user">
+
+google-chrome 대신 내가 원하는 스크립트 경로
+
+</p>
+
+<p>좋습니다! <code class="language-plaintext highlighter-rouge">google-chrome</code> 대신에 <strong>직접 만든 스크립트 파일 경로</strong> 를 사용할 수 있습니다. 아래에 <strong>step-by-step으로 설정하는 방법</strong> 을 설명드릴게요.</p>
+
+<hr />
+
+<h2 id="-전제-이해">🧠 전제 이해</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Jupyter Notebook</code>은 내부적으로 <code class="language-plaintext highlighter-rouge">webbrowser</code> 모듈을 통해 링크를 엽니다.<br />
+이때 <code class="language-plaintext highlighter-rouge">BROWSER</code> 환경 변수나 <code class="language-plaintext highlighter-rouge">jupyter_notebook_config.py</code>의 <code class="language-plaintext highlighter-rouge">c.NotebookApp.browser</code> 설정을 통해 어떤 프로그램(혹은 스크립트)으로 열지를 지정할 수 있습니다.</p>
+
+<p>따라서 <strong>스크립트를 만들어서 해당 링크를 전달받아 원하는 방식으로 처리</strong> 하면 됩니다.</p>
+
+<hr />
+
+<h2 id="-step-by-step-설정법">✅ Step-by-Step 설정법</h2>
+
+<h3 id="1️⃣-링크를-인자로-받는-스크립트-작성">1️⃣ 링크를 인자로 받는 스크립트 작성</h3>
+
+<p>예: <code class="language-plaintext highlighter-rouge">my_open.sh</code></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="c"># 첫 번째 인자는 Jupyter가 넘겨주는 URL</span>
+<span class="nv">url</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+
+<span class="c"># 원하는 동작 수행 (예: 로그 찍기 + chrome 열기 등)</span>
+<span class="nb">echo</span> <span class="s2">"[INFO] Opening Jupyter link: </span><span class="nv">$url</span><span class="s2">"</span> <span class="o">&gt;&gt;</span> ~/jupyter_open_log.txt
+
+<span class="c"># 예시: Chrome으로 여는 동작</span>
+/opt/google/chrome/chrome <span class="s2">"</span><span class="nv">$url</span><span class="s2">"</span>
+
+<span class="c"># 또는 다른 동작 수행 가능</span>
+</code></pre></div></div>
+
+<h3 id="2️⃣-실행-권한-부여">2️⃣ 실행 권한 부여</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x /full/path/to/my_open.sh
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="3️⃣-jupyter에-스크립트를-브라우저로-인식시키기">3️⃣ Jupyter에 스크립트를 브라우저로 인식시키기</h3>
+
+<p><strong>방법 A: 일시적으로 환경 변수로 지정 (쉘 스크립트에서)</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">BROWSER</span><span class="o">=</span><span class="s2">"/full/path/to/my_open.sh"</span> jupyter notebook
+</code></pre></div></div>
+
+<p><strong>방법 B: 설정 파일에서 고정 설정</strong></p>
+
+<ol>
+  <li>설정 파일 열기 (없으면 생성됨):
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jupyter notebook <span class="nt">--generate-config</span>
+</code></pre></div>    </div>
+  </li>
+  <li>파일 열기:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano ~/.jupyter/jupyter_notebook_config.py
+</code></pre></div>    </div>
+  </li>
+  <li>아래 줄 추가:
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span><span class="p">.</span><span class="n">NotebookApp</span><span class="p">.</span><span class="n">browser</span> <span class="o">=</span> <span class="sh">'</span><span class="s">/full/path/to/my_open.sh</span><span class="sh">'</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="-작동-방식-확인-예시">🔍 작동 방식 확인 예시</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">jupyter notebook</code> 실행</p>
+  </li>
+  <li>
+    <p>로그 파일 <code class="language-plaintext highlighter-rouge">~/jupyter_open_log.txt</code> 생기는지 확인</p>
+  </li>
+  <li>
+    <p>Chrome이나 원하는 동작이 실행되는지 확인</p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="️-팁">☑️ 팁</h2>
+
+<ul>
+  <li>
+    <p>Python 스크립트 (<code class="language-plaintext highlighter-rouge">.py</code>)도 사용 가능합니다. 단, 첫 줄에 <code class="language-plaintext highlighter-rouge">#!/usr/bin/env python3</code>가 있어야 하고 실행 권한이 필요합니다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">xdg-open</code>이나 <code class="language-plaintext highlighter-rouge">open</code> (Mac) 같은 명령어와 조합해서 다른 앱으로도 열 수 있습니다.</p>
+  </li>
+  <li>
+    <p>JupyterLab에서도 동일한 방식으로 적용됩니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하시면 Python으로 만드는 스크립트 예제도 도와드릴게요. <code class="language-plaintext highlighter-rouge">스크립트로 어떤 동작을 하고 싶은지</code> 말씀해주시면 더 정확하게 맞춰드릴 수 있습니다.</p>
+
+<p class="chat--user">
+
+BROWSER 변수는 공식적으로 다른 앱들에서도 쓰는건가
+
+</p>
+
+<p>좋은 질문입니다! <code class="language-plaintext highlighter-rouge">BROWSER</code> 환경 변수는 <strong>공식적으로 존재하는 일반적인 Unix 환경 변수</strong> 이며, <strong>Jupyter뿐 아니라 다양한 앱들에서 사용됩니다.</strong><br />
+아래에 step-by-step으로 자세히 설명드릴게요.</p>
+
+<hr />
+
+<h2 id="-1-browser-변수의-공식성">✅ 1. <code class="language-plaintext highlighter-rouge">BROWSER</code> 변수의 공식성</h2>
+
+<h3 id="-출처">🔹 출처</h3>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">BROWSER</code>는 POSIX 표준은 아니지만, <strong>많은 Unix 계열 유틸리티들</strong> 에서 사용하는 <strong>사실상의 표준 변수</strong> 입니다.</p>
+  </li>
+  <li>
+    <p>Python의 <code class="language-plaintext highlighter-rouge">webbrowser</code> 모듈이 이를 지원하고 있으며, 이를 기반으로 한 도구들(Jupyter 포함)이 이를 따릅니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-2-어떤-앱들이-browser를-사용하는가">✅ 2. 어떤 앱들이 <code class="language-plaintext highlighter-rouge">BROWSER</code>를 사용하는가?</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>사용 프로그램/환경</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Jupyter Notebook/Lab</strong></td>
+      <td>링크 열 때 <code class="language-plaintext highlighter-rouge">BROWSER</code> 환경 변수를 참고함</td>
+    </tr>
+    <tr>
+      <td><strong>Python<code class="language-plaintext highlighter-rouge">webbrowser</code> 모듈</strong></td>
+      <td>Python에서 <code class="language-plaintext highlighter-rouge">webbrowser.open()</code> 사용 시 이 변수 활용</td>
+    </tr>
+    <tr>
+      <td><strong>Git</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">git help</code>, <code class="language-plaintext highlighter-rouge">git config --global help.browser</code>로 설정 가능 (<code class="language-plaintext highlighter-rouge">BROWSER</code>도 fallback으로 사용)</td>
+    </tr>
+    <tr>
+      <td><strong>man 페이지 뷰어 (예:<code class="language-plaintext highlighter-rouge">man -H</code>)</strong></td>
+      <td>HTML 매뉴얼 뷰어로 링크 열 때 <code class="language-plaintext highlighter-rouge">BROWSER</code> 사용</td>
+    </tr>
+    <tr>
+      <td><strong>w3m, lynx</strong></td>
+      <td>CLI 웹브라우저에서도 외부 링크 오픈에 활용</td>
+    </tr>
+    <tr>
+      <td><strong>xdg-open (Linux)</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">xdg-open</code> 자체는 안 쓰지만, 내부에서 <code class="language-plaintext highlighter-rouge">BROWSER</code>를 사용하는 경우가 있음 (간접적으로)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-3-우선순위-웹브라우저-선택">✅ 3. 우선순위 (웹브라우저 선택)</h2>
+
+<p>Python의 <code class="language-plaintext highlighter-rouge">webbrowser</code> 모듈 기준 우선순위는 다음과 같습니다:</p>
+
+<ol>
+  <li>
+    <p>명시적으로 지정한 브라우저 (코드에서 직접)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">BROWSER</code> 환경 변수</p>
+  </li>
+  <li>
+    <p>운영체제 기본 브라우저 (ex. <code class="language-plaintext highlighter-rouge">xdg-open</code>, <code class="language-plaintext highlighter-rouge">open</code>, Windows Shell)</p>
+  </li>
+</ol>
+
+<p>즉, <code class="language-plaintext highlighter-rouge">BROWSER</code>는 브라우저 선택에 있어 <strong>중간 우선순위</strong> 이자 <strong>사용자 제어 방식</strong> 으로 쓰입니다.</p>
+
+<hr />
+
+<h2 id="-4-예시">✅ 4. 예시</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 링크를 Firefox로 열고 싶을 때</span>
+<span class="nb">export </span><span class="nv">BROWSER</span><span class="o">=</span>firefox
+jupyter notebook
+</code></pre></div></div>
+
+<p>또는</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">BROWSER</span><span class="o">=</span><span class="s2">"/my/custom/script.sh"</span>
+python <span class="nt">-m</span> webbrowser <span class="nt">-t</span> <span class="s2">"http://localhost:8888"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-요약">🔚 요약</h2>
+
+<ul>
+  <li>
+    <p>✅ <code class="language-plaintext highlighter-rouge">BROWSER</code>는 <strong>Jupyter 전용이 아닌</strong> 여러 앱에서 쓰이는 <strong>사실상의 표준 환경 변수</strong> 입니다.</p>
+  </li>
+  <li>
+    <p>✅ Python, Git, man page viewer 등에서도 이를 인식합니다.</p>
+  </li>
+  <li>
+    <p>✅ 따라서 이 변수를 사용하는 것은 <strong>공식적이며 호환성 있는 방식</strong> 입니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하다면 이 변수에 맞춰 커스텀 브라우저 런처를 만드는 것도 좋은 방법입니다. 원하시면 <code class="language-plaintext highlighter-rouge">.desktop</code> 파일이나 macOS의 <code class="language-plaintext highlighter-rouge">.app</code> 포맷으로 만드는 것도 알려드릴게요.</p>
+
+<p class="chat--user">
+
+잘 반영이 됐나
+
+</p>
+
+<p>잘 반영되었는지 확인하는 방법을 <strong>step-by-step</strong> 으로 정리해드릴게요. 아래 순서대로 점검해보세요.</p>
+
+<hr />
+
+<h2 id="-1-현재-적용된-browser-확인">✅ 1. 현재 적용된 <code class="language-plaintext highlighter-rouge">BROWSER</code> 확인</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="nv">$BROWSER</span>
+</code></pre></div></div>
+
+<h3 id="예상-결과">예상 결과:</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">/path/to/your/script.sh</code> 혹은 <code class="language-plaintext highlighter-rouge">firefox</code>, <code class="language-plaintext highlighter-rouge">google-chrome</code> 등의 값이 출력되어야 함<br />
+→ 원하는 스크립트로 정확히 설정됐는지 확인</li>
+</ul>
+
+<hr />
+
+<h2 id="-2-jupyter-실행-테스트">✅ 2. Jupyter 실행 테스트</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jupyter notebook
+</code></pre></div></div>
+
+<p>또는</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">BROWSER</span><span class="o">=</span>/path/to/your/script.sh jupyter notebook
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>브라우저 창이 뜨거나</p>
+  </li>
+  <li>
+    <p><strong>스크립트가 실행되었는지 로그 확인</strong><br />
+(예: 로그 파일 쓰기, 알림, 특정 프로그램 열기 등)</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-3-내-스크립트가-잘-실행되는지-로그로-확인하기-선택">✅ 3. 내 스크립트가 잘 실행되는지 로그로 확인하기 (선택)</h2>
+
+<p>예: <code class="language-plaintext highlighter-rouge">my_script.sh</code> 내용에 아래가 있다면</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"[Opened at </span><span class="si">$(</span><span class="nb">date</span><span class="si">)</span><span class="s2">] </span><span class="nv">$1</span><span class="s2">"</span> <span class="o">&gt;&gt;</span> ~/jupyter_link_log.txt
+</code></pre></div></div>
+
+<p>그렇다면 다음 파일이 생성되어 있어야 합니다:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> ~/jupyter_link_log.txt
+</code></pre></div></div>
+
+<p>📌 여기서 링크가 잘 기록됐다면 → 스크립트가 정상적으로 실행된 것입니다.</p>
+
+<hr />
+
+<h2 id="-4-python-테스트-browser-전역-적용-확인용">✅ 4. Python 테스트 (BROWSER 전역 적용 확인용)</h2>
+
+<p>Python에서도 동작하는지 테스트해볼 수 있습니다:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 <span class="nt">-c</span> <span class="s2">"import webbrowser; webbrowser.open('http://localhost:8888')"</span>
+</code></pre></div></div>
+
+<p>→ 이때도 <code class="language-plaintext highlighter-rouge">BROWSER</code>에 지정된 프로그램이 실행돼야 합니다.</p>
+
+<hr />
+
+<h2 id="-만약-적용이-안-된다면">🛠 만약 적용이 안 된다면?</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>증상</th>
+      <th>해결 방법</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>아무 반응 없음</td>
+      <td>스크립트 실행 권한 부여했는지 확인: <code class="language-plaintext highlighter-rouge">chmod +x script.sh</code></td>
+    </tr>
+    <tr>
+      <td>터미널에서만 되고 다른 곳에선 안 됨</td>
+      <td><code class="language-plaintext highlighter-rouge">.bashrc</code>, <code class="language-plaintext highlighter-rouge">.zshrc</code>, <code class="language-plaintext highlighter-rouge">.profile</code>에 <code class="language-plaintext highlighter-rouge">export BROWSER=...</code> 추가</td>
+    </tr>
+    <tr>
+      <td>URL이 안 넘어옴</td>
+      <td>스크립트에서 <code class="language-plaintext highlighter-rouge">$1</code>으로 URL을 받고 있는지 확인</td>
+    </tr>
+    <tr>
+      <td>macOS에서 <code class="language-plaintext highlighter-rouge">open</code>만 작동함</td>
+      <td>mac에서는 <code class="language-plaintext highlighter-rouge">open</code> 명령만 쓸 수 있는 경우가 있음. 따로 처리 필요</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하시면 스크립트 내용 보여주시면 함께 검토도 가능해요!<br />
+반영 결과 확인이 잘 됐는지도 같이 도와드릴게요.</p>]]></content><author><name>hvppyarchive</name></author><category term="linux" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">브라우저 설정 방법</title><link href="https://hvppyarchive.github.io/linux/setting-default-browser/" rel="alternate" type="text/html" title="브라우저 설정 방법" /><published>2025-08-01T16:32:11+09:00</published><updated>2025-08-01T16:32:11+09:00</updated><id>https://hvppyarchive.github.io/linux/setting-default-browser</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/setting-default-browser/"><![CDATA[<p class="chat--user">
 
 jupyter notebook 띄울 때 링크를 어떤 인터넷 프로그램으로 열지 설정
 
@@ -4915,216 +5411,4 @@ launchctl list | <span class="nb">grep </span>com.myproject.webapi
 <p>자동매매는 “코드 몇 줄”보다 <strong>문서와 위험 관리</strong> 가 성공을 결정합니다. 항상 “이 정의가 브로커마다 동일한가?”를 의심하시고, 의심이
 풀릴 때까지 실제 호가·체결 데이터로 검증하시기 바랍니다.</p>
 
-<p>궁금한 점이 더 있으시면 언제든 추가로 말씀해 주십시오.</p>]]></content><author><name>hvppyarchive</name></author><category term="investing" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Pydantic 설명 장단점</title><link href="https://hvppyarchive.github.io/python/python-pydantic/" rel="alternate" type="text/html" title="Pydantic 설명 장단점" /><published>2025-07-25T16:39:01+09:00</published><updated>2025-07-25T16:39:01+09:00</updated><id>https://hvppyarchive.github.io/python/python-pydantic</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-pydantic/"><![CDATA[<p class="chat--user">
-
-pydantic이 뭔지, 왜 쓰는건지 장단점 등을 설명해줘
-
-</p>
-
-<p><code class="language-plaintext highlighter-rouge">Pydantic</code>은 Python의 데이터 유효성 검사(validation)와 설정 관리(settings management)를 위한
-라이브러리입니다. 주로 FastAPI나 다른 Python 웹 프레임워크에서 많이 사용됩니다.</p>
-
-<hr />
-
-<h2 id="-무엇인가">📌 무엇인가?</h2>
-
-<p><code class="language-plaintext highlighter-rouge">Pydantic</code>은 Python의 <code class="language-plaintext highlighter-rouge">dataclass</code>와 비슷한 구조를 가지고 있지만, <strong>입력 데이터의 타입을 강제하고 유효성을 검사</strong>
-합니다. 핵심은 "type hints를 이용해서 런타임에서 실제로 검사한다"는 점입니다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
-
-<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-
-<span class="n">u</span> <span class="o">=</span> <span class="nc">User</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sh">'</span><span class="s">123</span><span class="sh">'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sh">'</span><span class="s">Alice</span><span class="sh">'</span><span class="p">)</span>  <span class="c1"># id는 str이지만 int로 자동 변환됨
-</span><span class="nf">print</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>  <span class="c1"># 123
-</span></code></pre></div></div>
-
-<hr />
-
-<h2 id="-왜-쓰는가">🔍 왜 쓰는가?</h2>
-
-<h3 id="-목적">✅ 목적</h3>
-
-<ol>
-  <li>
-    <p><strong>입력 검증</strong> : 외부에서 들어오는 데이터(json 등)를 타입 검증하고 잘못된 값을 막기 위함</p>
-  </li>
-  <li>
-    <p><strong>자동 변환</strong> : 가능한 경우 타입을 자동으로 변환</p>
-  </li>
-  <li>
-    <p><strong>명확한 구조 정의</strong> : 코드 상에서 데이터 구조를 명확히 표현 가능</p>
-  </li>
-  <li>
-    <p><strong>정적 분석 가능</strong> : IDE나 타입 체커가 인식할 수 있음</p>
-  </li>
-  <li>
-    <p><strong>FastAPI 연동</strong> : FastAPI에서 request body를 검증할 때 거의 필수</p>
-  </li>
-</ol>
-
-<hr />
-
-<h2 id="-장점">👍 장점</h2>
-
-<h3 id="1-타입-기반-검증">1. 타입 기반 검증</h3>
-
-<p>타입 힌트를 활용해 런타임에서 오류를 조기에 잡아냄.</p>
-
-<h3 id="2-자동-형변환">2. 자동 형변환</h3>
-
-<p>가능하면 타입을 자동으로 맞춰줌. 예: <code class="language-plaintext highlighter-rouge">'1'</code> → <code class="language-plaintext highlighter-rouge">1</code> (int)</p>
-
-<h3 id="3-구조화된-에러-메시지">3. 구조화된 에러 메시지</h3>
-
-<p>에러가 나면 어디서 어떤 타입이 잘못됐는지 명확하게 알려줌.</p>
-
-<h3 id="4-nesting-및-재사용성">4. Nesting 및 재사용성</h3>
-
-<p>다른 <code class="language-plaintext highlighter-rouge">BaseModel</code>을 중첩해서 사용할 수 있어서 복잡한 구조도 표현 가능.</p>
-
-<h3 id="5-빠름">5. 빠름</h3>
-
-<p>내부적으로 <code class="language-plaintext highlighter-rouge">Cython</code>을 사용하여 빠르게 동작함 (v2 기준)</p>
-
-<hr />
-
-<h2 id="-단점">👎 단점</h2>
-
-<h3 id="1-러닝커브">1. 러닝커브</h3>
-
-<p>단순한 프로젝트에 쓰기에는 문법이나 개념이 복잡할 수 있음</p>
-
-<h3 id="2-동적-스키마-어려움">2. 동적 스키마 어려움</h3>
-
-<p>스키마가 런타임에서 바뀌는 경우에는 유연하지 않음</p>
-
-<h3 id="3-성능-이슈-일부-경우">3. 성능 이슈 (일부 경우)</h3>
-
-<p>대규모 데이터 처리 시 자동 형변환이 오히려 성능 병목이 될 수 있음</p>
-
-<h3 id="4-에러-추적-어려움-복잡한-모델일-경우">4. 에러 추적 어려움 (복잡한 모델일 경우)</h3>
-
-<p>중첩 모델이 깊어지면 어느 필드에서 에러 났는지 파악하기 어려울 수 있음</p>
-
-<hr />
-
-<h2 id="-언제-쓰는-게-적절한가">🧠 언제 쓰는 게 적절한가?</h2>
-
-<ul>
-  <li>
-    <p>외부 입력(json, form, query)을 다루는 API 서버 (FastAPI, Flask 등)</p>
-  </li>
-  <li>
-    <p>데이터 파이프라인에서 중간 결과를 검증할 때</p>
-  </li>
-  <li>
-    <p>설정 파일을 로드하고 검증할 때</p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="총평">❗총평</h2>
-
-<p><code class="language-plaintext highlighter-rouge">pydantic</code>은 잘 쓰면 생산성과 안정성을 크게 올릴 수 있지만, 단순한 스크립트나 내부 전용 툴에는 과도한 도구일 수도 있습니다.
-데이터 유효성 검사가 필요 없다면 굳이 쓸 이유는 없습니다.</p>
-
-<p>궁금한 점 더 있으시면 말씀해주세요.</p>
-
-<p class="chat--user">
-
-데이터가 안맞으면 어떻게 돼?
-
-</p>
-
-<p><code class="language-plaintext highlighter-rouge">pydantic</code>에서는 데이터가 타입에 맞지 않으면 예외(<code class="language-plaintext highlighter-rouge">ValidationError</code>)가 발생합니다. 이건 <strong>런타임에서 바로 발생</strong>
-하고, 명확하게 어떤 필드에 어떤 문제가 있었는지를 알려줍니다.</p>
-
-<hr />
-
-<h2 id="-예시-타입이-안-맞을-때">❌ 예시: 타입이 안 맞을 때</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
-
-<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-
-<span class="n">user</span> <span class="o">=</span> <span class="nc">User</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sh">'</span><span class="s">abc</span><span class="sh">'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>이렇게 실행하면 아래와 같은 <code class="language-plaintext highlighter-rouge">ValidationError</code>가 발생합니다:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgsql
-
-pydantic.error_wrappers.ValidationError: 2 validation errors for User
-id
-  value is not a valid integer (type=type_error.integer)
-name
-  str type expected (type=type_error.str)
-</code></pre></div></div>
-
-<p>즉, <code class="language-plaintext highlighter-rouge">id='abc'</code>는 int로 변환 불가능하고, <code class="language-plaintext highlighter-rouge">name=123</code>도 str이 아니기 때문에 에러를 던집니다.</p>
-
-<hr />
-
-<h2 id="-예시-자동-변환이-가능한-경우">✅ 예시: 자동 변환이 가능한 경우</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">user</span> <span class="o">=</span> <span class="nc">User</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sh">'</span><span class="s">42</span><span class="sh">'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sh">'</span><span class="s">Alice</span><span class="sh">'</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="nb">id</span><span class="p">)</span>    <span class="c1"># 42 (str → int 자동 변환)
-</span><span class="nf">print</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># 'Alice'
-</span></code></pre></div></div>
-
-<p>자동 형변환이 가능한 경우에는 문제없이 처리됩니다. 하지만 <strong>불가능한 경우는 예외 발생</strong>.</p>
-
-<hr />
-
-<h2 id="예외-처리-방법">예외 처리 방법</h2>
-
-<p>물론 try-except로 예외를 잡을 수도 있습니다:</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">ValidationError</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="nc">User</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sh">'</span><span class="s">xyz</span><span class="sh">'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sh">'</span><span class="s">Bob</span><span class="sh">'</span><span class="p">)</span>
-<span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="nf">json</span><span class="p">())</span>
-</code></pre></div></div>
-
-<p>출력 예시:</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"loc"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span><span class="w">
-    </span><span class="nl">"msg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value is not a valid integer"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"type_error.integer"</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre></div></div>
-
-<p>구조화된 JSON 형태로 어떤 필드에 무슨 문제가 있었는지 파악할 수 있습니다.</p>
-
-<hr />
-
-<h2 id="결론">결론</h2>
-
-<ul>
-  <li>
-    <p><strong>타입이 안 맞으면 무조건 예외 발생</strong></p>
-  </li>
-  <li>
-    <p><strong>가능하면 자동 변환</strong></p>
-  </li>
-  <li>
-    <p><strong>ValidationError는 매우 상세하고 디버깅에 유리</strong></p>
-  </li>
-  <li>
-    <p>FastAPI와 연동할 경우, 이 에러는 HTTP 422 응답으로 자동 변환됨</p>
-  </li>
-</ul>
-
-<p>pydantic을 도입하는 주 이유 중 하나가 이 <strong>강력하고 친절한 검증 메커니즘</strong> 입니다.<br />
-더 알고 싶은 부분 있으시면 말씀해주세요.</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry></feed>
+<p>궁금한 점이 더 있으시면 언제든 추가로 말씀해 주십시오.</p>]]></content><author><name>hvppyarchive</name></author><category term="investing" /><summary type="html"><![CDATA[]]></summary></entry></feed>
