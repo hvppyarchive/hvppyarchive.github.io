@@ -1419,15 +1419,32 @@ root_logger.addHandler(stream_handler) 이 코드는 왜 있는거야? 그리고
 
 <h2 id="-최종-정리">🔁 최종 정리</h2>
 
-<p>목적| 해야 할 일<br />
-—|—<br />
-<strong>테스트 시 콘솔 출력만 하고 싶다</strong>| <code class="language-plaintext highlighter-rouge">pyproject.toml</code> 또는 <code class="language-plaintext highlighter-rouge">pytest.ini</code>에 설정 추가 (<code class="language-plaintext highlighter-rouge">log_cli =
-true</code>)<br />
-<strong>테스트 시 로그를 파일로 저장하고 싶다</strong>| <code class="language-plaintext highlighter-rouge">setup_logging()</code>을 <code class="language-plaintext highlighter-rouge">conftest.py</code>에서 호출 (예: <code class="language-plaintext highlighter-rouge">autouse
-fixture</code>)<br />
-<strong>테스트 시에도 색상 있는 출력 원한다</strong>| <code class="language-plaintext highlighter-rouge">setup_logging()</code>을 직접 호출해야 가능 (ANSI 색은 <code class="language-plaintext highlighter-rouge">pytest</code> 설정에선
-불가)<br />
-<strong>CLI 실행 시에는<code class="language-plaintext highlighter-rouge">setup_logging()</code> 필수</strong>| 콘솔 + 파일 로그 모두 설정됨</p>
+<table>
+  <thead>
+    <tr>
+      <th>목적</th>
+      <th>해야 할 일</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>테스트 시 콘솔 출력만 하고 싶다</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">pyproject.toml</code> 또는 <code class="language-plaintext highlighter-rouge">pytest.ini</code>에 설정 추가 (<code class="language-plaintext highlighter-rouge">log_cli = true</code>)</td>
+    </tr>
+    <tr>
+      <td><strong>테스트 시 로그를 파일로 저장하고 싶다</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">setup_logging()</code>을 <code class="language-plaintext highlighter-rouge">conftest.py</code>에서 호출 (예: <code class="language-plaintext highlighter-rouge">autouse fixture</code>)</td>
+    </tr>
+    <tr>
+      <td><strong>테스트 시에도 색상 있는 출력 원한다</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">setup_logging()</code>을 직접 호출해야 가능 (ANSI 색은 <code class="language-plaintext highlighter-rouge">pytest</code> 설정에선 불가)</td>
+    </tr>
+    <tr>
+      <td><strong>CLI 실행 시에는<code class="language-plaintext highlighter-rouge">setup_logging()</code> 필수</strong></td>
+      <td>콘솔 + 파일 로그 모두 설정됨</td>
+    </tr>
+  </tbody>
+</table>
 
 <hr />
 
@@ -1602,15 +1619,42 @@ fixture</code>)<br />
 
 <h2 id="-실무오픈소스에서-보통-하는-방식-요약">✅ 실무/오픈소스에서 보통 하는 방식 요약</h2>
 
-<p>방식| 선택 이유| 단점<br />
-—|—|—<br />
-<strong>pytest 설정(<code class="language-plaintext highlighter-rouge">log_cli = true</code>)으로 항상 출력</strong>| 간단함, 설정 한 줄이면 끝| 로그가 너무 많아질 수 있음. 테스트
-결과 보기 힘듦<br />
-<strong>테스트에서는 로그 숨기고 실패 시만 출력 (기본)</strong>|  테스트 결과 깔끔, CI에 적합| 실패 전까지 로그 확인 어려움<br />
-<strong>조건부 출력 (<code class="language-plaintext highlighter-rouge">-s</code>일 때만 출력)</strong>| 필요한 상황에만 출력 가능| 구현 복잡도 증가, pytest와 충돌 주의<br />
-<strong>로그 파일로만 기록, 콘솔 출력 없음</strong>|  CI에서 아카이브 가능| 개발 중 디버깅 불편<br />
-<strong>caplog fixture 사용으로 개별 테스트에서 로그 확인</strong>|  테스트 검증 가능| 설정은 간단, 하지만 일일이 caplog 사용
-필요</p>
+<table>
+  <thead>
+    <tr>
+      <th>방식</th>
+      <th>선택 이유</th>
+      <th>단점</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>pytest 설정(<code class="language-plaintext highlighter-rouge">log_cli = true</code>)으로 항상 출력</strong></td>
+      <td>간단함, 설정 한 줄이면 끝</td>
+      <td>로그가 너무 많아질 수 있음. 테스트 결과 보기 힘듦</td>
+    </tr>
+    <tr>
+      <td><strong>테스트에서는 로그 숨기고 실패 시만 출력 (기본)</strong></td>
+      <td>테스트 결과 깔끔, CI에 적합</td>
+      <td>실패 전까지 로그 확인 어려움</td>
+    </tr>
+    <tr>
+      <td><strong>조건부 출력 (<code class="language-plaintext highlighter-rouge">-s</code>일 때만 출력)</strong></td>
+      <td>필요한 상황에만 출력 가능</td>
+      <td>구현 복잡도 증가, pytest와 충돌 주의</td>
+    </tr>
+    <tr>
+      <td><strong>로그 파일로만 기록, 콘솔 출력 없음</strong></td>
+      <td>CI에서 아카이브 가능</td>
+      <td>개발 중 디버깅 불편</td>
+    </tr>
+    <tr>
+      <td><strong>caplog fixture 사용으로 개별 테스트에서 로그 확인</strong></td>
+      <td>테스트 검증 가능</td>
+      <td>설정은 간단, 하지만 일일이 caplog 사용 필요</td>
+    </tr>
+  </tbody>
+</table>
 
 <hr />
 
@@ -1812,12 +1856,28 @@ caplog은 어떻게 쓰는거야?
 
 <h2 id="-사용-시-주의점">✅ 사용 시 주의점</h2>
 
-<p>항목| 내용<br />
-—|—<br />
-로그 레벨 안 맞으면 안 잡힘| <code class="language-plaintext highlighter-rouge">with caplog.at_level(...)</code> 안 쓰면 기본 <code class="language-plaintext highlighter-rouge">WARNING</code> 이상만 잡힘<br />
-<code class="language-plaintext highlighter-rouge">setup_logging()</code>이 caplog와 충돌 가능| <code class="language-plaintext highlighter-rouge">root_logger.setLevel(...)</code>이 pytest의 캡처를 방해할
-수 있음<br />
-로그 포맷, 색상 등은 <code class="language-plaintext highlighter-rouge">caplog</code>와 무관| 오직 메시지, 수준, 로거 이름 등 <strong>내용 중심</strong> 검증용</p>
+<table>
+  <thead>
+    <tr>
+      <th>항목</th>
+      <th>내용</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>로그 레벨 안 맞으면 안 잡힘</td>
+      <td><code class="language-plaintext highlighter-rouge">with caplog.at_level(...)</code> 안 쓰면 기본 <code class="language-plaintext highlighter-rouge">WARNING</code> 이상만 잡힘</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">setup_logging()</code>이 caplog와 충돌 가능</td>
+      <td><code class="language-plaintext highlighter-rouge">root_logger.setLevel(...)</code>이 pytest의 캡처를 방해할 수 있음</td>
+    </tr>
+    <tr>
+      <td>로그 포맷, 색상 등은 <code class="language-plaintext highlighter-rouge">caplog</code>와 무관</td>
+      <td>오직 메시지, 수준, 로거 이름 등 <strong>내용 중심</strong> 검증용</td>
+    </tr>
+  </tbody>
+</table>
 
 <hr />
 
@@ -2228,7 +2288,7 @@ click.echo랑 print의 차이는?
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/linux/setting-default-browser/" rel="permalink">브라우저 설정 방법
+        <a href="/python/python-cli-tool-dev/" rel="permalink">파이썬 CLI 패키지 개발
 </a>
       
     </h2>
@@ -2242,7 +2302,7 @@ click.echo랑 print의 차이는?
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-03T23:53:57+09:00">2025-08-03</time>
+        <time datetime="2025-08-04T00:17:29+09:00">2025-08-04</time>
       </span>
     
 
@@ -2283,7 +2343,7 @@ click.echo랑 print의 차이는?
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-01T16:32:11+09:00">2025-08-01</time>
+        <time datetime="2025-08-03T23:53:57+09:00">2025-08-03</time>
       </span>
     
 
