@@ -1,4 +1,2270 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-04T12:25:12+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html">웹 문서 빌드 방법</title><link href="https://hvppyarchive.github.io/python/web-document-for-python-package/" rel="alternate" type="text/html" title="웹 문서 빌드 방법" /><published>2025-08-04T12:25:08+09:00</published><updated>2025-08-04T12:25:08+09:00</updated><id>https://hvppyarchive.github.io/python/web-document-for-python-package</id><content type="html" xml:base="https://hvppyarchive.github.io/python/web-document-for-python-package/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-04T12:59:20+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html">python document 만들기</title><link href="https://hvppyarchive.github.io/python/python-package-documentation/" rel="alternate" type="text/html" title="python document 만들기" /><published>2025-08-04T12:59:15+09:00</published><updated>2025-08-04T12:59:15+09:00</updated><id>https://hvppyarchive.github.io/python/python-package-documentation</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-package-documentation/"><![CDATA[<p class="chat--user">
+
+유저에게 웹으로 된 document를 커맨드라인에서 띄울 수 있게 하고 싶어. 어떻게 웹을 빌드하는게 좋을것 같아?
+
+</p>
+
+<p>웹 기반 문서를 커맨드라인에서 띄우는 것을 목표로 한다면, 웹 페이지를 어떻게 <strong>빌드</strong> 하고 <strong>서빙</strong> 할지에 대해 전략적으로 접근할 필요가 있습니다. 다음은 step-by-step으로 고려할 수 있는 방식입니다:</p>
+
+<hr />
+
+<h3 id="1--문서-포맷-결정">1. 📄 <strong>문서 포맷 결정</strong></h3>
+
+<p>먼저 어떤 형태의 document를 띄우려는지 정해야 합니다.</p>
+
+<ul>
+  <li>
+    <p>HTML 문서인가? Markdown인가? PDF인가?</p>
+  </li>
+  <li>
+    <p>정적 페이지인지, 동적으로 렌더링되는 페이지인지?</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>예: Markdown 기반 문서를 HTML로 변환하여 웹에 서빙한 뒤 커맨드라인에서 브라우저를 열도록 할 수 있음.</p>
+</blockquote>
+
+<hr />
+
+<h3 id="2--웹-빌드-방식-선택">2. 🛠 <strong>웹 빌드 방식 선택</strong></h3>
+
+<p>문서를 웹에 띄우기 위한 최소한의 frontend를 구성합니다.</p>
+
+<h4 id="-가장-간단한-방법">⛳ 가장 간단한 방법:</h4>
+
+<ul>
+  <li>
+    <p><strong>Static HTML Generator 사용</strong> :</p>
+
+    <ul>
+      <li>
+        <p>예: Docusaurus, VitePress, Hugo</p>
+      </li>
+      <li>
+        <p>Markdown 문서를 static 웹 페이지로 자동 변환 가능.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="️-빌드-예시-vitepress">⚙️ 빌드 예시 (VitePress):</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm create vitepress
+<span class="c"># 문서 작성: docs/index.md 등</span>
+npm run docs:build  <span class="c"># static 사이트 빌드</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="3--로컬-서버-구성">3. 🌐 <strong>로컬 서버 구성</strong></h3>
+
+<p>생성된 정적 웹 파일을 서버에서 서빙해야 합니다.</p>
+
+<h4 id="선택지">선택지:</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">python -m http.server</code></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">npx serve ./dist</code></p>
+  </li>
+  <li>
+    <p>Express, FastAPI 등으로 간단한 서버 구성</p>
+  </li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 예시: dist 폴더 내 정적 파일 서빙</span>
+npx serve dist
+<span class="c"># 또는</span>
+python3 <span class="nt">-m</span> http.server 8080 <span class="nt">--directory</span> dist
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="4--cli에서-브라우저-열기">4. 🖥 <strong>CLI에서 브라우저 열기</strong></h3>
+
+<p>이제 커맨드라인에서 웹 문서를 띄우는 명령어를 실행합니다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># macOS / Linux</span>
+xdg-open http://localhost:8080
+
+<span class="c"># macOS 전용</span>
+open http://localhost:8080
+
+<span class="c"># Windows</span>
+start http://localhost:8080
+</code></pre></div></div>
+
+<p>이렇게 하면 커맨드라인에서 명령 한 줄로 문서를 열 수 있습니다.</p>
+
+<hr />
+
+<h3 id="5--배포까지-고려한다면">5. 🚀 <strong>배포까지 고려한다면</strong></h3>
+
+<ul>
+  <li>
+    <p>Netlify, GitHub Pages, Vercel 등을 사용해서 호스팅 가능.</p>
+  </li>
+  <li>
+    <p>커맨드라인에서 curl 등으로 접속하거나 링크만 열도록 할 수도 있음.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="-정리">✅ 정리</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>단계</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1. 문서 포맷</td>
+      <td>Markdown → HTML이 보편적</td>
+    </tr>
+    <tr>
+      <td>2. 빌드 방식</td>
+      <td>VitePress, Hugo, Docusaurus 등</td>
+    </tr>
+    <tr>
+      <td>3. 로컬 서버</td>
+      <td><code class="language-plaintext highlighter-rouge">python -m http.server</code>, <code class="language-plaintext highlighter-rouge">serve</code>, Express 등</td>
+    </tr>
+    <tr>
+      <td>4. CLI 실행</td>
+      <td><code class="language-plaintext highlighter-rouge">open</code>, <code class="language-plaintext highlighter-rouge">xdg-open</code>, <code class="language-plaintext highlighter-rouge">start</code> 명령으로 띄우기</td>
+    </tr>
+    <tr>
+      <td>5. 배포 옵션</td>
+      <td>Netlify, Vercel, GitHub Pages 등</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하다면 예제 스크립트나 템플릿도 같이 만들어줄 수 있어요. 특정 툴이나 언어 선호가 있다면 알려줘요.</p>
+
+<p class="chat--user">
+
+오프라인 환경임을 고려해줘
+
+</p>
+
+<p>오프라인 환경이라면 외부 호스팅이나 CDN 의존 없이 <strong>문서를 로컬에서 웹으로 빌드하고, CLI에서 브라우저로 띄울 수 있도록 만드는 방식</strong> 이 적합합니다. 다음은 <strong>오프라인 환경에 최적화된 빌드 및 실행 절차</strong> 입니다.</p>
+
+<hr />
+
+<h2 id="️-1-문서-포맷--html-변환">🛠️ 1. 문서 포맷 → HTML 변환</h2>
+
+<h3 id="-권장-포맷-markdown--html">✅ 권장 포맷: Markdown → HTML</h3>
+
+<ul>
+  <li>
+    <p>Markdown으로 문서 작성 (<code class="language-plaintext highlighter-rouge">.md</code>)</p>
+  </li>
+  <li>
+    <p><strong>Pandoc</strong> 이나 <strong>Marked</strong> 를 활용해 HTML로 변환 가능</p>
+  </li>
+</ul>
+
+<h4 id="예시-pandoc-사용">예시: Pandoc 사용</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 설치 (오프라인용 바이너리 준비 가능): https://github.com/jgm/pandoc/releases</span>
+pandoc input.md <span class="nt">-o</span> output.html
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-2-웹-문서-구조-구성">🧱 2. 웹 문서 구조 구성</h2>
+
+<p><code class="language-plaintext highlighter-rouge">output.html</code>을 포함한 디렉토리를 예시로 들어보면:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>offline-doc/
+├── index.html       <span class="c"># 변환된 문서</span>
+├── style.css        <span class="c"># 로컬 CSS (필요시)</span>
+└── assets/          <span class="c"># 이미지, JS 등</span>
+</code></pre></div></div>
+
+<ul>
+  <li>CSS와 JS는 <strong>외부 링크 없이 모두 로컬 경로로 포함</strong> 해야 합니다.</li>
+</ul>
+
+<blockquote>
+  <p><strong>중요</strong> : 절대 <code class="language-plaintext highlighter-rouge">https://</code> CDN 같은 링크 쓰면 안 됩니다. 모든 리소스를 직접 보관.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="-3-로컬-웹서버-실행">🌐 3. 로컬 웹서버 실행</h2>
+
+<h3 id="선택지-a-python-내장-서버">선택지 A: Python 내장 서버</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>offline-doc
+python3 <span class="nt">-m</span> http.server 8080
+</code></pre></div></div>
+
+<h3 id="선택지-b-nodejs가-있다면-serve-사용">선택지 B: Node.js가 있다면 <code class="language-plaintext highlighter-rouge">serve</code> 사용</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 오프라인 설치를 위해 serve npm 패키지를 미리 다운로드하거나, 내부 레포에 배포</span>
+npx serve <span class="nb">.</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="️-4-cli에서-웹-페이지-띄우기">🖥️ 4. CLI에서 웹 페이지 띄우기</h2>
+
+<h3 id="os별-브라우저-열기-명령어">OS별 브라우저 열기 명령어:</h3>
+
+<ul>
+  <li>
+    <p>macOS: <code class="language-plaintext highlighter-rouge">open</code></p>
+  </li>
+  <li>
+    <p>Linux: <code class="language-plaintext highlighter-rouge">xdg-open</code></p>
+  </li>
+  <li>
+    <p>Windows: <code class="language-plaintext highlighter-rouge">start</code></p>
+  </li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>open http://localhost:8080/index.html
+<span class="c"># 또는</span>
+xdg-open http://localhost:8080/index.html
+</code></pre></div></div>
+
+<blockquote>
+  <p>또는 CLI 앱에 이 명령을 포함시켜 문서 뷰어처럼 동작하게 할 수 있습니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="-보너스-문서-뷰어-cli-스크립트">💡 보너스: 문서 뷰어 CLI 스크립트</h2>
+
+<p>예를 들어 <code class="language-plaintext highlighter-rouge">view_doc.sh</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="nv">DIR</span><span class="o">=</span><span class="si">$(</span><span class="nb">dirname</span> <span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="si">)</span>
+<span class="nb">cd</span> <span class="s2">"</span><span class="nv">$DIR</span><span class="s2">"</span>
+python3 <span class="nt">-m</span> http.server 8080 <span class="o">&gt;</span> /dev/null 2&gt;&amp;1 &amp;
+<span class="nb">sleep </span>1
+xdg-open http://localhost:8080/index.html
+</code></pre></div></div>
+
+<ul>
+  <li>문서 디렉토리에 <code class="language-plaintext highlighter-rouge">index.html</code> 넣고 실행하면 바로 열림</li>
+</ul>
+
+<hr />
+
+<h2 id="-요약">✅ 요약</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>항목</th>
+      <th>방법</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>문서 포맷</td>
+      <td>Markdown (.md), Pandoc으로 HTML 변환</td>
+    </tr>
+    <tr>
+      <td>리소스 관리</td>
+      <td>CSS/JS 포함 리소스 모두 로컬 저장</td>
+    </tr>
+    <tr>
+      <td>웹서버</td>
+      <td><code class="language-plaintext highlighter-rouge">python3 -m http.server</code></td>
+    </tr>
+    <tr>
+      <td>브라우저 열기</td>
+      <td>OS별 <code class="language-plaintext highlighter-rouge">open</code>, <code class="language-plaintext highlighter-rouge">xdg-open</code>, <code class="language-plaintext highlighter-rouge">start</code> 명령</td>
+    </tr>
+    <tr>
+      <td>오토 실행</td>
+      <td>bash 또는 bat 스크립트로 자동화</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하다면 예제 디렉토리 구조, Pandoc 템플릿, 실행 스크립트도 제공해줄게요. Python, Node.js, Shell Script 중 어떤 걸 선호하나요?</p>
+
+<p class="chat--user">
+
+pandoc은 한 페이지로만 변환할 수 있나?
+
+</p>
+
+<p><code class="language-plaintext highlighter-rouge">Pandoc</code>은 기본적으로 하나의 Markdown 파일을 하나의 HTML 문서로 변환합니다. 즉, "한 페이지로 변환"이 기본 동작입니다. 하지만 <strong>여러 Markdown 파일을 각각 혹은 하나로 묶어서</strong> 다양한 방식으로 처리할 수 있습니다. 아래에서 그 경우를 구분해 step-by-step으로 설명할게요.</p>
+
+<hr />
+
+<h2 id="-1-기본-단일-파일--단일-html-기본-동작">✅ 1. 기본: 단일 파일 → 단일 HTML (기본 동작)</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pandoc chapter1.md <span class="nt">-o</span> chapter1.html
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>결과: <code class="language-plaintext highlighter-rouge">chapter1.html</code>이라는 <strong>한 페이지 HTML 문서</strong> 생성됨.</p>
+  </li>
+  <li>
+    <p>이 경우, 긴 문서도 스크롤 한 페이지에 모두 들어감.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-2-여러-markdown--하나의-html로-병합">✅ 2. 여러 Markdown → 하나의 HTML로 병합</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pandoc intro.md chapter1.md chapter2.md <span class="nt">-o</span> full.html
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">full.html</code>이라는 <strong>한 페이지짜리 완성 문서</strong> 생성.</p>
+  </li>
+  <li>
+    <p>각 파일은 구분되어 들어가지만, HTML은 <strong>단일 파일</strong>.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-3-여러-페이지파일로-나누고-싶다면">🔀 3. 여러 페이지(파일)로 나누고 싶다면?</h2>
+
+<p>Pandoc 자체는 기본적으로 "책갈피가 있는 단일 HTML"을 생성하며, 여러 개의 HTML 파일로 나누지는 않습니다. 하지만 아래 방법들을 쓸 수 있어요:</p>
+
+<hr />
+
+<h3 id="-방법-a-각-markdown--각-html-다중-페이지">🔧 방법 A: 각 Markdown → 각 HTML (다중 페이지)</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span>f <span class="k">in</span> <span class="k">*</span>.md<span class="p">;</span> <span class="k">do
+  </span>pandoc <span class="s2">"</span><span class="nv">$f</span><span class="s2">"</span> <span class="nt">-o</span> <span class="s2">"</span><span class="k">${</span><span class="nv">f</span><span class="p">%.md</span><span class="k">}</span><span class="s2">.html"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>이 방식으로 <code class="language-plaintext highlighter-rouge">chapter1.md</code>, <code class="language-plaintext highlighter-rouge">chapter2.md</code> → 각각의 HTML 페이지로 변환됨.</p>
+  </li>
+  <li>
+    <p>각각의 HTML은 독립적이며 링크로 서로 연결 가능.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="-방법-b-단일-html-내에-목차-및-섹션-anchor-삽입">🔧 방법 B: 단일 HTML 내에 목차 및 섹션 anchor 삽입</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pandoc <span class="nt">--toc</span> <span class="nt">--toc-depth</span><span class="o">=</span>2 full.md <span class="nt">-o</span> full.html
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>목차 포함 (<code class="language-plaintext highlighter-rouge">--toc</code>)</p>
+  </li>
+  <li>
+    <p>각 헤더 (<code class="language-plaintext highlighter-rouge">#</code>, <code class="language-plaintext highlighter-rouge">##</code>)에 자동으로 <strong>anchor link</strong> 가 붙어서 네비게이션 가능</p>
+  </li>
+  <li>
+    <p>결과는 여전히 <strong>한 HTML 파일</strong> 이지만 <strong>느낌상 섹션 분할</strong> 이 됨.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="-방법-c-pandoc--scripting-으로-multi-page-사이트-구성">🔧 방법 C: Pandoc + Scripting 으로 Multi-Page 사이트 구성</h3>
+
+<p>Pandoc만으로는 완전한 다중 페이지 네비게이션은 어렵지만, 쉘 스크립트나 Makefile을 사용해 각 페이지를 생성하고 링크를 수동으로 삽입하면 됩니다.</p>
+
+<p>예:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 목차 페이지 생성</span>
+<span class="nb">echo</span> <span class="s2">"# 목차"</span> <span class="o">&gt;</span> index.md
+<span class="nb">echo</span> <span class="s2">"- [1장](chapter1.html)"</span> <span class="o">&gt;&gt;</span> index.md
+<span class="nb">echo</span> <span class="s2">"- [2장](chapter2.html)"</span> <span class="o">&gt;&gt;</span> index.md
+
+pandoc index.md <span class="nt">-o</span> index.html
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-팁-다중-페이지-웹사이트용-도구">🧠 팁: 다중 페이지 웹사이트용 도구</h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">pandoc</code>은 "전자책" 또는 "보고서" 스타일에 적합</p>
+  </li>
+  <li>
+    <p>다중 HTML 페이지로 분리된 웹사이트 스타일을 원한다면:</p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">mkdocs</code>, <code class="language-plaintext highlighter-rouge">mdbook</code>, <code class="language-plaintext highlighter-rouge">Docusaurus</code> 등을 고려</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-요약-1">✅ 요약</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>목적</th>
+      <th>가능 여부</th>
+      <th>방법</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>한 Markdown → 한 HTML</td>
+      <td>✅ 기본 동작</td>
+      <td><code class="language-plaintext highlighter-rouge">pandoc a.md -o a.html</code></td>
+    </tr>
+    <tr>
+      <td>여러 Markdown → 하나의 HTML</td>
+      <td>✅</td>
+      <td><code class="language-plaintext highlighter-rouge">pandoc a.md b.md -o merged.html</code></td>
+    </tr>
+    <tr>
+      <td>여러 Markdown → 여러 HTML</td>
+      <td>✅</td>
+      <td>루프/스크립트 사용</td>
+    </tr>
+    <tr>
+      <td>HTML을 여러 페이지로 자동 분할</td>
+      <td>❌ (Pandoc만으론 어려움)</td>
+      <td>스크립트/도구 활용 필요</td>
+    </tr>
+    <tr>
+      <td>목차/섹션 anchor로 나누기</td>
+      <td>✅</td>
+      <td><code class="language-plaintext highlighter-rouge">--toc</code> 옵션 사용</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><strong>정리하자면</strong> , Pandoc은 <strong>"한 Markdown = 한 HTML"</strong> 철학이 기본입니다. 여러 페이지로 나누려면 직접 <strong>여러 파일로 분할하여 개별 변환</strong> 하거나, 웹사이트 생성 도구와 조합하는 방식이 필요해요.</p>
+
+<p>원하는 결과가 "책처럼 페이지가 나뉜 문서"인지, "목차 있는 긴 HTML 하나"인지 말해주시면 거기에 맞는 예제도 만들어줄 수 있어요!</p>
+
+<p class="chat--user">
+
+이미지 등도 넣을 수 있어?
+
+</p>
+
+<p>네, <strong>Pandoc으로 HTML 문서를 만들 때 이미지도 얼마든지 넣을 수 있습니다.</strong> 다만 오프라인 환경이므로, <strong>이미지를 반드시 로컬 경로로 포함</strong> 해야 합니다. 아래에 step-by-step으로 설명드릴게요.</p>
+
+<hr />
+
+<h2 id="-1-markdown에서-이미지-삽입하기">✅ 1. Markdown에서 이미지 삽입하기</h2>
+
+<p>Markdown에서 이미지를 삽입하는 기본 문법은 다음과 같습니다:</p>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">![</span><span class="nv">이미지 설명</span><span class="p">](</span><span class="sx">images/photo.png</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">images/photo.png</code>는 현재 Markdown 파일 기준의 상대 경로입니다.</p>
+  </li>
+  <li>
+    <p>설명은 <code class="language-plaintext highlighter-rouge">&lt;img alt="..."&gt;</code> 태그로 변환됨.</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p><strong>Tip:</strong> 경로에 띄어쓰기가 있으면 <code class="language-plaintext highlighter-rouge">%20</code> 대신 <code class="language-plaintext highlighter-rouge">"..."</code>로 감싸는 게 안전합니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="-2-pandoc으로-html-변환">✅ 2. Pandoc으로 HTML 변환</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pandoc input.md <span class="nt">-o</span> output.html
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>이 경우 Pandoc은 <code class="language-plaintext highlighter-rouge">&lt;img src="images/photo.png"&gt;</code> 태그를 생성합니다.</p>
+  </li>
+  <li>
+    <p><strong>주의</strong> : 이미지 파일 자체는 <code class="language-plaintext highlighter-rouge">output.html</code>에 포함되지 않으며 <strong>링크로만 참조</strong> 됩니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-3-오프라인에서-완전한-단일-파일-만들기-base64-임베딩">🔐 3. 오프라인에서 완전한 단일 파일 만들기 (Base64 임베딩)</h2>
+
+<p>HTML 하나에 이미지도 <strong>모두 포함</strong> 시키고 싶다면 <code class="language-plaintext highlighter-rouge">--self-contained</code> 옵션을 사용합니다:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pandoc input.md <span class="nt">-o</span> output.html <span class="nt">--self-contained</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>이미지, CSS, JS 등을 모두 <strong>base64로 인코딩하여 HTML 내부에 포함</strong></p>
+  </li>
+  <li>
+    <p>완전히 독립된 <code class="language-plaintext highlighter-rouge">.html</code> 파일 하나로 배포 가능</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>단점: 파일 용량 커짐 (이미지 많을수록)</p>
+</blockquote>
+
+<hr />
+
+<h2 id="-4-외부-리소스를-함께-배포할-경우-디렉토리-구조-예시">📦 4. 외부 리소스를 함께 배포할 경우 디렉토리 구조 예시</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>offline-doc/
+├── index.html
+├── style.css
+└── images/
+    ├── photo1.jpg
+    └── diagram.svg
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Markdown에선 <code class="language-plaintext highlighter-rouge">images/photo1.jpg</code>처럼 링크</p>
+  </li>
+  <li>
+    <p>HTML로 변환한 후에도 해당 경로를 유지해야 이미지가 정상 표시됨</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="️-5-이미지-포맷-호환성">🖼️ 5. 이미지 포맷 호환성</h2>
+
+<p>Pandoc은 브라우저가 지원하는 대부분의 이미지 포맷을 지원합니다:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>포맷</th>
+      <th>지원 여부</th>
+      <th>비고</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PNG</td>
+      <td>✅</td>
+      <td>일반 그래픽</td>
+    </tr>
+    <tr>
+      <td>JPG</td>
+      <td>✅</td>
+      <td>사진 등</td>
+    </tr>
+    <tr>
+      <td>GIF</td>
+      <td>✅</td>
+      <td>애니메이션 포함</td>
+    </tr>
+    <tr>
+      <td>SVG</td>
+      <td>✅</td>
+      <td>벡터 이미지</td>
+    </tr>
+    <tr>
+      <td>WebP</td>
+      <td>✅</td>
+      <td>최신 브라우저 호환 시</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-요약-2">✅ 요약</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>목적</th>
+      <th>방법</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>이미지 삽입</td>
+      <td><code class="language-plaintext highlighter-rouge">![설명](images/pic.png)</code></td>
+    </tr>
+    <tr>
+      <td>로컬 이미지 표시</td>
+      <td>이미지 파일을 경로에 포함</td>
+    </tr>
+    <tr>
+      <td>완전한 단일 HTML 파일</td>
+      <td><code class="language-plaintext highlighter-rouge">--self-contained</code> 사용</td>
+    </tr>
+    <tr>
+      <td>오프라인 배포</td>
+      <td>HTML + 이미지 폴더 같이 배포</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하다면 실제 예제 Markdown + HTML + 이미지 구조까지 만들어서 템플릿을 드릴 수 있어요. 원하시는 방식(분리 vs 단일 파일) 알려주시면 거기에 맞게 구성해드릴게요!</p>
+
+<p class="chat--user">
+
+html 경로를 주고 예를 들어 mytool doc 하면 document 폴더의 index.html 열리게 하는 방식 어때
+
+</p>
+
+<p>아주 훌륭한 방식입니다!<br />
+명령어 <code class="language-plaintext highlighter-rouge">mytool doc</code>을 입력하면 특정 폴더의 <code class="language-plaintext highlighter-rouge">index.html</code>을 열도록 만드는 건 <strong>오프라인 문서 뷰어를 CLI 도구로 만드는 매우 실용적인 접근</strong> 입니다.</p>
+
+<p>아래는 그 아이디어를 <strong>구현 가능한 방식으로 step-by-step</strong> 으로 정리한 것입니다.</p>
+
+<hr />
+
+<h2 id="-목표">✅ 목표</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nginx
+
+mytool doc
+</code></pre></div></div>
+
+<p>이 명령을 실행하면:</p>
+
+<ul>
+  <li>
+    <p>로컬 <code class="language-plaintext highlighter-rouge">document/index.html</code>을</p>
+  </li>
+  <li>
+    <p>시스템 기본 브라우저에서 자동으로 열고</p>
+  </li>
+  <li>
+    <p>필요하면 백그라운드에 로컬 서버까지 띄움</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-디렉토리-구조-예시">📁 디렉토리 구조 예시</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mytool/
+├── mytool.sh           <span class="c"># 메인 실행 스크립트</span>
+├── document/
+│   ├── index.html
+│   ├── style.css
+│   └── images/
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-1-mytoolsh-bash-스크립트-예시">🔧 1. <code class="language-plaintext highlighter-rouge">mytool.sh</code> (Bash 스크립트 예시)</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">CMD</span><span class="o">=</span><span class="nv">$1</span>
+
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$CMD</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"doc"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+  </span><span class="nv">DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cd</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">dirname</span> <span class="s2">"</span><span class="k">${</span><span class="nv">BASH_SOURCE</span><span class="p">[0]</span><span class="k">}</span><span class="s2">"</span><span class="si">)</span><span class="s2">"</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>
+  <span class="nb">cd</span> <span class="s2">"</span><span class="nv">$DIR</span><span class="s2">/document"</span>
+
+  <span class="c"># 로컬 서버 백그라운드 실행</span>
+  python3 <span class="nt">-m</span> http.server 8976 <span class="o">&gt;</span> /dev/null 2&gt;&amp;1 &amp;
+
+  <span class="c"># 서버 PID 저장 (종료 시킬 때 사용 가능)</span>
+  <span class="nv">SERVER_PID</span><span class="o">=</span><span class="nv">$!</span>
+
+  <span class="c"># 브라우저 열기</span>
+  <span class="k">if </span><span class="nb">command</span> <span class="nt">-v</span> xdg-open <span class="o">&gt;</span> /dev/null<span class="p">;</span> <span class="k">then
+    </span>xdg-open http://localhost:8976/index.html
+  <span class="k">elif </span><span class="nb">command</span> <span class="nt">-v</span> open <span class="o">&gt;</span> /dev/null<span class="p">;</span> <span class="k">then
+    </span>open http://localhost:8976/index.html
+  <span class="k">elif </span><span class="nb">command</span> <span class="nt">-v</span> start <span class="o">&gt;</span> /dev/null<span class="p">;</span> <span class="k">then
+    </span>start http://localhost:8976/index.html
+  <span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"브라우저를 여는 명령어를 찾을 수 없습니다."</span>
+  <span class="k">fi</span>
+
+  <span class="c"># 서버가 계속 돌도록 대기 (선택사항)</span>
+  <span class="nb">wait</span> <span class="nv">$SERVER_PID</span>
+<span class="k">else
+  </span><span class="nb">echo</span> <span class="s2">"사용법: mytool doc"</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-2-실행-가능한-cli로-만들기">🔨 2. 실행 가능한 CLI로 만들기</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x mytool.sh
+<span class="nb">ln</span> <span class="nt">-s</span> /path/to/mytool/mytool.sh /usr/local/bin/mytool
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>이제 <code class="language-plaintext highlighter-rouge">mytool doc</code> 명령어로 실행 가능</p>
+  </li>
+  <li>
+    <p>오프라인에서도 문서 폴더 열기 가능</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-응용-아이디어">🧩 응용 아이디어</h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">mytool doc chapter1</code> → <code class="language-plaintext highlighter-rouge">chapter1.html</code> 열도록 확장</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">mytool doc --print</code> → PDF로 저장 또는 출력</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">mytool doc edit</code> → 원본 Markdown 열기</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-요약-3">✅ 요약</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>구성 요소</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">document/</code></td>
+      <td>정적 HTML 문서 폴더</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mytool.sh</code></td>
+      <td>CLI 인터페이스 역할</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">python3 -m http.server</code></td>
+      <td>로컬 서빙</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">xdg-open</code>, <code class="language-plaintext highlighter-rouge">open</code>, <code class="language-plaintext highlighter-rouge">start</code></td>
+      <td>시스템 브라우저 실행</td>
+    </tr>
+    <tr>
+      <td>심볼릭 링크</td>
+      <td>명령어를 글로벌하게 등록</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하면 이걸 <code class="language-plaintext highlighter-rouge">.deb</code> 패키지, <code class="language-plaintext highlighter-rouge">.pkg</code>, <code class="language-plaintext highlighter-rouge">.exe</code>로 만들거나 Python 기반으로 다시 구현하는 것도 가능합니다.<br />
+이걸 Shell이 아니라 Python CLI (예: <code class="language-plaintext highlighter-rouge">typer</code>, <code class="language-plaintext highlighter-rouge">click</code>)로 구현하는 게 더 편하신가요?</p>
+
+<p class="chat--user">
+
+그냥 html로 여는거 아니었어? 서버도 열어야해?
+
+</p>
+
+<p>좋은 질문이에요!<br />
+<strong>반드시 로컬 서버를 열 필요는 없습니다.</strong><br />
+하지만 “서버를 열 것인가, 그냥 HTML 파일을 브라우저로 열 것인가”는 다음 조건에 따라 달라집니다:</p>
+
+<hr />
+
+<h2 id="-핵심-차이점-직접-여는-것-vs-서버로-여는-것">🧠 핵심 차이점: 직접 여는 것 vs 서버로 여는 것</h2>
+
+<p>방식| 장점| 단점<br />
+—|—|—<br />
+<strong>그냥 열기</strong> (<code class="language-plaintext highlighter-rouge">file://</code>)| ✅ 빠르고 간단<br />
+✅ 서버 불필요| ❌ JS 로딩, 경로 제한 있을 수 있음 (브라우저 보안 정책에 따라)<br />
+<strong>서버 열기</strong> (<code class="language-plaintext highlighter-rouge">http://localhost</code>)| ✅ HTML, JS, 이미지 로딩 완벽하게 동작<br />
+✅ 현대 웹앱과 호환성↑| ❌ Python 필요<br />
+❌ 포트 충돌 가능</p>
+
+<hr />
+
+<h2 id="-1-그냥-html을-열고-싶다면-가장-간단한-방식">✅ 1. 그냥 HTML을 열고 싶다면 (가장 간단한 방식)</h2>
+
+<h3 id="️-추천-조건">▶️ 추천 조건:</h3>
+
+<ul>
+  <li>
+    <p>정적 HTML만 있고, JS 프레임워크를 쓰지 않음</p>
+  </li>
+  <li>
+    <p>SPA (Single Page App)가 아님</p>
+  </li>
+  <li>
+    <p>보안 제한 무관한 환경 (내 PC, 내 브라우저)</p>
+  </li>
+</ul>
+
+<h3 id="️-예제-코드">▶️ 예제 코드:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">CMD</span><span class="o">=</span><span class="nv">$1</span>
+
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$CMD</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"doc"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+  </span><span class="nv">DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cd</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">dirname</span> <span class="s2">"</span><span class="k">${</span><span class="nv">BASH_SOURCE</span><span class="p">[0]</span><span class="k">}</span><span class="s2">"</span><span class="si">)</span><span class="s2">"</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>
+  <span class="nv">FILE</span><span class="o">=</span><span class="s2">"</span><span class="nv">$DIR</span><span class="s2">/document/index.html"</span>
+
+  <span class="k">if </span><span class="nb">command</span> <span class="nt">-v</span> xdg-open <span class="o">&gt;</span> /dev/null<span class="p">;</span> <span class="k">then
+    </span>xdg-open <span class="s2">"</span><span class="nv">$FILE</span><span class="s2">"</span>
+  <span class="k">elif </span><span class="nb">command</span> <span class="nt">-v</span> open <span class="o">&gt;</span> /dev/null<span class="p">;</span> <span class="k">then
+    </span>open <span class="s2">"</span><span class="nv">$FILE</span><span class="s2">"</span>
+  <span class="k">elif </span><span class="nb">command</span> <span class="nt">-v</span> start <span class="o">&gt;</span> /dev/null<span class="p">;</span> <span class="k">then
+    </span>start <span class="s2">"</span><span class="nv">$FILE</span><span class="s2">"</span>
+  <span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"브라우저를 여는 명령어를 찾을 수 없습니다."</span>
+  <span class="k">fi
+else
+  </span><span class="nb">echo</span> <span class="s2">"사용법: mytool doc"</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>브라우저에서 <code class="language-plaintext highlighter-rouge">file:///.../index.html</code> 경로로 열림</p>
+  </li>
+  <li>
+    <p>단일 HTML 문서라면 이 방식이 제일 간단하고 충분합니다!</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-그런데-서버가-필요한-경우는">❗ 그런데 서버가 필요한 경우는?</h2>
+
+<blockquote>
+  <p>예: Vue, React, Vite, Webpack, 이미지 fetch API, 로컬 스크립트에서 <code class="language-plaintext highlighter-rouge">XMLHttpRequest</code> 사용하는 경우</p>
+</blockquote>
+
+<p>이런 경우 브라우저가 <strong>file://에서는 CORS나 보안 오류</strong> 를 낼 수 있어서 로컬 HTTP 서버가 필요합니다.</p>
+
+<hr />
+
+<h2 id="-결론">✅ 결론</h2>
+
+<ul>
+  <li>
+    <p>정적 문서(<code class="language-plaintext highlighter-rouge">index.html</code>, <code class="language-plaintext highlighter-rouge">style.css</code>, <code class="language-plaintext highlighter-rouge">img.png</code>)만 있으면 👉 <strong>서버 없이 직접 여는 방식이 정답</strong> 입니다.</p>
+  </li>
+  <li>
+    <p>JavaScript가 파일을 불러오거나 모듈화된 웹앱이면 👉 <strong>로컬 서버 필요</strong> 합니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="원하시는-방향-정리">원하시는 방향 정리:</h2>
+
+<blockquote>
+  <p>✅ <code class="language-plaintext highlighter-rouge">mytool doc</code> → 그냥 HTML 열기만 하면 된다</p>
+</blockquote>
+
+<p>그렇다면 로컬 서버는 <strong>불필요</strong> 하고, 위의 "그냥 열기" 방식으로 충분합니다.</p>
+
+<p>필요하면 이 방식으로 깔끔한 <code class="language-plaintext highlighter-rouge">bash</code> 템플릿도 만들어드릴게요!</p>
+
+<p class="chat--user">
+
+pandoc이 js도 필요해?
+
+</p>
+
+<p>아니요, <strong>Pandoc 자체는 JavaScript(JS)를 필요로 하지 않습니다.</strong><br />
+즉, <strong>기본적인 HTML 변환 결과물은 JS 없이도 완전히 동작</strong> 합니다. 아래에서 자세히 설명드릴게요:</p>
+
+<hr />
+
+<h2 id="-pandoc의-html-출력-기본-성격">✅ Pandoc의 HTML 출력: 기본 성격</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pandoc input.md <span class="nt">-o</span> output.html
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>생성되는 <code class="language-plaintext highlighter-rouge">output.html</code>은 <strong>정적 HTML 문서</strong> 입니다.</p>
+  </li>
+  <li>
+    <p>내부에 <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> 태그도 없고, JS 파일도 사용하지 않음.</p>
+  </li>
+  <li>
+    <p>CSS도 포함되지 않거나, 옵션을 주지 않으면 inline으로 최소화됨.</p>
+  </li>
+</ul>
+
+<h3 id="-예외적으로-js가-포함되는-경우는-다음과-같습니다">➕ 예외적으로 JS가 포함되는 경우는 다음과 같습니다:</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>기능</th>
+      <th>JS 필요 여부</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>기본 Markdown → HTML</td>
+      <td>❌ 필요 없음</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--highlight-style</code> (문법 강조)</td>
+      <td>✅ 필요할 수 있음 (highlight.js 내장)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--toc</code> (목차 생성)</td>
+      <td>❌ 필요 없음 (JS 아닌 anchor 링크로 처리됨)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Reveal.js 슬라이드 출력</td>
+      <td>✅ 필요 (슬라이드용 JS 프레임워크 포함)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>MathJax 수식 표현</td>
+      <td>✅ 필요 (JS 수식 렌더링)</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-예시-js-없이-변환">🔍 예시: JS 없이 변환</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pandoc mydoc.md <span class="nt">-o</span> mydoc.html
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>이 파일은 아무런 JS 없이 <code class="language-plaintext highlighter-rouge">file://</code>로 브라우저에서 열 수 있음.</p>
+  </li>
+  <li>
+    <p>이미지, 링크, 헤더 등 HTML 기본 기능만으로도 충분히 표현됨.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-그럼-언제-js가-필요한가">🧠 그럼 언제 JS가 필요한가?</h2>
+
+<p>JS는 Pandoc과는 관계 없이 <strong>당신이 문서에 추가한 기능이나 스타일에 따라</strong> 필요할 수 있습니다. 예를 들어:</p>
+
+<ul>
+  <li>
+    <p><strong>문서 내 인터랙션</strong> (접었다 펴기, 탭 전환 등)</p>
+  </li>
+  <li>
+    <p><strong>수식 렌더링 (LaTeX → MathJax)</strong></p>
+  </li>
+  <li>
+    <p><strong>Reveal.js 슬라이드 출력</strong></p>
+  </li>
+  <li>
+    <p><strong>검색 기능, 페이지 이동 등 SPA 느낌</strong></p>
+  </li>
+</ul>
+
+<p>이런 경우는 Pandoc에서 template을 바꾸거나, 후처리로 JS를 붙이는 거지 <strong>Pandoc 자체 요구사항은 아닙니다.</strong></p>
+
+<hr />
+
+<h2 id="-결론-1">✅ 결론</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>질문</th>
+      <th>대답</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pandoc이 HTML 만들 때 JS 필요해?</td>
+      <td>❌ (기본 변환은 필요 없음)</td>
+    </tr>
+    <tr>
+      <td>언제 JS가 필요할 수 있어?</td>
+      <td>문법 강조, 수식, 슬라이드, 고급 UI 추가할 때</td>
+    </tr>
+    <tr>
+      <td>기본 문서 보기만 한다면?</td>
+      <td>그냥 <code class="language-plaintext highlighter-rouge">file://</code>로 HTML 열면 충분</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>원하시는 게 "그냥 Markdown → HTML 변환해서 문서 보기"라면, <strong>Pandoc만으로도 아주 충분하고, JS 없이 완전한 결과</strong> 를 만들 수 있습니다.</p>
+
+<p>수식이나 슬라이드 같은 JS 기능을 붙이고 싶으면, 그에 맞는 설정도 도와드릴 수 있어요!</p>
+
+<p class="chat--user">
+
+근데 click subcommand로 doc을 줄건데 어떻게 연결하는게 좋을까 doc이 배포되는 경로를 하드코딩하긴 좀 그런데 pyproject 로 html 빌드된 경로 주고 mytool doc 했을 때 그 리소스를 참조하게 할 수 있어?
+
+</p>
+
+<p>좋은 질문이에요.<br />
+Python 프로젝트에서 <code class="language-plaintext highlighter-rouge">click</code>으로 <code class="language-plaintext highlighter-rouge">mytool doc</code> 서브커맨드를 만들고, <strong>HTML로 빌드된 문서를 자연스럽게 참조하게 하고 싶다</strong> 는 목표죠.<br />
+핵심은 “HTML 리소스를 하드코딩하지 않고, 패키지 내부에 포함된 리소스를 동적으로 참조하는 방식”입니다.</p>
+
+<p>이를 해결하려면 <strong>패키징된 HTML 리소스를 접근할 수 있는 안정적인 방식</strong> 이 필요합니다.</p>
+
+<hr />
+
+<h2 id="-해결-전략-요약">✅ 해결 전략 요약</h2>
+
+<blockquote>
+  <p><strong>목표</strong> : <code class="language-plaintext highlighter-rouge">mytool doc</code> → 패키지 안에 포함된 <code class="language-plaintext highlighter-rouge">index.html</code> 열기 (서버 없이 or 선택적으로 서버로)</p>
+</blockquote>
+
+<h3 id="-리소스를-패키지에-포함--안전하게-참조">📦 리소스를 패키지에 포함 + 안전하게 참조</h3>
+
+<p>Python의 <code class="language-plaintext highlighter-rouge">importlib.resources</code> 또는 <code class="language-plaintext highlighter-rouge">pkg_resources</code>를 사용하면<br />
+패키지 내부에 포함된 HTML 리소스를 안전하게 참조할 수 있습니다.</p>
+
+<hr />
+
+<h2 id="-예시-구조-pyprojecttoml-기반-패키지">🧱 예시 구조 (pyproject.toml 기반 패키지)</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mytool/
+├── __init__.py
+├── cli.py               <span class="c"># click entrypoint</span>
+├── docs/                <span class="c"># HTML 리소스 위치</span>
+│   ├── index.html
+│   └── style.css
+pyproject.toml
+</code></pre></div></div>
+
+<h3 id="pyprojecttoml-설정">pyproject.toml 설정</h3>
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[tool.setuptools.package-data]</span>
+<span class="py">mytool</span> <span class="p">=</span> <span class="p">[</span><span class="s">"docs/**/*"</span><span class="p">]</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>또는 <code class="language-plaintext highlighter-rouge">MANIFEST.in</code>이 필요한 경우:</p>
+  <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">recursive-include</span> <span class="err">mytool/docs</span> <span class="err">*</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<hr />
+
+<h2 id="-core-리소스-파일을-참조해서-여는-방법">🧠 core: 리소스 파일을 참조해서 여는 방법</h2>
+
+<h3 id="-python--39-importlibresourcesfiles">✅ Python ≥ 3.9: <code class="language-plaintext highlighter-rouge">importlib.resources.files</code></h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">importlib.resources</span> <span class="kn">import</span> <span class="n">files</span>
+<span class="kn">import</span> <span class="n">webbrowser</span>
+
+<span class="k">def</span> <span class="nf">open_docs</span><span class="p">():</span>
+    <span class="n">html_path</span> <span class="o">=</span> <span class="nf">files</span><span class="p">(</span><span class="sh">"</span><span class="s">mytool</span><span class="sh">"</span><span class="p">).</span><span class="nf">joinpath</span><span class="p">(</span><span class="sh">"</span><span class="s">docs/index.html</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">webbrowser</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">file://</span><span class="si">{</span><span class="n">html_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">files(...)</code>는 설치된 wheel 안에서도 정상 동작</p>
+  </li>
+  <li>
+    <p>상대 경로 하드코딩 안 해도 됨</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">.joinpath(...)</code>로 안정적으로 서브 디렉토리 접근 가능</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>⚠️ 주의: <code class="language-plaintext highlighter-rouge">file://</code> 경로는 시스템에 따라 URI 인코딩에 주의</p>
+</blockquote>
+
+<hr />
+
+<h2 id="-click-cli-예시">🧾 click CLI 예시</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">click</span>
+<span class="kn">from</span> <span class="n">importlib.resources</span> <span class="kn">import</span> <span class="n">files</span>
+<span class="kn">import</span> <span class="n">webbrowser</span>
+
+<span class="nd">@click.group</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">cli</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="nd">@cli.command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">doc</span><span class="p">():</span>
+    <span class="sh">"""</span><span class="s">Open HTML documentation in browser.</span><span class="sh">"""</span>
+    <span class="n">html_path</span> <span class="o">=</span> <span class="nf">files</span><span class="p">(</span><span class="sh">"</span><span class="s">mytool</span><span class="sh">"</span><span class="p">).</span><span class="nf">joinpath</span><span class="p">(</span><span class="sh">"</span><span class="s">docs/index.html</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">webbrowser</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">file://</span><span class="si">{</span><span class="n">html_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">cli</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-서버를-선택적으로-띄우고-싶다면">💡 서버를 선택적으로 띄우고 싶다면?</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">http.server</span>
+<span class="kn">import</span> <span class="n">socketserver</span>
+<span class="kn">import</span> <span class="n">threading</span>
+
+<span class="nd">@click.command</span><span class="p">()</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="sh">"</span><span class="s">--serve</span><span class="sh">"</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Serve via local HTTP</span><span class="sh">"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">doc</span><span class="p">(</span><span class="n">serve</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">serve</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="n">importlib.resources</span> <span class="kn">import</span> <span class="n">files</span>
+        <span class="n">doc_dir</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nf">files</span><span class="p">(</span><span class="sh">"</span><span class="s">mytool</span><span class="sh">"</span><span class="p">).</span><span class="nf">joinpath</span><span class="p">(</span><span class="sh">"</span><span class="s">docs</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="mi">8000</span>
+
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span><span class="p">.</span><span class="n">SimpleHTTPRequestHandler</span>
+        <span class="n">httpd</span> <span class="o">=</span> <span class="n">socketserver</span><span class="p">.</span><span class="nc">TCPServer</span><span class="p">((</span><span class="sh">""</span><span class="p">,</span> <span class="n">port</span><span class="p">),</span> <span class="n">handler</span><span class="p">)</span>
+
+        <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">httpd</span><span class="p">.</span><span class="n">serve_forever</span><span class="p">)</span>
+        <span class="n">thread</span><span class="p">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">thread</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+
+        <span class="n">webbrowser</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">http://localhost:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s">/index.html</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">html_path</span> <span class="o">=</span> <span class="nf">files</span><span class="p">(</span><span class="sh">"</span><span class="s">mytool</span><span class="sh">"</span><span class="p">).</span><span class="nf">joinpath</span><span class="p">(</span><span class="sh">"</span><span class="s">docs/index.html</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">webbrowser</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">file://</span><span class="si">{</span><span class="n">html_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-요약-4">✅ 요약</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>목적</th>
+      <th>방법</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>리소스를 하드코딩 없이 참조</td>
+      <td><code class="language-plaintext highlighter-rouge">importlib.resources.files()</code></td>
+    </tr>
+    <tr>
+      <td>HTML 포함</td>
+      <td><code class="language-plaintext highlighter-rouge">package_data</code> 또는 <code class="language-plaintext highlighter-rouge">MANIFEST.in</code></td>
+    </tr>
+    <tr>
+      <td>브라우저 열기</td>
+      <td><code class="language-plaintext highlighter-rouge">webbrowser.open()</code> 사용</td>
+    </tr>
+    <tr>
+      <td>선택적 서버 서빙</td>
+      <td><code class="language-plaintext highlighter-rouge">http.server</code> + <code class="language-plaintext highlighter-rouge">--serve</code> 옵션</td>
+    </tr>
+    <tr>
+      <td>pyproject.toml 패키징</td>
+      <td><code class="language-plaintext highlighter-rouge">mytool/docs/**/*</code> 경로 포함 설정 필요</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하다면 <code class="language-plaintext highlighter-rouge">pyproject.toml</code>, <code class="language-plaintext highlighter-rouge">MANIFEST.in</code>, 실제 프로젝트 구조까지 예제 템플릿 드릴 수 있어요.<br />
+wheel로 배포될 경우도 포함해서 안정적인 접근 방식 원하시면 알려주세요!</p>
+
+<p class="chat--user">
+
+잡혀있는 webbrowser path 보는 법
+
+</p>
+
+<p><code class="language-plaintext highlighter-rouge">webbrowser</code> 모듈에서 <strong>현재 잡혀있는(사용되는) 브라우저 경로를 직접 확인</strong> 하려면, 내부적으로 등록된 브라우저 객체를 살펴야 합니다.<br />
+다만 <code class="language-plaintext highlighter-rouge">webbrowser.open()</code>은 내부에서 자동으로 <code class="language-plaintext highlighter-rouge">default</code> 브라우저를 선택하거나, 환경변수에 따라 다르게 동작하기 때문에 <strong>직접 경로를 반환해주진 않습니다.</strong></p>
+
+<p>하지만 아래의 방법들로 어느 브라우저가 잡혀 있는지 <strong>유추하거나 명시적으로 확인</strong> 할 수 있습니다:</p>
+
+<hr />
+
+<h2 id="-1-사용-가능한-브라우저-리스트-확인">✅ 1. 사용 가능한 브라우저 리스트 확인</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">webbrowser</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">webbrowser</span><span class="p">.</span><span class="n">_browsers</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>이 딕셔너리에는 <code class="language-plaintext highlighter-rouge">webbrowser.register()</code>로 등록된 브라우저들이 나옴</p>
+  </li>
+  <li>
+    <p>예시 출력:</p>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="sh">'</span><span class="s">chrome</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">webbrowser</span><span class="p">.</span><span class="n">BackgroundBrowser</span> <span class="nb">object</span> <span class="n">at</span> <span class="mi">0</span><span class="n">x</span><span class="p">...</span><span class="o">&gt;</span><span class="p">],</span>
+ <span class="sh">'</span><span class="s">firefox</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">webbrowser</span><span class="p">.</span><span class="n">Mozilla</span> <span class="nb">object</span> <span class="n">at</span> <span class="mi">0</span><span class="n">x</span><span class="p">...</span><span class="o">&gt;</span><span class="p">]}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-2-기본으로-사용되는-브라우저-객체-확인">✅ 2. 기본으로 사용되는 브라우저 객체 확인</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">webbrowser</span>
+
+<span class="n">browser</span> <span class="o">=</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nf">get</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">browser</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>결과:
+    <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">&lt;</span><span class="n">webbrowser</span><span class="p">.</span><span class="n">MacOSXOSAScript</span> <span class="kt">object</span> <span class="n">at</span> <span class="m">0</span><span class="n">x</span><span class="p">...&gt;</span>
+<span class="p">&lt;</span><span class="n">webbrowser</span><span class="p">.</span><span class="n">BackgroundBrowser</span> <span class="kt">object</span> <span class="n">at</span> <span class="m">0</span><span class="n">x</span><span class="p">...&gt;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>여기서는 객체 타입을 통해 기본 브라우저가 무엇인지 유추 가능</li>
+</ul>
+
+<hr />
+
+<h2 id="-3-명시적으로-브라우저-인스턴스를-가져올-때-경로-확인-가능">✅ 3. 명시적으로 브라우저 인스턴스를 가져올 때 (경로 확인 가능)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">webbrowser</span>
+
+<span class="n">chrome</span> <span class="o">=</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">chrome</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">chrome</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>또는:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">webbrowser</span>
+
+<span class="n">firefox</span> <span class="o">=</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">firefox</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">firefox</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">firefox</span><span class="p">,</span> <span class="sh">'</span><span class="s">basename</span><span class="sh">'</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>  <span class="c1"># 일부 브라우저에만 존재
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">BackgroundBrowser</code> 클래스는 내부적으로 실행 경로를 들고 있음:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">print</span><span class="p">(</span><span class="n">firefox</span><span class="p">.</span><span class="n">_name</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">firefox</span><span class="p">.</span><span class="n">_executable</span><span class="p">)</span>  <span class="c1"># 등록된 실행 경로
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="-4-브라우저-경로-수동-등록-후-확인">✅ 4. 브라우저 경로 수동 등록 후 확인</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">webbrowser</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="sh">"</span><span class="s">mychrome</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nc">BackgroundBrowser</span><span class="p">(</span><span class="sh">"</span><span class="s">/usr/bin/google-chrome</span><span class="sh">"</span><span class="p">))</span>
+<span class="n">browser</span> <span class="o">=</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">mychrome</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">browser</span><span class="p">.</span><span class="n">_executable</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-참고-운영체제에-따라-기본-브라우저-확인하는-cli">💡 참고: 운영체제에 따라 기본 브라우저 확인하는 CLI</h2>
+
+<ul>
+  <li>macOS:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>open <span class="nt">-a</span> Safari
+</code></pre></div>    </div>
+  </li>
+  <li>Linux:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xdg-settings get default-web-browser
+</code></pre></div>    </div>
+  </li>
+  <li>Windows (PowerShell):
+    <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-ItemProperty</span><span class="w"> </span><span class="s1">'HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice'</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-결론-2">✅ 결론</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>목적</th>
+      <th>방법</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>기본 브라우저 객체 확인</td>
+      <td><code class="language-plaintext highlighter-rouge">webbrowser.get()</code></td>
+    </tr>
+    <tr>
+      <td>등록된 브라우저 목록 보기</td>
+      <td><code class="language-plaintext highlighter-rouge">webbrowser._browsers</code></td>
+    </tr>
+    <tr>
+      <td>브라우저 실행 경로 확인</td>
+      <td><code class="language-plaintext highlighter-rouge">BackgroundBrowser._executable</code></td>
+    </tr>
+    <tr>
+      <td>명시 등록 시 경로 추적</td>
+      <td><code class="language-plaintext highlighter-rouge">webbrowser.register(...)</code> 후 <code class="language-plaintext highlighter-rouge">.get(...)._executable</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하면 브라우저 경로 자동 탐지 및 fallback 등록 스크립트도 만들어드릴게요.<br />
+특정 OS에 대해 더 구체적인 경로 찾고 싶으시면 말씀해주세요!</p>
+
+<p class="chat--user">
+
+내가 특정한 브라우저 바이너리를 지정해서 열게하고 싶어
+
+</p>
+
+<p>완벽합니다 — 그럴 때는 Python의 <code class="language-plaintext highlighter-rouge">webbrowser</code> 모듈에서 <strong>원하는 브라우저 실행 바이너리를 직접 지정해서 등록</strong> 하면 됩니다.<br />
+즉, <code class="language-plaintext highlighter-rouge">webbrowser.register()</code>를 사용해 바이너리 경로를 지정하고, 그 브라우저로 <code class="language-plaintext highlighter-rouge">.open()</code>을 수행하면 돼요.</p>
+
+<hr />
+
+<h2 id="-목표-1">✅ 목표</h2>
+
+<blockquote>
+  <p>내가 원하는 경로의 브라우저 (<code class="language-plaintext highlighter-rouge">/opt/my-chrome/bin/chrome</code> 등)로 문서를 열고 싶다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="️-방법-webbrowserbackgroundbrowser-사용">🛠️ 방법: <code class="language-plaintext highlighter-rouge">webbrowser.BackgroundBrowser</code> 사용</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">webbrowser</span>
+
+<span class="c1"># 원하는 브라우저 바이너리 경로
+</span><span class="n">browser_path</span> <span class="o">=</span> <span class="sh">"</span><span class="s">/opt/my-chrome/bin/chrome</span><span class="sh">"</span>
+
+<span class="c1"># 'mybrowser' 이름으로 등록
+</span><span class="n">webbrowser</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="sh">"</span><span class="s">mybrowser</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nc">BackgroundBrowser</span><span class="p">(</span><span class="n">browser_path</span><span class="p">))</span>
+
+<span class="c1"># 가져와서 열기
+</span><span class="n">browser</span> <span class="o">=</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">mybrowser</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">browser</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">file:///path/to/your/index.html</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-옵션-open_new_tab-또는-open_new">📎 옵션: <code class="language-plaintext highlighter-rouge">open_new_tab()</code> 또는 <code class="language-plaintext highlighter-rouge">open_new()</code></h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">browser</span><span class="p">.</span><span class="nf">open_new_tab</span><span class="p">(</span><span class="sh">"</span><span class="s">file:///...</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-전체-예제">✅ 전체 예제</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">webbrowser</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">def</span> <span class="nf">open_with_custom_browser</span><span class="p">(</span><span class="n">doc_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">browser_bin</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="c1"># 파일을 절대경로로 바꾸고 URL 스킴 추가
+</span>    <span class="n">abs_path</span> <span class="o">=</span> <span class="n">doc_path</span><span class="p">.</span><span class="nf">resolve</span><span class="p">()</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">abs_path</span><span class="p">.</span><span class="nf">as_uri</span><span class="p">()</span>  <span class="c1"># e.g., 'file:///home/user/doc/index.html'
+</span>
+    <span class="c1"># 브라우저 등록
+</span>    <span class="n">webbrowser</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="sh">"</span><span class="s">mybrowser</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nc">BackgroundBrowser</span><span class="p">(</span><span class="n">browser_bin</span><span class="p">))</span>
+
+    <span class="c1"># 열기
+</span>    <span class="n">browser</span> <span class="o">=</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">mybrowser</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">browser</span><span class="p">.</span><span class="nf">open_new_tab</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="c1"># 예시 사용
+</span><span class="nf">open_with_custom_browser</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="sh">"</span><span class="s">./document/index.html</span><span class="sh">"</span><span class="p">),</span> <span class="sh">"</span><span class="s">/opt/chromium/chrome</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-참고-경로가-이상할-때-문제-해결-팁">💡 참고: 경로가 이상할 때 문제 해결 팁</h2>
+
+<ul>
+  <li>
+    <p>경로에 공백이 있으면 <code class="language-plaintext highlighter-rouge">Path(...).as_uri()</code> 방식이 안전</p>
+  </li>
+  <li>
+    <p>브라우저 실행 권한이 없으면 <code class="language-plaintext highlighter-rouge">PermissionError</code></p>
+  </li>
+  <li>
+    <p>브라우저가 headless 설정으로 실행되면 UI가 안 뜰 수 있음</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-정리-1">✅ 정리</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>항목</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>브라우저 바이너리 지정</td>
+      <td><code class="language-plaintext highlighter-rouge">webbrowser.BackgroundBrowser('/my/path')</code></td>
+    </tr>
+    <tr>
+      <td>등록 이름</td>
+      <td><code class="language-plaintext highlighter-rouge">webbrowser.register('mybrowser', ...)</code></td>
+    </tr>
+    <tr>
+      <td>파일 URL로 열기</td>
+      <td><code class="language-plaintext highlighter-rouge">Path(...).as_uri()</code> 사용</td>
+    </tr>
+    <tr>
+      <td>새 탭으로 열기</td>
+      <td><code class="language-plaintext highlighter-rouge">browser.open_new_tab(url)</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하면 macOS, Windows, Linux 별로 크롬이나 파이어폭스 기본 위치 자동 탐지하는 스크립트도 도와드릴게요.<br />
+지정하려는 브라우저가 특별한 환경 설정이 있다면 그것도 알려주세요!</p>
+
+<p class="chat--user">
+
+BackgroundBrowser는 뭐야?
+
+</p>
+
+<p>좋은 질문이에요! <code class="language-plaintext highlighter-rouge">webbrowser.BackgroundBrowser</code>는 Python의 <code class="language-plaintext highlighter-rouge">webbrowser</code> 모듈 내부에 있는 <strong>브라우저 실행 클래스 중 하나</strong> 로,<br />
+지정한 브라우저 실행 파일을 사용해 <strong>백그라운드에서 브라우저를 실행</strong> 하는 용도로 쓰입니다.</p>
+
+<p>아래에서 step-by-step으로 설명할게요.</p>
+
+<hr />
+
+<h2 id="-backgroundbrowser란">✅ <code class="language-plaintext highlighter-rouge">BackgroundBrowser</code>란?</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">webbrowser</span> <span class="kn">import</span> <span class="n">BackgroundBrowser</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>브라우저 실행 바이너리를 <strong>직접 지정해서 등록</strong> 할 때 사용하는 클래스입니다.</p>
+  </li>
+  <li>
+    <p>보통 <code class="language-plaintext highlighter-rouge">webbrowser.register()</code>와 함께 사용됩니다.</p>
+  </li>
+  <li>
+    <p>주로 <strong>사용자가 설치한 커스텀 브라우저 실행 파일 경로</strong> 를 지정할 때 쓰입니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-언제-쓰냐">✅ 언제 쓰냐?</h2>
+
+<p><code class="language-plaintext highlighter-rouge">webbrowser.get()</code>은 시스템 기본 브라우저를 찾지만,<br />
+당신이 원하는 브라우저가 등록되어 있지 않거나,<br />
+특정 <strong>경로의 실행 파일을 직접 지정하고 싶을 때</strong> 사용합니다.</p>
+
+<hr />
+
+<h2 id="-사용-예시">🔧 사용 예시</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">webbrowser</span>
+
+<span class="c1"># 크롬 바이너리 경로 예시
+</span><span class="n">chrome_path</span> <span class="o">=</span> <span class="sh">"</span><span class="s">/opt/google/chrome/chrome</span><span class="sh">"</span>
+
+<span class="c1"># 'custom-chrome'이라는 이름으로 등록
+</span><span class="n">webbrowser</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span>
+    <span class="sh">"</span><span class="s">custom-chrome</span><span class="sh">"</span><span class="p">,</span>
+    <span class="bp">None</span><span class="p">,</span>
+    <span class="n">webbrowser</span><span class="p">.</span><span class="nc">BackgroundBrowser</span><span class="p">(</span><span class="n">chrome_path</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># 해당 브라우저로 열기
+</span><span class="n">browser</span> <span class="o">=</span> <span class="n">webbrowser</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">custom-chrome</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">browser</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">file:///path/to/index.html</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="️-내부적으로-하는-일">⚙️ 내부적으로 하는 일</h2>
+
+<p><code class="language-plaintext highlighter-rouge">BackgroundBrowser</code>는 <code class="language-plaintext highlighter-rouge">.open(url)</code>을 호출했을 때 다음을 수행합니다:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/path/to/your/browser <span class="s2">"file:///..."</span>
+</code></pre></div></div>
+
+<p>즉, 그냥 subprocess로 브라우저 실행 파일에 URL을 넘겨주는 역할이에요.</p>
+
+<hr />
+
+<h2 id="-실제-소스-코드-요약">📘 실제 소스 코드 (요약)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BackgroundBrowser</span><span class="p">(</span><span class="n">BaseBrowser</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>  <span class="c1"># 경로 (예: "/usr/bin/firefox")
+</span>
+    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">autoraise</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">url</span><span class="p">]</span>
+        <span class="n">subprocess</span><span class="p">.</span><span class="nc">Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="p">...)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-요약-5">✅ 요약</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>항목</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>이름</td>
+      <td><code class="language-plaintext highlighter-rouge">webbrowser.BackgroundBrowser</code></td>
+    </tr>
+    <tr>
+      <td>역할</td>
+      <td>브라우저 실행 파일 경로를 직접 지정하여 URL 열기</td>
+    </tr>
+    <tr>
+      <td>사용 시기</td>
+      <td>시스템 기본 브라우저 대신 원하는 바이너리로 열고 싶을 때</td>
+    </tr>
+    <tr>
+      <td>대표 메서드</td>
+      <td><code class="language-plaintext highlighter-rouge">.open(url)</code>, <code class="language-plaintext highlighter-rouge">.open_new_tab(url)</code></td>
+    </tr>
+    <tr>
+      <td>등록 방법</td>
+      <td><code class="language-plaintext highlighter-rouge">webbrowser.register("이름", None, BackgroundBrowser(경로))</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>원하시면 Chrome/Firefox 경로 자동 탐지 후 <code class="language-plaintext highlighter-rouge">BackgroundBrowser</code>에 등록하는 유틸도 만들어드릴 수 있어요!</p>
+
+<p class="chat--user">
+
+documentation page 작성용 라이브러리는 따로 없어? pandoc은 좀 범용적인 느낌
+
+</p>
+
+<p>맞아요, 아주 날카로운 지적입니다!<br />
+<strong>Pandoc은 문서 포맷 변환에 특화된 범용 툴</strong> 이라서 <strong>정적 사이트로 된 documentation page</strong> 를 만들기엔 조금 무겁거나 유연성이 떨어질 수 있어요.</p>
+
+<p>그래서 <strong>“문서 페이지(Documentation Site)” 전용으로 설계된 Python 친화적 도구들</strong> 이 있습니다.<br />
+아래에서 목적에 맞는 라이브러리를 <strong>분류하고 설명</strong> 해 드릴게요.</p>
+
+<hr />
+
+<h2 id="-목적-markdown--정적-웹-기반-문서-사이트-생성">📚 목적: <strong>Markdown → 정적 웹 기반 문서 사이트 생성</strong></h2>
+
+<hr />
+
+<h2 id="-1-mkdocs--가장-추천">✅ 1. <strong>MkDocs</strong> ⭐ <em>가장 추천</em></h2>
+
+<ul>
+  <li>
+    <p><strong>Python 기반</strong></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">docs/</code> 폴더 안의 Markdown 파일을 읽어서 정적 사이트 생성</p>
+  </li>
+  <li>
+    <p>GitHub Pages 배포도 아주 쉬움</p>
+  </li>
+  <li>
+    <p>YAML로 구성 설정 (<code class="language-plaintext highlighter-rouge">mkdocs.yml</code>)</p>
+  </li>
+</ul>
+
+<h3 id="설치-및-사용">설치 및 사용</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>mkdocs
+mkdocs new my-project
+<span class="nb">cd </span>my-project
+mkdocs serve        <span class="c"># 로컬에서 미리보기</span>
+mkdocs build        <span class="c"># 정적 HTML 생성</span>
+</code></pre></div></div>
+
+<h3 id="장점">장점</h3>
+
+<ul>
+  <li>
+    <p>자동 목차, 검색, 테마 (Material theme 인기↑)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">pyproject.toml</code> 프로젝트와 잘 통합됨</p>
+  </li>
+  <li>
+    <p>문서 디렉토리와 빌드 결과물이 분리됨</p>
+  </li>
+</ul>
+
+<p>📦 <strong>Material 테마</strong> 는 아래처럼 설치하면 더 강력해져요:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>mkdocs-material
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-2-sphinx">✅ 2. <strong>Sphinx</strong></h2>
+
+<ul>
+  <li>
+    <p>원래는 Python 코드용 API 문서 생성기지만, 일반 문서 사이트도 가능</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">reStructuredText</code>가 기본이지만 Markdown도 지원</p>
+  </li>
+  <li>
+    <p>대규모 문서, cross-reference, 수식 등에 강함</p>
+  </li>
+</ul>
+
+<h3 id="설치-및-사용-1">설치 및 사용</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>sphinx
+sphinx-quickstart
+make html
+</code></pre></div></div>
+
+<p>📦 Markdown 사용하려면:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>myst-parser
+</code></pre></div></div>
+
+<h3 id="장점-1">장점</h3>
+
+<ul>
+  <li>
+    <p>Python 프로젝트와 강하게 통합됨 (docstring → 문서 자동화)</p>
+  </li>
+  <li>
+    <p>표, 수식, cross-reference 등 기술문서 특화</p>
+  </li>
+  <li>
+    <p>HTML/PDF/EPUB 다 가능</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-3-docusaurus-js-기반이지만-언급">✅ 3. <strong>Docusaurus</strong> (JS 기반이지만 언급)</h2>
+
+<ul>
+  <li>
+    <p>Meta(구 Facebook)에서 만든 문서 전용 정적 사이트 생성기</p>
+  </li>
+  <li>
+    <p>JS/React 기반이지만 Markdown로 작성 가능</p>
+  </li>
+  <li>
+    <p>커스터마이징/검색/버전 관리에 강함</p>
+  </li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx create-docusaurus@latest my-site classic
+<span class="nb">cd </span>my-site
+npm start
+</code></pre></div></div>
+
+<p>Python 기반 아니지만 <strong>대규모 문서 프로젝트</strong> 에 적합</p>
+
+<hr />
+
+<h2 id="-비교-요약">🔍 비교 요약</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>이름</th>
+      <th>언어 기반</th>
+      <th>특징</th>
+      <th>추천 상황</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>MkDocs</strong></td>
+      <td>Python</td>
+      <td>Markdown 중심, 빠름, 테마 다양</td>
+      <td>일반 문서 사이트, CLI 툴 문서에 강추</td>
+    </tr>
+    <tr>
+      <td><strong>Sphinx</strong></td>
+      <td>Python</td>
+      <td>reST 기반, API doc 자동화</td>
+      <td>Python 프로젝트 + API 자동 문서화</td>
+    </tr>
+    <tr>
+      <td><strong>Docusaurus</strong></td>
+      <td>JS (React)</td>
+      <td>깔끔한 UI, 버전관리 가능</td>
+      <td>고급 UI 문서, JS 친화 환경</td>
+    </tr>
+    <tr>
+      <td><strong>Pandoc</strong></td>
+      <td>CLI/범용</td>
+      <td>다양한 포맷 간 변환</td>
+      <td>보고서, 논문, eBook 스타일</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-추천-시나리오">✅ 추천 시나리오</h2>
+
+<ul>
+  <li>
+    <p>CLI 툴, 경량 문서, Markdown 중심 → ✅ <strong>MkDocs + Material</strong></p>
+  </li>
+  <li>
+    <p>Python 프로젝트에 포함된 코드 자동 문서화 → ✅ <strong>Sphinx + myst-parser</strong></p>
+  </li>
+  <li>
+    <p>고급 UI, 다국어, 다중 버전 → ✅ <strong>Docusaurus</strong></p>
+  </li>
+  <li>
+    <p>PDF, LaTeX, ePub 등 포맷 변환 → ✅ <strong>Pandoc</strong></p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-결론-3">📌 결론</h2>
+
+<blockquote>
+  <p>🟩 <strong>“Python 프로젝트에서 쉽게 문서 페이지 만들고 싶다.”</strong><br />
+ → <strong>MkDocs + Material Theme</strong> 가 최선입니다.</p>
+</blockquote>
+
+<p>필요하시면 <code class="language-plaintext highlighter-rouge">pyproject.toml</code> 통합 구조, <code class="language-plaintext highlighter-rouge">mkdocs.yml</code> 샘플, 배포 설정까지 한 번에 구성된 템플릿도 드릴 수 있어요!</p>
+
+<p class="chat--user">
+
+이걸 배포하면 유저가 로컬 서버를 열게하는 식으로 해야하나
+
+</p>
+
+<p>훌륭한 질문입니다.<br />
+<strong>문서 사이트(MkDocs 등)를 배포한 후, 유저가 어떻게 보게 할 것인가?</strong><br />
+→ 이것은 <strong>“어떻게 문서를 열도록 할 것인가”</strong>에 대한 전략이고, 아래 3가지 방식 중에서 골라야 합니다:</p>
+
+<hr />
+
+<h2 id="-선택지-요약">✅ 선택지 요약</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>방식</th>
+      <th>유저가 해야 하는 일</th>
+      <th>브라우저 지원</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. 그냥<code class="language-plaintext highlighter-rouge">file://</code>로 열기</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">index.html</code> 더블클릭 or <code class="language-plaintext highlighter-rouge">open</code> 명령</td>
+      <td>일부 제한 있음</td>
+      <td>서버 필요 없음, HTML에서 JS 로딩 시 제한 가능</td>
+    </tr>
+    <tr>
+      <td><strong>2. 로컬 서버 열기</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">python -m http.server</code> 등</td>
+      <td>완벽 지원</td>
+      <td>가장 범용적이고 JS도 문제없음</td>
+    </tr>
+    <tr>
+      <td><strong>3. 외부 서버 배포</strong></td>
+      <td>URL 접속만</td>
+      <td>✅</td>
+      <td>GitHub Pages, Netlify, Vercel 등 필요 (오프라인 X)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-당신이-말한-방식은">🔍 당신이 말한 방식은:</h2>
+
+<blockquote>
+  <p>“<strong>로컬에 문서 HTML을 포함해서 배포</strong> 하고, 유저가 <code class="language-plaintext highlighter-rouge">mytool doc</code> 명령어로 보기 원함”</p>
+</blockquote>
+
+<p>→ 이건 <strong>“로컬 서버 열기” 방식(2번)</strong>이 <strong>가장 안정적이고 표준적인 방법</strong> 입니다. 이유는 아래와 같습니다:</p>
+
+<hr />
+
+<h2 id="-왜-로컬-서버-방식이-적합한가">✅ 왜 로컬 서버 방식이 적합한가?</h2>
+
+<h3 id="-보안-제한-문제-file-경로">🔒 보안 제한 문제 (file:// 경로)</h3>
+
+<ul>
+  <li>
+    <p>현대 브라우저는 <code class="language-plaintext highlighter-rouge">file://</code>로 열었을 때:</p>
+
+    <ul>
+      <li>
+        <p>JS가 로드 안 되거나,</p>
+      </li>
+      <li>
+        <p>경로 문제 발생 (특히 CSS, 이미지, client-side routing)</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// 예: MkDocs Material의 JS 검색기능 등이 안 될 수 있음
+</code></pre></div></div>
+
+<h3 id="-로컬-서버를-열면">💻 로컬 서버를 열면?</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 <span class="nt">-m</span> http.server 8000
+<span class="c"># 또는</span>
+mkdocs serve
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>브라우저는 이를 <strong>정상적인 웹 페이지로 인식</strong> 함 (<code class="language-plaintext highlighter-rouge">http://localhost:8000</code>)</p>
+  </li>
+  <li>
+    <p>모든 기능 100% 작동 (검색, 라우팅, 이미지 등)</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-배포-방식-설계-제안">🎯 배포 방식 설계 제안</h2>
+
+<h3 id="-1-유저에게-html-빌드-결과--실행-스크립트-제공">📦 1. 유저에게 HTML 빌드 결과 + 실행 스크립트 제공</h3>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mytool/
+├── cli.py
+├── docs/                 ← mkdocs build 결과 (site/)
+│   ├── index.html
+│   ├── js/
+│   └── css/
+├── __init__.py
+└── ...
+</code></pre></div></div>
+
+<h3 id="-2-click-명령어-예시">🛠 2. click 명령어 예시</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@click.command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">doc</span><span class="p">():</span>
+    <span class="sh">"""</span><span class="s">Open documentation in local browser.</span><span class="sh">"""</span>
+    <span class="kn">import</span> <span class="n">http.server</span>
+    <span class="kn">import</span> <span class="n">socketserver</span>
+    <span class="kn">import</span> <span class="n">threading</span>
+    <span class="kn">import</span> <span class="n">webbrowser</span>
+    <span class="kn">import</span> <span class="n">os</span>
+    <span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+    <span class="n">doc_dir</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">__file__</span><span class="p">).</span><span class="n">parent</span> <span class="o">/</span> <span class="sh">"</span><span class="s">docs</span><span class="sh">"</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">chdir</span><span class="p">(</span><span class="n">doc_dir</span><span class="p">)</span>
+
+    <span class="n">port</span> <span class="o">=</span> <span class="mi">8000</span>
+    <span class="n">Handler</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span><span class="p">.</span><span class="n">SimpleHTTPRequestHandler</span>
+    <span class="n">httpd</span> <span class="o">=</span> <span class="n">socketserver</span><span class="p">.</span><span class="nc">TCPServer</span><span class="p">((</span><span class="sh">""</span><span class="p">,</span> <span class="n">port</span><span class="p">),</span> <span class="n">Handler</span><span class="p">)</span>
+
+    <span class="c1"># 백그라운드에서 서버 실행
+</span>    <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">httpd</span><span class="p">.</span><span class="n">serve_forever</span><span class="p">)</span>
+    <span class="n">thread</span><span class="p">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">thread</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+
+    <span class="c1"># 브라우저 열기
+</span>    <span class="n">webbrowser</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">http://localhost:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s">/index.html</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-설치-or-배포-형태">📦 설치 or 배포 형태</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>방법</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>pip 패키지 + docs 포함</td>
+      <td><code class="language-plaintext highlighter-rouge">package_data</code>로 정적 파일 포함</td>
+    </tr>
+    <tr>
+      <td>wheel 배포</td>
+      <td>설치 후 CLI에서 바로 <code class="language-plaintext highlighter-rouge">mytool doc</code> 실행 가능</td>
+    </tr>
+    <tr>
+      <td>zip 배포</td>
+      <td>유저가 직접 실행 (<code class="language-plaintext highlighter-rouge">./run-doc.sh</code>) 등으로 열도록 안내</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-결론-4">✅ 결론</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>조건</th>
+      <th>추천 방식</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>유저가 오프라인 + full 기능 보기 원함</td>
+      <td>✅ <strong>로컬 서버 방식</strong> (권장)</td>
+    </tr>
+    <tr>
+      <td>기능 제약 감수하고 단순히 보기만 원함</td>
+      <td><code class="language-plaintext highlighter-rouge">file://</code>로 열기 가능 (제한 존재)</td>
+    </tr>
+    <tr>
+      <td>온라인 문서 배포하고 싶음</td>
+      <td>GitHub Pages 등 사용 가능</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하다면 <code class="language-plaintext highlighter-rouge">click</code> + MkDocs 기반 배포 스크립트, 템플릿 구조, pyproject 통합까지 완성된 샘플 만들어 드릴 수 있어요!<br />
+유저 편의성 극대화하는 실행 UX도 같이 설계할 수 있습니다. 원하시나요?</p>
+
+<p class="chat--user">
+
+python package 내의 docs 폴더는 일반 유저를 위한 걸까 개발자들을 위한 걸까
+
+</p>
+
+<p>좋은 질문이에요.<br />
+Python 패키지 내의 <code class="language-plaintext highlighter-rouge">docs/</code> 폴더는 <strong>"의도와 컨텍스트에 따라 다르게 쓰일 수 있는 디렉토리"</strong>입니다.<br />
+그렇기 때문에 정확히 말하면 <strong>"개발자용이냐, 일반 사용자용이냐"는 명확히 정해져 있지 않습니다</strong>.<br />
+하지만 현실에서는 용도에 따라 아래처럼 구분해서 쓰이는 경향이 강합니다.</p>
+
+<hr />
+
+<h2 id="-1-개발자용-docs--일반적-관례">✅ 1. 개발자용 <code class="language-plaintext highlighter-rouge">docs/</code> — 일반적 관례</h2>
+
+<p>📁 <strong>위치</strong> : 프로젝트 루트 (<code class="language-plaintext highlighter-rouge">pyproject.toml</code>과 같은 레벨)</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myproject/
+├── pyproject.toml
+├── src/
+│   └── myproject/
+├── tests/
+├── docs/               👈 여기가 개발자 문서
+│   ├── index.md
+│   ├── api.md
+│   └── usage.md
+</code></pre></div></div>
+
+<h3 id="️-주로-포함하는-내용">▶️ 주로 포함하는 내용:</h3>
+
+<ul>
+  <li>
+    <p>설치 방법</p>
+  </li>
+  <li>
+    <p>사용 예제</p>
+  </li>
+  <li>
+    <p>개발 가이드 / 컨트리뷰션 안내</p>
+  </li>
+  <li>
+    <p>API 문서</p>
+  </li>
+  <li>
+    <p>빌드 방법, 환경 설정, 개발 히스토리</p>
+  </li>
+</ul>
+
+<h3 id="️-작성-형식">▶️ 작성 형식:</h3>
+
+<ul>
+  <li>
+    <p>Markdown, reStructuredText</p>
+  </li>
+  <li>
+    <p>Sphinx, MkDocs 등 정적 사이트 생성기와 연동</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-2-유저-가이드용-docs--사용자-facing-문서-포함하는-경우">✅ 2. 유저 가이드용 <code class="language-plaintext highlighter-rouge">docs/</code> — 사용자-facing 문서 포함하는 경우</h2>
+
+<p>📁 <strong>위치</strong> : 패키지 내부에 포함 (<code class="language-plaintext highlighter-rouge">src/myproject/docs/</code> 등)</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>src/
+└── myproject/
+    ├── __init__.py
+    ├── core.py
+    └── docs/           👈 여기가 사용자-facing HTML, Markdown
+        └── index.html
+</code></pre></div></div>
+
+<h3 id="️-이-경우에는">▶️ 이 경우에는:</h3>
+
+<ul>
+  <li>
+    <p>일반 사용자용 GUI 도움말 또는 웹 문서 포함</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">mytool doc</code> 같은 커맨드에서 열리는 <strong>정적 문서</strong> 포함</p>
+  </li>
+  <li>
+    <p>종종 <code class="language-plaintext highlighter-rouge">package_data</code>에 포함하여 <code class="language-plaintext highlighter-rouge">.whl</code>로 배포</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="-관점-정리-용도에-따른-차이">📦 관점 정리: 용도에 따른 차이</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>목적</th>
+      <th>위치</th>
+      <th>대상</th>
+      <th>예</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>개발자용 문서</td>
+      <td>루트 <code class="language-plaintext highlighter-rouge">/docs/</code></td>
+      <td>프로젝트 개발자</td>
+      <td>Sphinx, MkDocs source</td>
+    </tr>
+    <tr>
+      <td>유저 가이드 문서 (빌드 결과)</td>
+      <td>패키지 내 <code class="language-plaintext highlighter-rouge">mytool/docs/</code></td>
+      <td>일반 사용자</td>
+      <td>HTML, CSS 포함해서 브라우저로 열기</td>
+    </tr>
+    <tr>
+      <td>API doc (자동 생성)</td>
+      <td>루트 <code class="language-plaintext highlighter-rouge">/docs/</code> 또는 별도</td>
+      <td>개발자</td>
+      <td>Sphinx API, autodoc</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-예-mytool-doc을-통해-문서를-보여주고-싶다면">💡 예: <code class="language-plaintext highlighter-rouge">mytool doc</code>을 통해 문서를 보여주고 싶다면?</h2>
+
+<blockquote>
+  <p>그 문서는 “<strong>유저 가이드</strong> ” → 따라서 패키지 내부의 <code class="language-plaintext highlighter-rouge">docs/</code>가 적합</p>
+  <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mytool/
+├── __init__.py
+├── cli.py
+├── docs/           👈 여기에 HTML 결과 포함
+│   └── index.html
+</code></pre></div>  </div>
+</blockquote>
+
+<p>그리고 <code class="language-plaintext highlighter-rouge">pyproject.toml</code>에:</p>
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[tool.setuptools.package-data]</span>
+<span class="py">mytool</span> <span class="p">=</span> <span class="p">[</span><span class="s">"docs/**/*"</span><span class="p">]</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-결론-5">✅ 결론</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>질문</th>
+      <th>답변</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">docs/</code>는 원래 누구를 위한 폴더인가요?</td>
+      <td><strong>루트<code class="language-plaintext highlighter-rouge">docs/</code>는 개발자용</strong>, 패키지 내 <code class="language-plaintext highlighter-rouge">docs/</code>는 사용자용으로 활용 가능</td>
+    </tr>
+    <tr>
+      <td>사용자 가이드 HTML을 패키지에 넣고 싶어요</td>
+      <td>패키지 내부에 넣고 <code class="language-plaintext highlighter-rouge">package_data</code>로 포함</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mytool doc</code>으로 열 문서를 넣을 곳은?</td>
+      <td>패키지 내부 <code class="language-plaintext highlighter-rouge">mytool/docs/</code>가 적절</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p>필요하다면 프로젝트 구조 템플릿도 만들어드릴게요!<br />
+혹시 이걸 라이브러리로 쓸지, CLI 툴로 쓸지 명확하면 거기에 맞춰 더 구체적으로 도와드릴 수 있어요.</p>
+
+<p class="chat--user">
+
+프로젝트 구조 만들어줘
+
+</p>
+
+<p>좋습니다!<br />
+당신의 목적은:</p>
+
+<blockquote>
+  <p>✅ <strong>Python CLI 툴 프로젝트</strong><br />
+ ✅ <code class="language-plaintext highlighter-rouge">mytool doc</code> 명령어로 <strong>사용자용 HTML 문서</strong> 를 열 수 있게 만들기<br />
+ ✅ 정적 문서는 <strong>패키지에 포함</strong> 되며, 로컬 브라우저에서 띄우도록 함</p>
+</blockquote>
+
+<p>이에 맞는 <strong>프로젝트 구조, pyproject 설정, click CLI, docs 포함 방식까지 완성된 예제</strong> 를 아래에 제공합니다.</p>
+
+<hr />
+
+<h2 id="-프로젝트-구조">🧱 프로젝트 구조</h2>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">mytool</span><span class="o">/</span>
+<span class="err">├──</span> <span class="nt">pyproject</span><span class="nc">.toml</span>
+<span class="err">├──</span> <span class="nt">README</span><span class="nc">.md</span>
+<span class="err">├──</span> <span class="nt">LICENSE</span>
+<span class="err">├──</span> <span class="nt">src</span><span class="o">/</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="nt">mytool</span><span class="o">/</span>
+<span class="err">│</span>       <span class="err">├──</span> <span class="nt">__init__</span><span class="nc">.py</span>
+<span class="err">│</span>       <span class="err">├──</span> <span class="nt">cli</span><span class="nc">.py</span>              <span class="err">←</span> <span class="nt">main</span> <span class="nt">CLI</span> <span class="nt">entrypoint</span>
+<span class="err">│</span>       <span class="err">└──</span> <span class="nt">docs</span><span class="o">/</span>               <span class="err">←</span> <span class="nt">사용자-facing</span> <span class="nt">HTML</span> <span class="nt">문서</span>
+<span class="err">│</span>           <span class="err">├──</span> <span class="nt">index</span><span class="nc">.html</span>
+<span class="err">│</span>           <span class="err">├──</span> <span class="nt">style</span><span class="nc">.css</span>
+<span class="err">│</span>           <span class="err">└──</span> <span class="nt">images</span><span class="o">/</span>
+<span class="err">└──</span> <span class="nt">tests</span><span class="o">/</span>
+    <span class="err">└──</span> <span class="nt">test_cli</span><span class="nc">.py</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-pyprojecttoml-setuptools-기반">📦 pyproject.toml (setuptools 기반)</h2>
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[build-system]</span>
+<span class="py">requires</span> <span class="p">=</span> <span class="py">["setuptools&gt;</span><span class="p">=</span><span class="mf">61.0</span><span class="s">"]</span><span class="err">
+</span><span class="py">build-backend</span> <span class="p">=</span> <span class="s">"setuptools.build_meta"</span>
+
+<span class="nn">[project]</span>
+<span class="py">name</span> <span class="p">=</span> <span class="s">"mytool"</span>
+<span class="py">version</span> <span class="p">=</span> <span class="s">"0.1.0"</span>
+<span class="py">description</span> <span class="p">=</span> <span class="s">"A sample CLI tool with documentation viewer"</span>
+<span class="py">readme</span> <span class="p">=</span> <span class="s">"README.md"</span>
+<span class="py">requires-python</span> <span class="p">=</span> <span class="py">"&gt;</span><span class="p">=</span><span class="mf">3.7</span><span class="s">"</span><span class="err">
+</span><span class="py">dependencies</span> <span class="p">=</span> <span class="p">[</span><span class="s">"click"</span><span class="p">]</span>
+
+<span class="nn">[project.scripts]</span>
+<span class="py">mytool</span> <span class="p">=</span> <span class="s">"mytool.cli:cli"</span>
+
+<span class="nn">[tool.setuptools.packages.find]</span>
+<span class="py">where</span> <span class="p">=</span> <span class="p">[</span><span class="s">"src"</span><span class="p">]</span>
+
+<span class="nn">[tool.setuptools.package-data]</span>
+<span class="py">mytool</span> <span class="p">=</span> <span class="p">[</span><span class="s">"docs/**/*"</span><span class="p">]</span>    <span class="c"># HTML 문서를 wheel에 포함</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-srcmytoolclipy-click--docs-오픈">🧪 <code class="language-plaintext highlighter-rouge">src/mytool/cli.py</code> (Click + docs 오픈)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">click</span>
+<span class="kn">import</span> <span class="n">webbrowser</span>
+<span class="kn">from</span> <span class="n">importlib.resources</span> <span class="kn">import</span> <span class="n">files</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="nd">@click.group</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">cli</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="nd">@cli.command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">doc</span><span class="p">():</span>
+    <span class="sh">"""</span><span class="s">Open the local HTML documentation.</span><span class="sh">"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># docs/index.html 파일 위치 찾기
+</span>        <span class="n">html_path</span> <span class="o">=</span> <span class="nf">files</span><span class="p">(</span><span class="sh">"</span><span class="s">mytool</span><span class="sh">"</span><span class="p">).</span><span class="nf">joinpath</span><span class="p">(</span><span class="sh">"</span><span class="s">docs/index.html</span><span class="sh">"</span><span class="p">)</span>
+        <span class="c1"># 브라우저에서 열기
+</span>        <span class="n">webbrowser</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">html_path</span><span class="p">.</span><span class="nf">as_uri</span><span class="p">())</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">click</span><span class="p">.</span><span class="nf">echo</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">문서를 열 수 없습니다: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-srcmytool__init__py">📎 <code class="language-plaintext highlighter-rouge">src/mytool/__init__.py</code></h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 빈 파일 (패키지 인식용)
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="-teststest_clipy">🧪 <code class="language-plaintext highlighter-rouge">tests/test_cli.py</code></h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">click.testing</span> <span class="kn">import</span> <span class="n">CliRunner</span>
+<span class="kn">from</span> <span class="n">mytool.cli</span> <span class="kn">import</span> <span class="n">cli</span>
+
+<span class="k">def</span> <span class="nf">test_doc_command_runs</span><span class="p">():</span>
+    <span class="n">runner</span> <span class="o">=</span> <span class="nc">CliRunner</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">runner</span><span class="p">.</span><span class="nf">invoke</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="p">[</span><span class="sh">"</span><span class="s">doc</span><span class="sh">"</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">.</span><span class="n">exit_code</span> <span class="o">==</span> <span class="mi">0</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-사용-예시-1">🧾 사용 예시</h2>
+
+<ol>
+  <li>패키지 설치:</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install</span> <span class="nb">.</span>
+</code></pre></div></div>
+
+<ol>
+  <li>커맨드 실행:</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mytool doc
+</code></pre></div></div>
+
+<p>→ 기본 브라우저에서 <code class="language-plaintext highlighter-rouge">docs/index.html</code> 열림</p>
+
+<hr />
+
+<h2 id="-빌드--배포-준비">✅ 빌드 &amp; 배포 준비</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> build      <span class="c"># pyproject.toml 기반 wheel 생성</span>
+twine upload dist/<span class="k">*</span>  <span class="c"># PyPI 배포 가능</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-유용한-추가-아이디어">🧠 유용한 추가 아이디어</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>기능</th>
+      <th>구현 포인트</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mytool doc --serve</code></td>
+      <td><code class="language-plaintext highlighter-rouge">http.server</code>로 로컬 서버 열기</td>
+    </tr>
+    <tr>
+      <td>문서 버전 나누기</td>
+      <td><code class="language-plaintext highlighter-rouge">docs/v1/index.html</code>, <code class="language-plaintext highlighter-rouge">docs/v2/</code> 폴더 구성</td>
+    </tr>
+    <tr>
+      <td>CLI 자동 문서화 연동</td>
+      <td>MkDocs나 Sphinx의 자동 docstring 추출 활용</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-전체-템플릿이-필요하면">🎁 전체 템플릿이 필요하면?</h2>
+
+<p>필요하시면 전체 디렉토리 + 파일 내용 통으로 <code class="language-plaintext highlighter-rouge">.zip</code> 템플릿 만들거나, GitHub 템플릿 저장소로 구성해드릴 수 있어요. 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">웹 문서 빌드 방법</title><link href="https://hvppyarchive.github.io/python/web-document-for-python-package/" rel="alternate" type="text/html" title="웹 문서 빌드 방법" /><published>2025-08-04T12:25:08+09:00</published><updated>2025-08-04T12:25:08+09:00</updated><id>https://hvppyarchive.github.io/python/web-document-for-python-package</id><content type="html" xml:base="https://hvppyarchive.github.io/python/web-document-for-python-package/"><![CDATA[<p class="chat--user">
 
 유저에게 웹으로 된 document를 커맨드라인에서 띄울 수 있게 하고 싶어. 어떻게 웹을 빌드하는게 좋을것 같아?
 
@@ -7608,1591 +9874,4 @@ python priority queue 예제 만들어줘
   </li>
 </ul>
 
-<p>필요하시면 PEG를 적용한 기업 분석 예제도 보여드릴 수 있어요.</p>]]></content><author><name>hvppyarchive</name></author><category term="investing" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Curl로 vLLM 쿼리 보내기</title><link href="https://hvppyarchive.github.io/llm/vllm-curl/" rel="alternate" type="text/html" title="Curl로 vLLM 쿼리 보내기" /><published>2025-07-30T01:03:41+09:00</published><updated>2025-07-30T01:03:41+09:00</updated><id>https://hvppyarchive.github.io/llm/vllm-curl</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/vllm-curl/"><![CDATA[<p class="chat--user">
-
-curl로 vllm gpt 에 쿼리 보내기
-
-</p>
-
-<p><code class="language-plaintext highlighter-rouge">vLLM</code> 기반 GPT 서버에 <code class="language-plaintext highlighter-rouge">curl</code> 명령어로 쿼리를 보내려면 다음과 같은 구조를 따릅니다. vLLM은 일반적으로 OpenAI 호환
-API 엔드포인트를 제공합니다. 다음은 <code class="language-plaintext highlighter-rouge">vLLM</code> 서버가 OpenAI API처럼 작동할 경우를 가정한 예시입니다.</p>
-
-<hr />
-
-<h3 id="-전제-조건">✅ 전제 조건</h3>
-
-<ol>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">vLLM</code> 서버가 실행 중이며 OpenAI 호환 REST API 엔드포인트를 제공</p>
-  </li>
-  <li>
-    <p>모델이 <code class="language-plaintext highlighter-rouge">chat</code> 유형으로 등록되어 있음 (<code class="language-plaintext highlighter-rouge">chat/completions</code> endpoint 사용)</p>
-  </li>
-  <li>
-    <p>토큰 인증이 설정되어 있다면 <code class="language-plaintext highlighter-rouge">Authorization: Bearer YOUR_API_KEY</code> 헤더 필요</p>
-  </li>
-</ol>
-
-<hr />
-
-<h3 id="-예시-curl-명령어">🧪 예시 <code class="language-plaintext highlighter-rouge">curl</code> 명령어</h3>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:8000/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "gpt-3.5-turbo",
-    "messages": [
-      {"role": "system", "content": "You are a helpful assistant."},
-      {"role": "user", "content": "서울 날씨 어때?"}
-    ],
-    "temperature": 0.7
-  }'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h3 id="-주요-요소-설명">🧩 주요 요소 설명</h3>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">http://localhost:8000/v1/chat/completions</code>:</p>
-
-    <ul>
-      <li>vLLM 서버의 엔드포인트 주소입니다. 실제 주소로 바꾸세요.</li>
-    </ul>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">model</code>:</p>
-
-    <ul>
-      <li>vLLM에서 사용 중인 모델 이름. (예: <code class="language-plaintext highlighter-rouge">gpt-3.5-turbo</code>, <code class="language-plaintext highlighter-rouge">llama-3</code>, <code class="language-plaintext highlighter-rouge">mistral-7b</code>, 등)</li>
-    </ul>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">messages</code>:</p>
-
-    <ul>
-      <li>Chat 기반 입력 형식으로, 각 메시지의 <code class="language-plaintext highlighter-rouge">role</code>은 <code class="language-plaintext highlighter-rouge">system</code>, <code class="language-plaintext highlighter-rouge">user</code>, <code class="language-plaintext highlighter-rouge">assistant</code> 중 하나입니다.</li>
-    </ul>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">temperature</code>:</p>
-
-    <ul>
-      <li>응답의 무작위성 (창의성) 조절. 0은 결정적, 1에 가까울수록 창의적입니다.</li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="-인증이-필요한-경우-api-key">🔐 인증이 필요한 경우 (API Key)</h3>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:8000/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer YOUR_API_KEY"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{...}'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h3 id="-completion-api를-쓰는-경우-prompt-기반">📦 <code class="language-plaintext highlighter-rouge">completion</code> API를 쓰는 경우 (prompt 기반)</h3>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:8000/v1/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "gpt-3.5-turbo",
-    "prompt": "서울 날씨 어때?",
-    "max_tokens": 100,
-    "temperature": 0.7
-  }'</span>
-</code></pre></div></div>
-
-<hr />
-
-<p>필요하다면 <code class="language-plaintext highlighter-rouge">stream</code> 옵션이나 <code class="language-plaintext highlighter-rouge">stop</code>, <code class="language-plaintext highlighter-rouge">top_p</code>, <code class="language-plaintext highlighter-rouge">n</code> 등의 고급 파라미터도 사용할 수 있습니다.</p>
-
-<p>원하시는 API 구조에 맞춰 <code class="language-plaintext highlighter-rouge">curl</code> 명령어를 조정해드릴 수도 있습니다. vLLM 서버 설정을 공유해주시면 더 정확하게 도와드릴 수
-있어요.</p>
-
-<p class="chat--user">
-
-모델 조회하는 법 있어?
-
-</p>
-
-<p>네, <code class="language-plaintext highlighter-rouge">vLLM</code> 서버에서 <strong>사용 가능한 모델 목록을 조회</strong> 하려면 일반적으로 OpenAI 호환 REST API의 <code class="language-plaintext highlighter-rouge">/v1/models</code>
-엔드포인트를 사용할 수 있습니다. 아래에 단계별로 정리해드릴게요.</p>
-
-<hr />
-
-<h2 id="-1-모델-목록-조회-curl-명령어">✅ 1. 모델 목록 조회 curl 명령어</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:8000/v1/models
-</code></pre></div></div>
-
-<blockquote>
-  <p>포트 번호 (<code class="language-plaintext highlighter-rouge">8000</code>)나 주소는 <code class="language-plaintext highlighter-rouge">vLLM</code> 서버 실행 환경에 따라 달라질 수 있으니 적절히 수정하세요.</p>
-</blockquote>
-
-<hr />
-
-<h2 id="-2-응답-예시-json">🔎 2. 응답 예시 (JSON)</h2>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"list"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"llama-3"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"owned_by"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vllm"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mistral-7b"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"owned_by"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vllm"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p>여기서 <code class="language-plaintext highlighter-rouge">"id"</code> 필드가 실제로 쿼리에 사용할 모델 이름입니다. 예를 들어:</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"llama-3"</span><span class="w">
-</span></code></pre></div></div>
-
-<hr />
-
-<h2 id="-3-참고-vllm-서버가-openai-스타일-api를-따르지-않는-경우">🧩 3. 참고: <code class="language-plaintext highlighter-rouge">vLLM</code> 서버가 OpenAI 스타일 API를 따르지 않는 경우</h2>
-
-<p>일부 설정에서는 <code class="language-plaintext highlighter-rouge">/v1/models</code> 엔드포인트가 비활성화되어 있을 수 있습니다. 그런 경우에는:</p>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">vllm.entrypoints.openai.api_server</code> 실행 시 콘솔 로그에서 <code class="language-plaintext highlighter-rouge">model_name</code> 확인</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">vllm.engine.args.model</code> 로 <code class="language-plaintext highlighter-rouge">vllm</code> 서버 시작 시 전달된 모델 경로나 HuggingFace 모델명 직접 확인</p>
-  </li>
-</ul>
-
-<p>예:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> vllm.entrypoints.openai.api_server <span class="se">\</span>
-  <span class="nt">--model</span> mistralai/Mistral-7B-Instruct-v0.1 <span class="se">\</span>
-  <span class="nt">--host</span> 0.0.0.0 <span class="nt">--port</span> 8000
-</code></pre></div></div>
-
-<p>위의 경우 모델 이름은 <code class="language-plaintext highlighter-rouge">"mistralai/Mistral-7B-Instruct-v0.1"</code> 입니다.</p>
-
-<hr />
-
-<h2 id="-요약">✅ 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>목적</th>
-      <th>명령어 예시</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>모델 목록 조회</td>
-      <td><code class="language-plaintext highlighter-rouge">curl http://localhost:8000/v1/models</code></td>
-    </tr>
-    <tr>
-      <td>단일 모델 사용</td>
-      <td>API 실행할 때 <code class="language-plaintext highlighter-rouge">--model</code> 옵션 확인</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>필요하면 <code class="language-plaintext highlighter-rouge">vLLM</code> 실행 로그를 기반으로 모델 이름 파싱하는 방법도 알려드릴 수 있어요. 서버 설정 알려주시면 구체적으로 도와드릴게요.</p>
-
-<p class="chat--user">
-
-openweb ui 환경의 api 주소
-
-</p>
-
-<p><code class="language-plaintext highlighter-rouge">Open WebUI</code> (ex: Open Web UI 또는 oobabooga WebUI 같은 인터페이스)의 경우, 백엔드에 붙어 있는 LLM
-서버에 따라 <strong>API 주소</strong> 가 달라질 수 있습니다. 그러나 일반적으로 다음과 같은 구조로 동작합니다.</p>
-
-<hr />
-
-<h2 id="-1-기본-api-주소-구조">✅ 1. 기본 API 주소 구조</h2>
-
-<p>기본적으로 Open WebUI는 내부적으로 <code class="language-plaintext highlighter-rouge">vllm</code>, <code class="language-plaintext highlighter-rouge">text-generation-webui</code>, 또는 <code class="language-plaintext highlighter-rouge">llama.cpp</code> 서버에
-REST API 요청을 전달하는 <strong>프록시 역할</strong> 을 합니다.</p>
-
-<h3 id="기본-api-주소-예시">기본 API 주소 예시:</h3>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:8080/api/v1/chat/completions
-</code></pre></div></div>
-
-<p>또는</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:3000/api/v1/chat/completions
-</code></pre></div></div>
-
-<p>포트 번호는 Open WebUI를 실행한 구성에 따라 달라집니다.</p>
-
-<hr />
-
-<h2 id="-2-확인-방법">✅ 2. 확인 방법</h2>
-
-<h3 id="방법-1-open-webui-실행-시-로그-확인">방법 1: Open WebUI 실행 시 로그 확인</h3>
-
-<p>Open WebUI를 실행하면 터미널에 다음과 같은 로그가 출력됩니다:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nginx
-
-API listening at http://0.0.0.0:3000
-Forwarding to: http://localhost:8000/v1
-</code></pre></div></div>
-
-<p>여기서:</p>
-
-<ul>
-  <li>
-    <p><strong>사용자 요청</strong> 은 <code class="language-plaintext highlighter-rouge">http://localhost:3000/api/v1/...</code>로 보냅니다.</p>
-  </li>
-  <li>
-    <p><strong>실제 LLM 서버</strong> 는 <code class="language-plaintext highlighter-rouge">http://localhost:8000/v1/...</code>입니다. (예: vLLM)</p>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="방법-2-브라우저에서-f12--network-탭-확인">방법 2: 브라우저에서 <code class="language-plaintext highlighter-rouge">F12 &gt; Network</code> 탭 확인</h3>
-
-<p>Open WebUI 브라우저에서 채팅할 때 개발자도구를 열고 <code class="language-plaintext highlighter-rouge">Network</code> 탭에서 실제 API 요청이 보내지는 URL을 확인할 수
-있습니다. 보통 다음과 같습니다:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http
-
-POST http://localhost:3000/api/v1/chat/completions
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="-3-실제-curl-예시-open-webui-프록시-사용-시">✅ 3. 실제 curl 예시 (Open WebUI 프록시 사용 시)</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:3000/api/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "mistral-7b",
-    "messages": [
-      {"role": "user", "content": "안녕 GPT!"}
-    ],
-    "temperature": 0.7
-  }'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="-요약-1">✅ 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>항목</th>
-      <th>예시</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>WebUI 포트</td>
-      <td><code class="language-plaintext highlighter-rouge">3000</code>, <code class="language-plaintext highlighter-rouge">8080</code>, 또는 Docker에 따라 다름</td>
-    </tr>
-    <tr>
-      <td>API 엔드포인트 예</td>
-      <td><code class="language-plaintext highlighter-rouge">http://localhost:3000/api/v1/chat/completions</code></td>
-    </tr>
-    <tr>
-      <td>백엔드 연결 대상</td>
-      <td>보통 <code class="language-plaintext highlighter-rouge">vLLM</code>, <code class="language-plaintext highlighter-rouge">Ollama</code>, <code class="language-plaintext highlighter-rouge">text-generation-webui</code> 등</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>필요하시면 Docker 환경 기준으로도 예시를 드릴 수 있습니다. 현재 사용 중인 WebUI 종류 (<code class="language-plaintext highlighter-rouge">OpenWebUI</code>,
-<code class="language-plaintext highlighter-rouge">Oobabooga</code>, <code class="language-plaintext highlighter-rouge">LM Studio</code>, 등)나 백엔드 모델 서버(<code class="language-plaintext highlighter-rouge">vllm</code>, <code class="language-plaintext highlighter-rouge">llama.cpp</code>, 등)를 알려주시면 더 정확히
-도와드릴 수 있어요.</p>
-
-<p class="chat--user">
-
-model 보는법
-
-</p>
-
-<p><code class="language-plaintext highlighter-rouge">Open WebUI</code> 환경에서 <strong>사용 가능한 모델 목록을 확인하는 방법</strong> 은 사용 중인 백엔드(LM 서버: <code class="language-plaintext highlighter-rouge">vLLM</code>,
-<code class="language-plaintext highlighter-rouge">llama.cpp</code>, <code class="language-plaintext highlighter-rouge">Ollama</code>, 등)에 따라 다릅니다. 아래는 대표적인 경우를 나눠서 <strong>step-by-step</strong> 으로 정리한
-내용입니다.</p>
-
-<hr />
-
-<h2 id="-1-open-webui에서-모델-확인하는-방법-ui-기준">✅ 1. Open WebUI에서 모델 확인하는 방법 (UI 기준)</h2>
-
-<h3 id="-방법-a-web-ui-내부에서-확인">📍 방법 A: Web UI 내부에서 확인</h3>
-
-<ul>
-  <li>
-    <p>브라우저에서 Open WebUI에 접속</p>
-  </li>
-  <li>
-    <p>보통 <strong>좌측 사이드바</strong> 또는 <strong>설정(Settings)</strong> 메뉴에서</p>
-
-    <ul>
-      <li>
-        <p>현재 로드된 모델 이름</p>
-      </li>
-      <li>
-        <p>선택 가능한 모델 목록</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>표시 위치 예:</p>
-
-    <ul>
-      <li>메뉴: <code class="language-plaintext highlighter-rouge">Models</code>, <code class="language-plaintext highlighter-rouge">Select Model</code>, 또는 <code class="language-plaintext highlighter-rouge">Settings &gt; Model</code></li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="-2-api를-통해-모델-목록-확인-curl-사용">✅ 2. API를 통해 모델 목록 확인 (curl 사용)</h2>
-
-<h3 id="-전제">📍 전제</h3>
-
-<p>Open WebUI가 OpenAI 호환 백엔드를 프록시하고 있어야 합니다. (예: vLLM, text-generation-webui 등)</p>
-
-<h3 id="-api-엔드포인트-openai-스타일">💡 API 엔드포인트 (OpenAI 스타일)</h3>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:3000/api/v1/models
-</code></pre></div></div>
-
-<p>또는 백엔드 직접 호출:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:8000/v1/models
-</code></pre></div></div>
-
-<h3 id="-응답-예시">✅ 응답 예시:</h3>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"list"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mistral-7b"</span><span class="p">,</span><span class="w"> </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"llama-3-8b"</span><span class="p">,</span><span class="w"> </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<hr />
-
-<h2 id="-3-사용-중인-백엔드별-모델-확인법">✅ 3. 사용 중인 백엔드별 모델 확인법</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>백엔드</th>
-      <th>확인 방법</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>vLLM</strong></td>
-      <td><code class="language-plaintext highlighter-rouge">curl http://localhost:8000/v1/models</code></td>
-    </tr>
-    <tr>
-      <td><strong>Ollama</strong></td>
-      <td><code class="language-plaintext highlighter-rouge">ollama list</code> 또는 <code class="language-plaintext highlighter-rouge">curl http://localhost:11434/api/tags</code></td>
-    </tr>
-    <tr>
-      <td><strong>text-generation-webui</strong></td>
-      <td>WebUI에서 좌측 모델 목록 확인 or <code class="language-plaintext highlighter-rouge">/api/v1/model</code></td>
-    </tr>
-    <tr>
-      <td><strong>llama.cpp</strong></td>
-      <td>모델 수동 로딩이므로 CLI 로그에서 확인</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<h2 id="-예시-open-webui--vllm-연결-시">🧪 예시 (Open WebUI → vLLM 연결 시)</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:3000/api/v1/models
-</code></pre></div></div>
-
-<h3 id="-모델명으로-응답이-오면-이후-요청에서-이렇게-사용">📌 모델명으로 응답이 오면, 이후 요청에서 이렇게 사용:</h3>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:3000/api/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "mistral-7b",
-    "messages": [{"role": "user", "content": "Hello!"}]
-  }'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="-요약-2">✅ 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>환경</th>
-      <th>모델 확인 방법</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Web UI</td>
-      <td>브라우저 UI 내 모델 선택 메뉴</td>
-    </tr>
-    <tr>
-      <td>curl API</td>
-      <td><code class="language-plaintext highlighter-rouge">/api/v1/models</code> or <code class="language-plaintext highlighter-rouge">/v1/models</code></td>
-    </tr>
-    <tr>
-      <td>백엔드에 따라 다름</td>
-      <td>vLLM: <code class="language-plaintext highlighter-rouge">/v1/models</code>, Ollama: <code class="language-plaintext highlighter-rouge">ollama list</code> 등</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>어떤 백엔드를 Open WebUI가 연결하고 있는지 알려주시면, 그에 맞는 정확한 명령어를 드릴 수 있어요. 필요하시면 Docker 기준도
-설명드릴게요.</p>
-
-<p class="chat--user">
-
-api key 같이 주는법
-
-</p>
-
-<p><code class="language-plaintext highlighter-rouge">curl</code>로 LLM 서버(Open WebUI 포함)에 <strong>API Key를 포함해서 요청하는 방법</strong> 은 매우 간단합니다. 보통 OpenAI
-호환 API를 따르는 경우, <code class="language-plaintext highlighter-rouge">Authorization</code> 헤더에 키를 추가하면 됩니다.</p>
-
-<hr />
-
-<h2 id="-step-by-step-api-key-포함하는-방법">✅ Step-by-step: API Key 포함하는 방법</h2>
-
-<h3 id="-1-api-key가-필요한-구조-예">🔐 1. API Key가 필요한 구조 예</h3>
-
-<p>API 서버가 <code class="language-plaintext highlighter-rouge">Bearer</code> 인증을 요구한다면 다음 형식입니다:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:3000/api/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer YOUR_API_KEY"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "mistral-7b",
-    "messages": [
-      {"role": "user", "content": "안녕 GPT!"}
-    ]
-  }'</span>
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">"Authorization: Bearer ..."</code> → OpenAI-style 인증 방식</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">"YOUR_API_KEY"</code>는 발급받은 키로 교체</p>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="-2-환경별-api-key-발급-위치">📌 2. 환경별 API Key 발급 위치</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>환경</th>
-      <th>API Key 설정 위치</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Open WebUI</strong></td>
-      <td><code class="language-plaintext highlighter-rouge">Settings &gt; API Authentication</code> (서버 관리자만 설정 가능)</td>
-    </tr>
-    <tr>
-      <td><strong>vLLM</strong></td>
-      <td>기본적으로 인증 없음, 프록시 또는 Gateway에서 인증 설정 필요</td>
-    </tr>
-    <tr>
-      <td><strong>Ollama</strong></td>
-      <td>인증 필요 없음 (로컬 전용)</td>
-    </tr>
-    <tr>
-      <td><strong>text-generation-webui</strong></td>
-      <td>인증 기능 없음 (커스텀 코드 필요)</td>
-    </tr>
-  </tbody>
-</table>
-
-<blockquote>
-  <p>즉, <strong>Open WebUI가 자체적으로 API Key 인증을 요구하는 경우</strong> , <code class="language-plaintext highlighter-rouge">Bearer</code> 방식으로 보내야 하며, 백엔드가 직접
-인증하지는 않는 경우가 많습니다.</p>
-</blockquote>
-
-<hr />
-
-<h2 id="-예시-api-key로-llm-호출-open-webui-프록시-사용">🧪 예시: API Key로 LLM 호출 (Open WebUI 프록시 사용)</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://localhost:3000/api/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer sk-1234abcd5678efgh"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "llama-3",
-    "messages": [
-      {"role": "user", "content": "API 키가 잘 작동하고 있니?"}
-    ]
-  }'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="-참고-open-webui에서-api-key-요구-설정-예">🔄 참고: Open WebUI에서 API Key 요구 설정 예</h2>
-
-<p>만약 Open WebUI를 운영 중이고, API Key 인증을 요구하도록 설정하려면 <code class="language-plaintext highlighter-rouge">.env</code> 또는 설정 파일에 아래와 같은 옵션이 들어
-있을 수 있습니다:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>env
-
-WEBUI_AUTH=true
-WEBUI_API_KEY=sk-1234abcd5678efgh
-</code></pre></div></div>
-
-<p>이 설정이 활성화된 경우에만 <code class="language-plaintext highlighter-rouge">curl</code>에서 API Key를 줘야 합니다.</p>
-
-<hr />
-
-<h2 id="-요약-3">✅ 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>항목</th>
-      <th>내용</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>헤더 키</td>
-      <td><code class="language-plaintext highlighter-rouge">"Authorization: Bearer YOUR_API_KEY"</code></td>
-    </tr>
-    <tr>
-      <td>위치</td>
-      <td><code class="language-plaintext highlighter-rouge">-H</code> 옵션으로 <code class="language-plaintext highlighter-rouge">curl</code>에 포함</td>
-    </tr>
-    <tr>
-      <td>적용 대상</td>
-      <td>Open WebUI + API 인증 활성화된 경우</td>
-    </tr>
-    <tr>
-      <td>백엔드 단</td>
-      <td>일반적으로 인증 없음 (vLLM, Ollama 등)</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>🔧 원하시면 <code class="language-plaintext highlighter-rouge">Open WebUI</code>의 API Key 설정을 어떻게 켜고 관리하는지도 설명드릴 수 있어요. 운영 중인 환경이 있으면
-알려주세요!</p>
-
-<p class="chat--user">
-
-….net/api 가 base야
-
-</p>
-
-<p>좋습니다! 말씀하신 대로 API의 <strong>Base URL</strong> 이 <code class="language-plaintext highlighter-rouge">http://your-host.net/api</code> 형식이라면, 아래와 같이 쿼리
-요청을 보내고 API Key도 포함할 수 있습니다. 단계별로 설명드릴게요.</p>
-
-<hr />
-
-<h2 id="-1-base-url이-httpyour-hostnetapi인-경우-구조">✅ 1. Base URL이 <code class="language-plaintext highlighter-rouge">http://your-host.net/api</code>인 경우 구조</h2>
-
-<p>OpenAI 호환 API 구조를 따르고 있다고 가정하면, 전체 엔드포인트는 다음과 같이 구성됩니다:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BASE_URL <span class="o">=</span> http://your-host.net/api
-           └─────┬────┘ └── endpoint path: /v1/chat/completions, /v1/models 등
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="-2-모델-목록-확인-curl">✅ 2. 모델 목록 확인 (curl)</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://your-host.net/api/v1/models <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer YOUR_API_KEY"</span>
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="-3-chatcompletions-요청-예시">✅ 3. chat/completions 요청 예시</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://your-host.net/api/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer YOUR_API_KEY"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "llama-3",
-    "messages": [
-      {"role": "user", "content": "안녕, 오늘 기분 어때?"}
-    ],
-    "temperature": 0.7
-  }'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="-4-응답-예시-정상-작동-시">✅ 4. 응답 예시 (정상 작동 시)</h2>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"chatcmpl-abc123"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"chat.completion"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"created"</span><span class="p">:</span><span class="w"> </span><span class="mi">1723450000</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"llama-3"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"choices"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"assistant"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"안녕하세요! 저는 잘 작동하고 있어요 😊"</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="nl">"finish_reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stop"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<hr />
-
-<h2 id="-요약-4">✅ 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>목적</th>
-      <th>예시 curl 명령</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>모델 목록 조회</td>
-      <td><code class="language-plaintext highlighter-rouge">curl http://your-host.net/api/v1/models -H "Authorization: Bearer YOUR_API_KEY"</code></td>
-    </tr>
-    <tr>
-      <td>채팅 요청 보내기</td>
-      <td><code class="language-plaintext highlighter-rouge">curl http://your-host.net/api/v1/chat/completions ...</code></td>
-    </tr>
-    <tr>
-      <td>인증 추가 방식</td>
-      <td><code class="language-plaintext highlighter-rouge">-H "Authorization: Bearer YOUR_API_KEY"</code></td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>🛠️ 혹시 <code class="language-plaintext highlighter-rouge">"401 Unauthorized"</code> 또는 <code class="language-plaintext highlighter-rouge">"invalid API key"</code> 등의 오류가 나는 경우에는:</p>
-
-<ul>
-  <li>
-    <p>API 키가 정확한지</p>
-  </li>
-  <li>
-    <p>서버가 정말 OpenAI 호환인지</p>
-  </li>
-  <li>
-    <p>엔드포인트 경로에 오타가 없는지</p>
-  </li>
-</ul>
-
-<p>이 세 가지를 다시 확인해 보셔야 합니다.</p>
-
-<p>필요하면 오류 메시지 붙여서 말씀 주세요!</p>
-
-<p class="chat--user">
-
-models에서는 있는거 같은데 model not found 뜨는데 뭘까
-
-</p>
-
-<p>좋은 질문입니다. <code class="language-plaintext highlighter-rouge">GET /v1/models</code>에서는 모델이 보이는데, <code class="language-plaintext highlighter-rouge">POST /v1/chat/completions</code>에서 <code class="language-plaintext highlighter-rouge">model
-not found</code> 에러가 발생하는 경우는 꽤 자주 있는 문제이며, 주로 다음과 같은 원인 때문입니다.</p>
-
-<hr />
-
-<h2 id="-step-by-step-원인-분석-및-해결">🧭 Step-by-Step 원인 분석 및 해결</h2>
-
-<hr />
-
-<h3 id="-1-models에서-보이는-id-를-정확히-사용하고-있는가">✅ 1. <code class="language-plaintext highlighter-rouge">models</code>에서 보이는 <strong>id</strong> 를 정확히 사용하고 있는가?</h3>
-
-<p><code class="language-plaintext highlighter-rouge">GET /v1/models</code> 응답 예시:</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mistral-7b-instruct"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"model"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p><strong>→ 여기에 나오는<code class="language-plaintext highlighter-rouge">id</code> 필드를 <code class="language-plaintext highlighter-rouge">chat/completions</code>의 <code class="language-plaintext highlighter-rouge">"model"</code>로 그대로 사용해야 합니다.</strong></p>
-
-<p>예:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"model"</span>: <span class="s2">"mistral-7b-instruct"</span>   ✅ 정확
-<span class="s2">"model"</span>: <span class="s2">"mistral"</span>               ❌ 에러 발생 가능
-</code></pre></div></div>
-
-<hr />
-
-<h3 id="-2-모델이-chat-기반-모델-인지-확인하기">✅ 2. 모델이 <strong>chat 기반 모델</strong> 인지 확인하기</h3>
-
-<p>OpenAI 호환 API의 <code class="language-plaintext highlighter-rouge">/v1/chat/completions</code>는 <strong>chat 형식 메시지 (<code class="language-plaintext highlighter-rouge">role</code>:
-user/assistant/system)</strong>를 지원하는 모델만 사용 가능합니다.</p>
-
-<blockquote>
-  <p>일부 모델은 <strong>prompt-only 모델</strong> 이어서 <code class="language-plaintext highlighter-rouge">/v1/completions</code>만 지원합니다.</p>
-</blockquote>
-
-<p>🔍 확인 방법:</p>
-
-<ul>
-  <li>
-    <p>chat 모델이면 보통 <code class="language-plaintext highlighter-rouge">instruct</code>, <code class="language-plaintext highlighter-rouge">chat</code>, <code class="language-plaintext highlighter-rouge">alpaca</code>, <code class="language-plaintext highlighter-rouge">vicuna</code> 등의 이름을 포함합니다.</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">messages</code> 대신 <code class="language-plaintext highlighter-rouge">prompt</code>를 쓰면 안 됩니다.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="-3-서버-설정상-허용된-모델만-받도록-되어-있는-경우">✅ 3. 서버 설정상 허용된 모델만 받도록 되어 있는 경우</h3>
-
-<p>특히 <strong>Open WebUI</strong> 또는 프록시 서버 (<code class="language-plaintext highlighter-rouge">FastAPI</code>, <code class="language-plaintext highlighter-rouge">vLLM</code>, <code class="language-plaintext highlighter-rouge">LM Gateway</code> 등)는 보안상 일부 모델만
-허용하는 설정을 둘 수 있습니다.</p>
-
-<p>예:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>env
-
-# 환경변수나 config.json
-ALLOWED_MODELS=mistral-7b-instruct,llama-3
-</code></pre></div></div>
-
-<p>→ 이 경우 <code class="language-plaintext highlighter-rouge">models</code> 응답에는 보이지만, 실제 inference에는 제한될 수 있습니다.</p>
-
-<hr />
-
-<h3 id="-4-이름이-길거나-경로-포함된-경우">✅ 4. 이름이 길거나 경로 포함된 경우</h3>
-
-<p><code class="language-plaintext highlighter-rouge">/v1/models</code>에서 다음처럼 보일 수 있습니다:</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TheBloke/Mistral-7B-Instruct-v0.1-GGUF"</span><span class="w">
-</span></code></pre></div></div>
-
-<p>→ 이 경우 <strong>이 전체 문자열</strong> 을 <code class="language-plaintext highlighter-rouge">"model"</code>로 넣어야 합니다.</p>
-
-<p>예:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"model"</span>: <span class="s2">"TheBloke/Mistral-7B-Instruct-v0.1-GGUF"</span>
-</code></pre></div></div>
-
-<hr />
-
-<h3 id="-5-올바른-백엔드인지-확인-ollama-vllm-lm-studio-등-혼동">✅ 5. 올바른 백엔드인지 확인 (Ollama, vLLM, LM Studio 등 혼동)</h3>
-
-<p><code class="language-plaintext highlighter-rouge">Open WebUI</code>가 어떤 백엔드로 프록시되고 있는지 명확히 알아야 합니다.</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>백엔드</th>
-      <th>특징</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>vLLM</strong></td>
-      <td>모델 이름 설정 시 <code class="language-plaintext highlighter-rouge">--model</code> 파라미터로 고정됨</td>
-    </tr>
-    <tr>
-      <td><strong>Ollama</strong></td>
-      <td><code class="language-plaintext highlighter-rouge">ollama list</code> 로 확인 가능, 이름 그대로 사용해야 함</td>
-    </tr>
-    <tr>
-      <td><strong>text-generation-webui</strong></td>
-      <td>UI에서 로드된 모델 외에는 작동 안 함</td>
-    </tr>
-    <tr>
-      <td><strong>LM Studio</strong></td>
-      <td>보통 <code class="language-plaintext highlighter-rouge">"lmstudio"</code> 같은 프록시 모델 ID 사용</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<h2 id="️-해결-요약">🛠️ 해결 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>점검 항목</th>
-      <th>조치 방법</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">model</code> 이름 정확히 일치?</td>
-      <td><code class="language-plaintext highlighter-rouge">/v1/models</code> 응답에서 <code class="language-plaintext highlighter-rouge">id</code> 그대로 사용</td>
-    </tr>
-    <tr>
-      <td>chat 모델 맞나?</td>
-      <td>메시지 포맷이 <code class="language-plaintext highlighter-rouge">messages</code>, role 포함되어야 함</td>
-    </tr>
-    <tr>
-      <td>서버 설정에서 차단?</td>
-      <td><code class="language-plaintext highlighter-rouge">ALLOWED_MODELS</code>, 정책 확인</td>
-    </tr>
-    <tr>
-      <td>경로 포함된 이름?</td>
-      <td><code class="language-plaintext highlighter-rouge">model</code>: <code class="language-plaintext highlighter-rouge">"TheBloke/.../gguf"</code> 등 전체 경로 포함</td>
-    </tr>
-    <tr>
-      <td>프록시 백엔드 확인</td>
-      <td>어떤 백엔드가 API 처리 중인지 명확히 파악 필요</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<h2 id="-필요하시면">📌 필요하시면</h2>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">/v1/models</code> 응답 JSON을 붙여 주시면</p>
-  </li>
-  <li>
-    <p>어떤 모델 이름을 넣었는지 보여주시면</p>
-  </li>
-</ul>
-
-<p>제가 직접 비교해서 정확한 <code class="language-plaintext highlighter-rouge">"model"</code> 값으로 변환해 드릴 수 있어요. 원하시면 확인 도와드릴게요.</p>
-
-<p class="chat--user">
-
-리눅스 망에서 하는데 한 서버에서는 응답이 잘 나오는데 다른 서버에서는 curl: (60) SSL certificate problem 발생해
-
-</p>
-
-<p>좋습니다. <code class="language-plaintext highlighter-rouge">curl: (60) SSL certificate problem</code> 오류는 주로 <strong>서버의 SSL 인증서를 검증할 수 없을 때
-발생</strong> 합니다. 이 문제는 특히 내부망(LAN) 리눅스 환경에서 자주 생깁니다. 원인을 단계별로 진단하고 해결 방법을 안내드릴게요.</p>
-
-<hr />
-
-<h2 id="-1-오류-메시지-요약">✅ 1. 오류 메시지 요약</h2>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vbnet
-
-curl: (60) SSL certificate problem: unable to get local issuer certificate
-</code></pre></div></div>
-
-<p>이 오류는 <code class="language-plaintext highlighter-rouge">curl</code>이 HTTPS 인증서 체인을 검증할 수 없다는 뜻입니다.</p>
-
-<hr />
-
-<h2 id="-step-by-step-해결-방법">🧭 Step-by-Step 해결 방법</h2>
-
-<hr />
-
-<h3 id="-1단계---insecure-옵션으로-우회-테스트용">✅ [1단계] <code class="language-plaintext highlighter-rouge">--insecure</code> 옵션으로 우회 (테스트용)</h3>
-
-<p>먼저 빠르게 테스트하려면 <code class="language-plaintext highlighter-rouge">--insecure</code> 플래그를 사용해 인증서 검증을 끄세요.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--insecure</span> https://your-host.net/api/v1/models
-</code></pre></div></div>
-
-<ul>
-  <li>👉 <strong>이 방법은 보안상 안전하지 않기 때문에, 프로덕션에선 쓰지 말고 원인 해결용으로만 사용하세요.</strong></li>
-</ul>
-
-<hr />
-
-<h3 id="-2단계-문제가-발생하지-않는-서버와-인증서-체인-비교">✅ [2단계] 문제가 발생하지 않는 서버와 인증서 체인 비교</h3>
-
-<p><code class="language-plaintext highlighter-rouge">curl -v</code>로 디버깅 로그를 비교해보세요:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> https://your-host.net/api/v1/models
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p>잘 되는 서버에서는 <code class="language-plaintext highlighter-rouge">SSL certificate verify ok</code>가 뜰 것이고,</p>
-  </li>
-  <li>
-    <p>문제 있는 서버는 <code class="language-plaintext highlighter-rouge">certificate verify failed</code> 로그가 뜰 것입니다.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="-3단계-ca-certificates-패키지-설치-확인">✅ [3단계] <code class="language-plaintext highlighter-rouge">ca-certificates</code> 패키지 설치 확인</h3>
-
-<p>문제 있는 서버에서 CA 인증서가 빠져있을 수 있습니다.</p>
-
-<p><strong>Debian/Ubuntu</strong> :</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt update
-<span class="nb">sudo </span>apt <span class="nb">install </span>ca-certificates
-<span class="nb">sudo </span>update-ca-certificates
-</code></pre></div></div>
-
-<p><strong>RHEL/CentOS/Fedora</strong> :</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yum <span class="nb">install </span>ca-certificates
-<span class="nb">sudo </span>update-ca-trust force-enable
-<span class="nb">sudo </span>update-ca-trust extract
-</code></pre></div></div>
-
-<hr />
-
-<h3 id="-4단계-인증서-수동-등록-자체서명-인증서-등">✅ [4단계] 인증서 수동 등록 (자체서명 인증서 등)</h3>
-
-<p>만약 사내망에서 <strong>자체 서명된 인증서</strong>(self-signed cert)를 쓴다면 수동으로 root CA를 등록해야 합니다.</p>
-
-<p>예: <code class="language-plaintext highlighter-rouge">/etc/ssl/certs/my-root-ca.crt</code>로 저장하고 아래 명령 실행</p>
-
-<p><strong>Debian/Ubuntu:</strong></p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo cp </span>my-root-ca.crt /usr/local/share/ca-certificates/
-<span class="nb">sudo </span>update-ca-certificates
-</code></pre></div></div>
-
-<p><strong>RHEL/CentOS:</strong></p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo cp </span>my-root-ca.crt /etc/pki/ca-trust/source/anchors/
-<span class="nb">sudo </span>update-ca-trust extract
-</code></pre></div></div>
-
-<hr />
-
-<h3 id="-5단계-curl에-ca-직접-지정">✅ [5단계] <code class="language-plaintext highlighter-rouge">curl</code>에 CA 직접 지정</h3>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--cacert</span> /path/to/my-root-ca.crt https://your-host.net/api
-</code></pre></div></div>
-
-<blockquote>
-  <p>인증서 신뢰 체인을 명시적으로 지정할 수 있습니다.</p>
-</blockquote>
-
-<hr />
-
-<h2 id="-요약-5">✅ 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>문제 원인</th>
-      <th>해결 방법</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>인증서 검증 실패</td>
-      <td><code class="language-plaintext highlighter-rouge">--insecure</code> (테스트용)</td>
-    </tr>
-    <tr>
-      <td>루트 CA 없음</td>
-      <td><code class="language-plaintext highlighter-rouge">ca-certificates</code> 패키지 설치</td>
-    </tr>
-    <tr>
-      <td>사설 인증서</td>
-      <td>수동 등록 또는 <code class="language-plaintext highlighter-rouge">--cacert</code> 지정</td>
-    </tr>
-    <tr>
-      <td>도메인 이름 mismatch</td>
-      <td><code class="language-plaintext highlighter-rouge">curl --resolve</code> 또는 hosts 파일 수정으로 대응</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>💡 참고: 사내 인증서를 사용하는 경우 인증서 관리팀에 Root CA 인증서 제공 요청할 수도 있어요.</p>
-
-<p>필요하시면 문제 있는 서버의 <code class="language-plaintext highlighter-rouge">curl -v</code> 로그를 붙여 주시면 더 정확히 진단해드릴 수 있습니다!</p>
-
-<p class="chat--user">
-
---insecure 하면 되네
-
-</p>
-
-<p>좋습니다! <code class="language-plaintext highlighter-rouge">--insecure</code> 옵션으로 동작이 된다는 것은, 해당 서버에서 <strong>SSL 인증서 검증 단계에서만 문제</strong> 가 있다는 것을
-확인한 셈입니다. 하지만 몇 가지 주의사항과 보완 방법을 덧붙이자면:</p>
-
-<hr />
-
-<h2 id="️---insecure의-의미와-주의사항">⚠️ <code class="language-plaintext highlighter-rouge">--insecure</code>의 의미와 주의사항</h2>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">--insecure</code>는 <code class="language-plaintext highlighter-rouge">curl</code>이 <strong>서버 인증서를 신뢰하지 않고도 요청을 허용</strong> 하게 만드는 옵션입니다.</p>
-  </li>
-  <li>
-    <p>이는 <strong>중간자 공격(MITM)</strong> 같은 보안 리스크에 노출될 수 있기 때문에 <strong>프로덕션/자동화 스크립트에서는 지양</strong> 하는 게 좋습니다.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="️-더-나은-해결-방안-권장">🛠️ 더 나은 해결 방안 (권장)</h2>
-
-<h3 id="-1-root-ca-인증서를-시스템에-추가">✅ 1. Root CA 인증서를 시스템에 추가</h3>
-
-<p>내부망이나 자체 인증서를 사용하는 경우 다음 단계를 권장합니다:</p>
-
-<h4 id="예시">예시:</h4>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo cp </span>your-ca.crt /usr/local/share/ca-certificates/
-<span class="nb">sudo </span>update-ca-certificates
-</code></pre></div></div>
-
-<p>그 후 <code class="language-plaintext highlighter-rouge">curl</code>은 <code class="language-plaintext highlighter-rouge">--insecure</code> 없이도 동작합니다.</p>
-
-<hr />
-
-<h3 id="-2-curl에-인증서-직접-지정-스크립트에서-안전하게-사용">✅ 2. <code class="language-plaintext highlighter-rouge">curl</code>에 인증서 직접 지정 (스크립트에서 안전하게 사용)</h3>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--cacert</span> /path/to/your-ca.crt https://your-host.net/api
-</code></pre></div></div>
-
-<p>스크립트에 <code class="language-plaintext highlighter-rouge">--insecure</code> 대신 <code class="language-plaintext highlighter-rouge">--cacert</code>를 사용하는 것이 더 안전합니다.</p>
-
-<hr />
-
-<h3 id="-3-서버-인증서가-lets-encrypt-등-공개-ca-기반이라면">✅ 3. 서버 인증서가 Let's Encrypt 등 공개 CA 기반이라면</h3>
-
-<p>문제가 되는 서버가 최신 루트 인증서 목록을 반영하지 못하고 있을 수 있으므로:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install</span> <span class="nt">--reinstall</span> ca-certificates
-</code></pre></div></div>
-
-<p>또는</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>update-ca-trust extract  <span class="c"># RHEL 계열</span>
-</code></pre></div></div>
-
-<p>을 통해 인증서 체인을 최신화할 수 있습니다.</p>
-
-<hr />
-
-<h2 id="-요약-6">✅ 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>방법</th>
-      <th>설명</th>
-      <th>보안성</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">--insecure</code></td>
-      <td>인증서 검증을 완전히 비활성화</td>
-      <td>❌ 위험 (테스트용)</td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">--cacert</code></td>
-      <td>명시적으로 루트 인증서 지정</td>
-      <td>✅ 안전</td>
-    </tr>
-    <tr>
-      <td>시스템 CA 등록</td>
-      <td>Root CA를 시스템 신뢰 목록에 등록</td>
-      <td>✅ 안전</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>필요하시면 <code class="language-plaintext highlighter-rouge">your-ca.crt</code> 만드는 방법이나, 기존 서버에서 인증서 추출해서 다른 서버에 복사하는 법도 알려드릴게요!</p>
-
-<p class="chat--user">
-
-vscode 내의 webengine에서도 이런거 때문에 에러가 발생하는거 같은데 이거 끌 수 없어?
-
-</p>
-
-<p>맞습니다. <code class="language-plaintext highlighter-rouge">VS Code</code> 내부의 <code class="language-plaintext highlighter-rouge">Webview</code>나 <code class="language-plaintext highlighter-rouge">WebEngine</code>이 사용하는 HTTP 요청에서도 <strong>SSL 인증서 검증 실패</strong>
-가 발생할 수 있으며, 이는 <code class="language-plaintext highlighter-rouge">curl</code>의 <code class="language-plaintext highlighter-rouge">(60) SSL certificate problem</code>과 유사한 이유로 발생합니다. 특히 사내망,
-자체 인증서, 프록시, MITM 방지 장비 등이 있을 경우 자주 발생하죠.</p>
-
-<hr />
-
-<h2 id="-해결-전략-요약">✅ 해결 전략 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>목적</th>
-      <th>방법</th>
-      <th>가능 여부</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Webview의 SSL 검증 끄기</td>
-      <td><strong>설정 불가</strong> (보안상 제한)</td>
-      <td>❌ 기본적으로 차단됨</td>
-    </tr>
-    <tr>
-      <td>전체 Electron/VS Code SSL 우회</td>
-      <td>환경변수 사용</td>
-      <td>✅ 제한적으로 가능</td>
-    </tr>
-    <tr>
-      <td>CA 인증서 강제로 등록</td>
-      <td>시스템 또는 VS Code 신뢰 목록에 추가</td>
-      <td>✅ 권장 방식</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<h2 id="-step-by-step-해결법">🧭 Step-by-Step 해결법</h2>
-
-<hr />
-
-<h3 id="-1-vs-code에-ssl-검증-무시-환경변수-추가-임시-우회">✅ 1. VS Code에 SSL 검증 무시 환경변수 추가 (임시 우회)</h3>
-
-<p><strong>Linux/macOS</strong> 에서 VS Code를 실행할 때:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">NODE_TLS_REJECT_UNAUTHORIZED</span><span class="o">=</span>0 code
-</code></pre></div></div>
-
-<p>또는 <code class="language-plaintext highlighter-rouge">~/.bashrc</code>, <code class="language-plaintext highlighter-rouge">~/.zshrc</code>에:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">NODE_TLS_REJECT_UNAUTHORIZED</span><span class="o">=</span>0
-</code></pre></div></div>
-
-<blockquote>
-  <p><strong>주의</strong> : 이는 Electron 기반 앱 전체에서 SSL 검증을 끄는 것이며, 보안상 위험하므로 임시 또는 로컬 테스트 용도로만
-쓰세요.</p>
-</blockquote>
-
-<hr />
-
-<h3 id="-2-webview-내-요청이-프록시인증서-문제일-경우--시스템에-root-ca-등록">✅ 2. Webview 내 요청이 프록시/인증서 문제일 경우 → 시스템에 Root CA 등록</h3>
-
-<p>위에서 <code class="language-plaintext highlighter-rouge">curl</code> 문제를 해결할 때처럼, VS Code에서 사용하는 시스템 SSL 인증서 스토어에 루트 인증서를 등록해야
-WebEngine도 정상 동작합니다.</p>
-
-<p>예:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo cp </span>my-root-ca.crt /usr/local/share/ca-certificates/
-<span class="nb">sudo </span>update-ca-certificates
-</code></pre></div></div>
-
-<p>VS Code 재시작 후 다시 시도.</p>
-
-<hr />
-
-<h3 id="-3-vs-code에-https-프록시ca-설정-기본-설정으로는-제한적">✅ 3. VS Code에 HTTPS 프록시/CA 설정 (기본 설정으로는 제한적)</h3>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">//</span><span class="w"> </span><span class="err">settings.json</span><span class="w">
-</span><span class="p">{</span><span class="w">
-  </span><span class="nl">"http.proxyStrictSSL"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<blockquote>
-  <p>단, 이 설정은 <strong>VS Code 자체의 확장 설치, 업데이트</strong> 등에만 적용되고, <strong>Webview 안의 JS 코드</strong> 나
-<code class="language-plaintext highlighter-rouge">webengine</code> 내부 요청에는 <strong>영향 없음</strong> 일 수 있습니다.</p>
-</blockquote>
-
-<hr />
-
-<h3 id="-4-webview가-내부에서-fetch-또는-xmlhttprequest를-쓴다면">✅ 4. WebView가 내부에서 <code class="language-plaintext highlighter-rouge">fetch</code> 또는 <code class="language-plaintext highlighter-rouge">XMLHttpRequest</code>를 쓴다면?</h3>
-
-<p>그럴 경우 해당 JS 코드에서 <code class="language-plaintext highlighter-rouge">https.Agent({ rejectUnauthorized: false })</code> 같은 설정을 사용하지 않는 한
-SSL 오류는 회피 불가능합니다.</p>
-
-<p>→ <strong>결국 CA 인증서를 올바르게 등록하는 게 유일한 안전한 해결책</strong> 입니다.</p>
-
-<hr />
-
-<h2 id="-마무리-요약">✅ 마무리 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>해결법</th>
-      <th>권장 여부</th>
-      <th>설명</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">NODE_TLS_REJECT_UNAUTHORIZED=0</code></td>
-      <td>⚠️ 비권장</td>
-      <td>전체 SSL 검증 우회 (임시 테스트용만)</td>
-    </tr>
-    <tr>
-      <td>시스템에 Root CA 등록</td>
-      <td>✅ 적극 권장</td>
-      <td>curl, VS Code, WebEngine 모두에 적용 가능</td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">http.proxyStrictSSL</code></td>
-      <td>☑️ 제한적</td>
-      <td>일부 기능만 해당, Webview에는 영향 X</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>🔧 원하시면 <code class="language-plaintext highlighter-rouge">Webview</code>에서 호출하는 실제 URL이나 오류 메시지를 알려주시면, 그 기반으로 더 정확하게 조치 방법을 안내해 드릴 수
-있어요!</p>
-
-<p class="chat--user">
-
-오 잘 된다. 근데 continue extension보면 chat이랑 자동완성이랑 url이 다른거 같더라?
-
-</p>
-
-<p>맞습니다! <code class="language-plaintext highlighter-rouge">Continue</code> 확장(Extension)에서는 <strong>"Chat 기능"</strong>과 <strong>"코드 자동완성 (autocomplete)"</strong>
-기능이 각각 다른 <strong>API 엔드포인트(URL)</strong> 를 사용하는 것이 일반적입니다. 이건 내부적으로 역할이 다르고 처리 방식도 다르기
-때문입니다.</p>
-
-<hr />
-
-<h2 id="-핵심-차이-chat-vs-autocomplete-url">✅ 핵심 차이: Chat vs Autocomplete URL</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>기능</th>
-      <th>목적</th>
-      <th>보통 URL 예시</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Chat</strong></td>
-      <td>사용자가 질문 입력 후 전체 답변</td>
-      <td><code class="language-plaintext highlighter-rouge">/v1/chat/completions</code></td>
-    </tr>
-    <tr>
-      <td><strong>Autocomplete</strong></td>
-      <td>코드 중간에서 자동 완성 추천</td>
-      <td><code class="language-plaintext highlighter-rouge">/v1/completions</code> 또는 <code class="language-plaintext highlighter-rouge">/v1/complete</code></td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<h2 id="-step-by-step-자세히-설명">🧭 Step-by-Step 자세히 설명</h2>
-
-<hr />
-
-<h3 id="-1-chat-기능--chatcompletions">✅ 1. <strong>Chat 기능</strong> : <code class="language-plaintext highlighter-rouge">chat/completions</code></h3>
-
-<ul>
-  <li>
-    <p>사용하는 모델: Chat 기반 모델 (<code class="language-plaintext highlighter-rouge">gpt-3.5-turbo</code>, <code class="language-plaintext highlighter-rouge">llama2-chat</code>, <code class="language-plaintext highlighter-rouge">mistral-instruct</code> 등)</p>
-  </li>
-  <li>메시지 포맷:
-    <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gpt-3.5-turbo"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"messages"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="nl">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w"> </span><span class="nl">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"이 함수 설명해줘"</span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div>    </div>
-  </li>
-  <li>URL:
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://your-server.net/api/v1/chat/completions
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="-2-autocomplete-기능--completions-또는-complete">✅ 2. <strong>Autocomplete 기능</strong> : <code class="language-plaintext highlighter-rouge">completions</code> 또는 <code class="language-plaintext highlighter-rouge">complete</code></h3>
-
-<ul>
-  <li>
-    <p>사용하는 모델: 일반 Language Model (prompt-only)</p>
-  </li>
-  <li>메시지 포맷:
-    <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"code-llama"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"prompt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"def fibonacci(n):"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"max_tokens"</span><span class="p">:</span><span class="w"> </span><span class="mi">64</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div>    </div>
-  </li>
-  <li>URL:
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://your-server.net/api/v1/completions
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<p>또는</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```bash
-http://localhost:11434/api/generate  # (Ollama)
-```
-</code></pre></div></div>
-
-<ul>
-  <li>일부에서는 <code class="language-plaintext highlighter-rouge">streaming</code>에 특화된 <code class="language-plaintext highlighter-rouge">/v1/complete-stream</code>, <code class="language-plaintext highlighter-rouge">/v1/predict</code> 같은 것도 씁니다.</li>
-</ul>
-
-<hr />
-
-<h2 id="-왜-url이-다를까">🧠 왜 URL이 다를까?</h2>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">chat/completions</code>는 <strong>역할 기반 메시지 처리</strong> (<code class="language-plaintext highlighter-rouge">role</code>: system/user/assistant)</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">completions</code>는 <strong>단일 프롬프트 → 이어쓰기 결과만 반환</strong></p>
-  </li>
-</ul>
-
-<p>즉, 구조적으로 API 요구 사항이 다르기 때문에 Continue나 Copilot 같은 확장은 서로 다른 경로를 지정합니다.</p>
-
-<hr />
-
-<h2 id="-continue-설정-예시">✅ Continue 설정 예시</h2>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">//</span><span class="w"> </span><span class="err">continue.config.json</span><span class="w"> </span><span class="err">또는</span><span class="w"> </span><span class="err">Settings</span><span class="w"> </span><span class="err">UI</span><span class="w">
-</span><span class="p">{</span><span class="w">
-  </span><span class="nl">"provider"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"chat_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8000/v1/chat/completions"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"completion_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8000/v1/completions"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"api_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sk-..."</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<hr />
-
-<h2 id="-요약-정리">✅ 요약 정리</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>항목</th>
-      <th>Chat</th>
-      <th>Autocomplete</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Endpoint</td>
-      <td><code class="language-plaintext highlighter-rouge">/v1/chat/completions</code></td>
-      <td><code class="language-plaintext highlighter-rouge">/v1/completions</code></td>
-    </tr>
-    <tr>
-      <td>입력 형식</td>
-      <td><code class="language-plaintext highlighter-rouge">messages[]</code> + roles</td>
-      <td><code class="language-plaintext highlighter-rouge">prompt</code></td>
-    </tr>
-    <tr>
-      <td>모델</td>
-      <td><code class="language-plaintext highlighter-rouge">-chat</code>, <code class="language-plaintext highlighter-rouge">-instruct</code></td>
-      <td>일반 LM (<code class="language-plaintext highlighter-rouge">code-llama</code>, <code class="language-plaintext highlighter-rouge">mistral</code>, 등)</td>
-    </tr>
-    <tr>
-      <td>사용 목적</td>
-      <td>질문-답변</td>
-      <td>짧은 이어쓰기 예측 (코드 추천 등)</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>필요하시면 Continue의 설정 파일을 붙여주시면 거기에 맞춰 경로 설정이나 커스터마이징도 도와드릴 수 있어요!</p>
-
-<p class="chat--user">
-
-이걸 curl로 지원하는지 안하는지 테스트하고 싶어
-
-</p>
-
-<p>좋습니다! 어떤 LLM 서버(예: OpenWebUI, vLLM, Ollama 등)가 <strong>chat API</strong> 와 <strong>completion
-API</strong> 를 curl로 지원하는지 테스트하는 방법을 단계별로 안내드릴게요.</p>
-
-<hr />
-
-<h2 id="-1-chat-api-v1chatcompletions-지원-여부-테스트">✅ 1. <strong>chat API (<code class="language-plaintext highlighter-rouge">/v1/chat/completions</code>) 지원 여부 테스트</strong></h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST http://your-server.net/api/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "gpt-3.5-turbo", 
-    "messages": [
-      { "role": "user", "content": "안녕!" }
-    ]
-  }'</span>
-</code></pre></div></div>
-
-<p><strong>응답 예시:</strong></p>
-
-<ul>
-  <li>
-    <p>정상: <code class="language-plaintext highlighter-rouge">choices[0].message.content</code> 포함된 JSON 반환</p>
-  </li>
-  <li>
-    <p>실패: <code class="language-plaintext highlighter-rouge">404</code>, <code class="language-plaintext highlighter-rouge">"model not found"</code>, <code class="language-plaintext highlighter-rouge">"unknown endpoint"</code> 등</p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="-2-completion-api-v1completions-지원-여부-테스트">✅ 2. <strong>completion API (<code class="language-plaintext highlighter-rouge">/v1/completions</code>) 지원 여부 테스트</strong></h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST http://your-server.net/api/v1/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "gpt-3.5-turbo",
-    "prompt": "def hello_world():\n",
-    "max_tokens": 50,
-    "temperature": 0.7
-  }'</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p>사용 중인 모델이 일반 언어 모델 (prompt-only)을 지원해야 합니다. 일부 chat 전용 모델은 여기서 작동안할 수 있습니다.</p>
-</blockquote>
-
-<hr />
-
-<h2 id="-3-자동완성-전용-테스트용-짧은-프롬프트-예">✅ 3. 자동완성 전용 테스트용 짧은 프롬프트 예</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"prompt"</span>: <span class="s2">"def sum(a, b):</span><span class="se">\n</span><span class="s2">    return"</span>
-</code></pre></div></div>
-
-<p>→ 기대 응답: <code class="language-plaintext highlighter-rouge">" a + b"</code> 또는 <code class="language-plaintext highlighter-rouge">" a - b"</code> 등</p>
-
-<hr />
-
-<h2 id="-4-curl-결과-해석-팁">✅ 4. curl 결과 해석 팁</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>결과</th>
-      <th>해석</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">200 OK</code> + <code class="language-plaintext highlighter-rouge">choices</code> 있음</td>
-      <td>✅ 해당 endpoint 지원됨</td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">404 Not Found</code></td>
-      <td>❌ 지원 안됨 (엔드포인트 없음)</td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">model not found</code></td>
-      <td>모델 이름이 잘못됐거나 해당 endpoint에서 비호환</td>
-    </tr>
-    <tr>
-      <td><code class="language-plaintext highlighter-rouge">400 Bad Request</code></td>
-      <td>payload 구조가 틀렸거나 model 미지원</td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<h2 id="-팁-자동화-테스트-스크립트">🔧 팁: 자동화 테스트 스크립트</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"Testing chat/completions..."</span>
-curl <span class="nt">-s</span> <span class="nt">-o</span> /dev/null <span class="nt">-w</span> <span class="s2">"%{http_code}</span><span class="se">\n</span><span class="s2">"</span> <span class="se">\</span>
-  <span class="nt">-X</span> POST http://your-server.net/api/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "gpt-3.5-turbo", 
-    "messages": [{"role": "user", "content": "ping"}]
-  }'</span>
-
-<span class="nb">echo</span> <span class="s2">"Testing completions..."</span>
-curl <span class="nt">-s</span> <span class="nt">-o</span> /dev/null <span class="nt">-w</span> <span class="s2">"%{http_code}</span><span class="se">\n</span><span class="s2">"</span> <span class="se">\</span>
-  <span class="nt">-X</span> POST http://your-server.net/api/v1/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "gpt-3.5-turbo", 
-    "prompt": "def add(a, b):\n    return",
-    "max_tokens": 10
-  }'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="-결론-요약">✅ 결론 요약</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>테스트</th>
-      <th>요청 URL</th>
-      <th>판단 기준</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Chat 지원 여부</td>
-      <td><code class="language-plaintext highlighter-rouge">/v1/chat/completions</code></td>
-      <td><code class="language-plaintext highlighter-rouge">messages[]</code> 넣고 응답 확인</td>
-    </tr>
-    <tr>
-      <td>Completion 지원 여부</td>
-      <td><code class="language-plaintext highlighter-rouge">/v1/completions</code></td>
-      <td><code class="language-plaintext highlighter-rouge">prompt</code> 넣고 응답 확인</td>
-    </tr>
-    <tr>
-      <td>모델 미지원 vs API 미지원 구분</td>
-      <td>응답 메시지로 판단 (<code class="language-plaintext highlighter-rouge">model not found</code>, <code class="language-plaintext highlighter-rouge">404</code>, 등)</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<hr />
-
-<p>📦 테스트 결과 붙여주시면 어떤 API가 활성화되어 있는지 바로 분석해드릴게요!</p>]]></content><author><name>hvppyarchive</name></author><category term="llm" /><summary type="html"><![CDATA[]]></summary></entry></feed>
+<p>필요하시면 PEG를 적용한 기업 분석 예제도 보여드릴 수 있어요.</p>]]></content><author><name>hvppyarchive</name></author><category term="investing" /><summary type="html"><![CDATA[]]></summary></entry></feed>
