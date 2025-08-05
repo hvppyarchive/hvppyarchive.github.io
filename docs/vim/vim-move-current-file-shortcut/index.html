@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-08-05T17:15:26+09:00">
+  <meta property="article:published_time" content="2025-08-05T17:33:53+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="GVim 파일 자동 이동 설정">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-08-05T17:15:26+09:00">
+    <meta itemprop="datePublished" content="2025-08-05T17:33:53+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-05T17:15:26+09:00">2025-08-05</time>
+        <time datetime="2025-08-05T17:33:53+09:00">2025-08-05</time>
       </span>
     
 
@@ -384,6 +384,177 @@ echohl WarningMsg | echom "Moved to recycle bin: " . l:target | echohl None
 
 <p>필요하면 이 부분도 적용해 드릴 수 있어요.</p>
 
+<p class="chat--user">
+
+뭔가 좀 이상한데 /user/RECYCLE_BIN/ 뒤에 절대 경로를 붙여야 하는데
+
+</p>
+
+<p>좋은 지적입니다! 말씀하신 대로 현재 스크립트는 <code class="language-plaintext highlighter-rouge">:~:.</code> 형식으로 상대 경로를 만들고 있어 <code class="language-plaintext highlighter-rouge">/user/RECYCLE_BIN/home/you/...</code> 처럼 전체 절대 경로가 붙는 것이 아니라, 홈 디렉토리 기준으로 상대경로가 붙을 가능성이 있습니다.</p>
+
+<p>당신이 원하는 건 <strong>그냥 현재 파일의 절대 경로를 그대로<code class="language-plaintext highlighter-rouge">/user/RECYCLE_BIN</code> 뒤에 붙이되, 앞의 슬래시는 제거하는 것</strong>입니다. 즉:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgsql
+
+/path/to/file.txt → /user/RECYCLE_BIN/path/to/file.txt
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-해결-전략-step-by-step">🧠 해결 전략 (step-by-step)</h2>
+
+<ol>
+  <li>
+    <p>현재 파일의 절대 경로를 구한다 → <code class="language-plaintext highlighter-rouge">/path/to/file.txt</code></p>
+  </li>
+  <li>
+    <p>첫 <code class="language-plaintext highlighter-rouge">/</code>을 제거 → <code class="language-plaintext highlighter-rouge">path/to/file.txt</code></p>
+  </li>
+  <li>
+    <p>그것을 <code class="language-plaintext highlighter-rouge">/user/RECYCLE_BIN/</code> 뒤에 붙인다 → <code class="language-plaintext highlighter-rouge">/user/RECYCLE_BIN/path/to/file.txt</code></p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="-수정된-vim-함수-요구사항-완전-반영">✅ 수정된 Vim 함수 (요구사항 완전 반영)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+
+function! MoveToRecycleBin()
+  let l:src = expand('%:p')  " 현재 파일 절대 경로
+  if !filereadable(l:src)
+    echoerr "Cannot move: file does not exist"
+    return
+  endif
+
+  " 절대 경로에서 선행 슬래시 제거
+  let l:clean_path = substitute(l:src, '^/', '', '')
+  let l:target = '/user/RECYCLE_BIN/' . l:clean_path
+
+  " 상위 디렉토리 생성
+  call mkdir(fnamemodify(l:target, ':h'), 'p')
+
+  " 파일 이동
+  if rename(l:src, l:target) == 0
+    echom "Moved to recycle bin: " . l:target
+    bdelete!
+  else
+    echoerr "Failed to move file to recycle bin."
+  endif
+endfunction
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-키매핑-예시">🔑 키매핑 (예시)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+
+nnoremap &lt;Leader&gt;d :call MoveToRecycleBin()&lt;CR&gt;
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-예시-1">✅ 예시</h2>
+
+<ul>
+  <li>
+    <p>현재 파일: <code class="language-plaintext highlighter-rouge">/home/you/code/test.txt</code></p>
+  </li>
+  <li>
+    <p>이동 대상: <code class="language-plaintext highlighter-rouge">/user/RECYCLE_BIN/home/you/code/test.txt</code></p>
+  </li>
+  <li>
+    <p>메시지:</p>
+    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Moved</span> <span class="n">to</span> <span class="n">recycle</span> <span class="nv">bin</span><span class="p">:</span> <span class="sr">/user/RECYCLE_BIN/home/you/code/</span><span class="n">test</span><span class="o">.</span><span class="n">txt</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하면 경로를 시간 스탬프 등으로 백업처럼 구성하는 것도 도와드릴 수 있습니다.</p>
+
+<p class="chat--user">
+
+그냥 절대 경로를 /user/RECYCLE_BIN 뒤에 붙이면 되지
+
+</p>
+
+<p>맞습니다! 말씀하신 대로 <strong>불필요하게 슬래시를 제거하거나 상대 경로로 바꿀 필요 없이</strong> , 그냥 현재 파일의 <strong>절대 경로 그대로를<code class="language-plaintext highlighter-rouge">/user/RECYCLE_BIN/</code> 뒤에 붙이면</strong> 됩니다.</p>
+
+<p>즉, 단순히 <code class="language-plaintext highlighter-rouge">"RECYCL_BIN" + 현재 파일 절대 경로</code>만 하면 OK입니다.</p>
+
+<hr />
+
+<h2 id="-깔끔하게-수정한-vim-함수-최소한의-변경">✅ 깔끔하게 수정한 Vim 함수 (최소한의 변경)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+
+function! MoveToRecycleBin()
+  let l:src = expand('%:p')  " 현재 파일 절대 경로
+  if !filereadable(l:src)
+    echoerr "Cannot move: file does not exist"
+    return
+  endif
+
+  let l:target = '/user/RECYCLE_BIN' . l:src  " 그냥 절대 경로 그대로 붙이기
+
+  " 상위 디렉토리 생성
+  call mkdir(fnamemodify(l:target, ':h'), 'p')
+
+  " 파일 이동
+  if rename(l:src, l:target) == 0
+    echom "Moved to recycle bin: " . l:target
+    bdelete!
+  else
+    echoerr "Failed to move file to recycle bin."
+  endif
+endfunction
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-예시-동작">🧪 예시 동작</h2>
+
+<ul>
+  <li>
+    <p>현재 파일:<br />
+<code class="language-plaintext highlighter-rouge">/home/user/docs/note.md</code></p>
+  </li>
+  <li>
+    <p>이동 후 경로:<br />
+<code class="language-plaintext highlighter-rouge">/user/RECYCLE_BIN/home/user/docs/note.md</code></p>
+  </li>
+  <li>
+    <p>메시지 출력:</p>
+    <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Moved</span> <span class="n">to</span> <span class="n">recycle</span> <span class="nv">bin</span><span class="p">:</span> <span class="sr">/user/RECYCLE_BIN/home/user/docs/</span><span class="n">note</span><span class="o">.</span><span class="n">md</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="️-키-매핑-예시">⌨️ 키 매핑 예시</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+
+nnoremap &lt;Leader&gt;d :call MoveToRecycleBin()&lt;CR&gt;
+</code></pre></div></div>
+
+<hr />
+
+<p>필요하면:</p>
+
+<ul>
+  <li>
+    <p>파일 이름에 타임스탬프 붙이기</p>
+  </li>
+  <li>
+    <p>휴지통 자동 비우기 기능</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">undotree</code>까지 정리하기<br />
+등도 확장할 수 있어요. 원하시면 도와드릴게요.</p>
+  </li>
+</ul>
+
         
       </section>
 
@@ -409,7 +580,7 @@ echohl WarningMsg | echom "Moved to recycle bin: " . l:target | echohl None
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-05T17:15:26+09:00">2025-08-05</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-05T17:33:53+09:00">2025-08-05</time></p>
 
       </footer>
 
