@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-08T13:35:41+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html">vLLM Cline 연결 설정</title><link href="https://hvppyarchive.github.io/llm/vllm-cline-connection-debugging/" rel="alternate" type="text/html" title="vLLM Cline 연결 설정" /><published>2025-08-08T13:35:38+09:00</published><updated>2025-08-08T13:35:38+09:00</updated><id>https://hvppyarchive.github.io/llm/vllm-cline-connection-debugging</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/vllm-cline-connection-debugging/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-08T16:14:24+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html">vLLM Cline 연결 디버깅</title><link href="https://hvppyarchive.github.io/llm/vllm-cline-connection-debugging/" rel="alternate" type="text/html" title="vLLM Cline 연결 디버깅" /><published>2025-08-08T16:14:21+09:00</published><updated>2025-08-08T16:14:21+09:00</updated><id>https://hvppyarchive.github.io/llm/vllm-cline-connection-debugging</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/vllm-cline-connection-debugging/"><![CDATA[<p class="chat--user">
 
 vllm 서버에서 gpt-oss 120B 모델을 띄우고, 이 endpoint url에 VSCode Cline Extension을 연결해서 사용하고 있어.
 
@@ -348,7 +348,433 @@ http.createServer<span class="o">((</span>clientReq, clientRes<span class="o">)<
   </li>
 </ul>
 
-<p>원하시면, <strong>현재 환경(IP/포트/HTTPS 여부)</strong> 알려주면 제가 <strong>딱 맞춘 명령어와 Cline 설정 스크린샷 가이드</strong> 까지 만들어드릴게요.</p>]]></content><author><name>hvppyarchive</name></author><category term="llm" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">아이패드 메모 앱 단축키</title><link href="https://hvppyarchive.github.io/misc/ipad-memo-app-shortcuts/" rel="alternate" type="text/html" title="아이패드 메모 앱 단축키" /><published>2025-08-08T12:57:12+09:00</published><updated>2025-08-08T12:57:12+09:00</updated><id>https://hvppyarchive.github.io/misc/ipad-memo-app-shortcuts</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/ipad-memo-app-shortcuts/"><![CDATA[<p class="chat--user">
+<p>원하시면, <strong>현재 환경(IP/포트/HTTPS 여부)</strong> 알려주면 제가 <strong>딱 맞춘 명령어와 Cline 설정 스크린샷 가이드</strong> 까지 만들어드릴게요.</p>
+
+<p class="chat--user">
+
+API 키 입력이 필요하면?
+
+</p>
+
+<p>Cline이 API 키를 <strong>반드시</strong> 요구하는 경우라도, vLLM 서버가 인증을 쓰지 않는다면 사실상 <strong>아무 문자열이나 넣으면 됩니다.</strong><br />
+왜냐면 vLLM의 OpenAI 호환 API는 기본적으로 API 키 검증을 하지 않기 때문이에요.</p>
+
+<hr />
+
+<h2 id="1-인증-없는-vllm-서버일-때">1. 인증 없는 vLLM 서버일 때</h2>
+
+<ul>
+  <li>
+    <p>Cline의 API Key 입력칸에 <code class="language-plaintext highlighter-rouge">dummy</code> 또는 <code class="language-plaintext highlighter-rouge">test</code>처럼 아무 값 입력</p>
+  </li>
+  <li>
+    <p>mitmproxy/프록시/서버 모두 그대로 통과합니다.</p>
+  </li>
+  <li>
+    <p>요청 헤더 예시:</p>
+    <div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">Authorization</span><span class="o">:</span> <span class="nf">Bearer dummy</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="2-vllm에서-api-키-검증을-켠-경우">2. vLLM에서 API 키 검증을 켠 경우</h2>
+
+<p>만약 <code class="language-plaintext highlighter-rouge">--api-key</code> 같은 인증 옵션을 활성화했다면(또는 API Gateway 뒤에 둔 경우):</p>
+
+<ol>
+  <li><strong>서버에서 설정한 키</strong> 를 기억하거나 환경변수로 확인
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">VLLM_API_KEY</span><span class="o">=</span><span class="s2">"my-secret-key"</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Cline API Key 입력란에 해당 키를 입력</p>
+  </li>
+  <li>프록시나 mitmproxy로 캡처 시에도 이 키가 그대로 Authorization 헤더에 뜹니다.</li>
+</ol>
+
+<hr />
+
+<h2 id="3-디버깅-프록시에서-키를-안전하게-처리하는-팁">3. 디버깅 프록시에서 키를 안전하게 처리하는 팁</h2>
+
+<ul>
+  <li>요청 로깅 시 Authorization 헤더를 <strong>마스킹</strong> 하면 좋습니다.
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># mitmproxy 스크립트 예시
+</span><span class="kn">from</span> <span class="n">mitmproxy</span> <span class="kn">import</span> <span class="n">http</span>
+<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">flow</span><span class="p">:</span> <span class="n">http</span><span class="p">.</span><span class="n">HTTPFlow</span><span class="p">):</span>
+    <span class="k">if</span> <span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">flow</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">headers</span><span class="p">:</span>
+        <span class="n">flow</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">headers</span><span class="p">[</span><span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">Bearer ***MASKED***</span><span class="sh">"</span>
+</code></pre></div>    </div>
+  </li>
+  <li>내부 개발/로컬 환경이면 그냥 그대로 봐도 무방하지만, 키가 외부로 유출되면 안 됩니다.</li>
+</ul>
+
+<hr />
+
+<p>📌 <strong>결론</strong></p>
+
+<ul>
+  <li>
+    <p>인증 없으면 Cline에 임의 문자열 넣으면 끝.</p>
+  </li>
+  <li>
+    <p>인증 있으면 vLLM 서버에 설정한 키를 넣어야 함.</p>
+  </li>
+  <li>
+    <p>디버깅 시엔 프록시에서 키를 가려주는 습관을 들이면 안전합니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하다면 제가 <strong>API 키 유무별 Cline–vLLM–mitmproxy 연결 전체 그림</strong> 을 그려서, 어떤 값이 어디로 흘러가는지 보여드릴 수 있습니다.<br />
+그렇게 하면 디버깅 흐름이 한눈에 보입니다.</p>
+
+<p class="chat--user">
+
+했는데 API Streaming Failed Unexpected token 173781 while expecting start token 200006 에러가 떠 cline에서
+
+</p>
+
+<p>이 증상, 거의 100% <strong>스트리밍 파서/포맷 불일치</strong> 예요.<br />
+특히 메시지에 나온 <code class="language-plaintext highlighter-rouge">start token 200006</code>는 OpenAI o-series(=gpt-4o 계열) 토크나이저의 특수 토큰 ID라서, <strong>Cline이 o-series/Harmony 포맷을 기대</strong> 하는데 vLLM의 <strong>일반 Chat Completions 스트림</strong> 을 받는 경우에 잘 터집니다. <a href="https://docs.cline.bot/provider-config/openai-compatible?utm_source=chatgpt.com">docs.cline.bot</a><a href="https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html?utm_source=chatgpt.com">VLLM Docs</a></p>
+
+<p>아래 순서대로 체크해보세요. (위에서부터 한 단계씩)</p>
+
+<hr />
+
+<h3 id="1-cline가-responses-api-가-아니라-chat-completions-를-때리게-만들기">1) Cline가 <strong>Responses API</strong> 가 아니라 <strong>Chat Completions</strong> 를 때리게 만들기</h3>
+
+<ul>
+  <li>
+    <p>Cline 설정 → <strong>API Provider: OpenAI Compatible</strong></p>
+  </li>
+  <li>
+    <p><strong>Base URL</strong> : <code class="language-plaintext highlighter-rouge">http://&lt;서버IP&gt;:8000/v1</code></p>
+  </li>
+  <li>
+    <p><strong>Model ID</strong> : vLLM에 띄운 <strong>정확한 이름</strong>(예: <code class="language-plaintext highlighter-rouge">gpt-oss-120b</code>)</p>
+  </li>
+  <li>
+    <p>가능하면 <strong>Responses API(“/v1/responses”) 옵션/모드 꺼두기</strong> → vLLM은 공식적으로 <strong>/v1/chat/completions</strong> 스트림을 지원합니다. <a href="https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html?utm_source=chatgpt.com">VLLM Docs</a></p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>왜? vLLM의 OpenAI 호환 서버는 Completions/Chat/Embeddings까지만 구현되어 있고, OpenAI의 최신 <strong>Responses/Harmony(o-series)</strong> 이벤트 스트림과는 필드/이벤트명이 달라서 Cline 파서가 못 알아듣습니다. <a href="https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html?utm_source=chatgpt.com">VLLM Docs</a></p>
+</blockquote>
+
+<hr />
+
+<h3 id="2-cline에서-o-seriesreasoningcomputer-use병렬-툴콜-꺼두기">2) Cline에서 “o-series/Reasoning/Computer Use/병렬 툴콜” 꺼두기</h3>
+
+<ul>
+  <li>
+    <p>모델을 <strong>o1/o3/gpt-4o</strong> 류가 아닌 <strong>일반 채팅형</strong> 으로 고정</p>
+  </li>
+  <li>
+    <p><strong>Tool/Computer Use</strong> 기능을 일단 <strong>OFF</strong> (vLLM의 함수/툴콜 구현과 Cline의 기대치가 어긋날 수 있음)</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="3-스트리밍-자체가-문제인지-분리">3) 스트리밍 자체가 문제인지 분리</h3>
+
+<ul>
+  <li>
+    <p>Cline 설정에서 <strong>Stream 비활성화</strong> 가 가능하면 잠시 꺼서 테스트</p>
+  </li>
+  <li>
+    <p>혹은 동일 요청을 <strong>curl로 재현</strong> 해 보세요:</p>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 스트림 OFF로 테스트(파서 우회)</span>
+curl http://&lt;서버IP&gt;:8000/v1/chat/completions <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer dummy"</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{
+    "model":"gpt-oss-120b",
+    "messages":[{"role":"user","content":"ping"}],
+    "stream": false
+  }'</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>이건 잘 되는데 Cline에서만 터지면 <strong>Cline의 SSE 파서/옵션 불일치</strong> 로 확정.</p>
+
+<hr />
+
+<h3 id="4-mitmproxy로-실제-스트림-모양-확인">4) mitmproxy로 실제 스트림 모양 확인</h3>
+
+<ul>
+  <li>Cline ↔ vLLM 사이에 <strong>mitmproxy(reverse)</strong>를 두고 <strong>SSE 라인</strong> 을 봅니다.<br />
+<code class="language-plaintext highlighter-rouge">data: { ... }</code>가 JSON 청크로 오다가 마지막에 <code class="language-plaintext highlighter-rouge">data: [DONE]</code>으로 끝나야 Cline이 행복합니다. 만약 <strong>Responses API 이벤트명</strong>(예: <code class="language-plaintext highlighter-rouge">event: response.delta</code>) 비슷한 게 보이면 라우팅이 잘못된 겁니다. <a href="https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html?utm_source=chatgpt.com">VLLM Docs</a></li>
+</ul>
+
+<hr />
+
+<h3 id="5-vllm-서버-쪽-권장-실행-플래그">5) vLLM 서버 쪽 권장 실행 플래그</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> vllm.entrypoints.openai.api_server <span class="se">\</span>
+  <span class="nt">--model</span> gpt-oss-120b <span class="se">\</span>
+  <span class="nt">--host</span> 0.0.0.0 <span class="nt">--port</span> 8000 <span class="se">\</span>
+  <span class="nt">--tensor-parallel-size</span> &lt;GPU수&gt; <span class="se">\</span>
+  <span class="nt">--enable-log-requests</span>  <span class="c">#(문제시 요청 로깅 보조)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>반드시 Cline이 <strong>/v1/chat/completions</strong> 로 치는지 확인하세요. (mitmproxy/curl)</li>
+</ul>
+
+<hr />
+
+<h3 id="6-흔한-함정-정리">6) 흔한 함정 정리</h3>
+
+<ul>
+  <li>
+    <p><strong>Base URL 끝에 /v1 빠짐</strong> → 404/파서오류 유발</p>
+  </li>
+  <li>
+    <p><strong>Model ID 오타</strong> → 일부 게이트웨이는 다른 엔드포인트로 우회 응답</p>
+  </li>
+  <li>
+    <p><strong>JSON 모드/Response Format 강제</strong>(예: json_schema) → 일부 모델에서 스트림 형식이 달라져 파서 에러</p>
+  </li>
+  <li>
+    <p><strong>HTTP 압축/프록시 변환</strong> 이 SSE 줄바꿈을 깨뜨리는 경우</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="왜-200006이-보였나">왜 200006이 보였나?</h3>
+
+<p>o-series(Harmony) 포맷에서 쓰는 특수 토큰 ID들이 있고, 글 중에도 <code class="language-plaintext highlighter-rouge">200006</code> 같은 ID가 언급됩니다. Cline이 그 <strong>포맷(=특정 토큰 경계/이벤트)을 기대</strong> 했는데, vLLM이 <strong>일반 Chat 스트림</strong> 을 보내니 “기대하던 시작 토큰이 아니다” 류의 에러가 난 것으로 추정됩니다. <a href="https://simonwillison.net/2025/Aug/5/gpt-oss/?utm_source=chatgpt.com">Simon Willison’s Weblog</a></p>
+
+<hr />
+
+<p>필요하면 지금 Cline 설정 스크린샷(모델/엔드포인트/토글 항목)과 <strong>mitmproxy 캡처</strong> 한두 건만 올려 주세요.<br />
+그대로 보고 <strong>“어느 지점에서 Responses↔Chat이 엇갈리는지”</strong> 정확히 짚어드릴게요.</p>
+
+<p class="chat--user">
+
+근데 mitmproxy를 안쓰면 저 에러가 안나
+
+</p>
+
+<p>오—그럼 <strong>원인 범위가 mitmproxy 쪽</strong> 으로 꽤 좁혀졌어요.<br />
+SSE(서버센트 이벤트) 스트림을 mitmproxy가 <strong>버퍼링/재인코딩/HTTP2 변환</strong> 하면서 Cline의 파서가 기대하는 포맷이 깨지는 전형적인 케이스 같습니다.</p>
+
+<p>아래 순서대로 “한 가지씩” 바꿔 보세요. (위에서부터 효과 큰 것 ▶ 세부)</p>
+
+<hr />
+
+<h2 id="1-mitmproxy-실행-옵션을-스트리밍-친화적으로-바꾸기">1) mitmproxy 실행 옵션을 스트리밍 친화적으로 바꾸기</h2>
+
+<p>SSE는 라인 경계(줄바꿈)와 chunking이 아주 민감해요. 다음 옵션이 핵심입니다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mitmproxy <span class="se">\</span>
+  <span class="nt">--mode</span> reverse:http://&lt;VLLM_HOST&gt;:8000 <span class="se">\</span>
+  <span class="nt">-p</span> 8080 <span class="se">\</span>
+  <span class="nt">--set</span> <span class="nv">http2</span><span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
+  <span class="nt">--set</span> <span class="nv">connection_strategy</span><span class="o">=</span>lazy <span class="se">\</span>
+  <span class="nt">--set</span> <span class="nv">stream_large_bodies</span><span class="o">=</span>1
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">http2=false</code> : 업스트림/다운스트림에서 HTTP/2로 변환되는 걸 막아서 <strong>SSE 라인 경계 깨짐</strong> 을 예방</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">connection_strategy=lazy</code> : 불필요한 선연결/재사용 줄임</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">stream_large_bodies=1</code> : <strong>응답을 버퍼링하지 말고 바로바로 흘려보냄</strong> (SSE 필수)</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Cline Base URL은 <code class="language-plaintext highlighter-rouge">http://localhost:8080/v1</code> 로 유지</p>
+</blockquote>
+
+<hr />
+
+<h2 id="2-바디-찍는-mitm-스크립트는-일단-끄기">2) “바디 찍는” mitm 스크립트는 일단 끄기</h2>
+
+<p>제가 전에 드린 예시처럼 <code class="language-plaintext highlighter-rouge">flow.response.raw_content</code>를 파일로 쓰면 <strong>mitm이 본문을 수집하려고 버퍼링</strong> 할 수 있어요.<br />
+<strong>스크립트 없이</strong> UI에서 Raw 탭으로 먼저 확인해 보세요.<br />
+(로그를 꼭 남겨야 한다면, <code class="language-plaintext highlighter-rouge">responseheaders</code> 이벤트에서 헤더만 찍고 바디는 건드리지 않는 방식으로…)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># headers만 로깅(버퍼링 방지)
+</span><span class="kn">from</span> <span class="n">mitmproxy</span> <span class="kn">import</span> <span class="n">http</span>
+<span class="k">def</span> <span class="nf">responseheaders</span><span class="p">(</span><span class="n">flow</span><span class="p">:</span> <span class="n">http</span><span class="p">.</span><span class="n">HTTPFlow</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">=== RESPONSE HEADERS ===</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">flow</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">,</span> <span class="nf">dict</span><span class="p">(</span><span class="n">flow</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">))</span>
+    <span class="c1"># 스트리밍 강제
+</span>    <span class="n">flow</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">stream</span> <span class="o">=</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-gzip인코딩-간섭-줄이기">3) gzip/인코딩 간섭 줄이기</h2>
+
+<p>가능하면 Cline 쪽에서 <strong>Accept-Encoding: identity</strong> 를 강제하거나, vLLM이 <code class="language-plaintext highlighter-rouge">text/event-stream</code>에 대해 압축을 안 하도록(기본적으로는 안 함) 둡니다.<br />
+압축이 끼면 중간 프록시가 <strong>재압축/해제</strong> 하면서 줄 경계가 어긋날 수 있어요.</p>
+
+<hr />
+
+<h2 id="4-프록시-경로중복-prefix-확인">4) 프록시 경로/중복 prefix 확인</h2>
+
+<p>reverse 모드에서 <strong>Base URL이<code class="language-plaintext highlighter-rouge">/v1</code></strong> 인데, upstream에도 <code class="language-plaintext highlighter-rouge">/v1</code>가 붙은 주소로 중복되면 라우팅 꼬입니다.</p>
+
+<ul>
+  <li>
+    <p>mitmproxy: <code class="language-plaintext highlighter-rouge">--mode reverse:http://&lt;VLLM_HOST&gt;:8000</code></p>
+  </li>
+  <li>
+    <p>Cline Base URL: <code class="language-plaintext highlighter-rouge">http://localhost:8080/v1</code></p>
+  </li>
+  <li>
+    <p><strong>Upstream vLLM 라우트는<code class="language-plaintext highlighter-rouge">/v1/chat/completions</code></strong> 로 딱 한 번만 들어가야 합니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="5-재현-테스트-직접-curl로-cline-대신-쏘기">5) 재현 테스트 (직접 curl로 Cline 대신 쏘기)</h2>
+
+<p>mitm를 끼웠을 때만 깨지는지, 그리고 옵션 수정 후 복구됐는지 빠르게 확인:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Stream 켠 채로 mitm 경유</span>
+curl <span class="nt">-N</span> <span class="nt">-v</span> http://localhost:8080/v1/chat/completions <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer dummy"</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{ "model":"gpt-oss-120b",
+        "messages":[{"role":"user","content":"ping"}],
+        "stream": true }'</span>
+</code></pre></div></div>
+
+<p>정상이라면 이런 패턴으로 흘러와야 합니다:</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="p">:</span> <span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="s">"..."</span><span class="p">,</span><span class="s">"object"</span><span class="p">:</span><span class="s">"chat.completion.chunk"</span><span class="p">,</span> <span class="o">..</span><span class="p">.}</span>
+<span class="n">data</span><span class="p">:</span> <span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="s">"..."</span><span class="p">,</span><span class="s">"object"</span><span class="p">:</span><span class="s">"chat.completion.chunk"</span><span class="p">,</span> <span class="o">..</span><span class="p">.}</span>
+<span class="o">..</span><span class="p">.</span>
+<span class="n">data</span><span class="p">:</span> <span class="p">[</span><span class="nc">DONE</span><span class="p">]</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="6-그래도-안-되면-대안-2가지">6) 그래도 안 되면: 대안 2가지</h2>
+
+<ul>
+  <li>
+    <p><strong>HTTP/1.1 고정 프록시</strong>(tinyproxy/nginx/HAProxy)로 단순 패스스루만 하게 하기</p>
+
+    <ul>
+      <li>nginx 예: <code class="language-plaintext highlighter-rouge">proxy_http_version 1.1; proxy_set_header Connection ""; proxy_buffering off;</code></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>ngrep/tcpdump</strong> 로 패킷 레벨 캡처(프록시 없이도 raw 확인 가능)</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="7-체크리스트한-번에-훑기">7) 체크리스트(한 번에 훑기)</h2>
+
+<ul>
+  <li>
+    <p>mitm <code class="language-plaintext highlighter-rouge">http2=false</code>, <code class="language-plaintext highlighter-rouge">stream_large_bodies=1</code> 적용</p>
+  </li>
+  <li>
+    <p>커스텀 mitm 스크립트에서 <strong>본문 접근 제거</strong> (헤더만 로깅)</p>
+  </li>
+  <li>
+    <p>Base URL 경로 중복 없음(<code class="language-plaintext highlighter-rouge">/v1</code> 한 번만)</p>
+  </li>
+  <li>
+    <p>SSE 응답 헤더 확인: <code class="language-plaintext highlighter-rouge">Content-Type: text/event-stream</code>, <code class="language-plaintext highlighter-rouge">Cache-Control: no-cache</code></p>
+  </li>
+  <li>
+    <p>gzip/deflate 비활성화(가능하다면)</p>
+  </li>
+  <li>
+    <p>Cline이 <strong>/v1/responses</strong> 가 아닌 <strong>/v1/chat/completions</strong> 로 호출 중</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>원하시면 지금 쓰신 mitm 실행 커맨드랑(옵션 포함), Cline Base URL/모델 설정을 알려주세요.<br />
+그대로 맞춰서 <strong>오류 재현 → 최소 수정 세트</strong> 를 딱 뽑아드릴게요.</p>
+
+<p class="chat--user">
+
+http2=false 옵션 하나만 추가하니 잘 돼네
+
+</p>
+
+<p>아, 그럼 원인이 거의 확정이네요 — <strong>mitmproxy가 기본으로 HTTP/2로 업스트림 연결</strong> 을 시도하면서 SSE(서버센트 이벤트) 스트림의 줄 경계나 전송 방식이 미묘하게 변형돼서, Cline 파서가 깨졌던 겁니다.</p>
+
+<hr />
+
+<h2 id="왜-http2false로-해결됐나">왜 <code class="language-plaintext highlighter-rouge">http2=false</code>로 해결됐나</h2>
+
+<ul>
+  <li>
+    <p>SSE는 <strong>HTTP/1.1의 chunked transfer</strong> 에 의존하는 경우가 많습니다.</p>
+  </li>
+  <li>
+    <p>mitmproxy가 HTTP/2로 업스트림을 붙으면, 내부에서 <strong>프레임 단위로 전송</strong> → 중간에 라인 경계(<code class="language-plaintext highlighter-rouge">\n\n</code>)가 바뀌거나 버퍼링 타이밍이 달라짐.</p>
+  </li>
+  <li>
+    <p>특히 Cline 같이 실시간 토큰 단위 파서를 쓰는 쪽은 이 변화에 민감해서, <strong>"Unexpected token"</strong> 같은 오류를 뿜습니다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">--set http2=false</code>는 mitmproxy가 업/다운 스트림 모두 <strong>HTTP/1.1로 고정</strong> 하게 해서 원본 chunking/SSE 형식을 보존하게 만듭니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="안전하게-쓰는-mitmproxy-sse-프록시-실행-예시">안전하게 쓰는 mitmproxy SSE 프록시 실행 예시</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mitmproxy <span class="se">\</span>
+  <span class="nt">--mode</span> reverse:http://&lt;VLLM_HOST&gt;:8000 <span class="se">\</span>
+  <span class="nt">-p</span> 8080 <span class="se">\</span>
+  <span class="nt">--set</span> <span class="nv">http2</span><span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
+  <span class="nt">--set</span> <span class="nv">connection_strategy</span><span class="o">=</span>lazy <span class="se">\</span>
+  <span class="nt">--set</span> <span class="nv">stream_large_bodies</span><span class="o">=</span>1
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">connection_strategy=lazy</code> → 불필요한 선연결 방지</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">stream_large_bodies=1</code> → 응답 버퍼링 없이 바로 흘려보냄</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="앞으로-비슷한-상황-방지-팁">앞으로 비슷한 상황 방지 팁</h2>
+
+<ol>
+  <li>
+    <p><strong>SSE 프록시에는 HTTP/2 강제 비활성</strong></p>
+  </li>
+  <li>
+    <p>본문 로깅이 필요하면 <strong>stream 모드에서 헤더만 찍고 바디는 건드리지 않기</strong></p>
+  </li>
+  <li>
+    <p>gzip/deflate 같은 압축은 가급적 꺼두기 → 중간 해제 시 줄 경계 깨짐 방지</p>
+  </li>
+  <li>
+    <p>프록시로 테스트한 curl 요청이 정상 스트리밍이면, Cline에서도 99% 잘 동작</p>
+  </li>
+</ol>
+
+<hr />
+
+<p>이제 <code class="language-plaintext highlighter-rouge">http2=false</code>로 고정한 상태에서 디버깅 로그 수집도 문제없이 가능할 거예요.<br />
+원하시면 제가 <strong>Cline↔mitmproxy↔vLLM 흐름도</strong> 그려서, 데이터가 어떻게 흘러가고 어디서 줄 경계가 깨지는지 시각적으로 보여드릴 수도 있습니다.</p>]]></content><author><name>hvppyarchive</name></author><category term="llm" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">아이패드 메모 앱 단축키</title><link href="https://hvppyarchive.github.io/misc/ipad-memo-app-shortcuts/" rel="alternate" type="text/html" title="아이패드 메모 앱 단축키" /><published>2025-08-08T12:57:12+09:00</published><updated>2025-08-08T12:57:12+09:00</updated><id>https://hvppyarchive.github.io/misc/ipad-memo-app-shortcuts</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/ipad-memo-app-shortcuts/"><![CDATA[<p class="chat--user">
 
 아이패드 + 매직키보드 조합에서 기본 노트(메모) 앱에서 잘 쓸 수 있는 단축키가 있어? 마크다운처럼 제목 등을 빠르게 작성하고 싶은데 
 
