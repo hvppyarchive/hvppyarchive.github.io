@@ -202,4 +202,10 @@ var store = [{
         "tags": [],
         "url": "/llm/openwebui-serve/",
         "teaser": null
+      },{
+        "title": null,
+        "excerpt":"  Python에서 __repr__ 함수와 __str__ 함수의 차이점     Python에서 __repr__ 과 __str__ 의 차이점은 객체를 문자열로 표현하는 목적 에서 달라집니다. 차이를 단계적으로 정리해드릴게요.     1. __repr__ 의 목적           개발자 중심 : 객체를 \"개발자\"가 보고 이해할 수 있도록 표현합니다.            재현 가능(reproducible) : 가능한 한 객체를 다시 만들 수 있는 코드 형태로 보여주는 것이 목표입니다.            보통 eval(repr(obj)) == obj 가 성립하는 형태를 지향합니다 (꼭 항상 그런 건 아니지만 권장).            디버깅할 때 주로 사용됩니다.       예시:  class Person:     def __init__(self, name, age):         self.name = name         self.age = age          def __repr__(self):         return f\"Person(name='{self.name}', age={self.age})\"  p = Person(\"Alice\", 30) print(repr(p))  # Person(name='Alice', age=30)     2. __str__ 의 목적           사용자 중심 : 객체를 \"사용자\"가 보기 좋은 문자열로 표현합니다.            읽기 쉽고 깔끔하게 출력하는 데 초점을 둡니다.            print(obj) 를 호출했을 때 보여지는 값이 __str__ 입니다.       예시:  class Person:     def __init__(self, name, age):         self.name = name         self.age = age          def __str__(self):         return f\"{self.name} ({self.age} years old)\"  p = Person(\"Alice\", 30) print(p)  # Alice (30 years old)     3. __repr__ vs __str__ 비교                  특징       __repr__       __str__                       목적       개발자용, 디버깅       사용자용, 가독성                 출력 대상       repr(obj), 대화형 쉘에서 기본       str(obj), print(obj)                 형식       객체 재현 가능하거나 상세       읽기 쉬운 설명 위주             4. 구현 시 주의사항           __str__ 가 없으면 __repr__ 가 대신 사용됩니다.            따라서 최소한 __repr__ 은 정의해 두는 것이 좋습니다.         👉 정리하면,           __repr__ : “개발자가 디버깅할 때” 객체의 정확한 표현.            __str__ : “사용자가 출력물을 볼 때” 보기 좋게 표현.         원하시면 __repr__ 와 __str__ 를 동시에 구현했을 때 print(obj) 와 obj (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?  ","categories": [],
+        "tags": null,
+        "url": "/2025-08-19-python-repr-vs-str/",
+        "teaser": null
       }]

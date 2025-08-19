@@ -1,0 +1,599 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>ARCHIVE</title>
+<meta name="description" content="An amazing archive.">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="ARCHIVE">
+<meta property="og:url" content="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/">
+
+
+  <meta property="og:description" content="An amazing archive.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-08-19T16:50:06+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-08-19T16:50:06+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-19T16:50:06+09:00">2025-08-19</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
+
+</p>
+
+<p>Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 과 <code class="language-plaintext highlighter-rouge">__str__</code> 의 차이점은 <strong>객체를 문자열로 표현하는 목적</strong> 에서 달라집니다. 차이를 단계적으로 정리해드릴게요.</p>
+
+<hr />
+
+<h2 id="1-__repr__-의-목적">1. <code class="language-plaintext highlighter-rouge">__repr__</code> 의 목적</h2>
+
+<ul>
+  <li>
+    <p><strong>개발자 중심</strong> : 객체를 "개발자"가 보고 이해할 수 있도록 표현합니다.</p>
+  </li>
+  <li>
+    <p><strong>재현 가능(reproducible)</strong> : 가능한 한 객체를 다시 만들 수 있는 코드 형태로 보여주는 것이 목표입니다.</p>
+  </li>
+  <li>
+    <p>보통 <code class="language-plaintext highlighter-rouge">eval(repr(obj)) == obj</code> 가 성립하는 형태를 지향합니다 (꼭 항상 그런 건 아니지만 권장).</p>
+  </li>
+  <li>
+    <p>디버깅할 때 주로 사용됩니다.</p>
+  </li>
+</ul>
+
+<p>예시:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+    
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Person(name=</span><span class="sh">'</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="sh">'</span><span class="s">, age=</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">age</span><span class="si">}</span><span class="s">)</span><span class="sh">"</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="nc">Person</span><span class="p">(</span><span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">repr</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>  <span class="c1"># Person(name='Alice', age=30)
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="2-__str__-의-목적">2. <code class="language-plaintext highlighter-rouge">__str__</code> 의 목적</h2>
+
+<ul>
+  <li>
+    <p><strong>사용자 중심</strong> : 객체를 "사용자"가 보기 좋은 문자열로 표현합니다.</p>
+  </li>
+  <li>
+    <p>읽기 쉽고 깔끔하게 출력하는 데 초점을 둡니다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">print(obj)</code> 를 호출했을 때 보여지는 값이 <code class="language-plaintext highlighter-rouge">__str__</code> 입니다.</p>
+  </li>
+</ul>
+
+<p>예시:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s"> (</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">age</span><span class="si">}</span><span class="s"> years old)</span><span class="sh">"</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="nc">Person</span><span class="p">(</span><span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>  <span class="c1"># Alice (30 years old)
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="3-__repr__-vs-__str__-비교">3. <code class="language-plaintext highlighter-rouge">__repr__</code> vs <code class="language-plaintext highlighter-rouge">__str__</code> 비교</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>특징</th>
+      <th><code class="language-plaintext highlighter-rouge">__repr__</code></th>
+      <th><code class="language-plaintext highlighter-rouge">__str__</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>목적</td>
+      <td>개발자용, 디버깅</td>
+      <td>사용자용, 가독성</td>
+    </tr>
+    <tr>
+      <td>출력 대상</td>
+      <td><code class="language-plaintext highlighter-rouge">repr(obj)</code>, 대화형 쉘에서 기본</td>
+      <td><code class="language-plaintext highlighter-rouge">str(obj)</code>, <code class="language-plaintext highlighter-rouge">print(obj)</code></td>
+    </tr>
+    <tr>
+      <td>형식</td>
+      <td>객체 재현 가능하거나 상세</td>
+      <td>읽기 쉬운 설명 위주</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="4-구현-시-주의사항">4. 구현 시 주의사항</h2>
+
+<ul>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">__str__</code> 가 없으면 <code class="language-plaintext highlighter-rouge">__repr__</code> 가 대신 사용</strong>됩니다.</p>
+  </li>
+  <li>
+    <p>따라서 최소한 <code class="language-plaintext highlighter-rouge">__repr__</code> 은 정의해 두는 것이 좋습니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>👉 정리하면,</p>
+
+<ul>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">__repr__</code></strong> : “개발자가 디버깅할 때” 객체의 정확한 표현.</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">__str__</code></strong> : “사용자가 출력물을 볼 때” 보기 좋게 표현.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-19T16:50:06+09:00">2025-08-19</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/llm/openwebui-serve/" class="pagination--pager" title="OpenWebUI 셋업 방법">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/openwebui-serve/" rel="permalink">OpenWebUI 셋업 방법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-12T19:21:35+09:00">2025-08-12</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/reasoning-effort-test/" rel="permalink">Reasoning effort 실험 계획
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-11T17:59:44+09:00">2025-08-11</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/vllm-cline-connection-debugging/" rel="permalink">vLLM Cline 연결 디버깅
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-08T16:14:21+09:00">2025-08-08</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/ipad-memo-app-shortcuts/" rel="permalink">아이패드 메모 앱 단축키
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-08T12:57:12+09:00">2025-08-08</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
