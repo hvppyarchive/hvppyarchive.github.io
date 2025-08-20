@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-20T15:29:57+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-20T15:29:57+09:00</published><updated>2025-08-20T15:29:57+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-20T15:45:38+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-20T15:45:38+09:00</published><updated>2025-08-20T15:45:38+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">Python 클래스 트리 출력</title><link href="https://hvppyarchive.github.io/python/python-class-tree/" rel="alternate" type="text/html" title="Python 클래스 트리 출력" /><published>2025-08-20T15:29:54+09:00</published><updated>2025-08-20T15:29:54+09:00</updated><id>https://hvppyarchive.github.io/python/python-class-tree</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-class-tree/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">Python 클래스 트리 출력</title><link href="https://hvppyarchive.github.io/python/python-class-tree/" rel="alternate" type="text/html" title="Python 클래스 트리 출력" /><published>2025-08-20T15:45:34+09:00</published><updated>2025-08-20T15:45:34+09:00</updated><id>https://hvppyarchive.github.io/python/python-class-tree</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-class-tree/"><![CDATA[<p class="chat--user">
 
 넌 Python 전문가야. Python에서 계층적 구조를 가지고 있는 커스텀 클래스에 대해 보기 좋게 모든 속성 Tree를 출력하게 하고 싶어. 예를 들어 PyVerilog의 AST의 전체 구조를 알고 싶어.
 
@@ -1406,7 +1406,107 @@ leaf일 경우 값도 보여주면 좋겠어 age: int(9) 이런 식으로
         <span class="err">└──</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="nf">int</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>필요하면 루트만 값 표시 여부(지금은 원시형 루트일 때만 <code class="language-plaintext highlighter-rouge">type(value)(repr)</code> 표시), 키 정렬 옵션, set 정렬, 길이 제한 등을 더 넣어줄 수도 있어. 원하는 포맷 있으면 말해줘!</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">PyVerilog AST 변환</title><link href="https://hvppyarchive.github.io/verilog/pyverilog-ir/" rel="alternate" type="text/html" title="PyVerilog AST 변환" /><published>2025-08-20T14:24:23+09:00</published><updated>2025-08-20T14:24:23+09:00</updated><id>https://hvppyarchive.github.io/verilog/pyverilog-ir</id><content type="html" xml:base="https://hvppyarchive.github.io/verilog/pyverilog-ir/"><![CDATA[<p class="chat--user">
+<p>필요하면 루트만 값 표시 여부(지금은 원시형 루트일 때만 <code class="language-plaintext highlighter-rouge">type(value)(repr)</code> 표시), 키 정렬 옵션, set 정렬, 길이 제한 등을 더 넣어줄 수도 있어. 원하는 포맷 있으면 말해줘!</p>
+
+<p class="chat--user">
+
+아 그런데 @dataclass에 대해서 이걸 적용했더니 같은 속성이 2번씩 나오네
+
+</p>
+
+<p>맞아요—그 현상은 <strong>dataclass 필드를 먼저 yield</strong> 한 뒤에, 다시 <code class="language-plaintext highlighter-rouge">__dict__</code>에서 <strong>같은 이름을 한 번 더</strong> 내보내서 생긴 중복이에요.<br />
+해결은 간단합니다: <code class="language-plaintext highlighter-rouge">__dict__</code>를 순회할 때 <strong>이미 낸 이름이면 건너뛰기</strong> 만 추가하면 됩니다. (<code class="language-plaintext highlighter-rouge">__slots__</code>/<code class="language-plaintext highlighter-rouge">property</code> 쪽은 이미 중복 방지가 되어 있었어요.)</p>
+
+<p>아래처럼 <code class="language-plaintext highlighter-rouge">_iter_object_members</code> 함수만 교체하세요. (나머지 코드는 그대로)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_iter_object_members</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">include_private</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">include_dunder</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">include_properties</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">yielded</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+
+    <span class="c1"># 1) dataclass 우선
+</span>    <span class="k">if</span> <span class="nf">is_dataclass</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nf">dc_fields</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">name</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_dunder</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_private</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">_</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="n">yielded</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span>
+
+    <span class="c1"># 2) __dict__ (⚠️ 추가된 중복 방지)
+</span>    <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="sh">"</span><span class="s">__dict__</span><span class="sh">"</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nf">vars</span><span class="p">(</span><span class="n">o</span><span class="p">).</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>           <span class="c1"># &lt;&lt;&lt; 중복 방지 (핵심 수정)
+</span>                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_dunder</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_private</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">_</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="n">yielded</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span>
+
+    <span class="c1"># 3) __slots__ (이미 중복 방지 있음)
+</span>    <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="sh">"</span><span class="s">__slots__</span><span class="sh">"</span><span class="p">):</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="sh">"</span><span class="s">__slots__</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">slots</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">slots</span> <span class="o">=</span> <span class="p">[</span><span class="n">slots</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_dunder</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_private</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">_</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">yielded</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span>
+
+    <span class="c1"># 4) @property (이미 중복 방지 있음)
+</span>    <span class="k">if</span> <span class="n">include_properties</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nf">dir</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_dunder</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_private</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">_</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">attr</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="nf">type</span><span class="p">(</span><span class="n">o</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="nb">property</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">yielded</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>     <span class="c1"># (일관성)
+</span>                    <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+</code></pre></div></div>
+
+<h3 id="왜-이게-맞나-step-by-step">왜 이게 맞나 (step-by-step)</h3>
+
+<ol>
+  <li>
+    <p><strong>dataclass 필드</strong> 를 먼저 내보냄(원하는 순서).</p>
+  </li>
+  <li>
+    <p>같은 이름이 <code class="language-plaintext highlighter-rouge">__dict__</code>에도 있으므로, <code class="language-plaintext highlighter-rouge">yielded</code>에 기록된 이름이면 <strong>건너뜀</strong>.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">__slots__</code>/<code class="language-plaintext highlighter-rouge">property</code>도 동일한 규칙으로 <strong>중복 방지</strong>.</p>
+  </li>
+  <li>
+    <p>결과: dataclass에서 <strong>중복 없이</strong> 한 번만 표기됩니다.</p>
+  </li>
+</ol>
+
+<p>원하면 dataclass + <code class="language-plaintext highlighter-rouge">slots=True</code> 조합(파이썬 3.10+)도 테스트 예제 드릴게요.</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">PyVerilog AST 변환</title><link href="https://hvppyarchive.github.io/verilog/pyverilog-ir/" rel="alternate" type="text/html" title="PyVerilog AST 변환" /><published>2025-08-20T14:24:23+09:00</published><updated>2025-08-20T14:24:23+09:00</updated><id>https://hvppyarchive.github.io/verilog/pyverilog-ir</id><content type="html" xml:base="https://hvppyarchive.github.io/verilog/pyverilog-ir/"><![CDATA[<p class="chat--user">
 
 PyVerilog의 ast가 생각보다 정규화(표준화) 되어 있지 않아서 예외처리할 것이 너무 많아.(e.g. port가 IO 포함인지, 본문에 써있는지 등등) 좀 더 표준화된 형식으로 쉽게 traverse할 수 있는 형태로 conversion 하는 기능을 개발하려고 해. 들어가야할 사항들: - port(순서, 포트명, width(msb, lsb), in/out/inout) - 내부 instance(submodule, port-argument mapping) - 내부 nets(width(msb, lsb)) 
 
