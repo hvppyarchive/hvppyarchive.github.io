@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-08-19T18:31:08+09:00">
+  <meta property="article:published_time" content="2025-08-20T14:24:23+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="PyVerilog AST 변환">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-08-19T18:31:08+09:00">
+    <meta itemprop="datePublished" content="2025-08-20T14:24:23+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-19T18:31:08+09:00">2025-08-19</time>
+        <time datetime="2025-08-20T14:24:23+09:00">2025-08-20</time>
       </span>
     
 
@@ -1358,6 +1358,379 @@ IR이 뭐야
 
 <p>한 줄 요약: <strong>IR은 “다루기 쉬운 표준형 설계 스냅샷”</strong>이고, 지금 만들고 있는 Python 클래스들이 바로 그 IR이에요.</p>
 
+<p class="chat--user">
+
+decl = io.first 이야. 근데 Enum을 Serialize 못해서 json 변환 부분에서 에러가 나
+
+</p>
+
+<p>좋은 포인트 두 가지!</p>
+
+<ul>
+  <li>
+    <p><strong>(A)</strong> <code class="language-plaintext highlighter-rouge">Ioport</code>에서 선언/이름의 위치가 환경마다 달라 <code class="language-plaintext highlighter-rouge">decl = io.first</code>가 되는 케이스가 있어요. ⇒ <strong>양쪽 모두 자동 감지</strong> 하도록 바꿉니다.</p>
+  </li>
+  <li>
+    <p><strong>(B)</strong> <code class="language-plaintext highlighter-rouge">Enum</code>은 기본 <code class="language-plaintext highlighter-rouge">json.dumps</code>로 직렬화가 안 됩니다. ⇒ <strong>custom default/encoder</strong> 로 <code class="language-plaintext highlighter-rouge">.value</code>를 쓰게 하면 해결됩니다.</p>
+  </li>
+</ul>
+
+<p>아래를 그대로 반영하세요. (필요한 부분만 교체/추가)</p>
+
+<hr />
+
+<h2 id="1-ioport-양식-차이를-자동-감지-firstsecond-스왑-대응">1) <code class="language-plaintext highlighter-rouge">Ioport</code> 양식 차이를 자동 감지 (first/second 스왑 대응)</h2>
+
+<h3 id="ordered_port_names-교체"><code class="language-plaintext highlighter-rouge">ordered_port_names</code> 교체</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ordered_port_names</span><span class="p">(</span><span class="n">mod</span><span class="p">:</span> <span class="n">vast</span><span class="p">.</span><span class="n">ModuleDef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">mod</span><span class="p">.</span><span class="n">portlist</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">names</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">mod</span><span class="p">.</span><span class="n">portlist</span><span class="p">.</span><span class="n">ports</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Ioport</span><span class="p">):</span>
+            <span class="c1"># Robust: 이름이 어느 쪽(first/second)에 있든 잡아낸다
+</span>            <span class="n">name_node</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Identifier</span><span class="p">):</span>
+                <span class="n">name_node</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">first</span>
+            <span class="k">elif</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Identifier</span><span class="p">):</span>
+                <span class="n">name_node</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">second</span>
+            <span class="k">if</span> <span class="n">name_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">names</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">name_node</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Port</span><span class="p">):</span>
+            <span class="n">names</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">names</span>
+</code></pre></div></div>
+
+<h3 id="normalize_module-내부의-포트-정규화-부분-수정"><code class="language-plaintext highlighter-rouge">normalize_module</code> 내부의 포트 정규화 부분 수정</h3>
+
+<p>아래처럼 <strong>decl(방향/폭을 가진 선언 노드)</strong>를 어느 쪽(first/second)이든 잡도록 바꿉니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1"># ...
+</span>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pname</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">ordered_names</span><span class="p">):</span>
+        <span class="n">dir_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Direction</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">signed</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">msb_s</span> <span class="o">=</span> <span class="n">lsb_s</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">msb_v</span> <span class="o">=</span> <span class="n">lsb_v</span> <span class="o">=</span> <span class="n">width_v</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="n">ansi_hit</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">mod</span><span class="p">.</span><span class="n">portlist</span> <span class="ow">and</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">mod</span><span class="p">.</span><span class="n">portlist</span><span class="p">.</span><span class="n">ports</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">vast</span><span class="p">.</span><span class="n">Ioport</span><span class="p">):</span>
+            <span class="n">io</span> <span class="o">=</span> <span class="n">mod</span><span class="p">.</span><span class="n">portlist</span><span class="p">.</span><span class="n">ports</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+            <span class="c1"># 어느 쪽이 선언 노드인지 감지
+</span>            <span class="k">def</span> <span class="nf">_is_decl</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">vast</span><span class="p">.</span><span class="n">Input</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Output</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Inout</span><span class="p">))</span>
+
+            <span class="n">decl</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">if</span> <span class="nf">_is_decl</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">first</span><span class="p">):</span>
+                <span class="n">decl</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">first</span>
+            <span class="k">elif</span> <span class="nf">_is_decl</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">second</span><span class="p">):</span>
+                <span class="n">decl</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">second</span>
+
+            <span class="k">if</span> <span class="n">decl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">decl</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Input</span><span class="p">):</span>  <span class="n">dir_</span> <span class="o">=</span> <span class="n">Direction</span><span class="p">.</span><span class="n">INPUT</span>
+                <span class="k">elif</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">decl</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Output</span><span class="p">):</span> <span class="n">dir_</span> <span class="o">=</span> <span class="n">Direction</span><span class="p">.</span><span class="n">OUTPUT</span>
+                <span class="k">else</span><span class="p">:</span> <span class="n">dir_</span> <span class="o">=</span> <span class="n">Direction</span><span class="p">.</span><span class="n">INOUT</span>
+                <span class="n">signed</span> <span class="o">=</span> <span class="nf">bool</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">decl</span><span class="p">,</span> <span class="sh">"</span><span class="s">signed</span><span class="sh">"</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+                <span class="n">msb_s</span><span class="p">,</span> <span class="n">lsb_s</span><span class="p">,</span> <span class="n">msb_v</span><span class="p">,</span> <span class="n">lsb_v</span><span class="p">,</span> <span class="n">width_v</span> <span class="o">=</span> <span class="nf">width_tuple</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">decl</span><span class="p">,</span> <span class="sh">"</span><span class="s">width</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span> <span class="n">env</span><span class="p">)</span>
+                <span class="n">ansi_hit</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c1"># Non-ANSI fallback
+</span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">ansi_hit</span> <span class="ow">and</span> <span class="n">pname</span> <span class="ow">in</span> <span class="n">io_map</span><span class="p">:</span>
+            <span class="n">dir_</span><span class="p">,</span> <span class="n">signed</span><span class="p">,</span> <span class="p">(</span><span class="n">msb_s</span><span class="p">,</span> <span class="n">lsb_s</span><span class="p">,</span> <span class="n">msb_v</span><span class="p">,</span> <span class="n">lsb_v</span><span class="p">,</span> <span class="n">width_v</span><span class="p">)</span> <span class="o">=</span> <span class="n">io_map</span><span class="p">[</span><span class="n">pname</span><span class="p">]</span>
+
+        <span class="c1"># 폭 미지정 → 1비트
+</span>        <span class="k">if</span> <span class="nf">all</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">msb_s</span><span class="p">,</span> <span class="n">lsb_s</span><span class="p">,</span> <span class="n">msb_v</span><span class="p">,</span> <span class="n">lsb_v</span><span class="p">,</span> <span class="n">width_v</span><span class="p">)):</span>
+            <span class="n">msb_s</span><span class="p">,</span> <span class="n">lsb_s</span><span class="p">,</span> <span class="n">msb_v</span><span class="p">,</span> <span class="n">lsb_v</span><span class="p">,</span> <span class="n">width_v</span> <span class="o">=</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+
+        <span class="n">ports</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Port</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">pname</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="n">dir_</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+            <span class="n">msb_str</span><span class="o">=</span><span class="n">msb_s</span><span class="p">,</span> <span class="n">lsb_str</span><span class="o">=</span><span class="n">lsb_s</span><span class="p">,</span> <span class="n">msb</span><span class="o">=</span><span class="n">msb_v</span><span class="p">,</span> <span class="n">lsb</span><span class="o">=</span><span class="n">lsb_v</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width_v</span>
+        <span class="p">))</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>이렇게 하면 <strong><code class="language-plaintext highlighter-rouge">decl = io.first</code></strong>인 케이스도, 반대로 <strong><code class="language-plaintext highlighter-rouge">decl = io.second</code></strong>인 케이스도 모두 정상 처리돼요.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="2-enum-json-직렬화-에러-해결">2) Enum JSON 직렬화 에러 해결</h2>
+
+<p><code class="language-plaintext highlighter-rouge">json.dumps</code>에 <code class="language-plaintext highlighter-rouge">default</code>를 주거나, 커스텀 <code class="language-plaintext highlighter-rouge">JSONEncoder</code>를 써서 <code class="language-plaintext highlighter-rouge">Enum</code>을 <code class="language-plaintext highlighter-rouge">.value</code>로 바꿔 주세요.</p>
+
+<h3 id="간단-버전-default-함수-추가">간단 버전: <code class="language-plaintext highlighter-rouge">default</code> 함수 추가</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">json</span>
+<span class="kn">from</span> <span class="n">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span>
+
+<span class="k">def</span> <span class="nf">_json_default</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+    <span class="c1"># Enum -&gt; 그 값으로 직렬화
+</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">o</span><span class="p">.</span><span class="n">value</span>
+    <span class="c1"># 필요시 추가 핸들링 가능
+</span>    <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">DesignIR</span><span class="p">:</span>
+    <span class="n">modules</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModuleIR</span><span class="p">]</span> <span class="o">=</span> <span class="nf">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="nf">asdict</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_json_default</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="대안-encoder-클래스로">대안: Encoder 클래스로</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">EnumEncoder</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">o</span><span class="p">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">default</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+<span class="c1"># 사용
+</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="nf">asdict</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="n">EnumEncoder</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>어느 쪽이든 결과는 동일: <code class="language-plaintext highlighter-rouge">Direction.INPUT</code> → <code class="language-plaintext highlighter-rouge">"input"</code>, <code class="language-plaintext highlighter-rouge">NetKind.WIRE</code> → <code class="language-plaintext highlighter-rouge">"wire"</code>처럼 직렬화됩니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="3-빠른-체크리스트-step-by-step">3) 빠른 체크리스트 (step-by-step)</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ordered_port_names</code>를 위 코드로 <strong>교체</strong></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">normalize_module</code>의 <strong>포트 처리 블록</strong> 을 위 코드로 <strong>교체</strong></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">DesignIR.to_json</code>에서 <code class="language-plaintext highlighter-rouge">default=_json_default</code> 또는 <code class="language-plaintext highlighter-rouge">cls=EnumEncoder</code>를 <strong>적용</strong></p>
+  </li>
+  <li>
+    <p>다시 실행해서 <code class="language-plaintext highlighter-rouge">Enum</code> 직렬화 에러가 사라지는지, ANSI/Non-ANSI 모두에서 포트 방향/폭이 제대로 나오는지 확인</p>
+  </li>
+</ol>
+
+<p>필요하면 <code class="language-plaintext highlighter-rouge">Port.dir</code> 타입을 일시적으로 <code class="language-plaintext highlighter-rouge">Optional[str]</code>로 바꿔도 되지만, 위처럼 <strong>Enum 유지 + 직렬화 커스터마이즈</strong> 가 더 안정적이에요.<br />
+다른 부분도 막히는 게 있으면 오류 메시지랑 함께 알려줘—거기에 맞춰 추가 패치 줄게!</p>
+
+<p class="chat--user">
+
+1. Normalize 말고 표준화/정규화 라는 느낌으로 rename 하는 걸 제안해. 2. Port 방향이 non ansi 타입으로 되어있을 경우에 찾으면 업데이트하도록 해줘
+
+</p>
+
+<p>좋아—요청한 두 가지를 <strong>차근차근</strong> 반영할게.</p>
+
+<hr />
+
+<h1 id="1-normalize-이름을-표준화정규화-느낌으로-변경-제안">1) “Normalize” 이름을 “표준화/정규화” 느낌으로 변경 제안</h1>
+
+<p>영어 식별자는 그대로 쓰되 의미를 “표준화/정규화”로 바꿔 읽히도록 추천해.</p>
+
+<p><strong>이름 매핑(권장)</strong></p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">normalize_module</code> → <code class="language-plaintext highlighter-rouge">standardize_module</code> <em>(표준화)</em></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">convert_to_design_ir</code> → <code class="language-plaintext highlighter-rouge">build_standard_ir</code> <em>(표준 IR 빌드)</em></p>
+  </li>
+  <li>
+    <p>파일명 <code class="language-plaintext highlighter-rouge">vnorm_classes.py</code> → <code class="language-plaintext highlighter-rouge">std_ir.py</code> <em>(standardized IR)</em></p>
+  </li>
+</ul>
+
+<p><strong>호환용 래퍼(선택)</strong><br />
+기존 호출부 안 깨지게 아래처럼 유지해도 좋아.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">convert_to_design_ir</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+    <span class="c1"># deprecated alias for backward-compat
+</span>    <span class="k">return</span> <span class="nf">build_standard_ir</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="2-non-ansi-선언에서-포트-방향속성-발견-시-업데이트-로직-추가">2) Non-ANSI 선언에서 포트 방향/속성 발견 시 <strong>업데이트</strong> 로직 추가</h1>
+
+<p>요지는 “헤더(ANSI)가 비어 있거나(non-ANSI 스타일) 또는 충돌 시 <strong>본문 선언(Decl)</strong> 을 신뢰해 덮어쓰기”다.<br />
+아래 2개 조각만 교체/추가하면 됨.</p>
+
+<h2 id="a-포트-표준화-함수-standardize_module-기존-normalize_module-대체">(A) 포트 표준화 함수: <code class="language-plaintext highlighter-rouge">standardize_module</code> (기존 <code class="language-plaintext highlighter-rouge">normalize_module</code> 대체)</h2>
+
+<p>차이점:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Ioport</code>에서 선언 노드(first/second) 자동 감지</p>
+  </li>
+  <li>
+    <p>일단 포트를 구성한 뒤 <strong>본문 선언으로 후처리 덮어쓰기</strong> 수행</p>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">standardize_module</span><span class="p">(</span><span class="n">mod</span><span class="p">:</span> <span class="n">vast</span><span class="p">.</span><span class="n">ModuleDef</span><span class="p">,</span> <span class="n">modlib_ports</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">ModuleIR</span><span class="p">:</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="nf">collect_param_env</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+
+    <span class="c1"># 1) parameters (동일)
+</span>    <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="sh">"</span><span class="s">paramlist</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">mod</span><span class="p">.</span><span class="n">paramlist</span><span class="p">.</span><span class="n">params</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Parameter</span><span class="p">):</span>
+                <span class="n">params</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Parameter</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value_str</span><span class="o">=</span><span class="nf">to_str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">value</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="nf">eval_expr</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+                <span class="p">))</span>
+    <span class="n">header_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="sh">"</span><span class="s">items</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Decl</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">item</span><span class="p">.</span><span class="nb">list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Parameter</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="p">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">header_names</span><span class="p">:</span>
+                    <span class="n">params</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Parameter</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">e</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value_str</span><span class="o">=</span><span class="nf">to_str</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">value</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="nf">eval_expr</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+                    <span class="p">))</span>
+
+    <span class="c1"># 2) 포트 초안(헤더 기반)
+</span>    <span class="n">ordered_names</span> <span class="o">=</span> <span class="nf">ordered_port_names</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+    <span class="n">ports</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Port</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pname</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">ordered_names</span><span class="p">):</span>
+        <span class="n">dir_</span><span class="p">,</span> <span class="n">signed</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">False</span>
+        <span class="n">msb_s</span> <span class="o">=</span> <span class="n">lsb_s</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">msb_v</span> <span class="o">=</span> <span class="n">lsb_v</span> <span class="o">=</span> <span class="n">width_v</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># Ioport에서 first/second 어느 쪽이든 선언 노드 감지
+</span>        <span class="n">decl</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">mod</span><span class="p">.</span><span class="n">portlist</span> <span class="ow">and</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">mod</span><span class="p">.</span><span class="n">portlist</span><span class="p">.</span><span class="n">ports</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">vast</span><span class="p">.</span><span class="n">Ioport</span><span class="p">):</span>
+            <span class="n">io</span> <span class="o">=</span> <span class="n">mod</span><span class="p">.</span><span class="n">portlist</span><span class="p">.</span><span class="n">ports</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">def</span> <span class="nf">_is_decl</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">vast</span><span class="p">.</span><span class="n">Input</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Output</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Inout</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nf">_is_decl</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">first</span><span class="p">):</span>  <span class="n">decl</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">first</span>
+            <span class="k">elif</span> <span class="nf">_is_decl</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">second</span><span class="p">):</span> <span class="n">decl</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">second</span>
+        <span class="k">if</span> <span class="n">decl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">decl</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Input</span><span class="p">):</span>  <span class="n">dir_</span> <span class="o">=</span> <span class="n">Direction</span><span class="p">.</span><span class="n">INPUT</span>
+            <span class="k">elif</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">decl</span><span class="p">,</span> <span class="n">vast</span><span class="p">.</span><span class="n">Output</span><span class="p">):</span> <span class="n">dir_</span> <span class="o">=</span> <span class="n">Direction</span><span class="p">.</span><span class="n">OUTPUT</span>
+            <span class="k">else</span><span class="p">:</span> <span class="n">dir_</span> <span class="o">=</span> <span class="n">Direction</span><span class="p">.</span><span class="n">INOUT</span>
+            <span class="n">signed</span> <span class="o">=</span> <span class="nf">bool</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">decl</span><span class="p">,</span> <span class="sh">"</span><span class="s">signed</span><span class="sh">"</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+            <span class="n">msb_s</span><span class="p">,</span> <span class="n">lsb_s</span><span class="p">,</span> <span class="n">msb_v</span><span class="p">,</span> <span class="n">lsb_v</span><span class="p">,</span> <span class="n">width_v</span> <span class="o">=</span> <span class="nf">width_tuple</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">decl</span><span class="p">,</span> <span class="sh">"</span><span class="s">width</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span> <span class="n">env</span><span class="p">)</span>
+
+        <span class="c1"># 폭 미지정 → 1비트 기본
+</span>        <span class="k">if</span> <span class="nf">all</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">msb_s</span><span class="p">,</span> <span class="n">lsb_s</span><span class="p">,</span> <span class="n">msb_v</span><span class="p">,</span> <span class="n">lsb_v</span><span class="p">,</span> <span class="n">width_v</span><span class="p">)):</span>
+            <span class="n">msb_s</span><span class="p">,</span> <span class="n">lsb_s</span><span class="p">,</span> <span class="n">msb_v</span><span class="p">,</span> <span class="n">lsb_v</span><span class="p">,</span> <span class="n">width_v</span> <span class="o">=</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+
+        <span class="n">ports</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Port</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">pname</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="n">dir_</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">,</span>
+            <span class="n">msb_str</span><span class="o">=</span><span class="n">msb_s</span><span class="p">,</span> <span class="n">lsb_str</span><span class="o">=</span><span class="n">lsb_s</span><span class="p">,</span> <span class="n">msb</span><span class="o">=</span><span class="n">msb_v</span><span class="p">,</span> <span class="n">lsb</span><span class="o">=</span><span class="n">lsb_v</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width_v</span>
+        <span class="p">))</span>
+
+    <span class="c1"># 3) 본문 선언(Non-ANSI)로 **후처리 덮어쓰기**
+</span>    <span class="n">io_map</span> <span class="o">=</span> <span class="nf">build_io_decl_map</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+    <span class="nf">apply_nonansi_overrides</span><span class="p">(</span><span class="n">ports</span><span class="p">,</span> <span class="n">io_map</span><span class="p">,</span> <span class="n">prefer_body</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># 4) nets (포트명 제외)
+</span>    <span class="n">nets_raw</span> <span class="o">=</span> <span class="nf">build_net_decl_list</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+    <span class="n">port_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ports</span><span class="p">}</span>
+    <span class="n">nets</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nets_raw</span> <span class="k">if</span> <span class="n">n</span><span class="p">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">port_names</span><span class="p">]</span>
+
+    <span class="c1"># 5) instances (기존과 동일)
+</span>    <span class="n">instances</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Instance</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">il</span> <span class="ow">in</span> <span class="nf">iter_instancelists</span><span class="p">(</span><span class="n">mod</span><span class="p">):</span>
+        <span class="n">submod</span> <span class="o">=</span> <span class="n">il</span><span class="p">.</span><span class="n">module</span>
+        <span class="n">shared_param_ovrs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">il</span><span class="p">,</span> <span class="sh">"</span><span class="s">paramlist</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">pa</span> <span class="ow">in</span> <span class="n">il</span><span class="p">.</span><span class="n">paramlist</span><span class="p">.</span><span class="n">params</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="sh">"</span><span class="s">paramname</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="n">value_node</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="sh">"</span><span class="s">argname</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="sh">"</span><span class="s">value</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="n">shared_param_ovrs</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Parameter</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value_str</span><span class="o">=</span><span class="nf">to_str</span><span class="p">(</span><span class="n">value_node</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="nf">eval_expr</span><span class="p">(</span><span class="n">value_node</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+                <span class="p">))</span>
+        <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">il</span><span class="p">.</span><span class="n">instances</span><span class="p">:</span>
+            <span class="n">conns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Connection</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">pas</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="sh">"</span><span class="s">portlist</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]</span>
+            <span class="n">positional</span> <span class="o">=</span> <span class="nf">any</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="sh">"</span><span class="s">portname</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span> <span class="k">for</span> <span class="n">pa</span> <span class="ow">in</span> <span class="n">pas</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">positional</span><span class="p">:</span>
+                <span class="n">lib_ports</span> <span class="o">=</span> <span class="n">modlib_ports</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">submod</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pa</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">pas</span><span class="p">):</span>
+                    <span class="n">pname</span> <span class="o">=</span> <span class="n">lib_ports</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">lib_ports</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="sh">"</span><span class="s">__pos</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="sh">"</span>
+                    <span class="n">conns</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Connection</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="n">pname</span><span class="p">,</span> <span class="n">expr_str</span><span class="o">=</span><span class="nf">to_str</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="sh">"</span><span class="s">argname</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">))))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pa</span> <span class="ow">in</span> <span class="n">pas</span><span class="p">:</span>
+                    <span class="n">conns</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Connection</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="n">pa</span><span class="p">.</span><span class="n">portname</span><span class="p">,</span> <span class="n">expr_str</span><span class="o">=</span><span class="nf">to_str</span><span class="p">(</span><span class="n">pa</span><span class="p">.</span><span class="n">argname</span><span class="p">)))</span>
+            <span class="n">instances</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Instance</span><span class="p">(</span><span class="n">inst</span><span class="o">=</span><span class="n">inst</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="n">submod</span><span class="p">,</span>
+                                      <span class="n">param_overrides</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">shared_param_ovrs</span><span class="p">),</span>
+                                      <span class="n">connections</span><span class="o">=</span><span class="n">conns</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nc">ModuleIR</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="n">ports</span><span class="p">,</span> <span class="n">nets</span><span class="o">=</span><span class="n">nets</span><span class="p">,</span> <span class="n">instances</span><span class="o">=</span><span class="n">instances</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="b-본문-선언-덮어쓰기-헬퍼-추가-apply_nonansi_overrides">(B) 본문 선언 덮어쓰기 헬퍼 추가: <code class="language-plaintext highlighter-rouge">apply_nonansi_overrides</code></h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">prefer_body=True</code>면 <strong>항상</strong> 본문 선언으로 덮어씀(권장)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">prefer_body=False</code>면 비어있는 값만 채움</p>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">apply_nonansi_overrides</span><span class="p">(</span><span class="n">ports</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Port</span><span class="p">],</span> <span class="n">io_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">],</span> <span class="n">prefer_body</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ports</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">io_map</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">dir2</span><span class="p">,</span> <span class="n">signed2</span><span class="p">,</span> <span class="p">(</span><span class="n">msb_s2</span><span class="p">,</span> <span class="n">lsb_s2</span><span class="p">,</span> <span class="n">msb_v2</span><span class="p">,</span> <span class="n">lsb_v2</span><span class="p">,</span> <span class="n">width_v2</span><span class="p">)</span> <span class="o">=</span> <span class="n">io_map</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">use_body</span><span class="p">(</span><span class="n">existing</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">new</span> <span class="nf">if </span><span class="p">(</span><span class="n">prefer_body</span> <span class="ow">or</span> <span class="n">existing</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span> <span class="k">else</span> <span class="n">existing</span>
+
+        <span class="c1"># 방향/서명/폭 모두 업데이트 규칙 적용
+</span>        <span class="n">p</span><span class="p">.</span><span class="nb">dir</span>    <span class="o">=</span> <span class="nf">use_body</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nb">dir</span><span class="p">,</span> <span class="n">dir2</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="n">signed</span> <span class="o">=</span> <span class="nf">use_body</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">signed</span><span class="p">,</span> <span class="n">signed2</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="n">msb_str</span> <span class="o">=</span> <span class="nf">use_body</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">msb_str</span><span class="p">,</span> <span class="n">msb_s2</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="n">lsb_str</span> <span class="o">=</span> <span class="nf">use_body</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">lsb_str</span><span class="p">,</span> <span class="n">lsb_s2</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="n">msb</span> <span class="o">=</span> <span class="nf">use_body</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">msb</span><span class="p">,</span> <span class="n">msb_v2</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="n">lsb</span> <span class="o">=</span> <span class="nf">use_body</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">lsb</span><span class="p">,</span> <span class="n">lsb_v2</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="nf">use_body</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">width_v2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="c-엔트리-포인트-이름-교체-build_standard_ir">(C) 엔트리 포인트 이름 교체 (<code class="language-plaintext highlighter-rouge">build_standard_ir</code>)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">build_standard_ir</span><span class="p">(</span><span class="n">files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DesignIR</span><span class="p">:</span>
+    <span class="n">ast</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="nf">parse</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+    <span class="n">mods</span> <span class="o">=</span> <span class="nf">collect_modules</span><span class="p">(</span><span class="n">ast</span><span class="p">)</span>
+    <span class="n">modlib_ports</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nf">ordered_port_names</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mods</span><span class="p">.</span><span class="nf">items</span><span class="p">()}</span>
+    <span class="n">design</span> <span class="o">=</span> <span class="nc">DesignIR</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mods</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="n">design</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nf">standardize_module</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">modlib_ports</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">design</span>
+
+<span class="c1"># (선택) 하위호환
+</span><span class="k">def</span> <span class="nf">convert_to_design_ir</span><span class="p">(</span><span class="n">files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DesignIR</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">build_standard_ir</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="동작-요약-step-by-step">동작 요약 (step-by-step)</h2>
+
+<ol>
+  <li>
+    <p>헤더에서 포트 <strong>초안</strong> 생성 (ANSI면 그 값 사용, 아니면 1비트 기본)</p>
+  </li>
+  <li>
+    <p>본문 <code class="language-plaintext highlighter-rouge">Decl(Input/Output/Inout)</code> 스캔해서 <strong>io_map</strong> 생성</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">apply_nonansi_overrides(..., prefer_body=True)</code>로</p>
+
+    <ul>
+      <li>
+        <p><strong>non-ANSI에서 찾은 방향/폭/서명</strong> 을 <strong>항상 덮어쓰기</strong></p>
+      </li>
+      <li>
+        <p>결과적으로 “헤더가 비어 있고 본문에만 방향이 있는” 경우도 정확히 채워짐</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>원하면 <code class="language-plaintext highlighter-rouge">prefer_body=False</code>로 바꿔 “헤더 우선, 빈 값만 보충” 정책도 쉽게 전환 가능해.<br />
+필요 시 포트에 <code class="language-plaintext highlighter-rouge">source="ansi|body"</code> 같은 필드 추가해서 최종 값의 출처를 트래킹하는 것도 추천!</p>
+
         
       </section>
 
@@ -1383,7 +1756,7 @@ IR이 뭐야
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-19T18:31:08+09:00">2025-08-19</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-20T14:24:23+09:00">2025-08-20</time></p>
 
       </footer>
 
@@ -1392,10 +1765,10 @@ IR이 뭐야
       
   <nav class="pagination">
     
-      <a href="/llm/openwebui-serve/" class="pagination--pager" title="OpenWebUI 셋업 방법">Previous</a>
+      <a href="/misc/text-split-copy/" class="pagination--pager" title="텍스트 분할 복사">Previous</a>
     
     
-      <a href="/python/python-class-tree/" class="pagination--pager" title="Python 클래스 트리 출력">Next</a>
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
     
   </nav>
 
@@ -1437,7 +1810,7 @@ IR이 뭐야
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-20T13:38:20+09:00">2025-08-20</time>
+        <time datetime="2025-08-20T14:24:27+09:00">2025-08-20</time>
       </span>
     
 
@@ -1536,46 +1909,6 @@ IR이 뭐야
 
     
       
-      
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/llm/openwebui-serve/" rel="permalink">OpenWebUI 셋업 방법
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <!-- hvppyarchive: remove date icon
-        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
-        -->
-        
-        <time datetime="2025-08-12T19:21:35+09:00">2025-08-12</time>
-      </span>
-    
-
-    
-
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">
-
-</p>
-  </article>
-</div>
-
-    
   </div>
 </div>
 
