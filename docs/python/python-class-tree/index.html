@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-08-20T11:07:44+09:00">
+  <meta property="article:published_time" content="2025-08-20T11:11:51+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python 클래스 트리 출력">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-08-20T11:07:44+09:00">
+    <meta itemprop="datePublished" content="2025-08-20T11:11:51+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-20T11:07:44+09:00">2025-08-20</time>
+        <time datetime="2025-08-20T11:11:51+09:00">2025-08-20</time>
       </span>
     
 
@@ -700,6 +700,103 @@ def print_attr_tree(obj, **kwargs):
 
 <p>필요하면 특정 타입을 “자식 확장 대상에서 제외/포함”하는 훅, 정렬, 출력 대상 화이트리스트/블랙리스트(예: 메서드/콜러블 전부 제외 등)도 바로 덧붙여 줄게.</p>
 
+<p class="chat--user">
+
+기존 유틸이나 패키지는 없나
+
+</p>
+
+<p>좋은 질문이에요 👍<br />
+제가 앞에서 짜드린 건 “직접 커스텀해서 범용 트리 뷰어”를 만드는 코드였는데, 사실 이미 비슷한 기능을 하는 <strong>유틸/패키지</strong> 가 몇 가지 있습니다. 다만 요구하신</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">member 변수명: class명</code> 형태의 계층적 트리<br />
+ 를 <strong>그대로</strong> 해주는 건 없고, 비슷한 걸 응용할 수 있는 도구들이 있습니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="1-표준내장-계열">1. 표준/내장 계열</h2>
+
+<ul>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">pprint</code></strong> (표준 라이브러리)<br />
+dict/list를 보기 좋게 출력하지만, 깊은 계층 + 클래스 멤버까지는 한계가 있음.</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">inspect</code></strong> (표준 라이브러리)<br />
+객체의 signature, members를 introspection 하는 데 특화.<br />
+→ raw 데이터를 얻는 데는 좋지만 tree 형태는 직접 그려야 함.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="2-트리구조-출력용">2. 트리/구조 출력용</h2>
+
+<ul>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">anytree</code></strong><br />
+파이썬 객체를 트리 구조로 모델링해서 문자열/Graphviz로 출력 가능.<br />
+직접 노드 생성해서 넣어야 하므로 “자동 introspection”은 아니고, “구조화된 데이터 → 트리 출력”에 적합.</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">asciitree</code></strong><br />
+dict 같은 nested 구조를 <code class="language-plaintext highlighter-rouge">├─/└─</code> 형태로 예쁘게 출력.<br />
+→ 값 대신 <code class="language-plaintext highlighter-rouge">type(value).__name__</code>만 넣도록 래퍼를 짜면 바로 활용 가능.</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">rich</code></strong> 의 <code class="language-plaintext highlighter-rouge">Tree</code><br />
+pretty console 출력 라이브러리.<br />
+계층적 데이터를 트리로 그려주는 <code class="language-plaintext highlighter-rouge">Tree</code> 컴포넌트가 있음.<br />
+→ dict/object를 순회해서 <code class="language-plaintext highlighter-rouge">Tree.add(f"{name}: {type(val).__name__}")</code>만 해주면 요구한 형태로 쉽게 구현 가능.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="3-디버깅개발-편의-패키지">3. 디버깅/개발 편의 패키지</h2>
+
+<ul>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">objprint</code></strong><br />
+객체 내부 구조를 이쁘게 출력해줌. dict/list 지원, 순환 감지.<br />
+→ 다만 출력 포맷이 “값” 중심이라 <code class="language-plaintext highlighter-rouge">멤버명: 클래스명</code> 전용은 아님.</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">varname</code></strong><br />
+변수명 추적 라이브러리. 직접 tree 출력은 없지만 introspection에 유용.</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">glom</code></strong><br />
+중첩 데이터 구조를 탐색/변환하는 도구. 출력은 덜 예쁘지만, dict 트리 처리에 적합.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="4-추천-조합">4. 추천 조합</h2>
+
+<p>만약 <strong>“바로 가져다 쓰고 싶다”</strong>면:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">rich.Tree</code> + 짧은 재귀 함수 → “멤버명: 클래스명” 트리 바로 구현 가능.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">asciitree</code>도 lightweight 대안.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>👉 결론: <strong>기존 패키지로는<code class="language-plaintext highlighter-rouge">rich</code> + introspection 유틸</strong>이 가장 범용적이고 예쁘게 나옵니다.<br />
+제가 위에서 짠 함수도 <code class="language-plaintext highlighter-rouge">print_attr_tree</code> 대신 <code class="language-plaintext highlighter-rouge">rich.Tree</code>를 써서 출력만 바꾸면 훨씬 더 보기 좋게 쓸 수 있어요.</p>
+
+<hr />
+
+<p>원하시면 제가 <code class="language-plaintext highlighter-rouge">rich.Tree</code> 버전으로 “member: class” 전용 트리 프린터 예제를 짜드릴까요?</p>
+
         
       </section>
 
@@ -725,7 +822,7 @@ def print_attr_tree(obj, **kwargs):
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-20T11:07:44+09:00">2025-08-20</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-20T11:11:51+09:00">2025-08-20</time></p>
 
       </footer>
 
@@ -779,7 +876,7 @@ def print_attr_tree(obj, **kwargs):
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-20T11:07:49+09:00">2025-08-20</time>
+        <time datetime="2025-08-20T11:11:54+09:00">2025-08-20</time>
       </span>
     
 
