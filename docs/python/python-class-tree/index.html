@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-08-20T11:11:51+09:00">
+  <meta property="article:published_time" content="2025-08-20T12:33:01+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python 클래스 트리 출력">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-08-20T11:11:51+09:00">
+    <meta itemprop="datePublished" content="2025-08-20T12:33:01+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-20T11:11:51+09:00">2025-08-20</time>
+        <time datetime="2025-08-20T12:33:01+09:00">2025-08-20</time>
       </span>
     
 
@@ -797,6 +797,410 @@ pretty console 출력 라이브러리.<br />
 
 <p>원하시면 제가 <code class="language-plaintext highlighter-rouge">rich.Tree</code> 버전으로 “member: class” 전용 트리 프린터 예제를 짜드릴까요?</p>
 
+<p class="chat--user">
+
+leaf일 경우 값도 보여주면 좋겠어 age: int(9) 이런 식으로
+
+</p>
+
+<p>좋습니다 👍<br />
+말씀해주신 대로 <strong>leaf 노드(더 이상 내려갈 속성이 없는 경우)</strong>에는 값까지 같이 보여주면 훨씬 직관적이에요.<br />
+출력 포맷은 예시처럼:</p>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">age</span><span class="p">:</span> <span class="kt">int</span><span class="p">(</span><span class="m">9</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="코드-예제-richtree-기반">코드 예제 (<code class="language-plaintext highlighter-rouge">rich.Tree</code> 기반)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">is_dataclass</span><span class="p">,</span> <span class="n">fields</span> <span class="k">as</span> <span class="n">dc_fields</span>
+<span class="kn">from</span> <span class="n">collections.abc</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="n">rich.tree</span> <span class="kn">import</span> <span class="n">Tree</span>
+<span class="kn">from</span> <span class="n">rich</span> <span class="kn">import</span> <span class="k">print</span> <span class="k">as</span> <span class="n">rprint</span>
+
+<span class="n">PRIMITIVES</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nf">type</span><span class="p">(</span><span class="bp">None</span><span class="p">),</span> <span class="nb">bytes</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_is_primitive</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">PRIMITIVES</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_short_repr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="nf">repr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">&lt;?&gt;</span><span class="sh">"</span>
+    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">maxlen</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:</span><span class="n">maxlen</span><span class="p">]</span> <span class="o">+</span> <span class="sh">"</span><span class="s">…</span><span class="sh">"</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">_iter_members</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">include_private</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">include_dunder</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nf">is_dataclass</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nf">dc_fields</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">f</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">f</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="sh">"</span><span class="s">__dict__</span><span class="sh">"</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nf">vars</span><span class="p">(</span><span class="n">o</span><span class="p">).</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_dunder</span> <span class="ow">and</span> <span class="n">k</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_private</span> <span class="ow">and</span> <span class="n">k</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">_</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">k</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
+    <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="sh">"</span><span class="s">__slots__</span><span class="sh">"</span><span class="p">):</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="sh">"</span><span class="s">__slots__</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">slots</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">slots</span> <span class="o">=</span> <span class="p">[</span><span class="n">slots</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
+
+<span class="k">def</span> <span class="nf">_iter_children</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># dict
+</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">node</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">k</span><span class="si">!r}</span><span class="sh">"</span><span class="p">,</span> <span class="n">v</span>
+        <span class="k">return</span>
+    <span class="c1"># sequence (문자열 제외)
+</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span><span class="p">,</span> <span class="n">v</span>
+            <span class="k">return</span>
+    <span class="c1"># object
+</span>    <span class="k">yield</span> <span class="k">from</span> <span class="nf">_iter_members</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">build_tree</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">root</span><span class="sh">"</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">include_private</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">include_dunder</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">Tree</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+        <span class="n">tname</span> <span class="o">=</span> <span class="nf">type</span><span class="p">(</span><span class="n">value</span><span class="p">).</span><span class="n">__name__</span>
+
+        <span class="c1"># leaf &amp; primitive → 값까지 출력
+</span>        <span class="k">if</span> <span class="nf">_is_primitive</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">or</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">max_depth</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">tname</span><span class="si">}</span><span class="s">(</span><span class="si">{</span><span class="nf">_short_repr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s">)</span><span class="sh">"</span>
+            <span class="n">tree</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">oid</span> <span class="o">=</span> <span class="nf">id</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">oid</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="n">tree</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">tname</span><span class="si">}</span><span class="s"> ↪ (cycle)</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">seen</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">oid</span><span class="p">)</span>
+
+        <span class="n">node_label</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">tname</span><span class="si">}</span><span class="sh">"</span>
+        <span class="n">child_tree</span> <span class="o">=</span> <span class="n">tree</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">node_label</span><span class="p">)</span>
+
+        <span class="n">children</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">_iter_children</span><span class="p">(</span>
+            <span class="n">value</span><span class="p">,</span>
+            <span class="n">include_private</span><span class="o">=</span><span class="n">include_private</span><span class="p">,</span>
+            <span class="n">include_dunder</span><span class="o">=</span><span class="n">include_dunder</span>
+        <span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">children</span><span class="p">:</span>  <span class="c1"># leaf지만 primitive 아님 (예: 빈 dict)
+</span>            <span class="n">child_tree</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">(empty)</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+                <span class="nf">walk</span><span class="p">(</span><span class="n">child_tree</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">root</span> <span class="o">=</span> <span class="nc">Tree</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">obj</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">walk</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">root</span>
+
+<span class="k">def</span> <span class="nf">print_attr_tree</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nf">rprint</span><span class="p">(</span><span class="nf">build_tree</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="사용-예시">사용 예시</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pets</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">dog</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">cat</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="nc">Person</span><span class="p">(</span><span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+<span class="nf">print_attr_tree</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">Person</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>출력 예시:</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">Person</span><span class="o">:</span> <span class="nt">Person</span>
+<span class="err">└──</span> <span class="nt">Person</span><span class="o">:</span> <span class="nt">Person</span>
+    <span class="err">├──</span> <span class="nt">name</span><span class="o">:</span> <span class="nt">str</span><span class="o">(</span><span class="s2">'Alice'</span><span class="o">)</span>
+    <span class="err">├──</span> <span class="nt">age</span><span class="o">:</span> <span class="nt">int</span><span class="o">(</span><span class="err">9</span><span class="o">)</span>
+    <span class="err">└──</span> <span class="nt">pets</span><span class="o">:</span> <span class="nt">list</span>
+        <span class="err">├──</span> <span class="o">[</span><span class="err">0</span><span class="o">]:</span> <span class="nt">str</span><span class="o">(</span><span class="s2">'dog'</span><span class="o">)</span>
+        <span class="err">└──</span> <span class="o">[</span><span class="err">1</span><span class="o">]:</span> <span class="nt">str</span><span class="o">(</span><span class="s2">'cat'</span><span class="o">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>👉 이렇게 하면 <strong>leaf 노드일 경우 값까지<code class="language-plaintext highlighter-rouge">클래스명(값)</code> 형태</strong>로 표시됩니다.<br />
+값이 너무 길면 자동으로 <code class="language-plaintext highlighter-rouge">…</code>으로 잘라주도록 했어요.</p>
+
+<p>원하시면 <code class="language-plaintext highlighter-rouge">max_depth</code>, <code class="language-plaintext highlighter-rouge">maxlen</code>, 특정 타입 제외 필터 같은 추가 옵션도 넣어드릴 수 있는데, 혹시 필요하실까요?</p>
+
+<p class="chat--user">
+
+라이브러리 기반 말고 아까 짜준 코드 기반으로
+
+</p>
+
+<p>좋아! <strong>라이브러리 없이</strong> 아까 만든 범용 트리 유틸을 그대로 확장해서, <strong>leaf일 때는 값까지<code class="language-plaintext highlighter-rouge">멤버: 타입(값)</code></strong> 형태로 출력하도록 손봤어.<br />
+(leaf 정의: 더 내려갈 자식이 없거나, 원시형이거나, 최대 깊이에 도달한 경우)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">is_dataclass</span><span class="p">,</span> <span class="n">fields</span> <span class="k">as</span> <span class="n">dc_fields</span>
+<span class="kn">from</span> <span class="n">collections.abc</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Iterable</span>
+
+<span class="n">PRIMITIVES</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nf">type</span><span class="p">(</span><span class="bp">None</span><span class="p">),</span> <span class="nb">bytes</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_is_primitive</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">PRIMITIVES</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_class_name</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nf">type</span><span class="p">(</span><span class="n">x</span><span class="p">).</span><span class="n">__name__</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sh">"</span><span class="s">&lt;unknown&gt;</span><span class="sh">"</span>
+
+<span class="k">def</span> <span class="nf">_short_repr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="nf">repr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">&lt;?&gt;</span><span class="sh">"</span>
+    <span class="k">if</span> <span class="n">maxlen</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">maxlen</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:</span><span class="n">maxlen</span><span class="p">]</span> <span class="o">+</span> <span class="sh">"</span><span class="s">…</span><span class="sh">"</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">_iter_object_members</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">include_private</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">include_dunder</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">include_properties</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">yielded</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nf">is_dataclass</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nf">dc_fields</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">name</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_dunder</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_private</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">_</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="n">yielded</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span>
+
+    <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="sh">"</span><span class="s">__dict__</span><span class="sh">"</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nf">vars</span><span class="p">(</span><span class="n">o</span><span class="p">).</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_dunder</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_private</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">_</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="n">yielded</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span>
+
+    <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="sh">"</span><span class="s">__slots__</span><span class="sh">"</span><span class="p">):</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="sh">"</span><span class="s">__slots__</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">slots</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">slots</span> <span class="o">=</span> <span class="p">[</span><span class="n">slots</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_dunder</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_private</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">_</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">yielded</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span>
+
+    <span class="k">if</span> <span class="n">include_properties</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nf">dir</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_dunder</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_private</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">_</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">attr</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="nf">type</span><span class="p">(</span><span class="n">o</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="nb">property</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+<span class="k">def</span> <span class="nf">_iter_children</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">include_private</span><span class="p">,</span> <span class="n">include_dunder</span><span class="p">,</span> <span class="n">include_properties</span><span class="p">,</span> <span class="n">max_items</span><span class="p">):</span>
+    <span class="c1"># dict류
+</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="nf">items</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">[:</span><span class="n">max_items</span><span class="p">]):</span>
+            <span class="k">yield</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">k</span><span class="si">!r}</span><span class="sh">"</span><span class="p">,</span> <span class="n">v</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_items</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="sh">"</span><span class="s">…(truncated)</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">-</span> <span class="n">max_items</span><span class="si">}</span><span class="s"> more</span><span class="sh">"</span>
+        <span class="k">return</span>
+
+    <span class="c1"># 시퀀스/세트 (문자열류 제외)
+</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">,</span> <span class="nb">memoryview</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">node</span><span class="p">)[:</span><span class="n">max_items</span><span class="p">]):</span>
+                <span class="k">yield</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span><span class="p">,</span> <span class="n">v</span>
+            <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_items</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="sh">"</span><span class="s">…(truncated)</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">-</span> <span class="n">max_items</span><span class="si">}</span><span class="s"> more</span><span class="sh">"</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="nb">set</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">)):</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">seq</span><span class="p">[:</span><span class="n">max_items</span><span class="p">]):</span>
+                <span class="k">yield</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span><span class="p">,</span> <span class="n">v</span>
+            <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_items</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="sh">"</span><span class="s">…(truncated)</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">-</span> <span class="n">max_items</span><span class="si">}</span><span class="s"> more</span><span class="sh">"</span>
+            <span class="k">return</span>
+
+    <span class="c1"># 일반 객체 멤버
+</span>    <span class="k">yield</span> <span class="k">from</span> <span class="nf">_iter_object_members</span><span class="p">(</span>
+        <span class="n">node</span><span class="p">,</span>
+        <span class="n">include_private</span><span class="o">=</span><span class="n">include_private</span><span class="p">,</span>
+        <span class="n">include_dunder</span><span class="o">=</span><span class="n">include_dunder</span><span class="p">,</span>
+        <span class="n">include_properties</span><span class="o">=</span><span class="n">include_properties</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">attr_tree</span><span class="p">(</span>
+    <span class="n">obj</span><span class="p">,</span>
+    <span class="n">root_name</span><span class="o">=</span><span class="sh">"</span><span class="s">root</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">max_items</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">include_private</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">include_dunder</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">include_properties</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">leaf_value_maxlen</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    </span><span class="sh">'</span><span class="s">속성 dict</span><span class="sh">'</span><span class="s"> 기반 범용 트리 출력.
+    - 내부 노드:  name: ClassName
+    - leaf 노드: name: ClassName(value_repr)
+    </span><span class="sh">"""</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">add_leaf_line</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">is_last</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">cls</span> <span class="o">=</span> <span class="nf">_class_name</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="p">(</span><span class="sh">"</span><span class="s">└── </span><span class="sh">"</span> <span class="k">if</span> <span class="n">is_last</span> <span class="k">else</span> <span class="sh">"</span><span class="s">├── </span><span class="sh">"</span><span class="p">)</span> <span class="o">+</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">cls</span><span class="si">}</span><span class="s">(</span><span class="si">{</span><span class="nf">_short_repr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">leaf_value_maxlen</span><span class="p">)</span><span class="si">}</span><span class="s">)</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_inner_line</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">is_last</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">cls</span> <span class="o">=</span> <span class="nf">_class_name</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="p">(</span><span class="sh">"</span><span class="s">└── </span><span class="sh">"</span> <span class="k">if</span> <span class="n">is_last</span> <span class="k">else</span> <span class="sh">"</span><span class="s">├── </span><span class="sh">"</span><span class="p">)</span> <span class="o">+</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">cls</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="sh">""</span><span class="p">,</span> <span class="n">is_last</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="c1"># 깊이 제한 또는 원시형이면 leaf
+</span>        <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">max_depth</span> <span class="ow">or</span> <span class="nf">_is_primitive</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="nf">add_leaf_line</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">is_last</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># 사이클 방지
+</span>        <span class="n">oid</span> <span class="o">=</span> <span class="nf">id</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">oid</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="nf">add_inner_line</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">is_last</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">child_prefix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="p">(</span><span class="sh">"</span><span class="s">    </span><span class="sh">"</span> <span class="k">if</span> <span class="n">is_last</span> <span class="k">else</span> <span class="sh">"</span><span class="s">│   </span><span class="sh">"</span><span class="p">)</span>
+            <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">child_prefix</span> <span class="o">+</span> <span class="sh">"</span><span class="s">↪ (cycle)</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">seen</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">oid</span><span class="p">)</span>
+
+        <span class="c1"># 자식 미리 구해보고, 없으면 leaf 취급(+값 표시)
+</span>        <span class="n">children</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">_iter_children</span><span class="p">(</span>
+            <span class="n">value</span><span class="p">,</span>
+            <span class="n">include_private</span><span class="o">=</span><span class="n">include_private</span><span class="p">,</span>
+            <span class="n">include_dunder</span><span class="o">=</span><span class="n">include_dunder</span><span class="p">,</span>
+            <span class="n">include_properties</span><span class="o">=</span><span class="n">include_properties</span><span class="p">,</span>
+            <span class="n">max_items</span><span class="o">=</span><span class="n">max_items</span><span class="p">,</span>
+        <span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">children</span><span class="p">:</span>
+            <span class="nf">add_leaf_line</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">is_last</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># 내부 노드
+</span>        <span class="nf">add_inner_line</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">is_last</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">child_prefix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="p">(</span><span class="sh">"</span><span class="s">    </span><span class="sh">"</span> <span class="k">if</span> <span class="n">is_last</span> <span class="k">else</span> <span class="sh">"</span><span class="s">│   </span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="n">L</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">child_name</span><span class="p">,</span> <span class="n">child_val</span><span class="p">)</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">children</span><span class="p">):</span>
+            <span class="nf">walk</span><span class="p">(</span><span class="n">child_name</span><span class="p">,</span> <span class="n">child_val</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">child_prefix</span><span class="p">,</span> <span class="n">is_last</span><span class="o">=</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">L</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nf">walk</span><span class="p">(</span><span class="n">root_name</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="sh">""</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">print_attr_tree</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">attr_tree</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h3 id="예시">예시</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">y</span><span class="sh">"</span><span class="p">,)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span> <span class="n">self</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">k</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
+
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">9</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="nc">B</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">lst</span> <span class="o">=</span> <span class="p">[{</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_hidden</span> <span class="o">=</span> <span class="sh">"</span><span class="s">secret</span><span class="sh">"</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="nc">A</span><span class="p">()</span>
+<span class="nf">print_attr_tree</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">,</span>
+    <span class="n">root_name</span><span class="o">=</span><span class="sh">"</span><span class="s">A</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">include_private</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>    <span class="c1"># _hidden 숨김
+</span>    <span class="n">include_dunder</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>     <span class="c1"># __dunder__ 숨김
+</span>    <span class="n">include_properties</span><span class="o">=</span><span class="bp">False</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>출력(예):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">└──</span> <span class="n">A</span><span class="p">:</span> <span class="n">A</span>
+    <span class="err">├──</span> <span class="n">name</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="sh">'</span><span class="s">Alice</span><span class="sh">'</span><span class="p">)</span>
+    <span class="err">├──</span> <span class="n">age</span><span class="p">:</span> <span class="nf">int</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+    <span class="err">├──</span> <span class="n">x</span><span class="p">:</span> <span class="n">B</span>
+    <span class="err">│</span>   <span class="err">└──</span> <span class="n">y</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="err">│</span>       <span class="err">└──</span> <span class="sh">'</span><span class="s">k</span><span class="sh">'</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="err">│</span>           <span class="err">├──</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="nf">int</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="err">│</span>           <span class="err">├──</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="nf">int</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="err">│</span>           <span class="err">└──</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="nf">int</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="err">└──</span> <span class="n">lst</span><span class="p">:</span> <span class="nb">list</span>
+        <span class="err">├──</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="nb">dict</span>
+        <span class="err">│</span>   <span class="err">└──</span> <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">:</span> <span class="nf">int</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="err">└──</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="nb">tuple</span>
+            <span class="err">├──</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="nf">int</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="err">└──</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="nf">int</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="참고-step-by-step">참고 (step-by-step)</h3>
+
+<ol>
+  <li>
+    <p><strong>leaf 판단</strong> : (a) 원시형(PRIMITIVES), (b) <code class="language-plaintext highlighter-rouge">max_depth</code> 도달, (c) 자식 탐색 결과 없음 → 값까지 출력.</p>
+  </li>
+  <li>
+    <p><strong>내부 노드</strong> : 자식이 있으면 <code class="language-plaintext highlighter-rouge">name: ClassName</code>만 찍고 아래로 재귀.</p>
+  </li>
+  <li>
+    <p><strong>사이클</strong> : 이미 본 객체면 <code class="language-plaintext highlighter-rouge">(cycle)</code> 표시하고 중단.</p>
+  </li>
+  <li>
+    <p><strong>가시성 옵션</strong> : <code class="language-plaintext highlighter-rouge">_private</code>, <code class="language-plaintext highlighter-rouge">__dunder__</code>, <code class="language-plaintext highlighter-rouge">@property</code> 포함 여부 조절.</p>
+  </li>
+  <li>
+    <p><strong>길이 제한</strong> : <code class="language-plaintext highlighter-rouge">leaf_value_maxlen</code>으로 leaf 값 <code class="language-plaintext highlighter-rouge">repr</code> 길이 제어.</p>
+  </li>
+</ol>
+
+<p>더 원하는 포맷(예: <code class="language-plaintext highlighter-rouge">key="..."</code> 따옴표 통일, dict 키 정렬, 특정 타입 축약 등) 있으면 말해줘—바로 반영할게!</p>
+
         
       </section>
 
@@ -822,7 +1226,7 @@ pretty console 출력 라이브러리.<br />
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-20T11:11:51+09:00">2025-08-20</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-20T12:33:01+09:00">2025-08-20</time></p>
 
       </footer>
 
@@ -876,7 +1280,7 @@ pretty console 출력 라이브러리.<br />
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-20T11:11:54+09:00">2025-08-20</time>
+        <time datetime="2025-08-20T12:33:04+09:00">2025-08-20</time>
       </span>
     
 
