@@ -1,0 +1,2112 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>LLM Chatbot Client Plan - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="LLM Chatbot Client Plan">
+<meta property="og:url" content="https://hvppyarchive.github.io/llm/simple-chatbot-client/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-08-21T13:53:08+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/llm/simple-chatbot-client/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="LLM Chatbot Client Plan">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-08-21T13:53:08+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/llm/simple-chatbot-client/" itemprop="url">LLM Chatbot Client Plan
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-21T13:53:08+09:00">2025-08-21</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+Developer: Role and Objective - Develop a simple, fast LLM Chatbot Client Application using Qt or PySide. Workflow Checklist - Begin with a concise checklist (3-7 bullets) of conceptual sub-tasks before implementation. Instructions - Design for easy, direct execution by users in a Linux environment with access to a shared disk. - Allow each user to save personal settings, while the default deployment settings are configured by the administrator. Deployment - The application should be distributed so users can launch it directly on supported Linux systems with shared disk access. - Initial, default application settings must be settable by an administrator; each user can override and save their preferences. Required Features - Allow setting a custom LLM (Large Language Model) endpoint. - Support multi-line message input. - Provide chat log management similar to applications like Ollama or OpenWebUI. - Enable changing model parameters from the interface. - Incorporate useful shortcut keys (e.g., hide/show window in workspace, start new conversation, etc.). - Render Markdown in chat messages. Code and Messaging Conventions - Code must be clear, well-commented, use readable variable names, and maintain straightforward control flow. - Application messaging and labels should be concise and clear to end users. Output Format - Default output is plain text. When documentation is required, use Markdown and backticks for file, directory, function, and class names. Validation - After implementation, validate that the application meets all feature and deployment requirements and is verified to run as specified in the Linux environment. Document any issues or unmet criteria. Stop Conditions - The task is complete once the client app fulfills all listed features and deployment criteria, has been validated as above, and any necessary corrections have been applied.
+
+</p>
+
+<p>Here’s a tight, step-by-step plan and a complete, ready-to-run PySide6 app you can drop on a shared Linux disk.</p>
+
+<h1 id="conceptual-checklist-before-coding">Conceptual checklist (before coding)</h1>
+
+<ol>
+  <li>
+    <p>Config strategy: admin defaults on shared disk or <code class="language-plaintext highlighter-rouge">/etc/llmchat</code>, user overrides in <code class="language-plaintext highlighter-rouge">~/.config/llmchat/</code> with deep-merge on load; write back only user file.</p>
+  </li>
+  <li>
+    <p>Storage strategy: chats as JSON under <code class="language-plaintext highlighter-rouge">~/.local/share/llmchat/chats/</code>, with an index; operations: new/rename/delete/export.</p>
+  </li>
+  <li>
+    <p>UI layout: left chat list + top toolbar; right chat view (Markdown) + param sidebar (model/temperature/top_p/max_tokens) + multiline input with send; tray icon for show/hide.</p>
+  </li>
+  <li>
+    <p>Network layer: simple OpenAI-compatible <code class="language-plaintext highlighter-rouge">/v1/chat/completions</code> POST with <code class="language-plaintext highlighter-rouge">requests</code>, API base+key configurable; run in worker thread to keep UI responsive.</p>
+  </li>
+  <li>
+    <p>Shortcuts: Ctrl+Enter send; Shift+Enter newline; Ctrl+N new chat; Ctrl+S export; Del delete chat; Ctrl+L focus input; Ctrl+, settings; Ctrl+H hide/show (via tray).</p>
+  </li>
+  <li>
+    <p>Markdown render: convert with <code class="language-plaintext highlighter-rouge">markdown</code> lib to sanitized HTML; display in <code class="language-plaintext highlighter-rouge">QTextBrowser</code> with minimal CSS for code blocks and links.</p>
+  </li>
+  <li>
+    <p>Deployment: <code class="language-plaintext highlighter-rouge">install.sh</code> (venv + pip), <code class="language-plaintext highlighter-rouge">run.sh</code> (activate &amp; start); <code class="language-plaintext highlighter-rouge">config/defaults.yaml</code> for admin to seed defaults; doc how to set <code class="language-plaintext highlighter-rouge">/etc/llmchat/config.yaml</code>.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="project-layout">Project layout</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arduino
+
+llmchat/
+  main.py
+  config_manager.py
+  llm_client.py
+  storage.py
+  ui_helpers.py
+  requirements.txt
+  install.sh
+  run.sh
+  config/
+    defaults.yaml
+  README.md
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="requirementstxt"><code class="language-plaintext highlighter-rouge">requirements.txt</code></h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>txt
+
+PySide6&gt;=6.6
+requests&gt;=2.31
+PyYAML&gt;=6.0.1
+markdown&gt;=3.5
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="installsh"><code class="language-plaintext highlighter-rouge">install.sh</code></h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> <span class="nt">-euo</span> pipefail
+<span class="nb">cd</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">dirname</span> <span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="si">)</span><span class="s2">"</span>
+python3 <span class="nt">-m</span> venv .venv
+<span class="nb">.</span> .venv/bin/activate
+pip <span class="nb">install</span> <span class="nt">--upgrade</span> pip
+pip <span class="nb">install</span> <span class="nt">-r</span> requirements.txt
+<span class="nb">echo</span> <span class="s2">"✔ venv created. Use ./run.sh to launch."</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="runsh"><code class="language-plaintext highlighter-rouge">run.sh</code></h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> <span class="nt">-euo</span> pipefail
+<span class="nb">cd</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">dirname</span> <span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="si">)</span><span class="s2">"</span>
+<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-d</span> .venv <span class="o">]</span><span class="p">;</span> <span class="k">then
+  </span><span class="nb">echo</span> <span class="s2">"No venv found. Running install..."</span>
+  ./install.sh
+<span class="k">fi</span>
+<span class="nb">.</span> .venv/bin/activate
+<span class="nb">export </span><span class="nv">QT_AUTO_SCREEN_SCALE_FACTOR</span><span class="o">=</span>1
+python3 <span class="nt">-u</span> main.py <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="configdefaultsyaml"><code class="language-plaintext highlighter-rouge">config/defaults.yaml</code></h2>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Admin-settable defaults (shared disk or /etc/llmchat/config.yaml)</span>
+<span class="na">app</span><span class="pi">:</span>
+  <span class="na">data_dir</span><span class="pi">:</span> <span class="s2">"</span><span class="s">~/.local/share/llmchat"</span>
+  <span class="na">chat_dir_name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">chats"</span>
+  <span class="na">window</span><span class="pi">:</span>
+    <span class="na">width</span><span class="pi">:</span> <span class="m">1100</span>
+    <span class="na">height</span><span class="pi">:</span> <span class="m">720</span>
+<span class="na">llm</span><span class="pi">:</span>
+  <span class="na">api_base</span><span class="pi">:</span> <span class="s2">"</span><span class="s">http://localhost:11434/v1"</span>  <span class="c1"># Works with Ollama's OpenAI-compatible server</span>
+  <span class="na">api_key</span><span class="pi">:</span> <span class="s2">"</span><span class="s">"</span>  <span class="c1"># Leave empty for local endpoints; user can override</span>
+  <span class="na">model</span><span class="pi">:</span> <span class="s2">"</span><span class="s">llama3.1"</span>
+  <span class="na">temperature</span><span class="pi">:</span> <span class="m">0.7</span>
+  <span class="na">top_p</span><span class="pi">:</span> <span class="m">0.95</span>
+  <span class="na">max_tokens</span><span class="pi">:</span> <span class="m">512</span>
+  <span class="na">timeout_sec</span><span class="pi">:</span> <span class="m">120</span>
+  <span class="na">verify_tls</span><span class="pi">:</span> <span class="kc">true</span>
+<span class="na">ui</span><span class="pi">:</span>
+  <span class="na">font_family</span><span class="pi">:</span> <span class="s2">"</span><span class="s">"</span>
+  <span class="na">font_size</span><span class="pi">:</span> <span class="m">11</span>
+  <span class="na">enable_tray</span><span class="pi">:</span> <span class="kc">true</span>
+  <span class="na">markdown_css</span><span class="pi">:</span> <span class="pi">|</span>
+    <span class="s">body { font-family: sans-serif; font-size: 13px; }</span>
+    <span class="s">code, pre { font-family: "DejaVu Sans Mono", monospace; }</span>
+    <span class="s">pre { background: #f5f5f5; padding: 8px; border-radius: 6px; overflow: auto; }</span>
+    <span class="s">code { background: #f1f1f1; padding: 2px 4px; border-radius: 4px; }</span>
+    <span class="s">.msg-user { background: #e8f0fe; padding: 8px 10px; border-radius: 10px; margin: 10px 0; }</span>
+    <span class="s">.msg-assistant { background: #f7f7f7; padding: 8px 10px; border-radius: 10px; margin: 10px 0; }</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="config_managerpy"><code class="language-plaintext highlighter-rouge">config_manager.py</code></h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="n">yaml</span>
+
+<span class="k">def</span> <span class="nf">deep_merge_dict</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Deep merge dict b into a (a has lower precedence). Returns a new dict.</span><span class="sh">"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">copy</span><span class="p">.</span><span class="nf">deepcopy</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">b</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nf">deep_merge_dict</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="p">.</span><span class="nf">deepcopy</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="k">class</span> <span class="nc">ConfigManager</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    Loads admin defaults and applies user overrides. Only writes user config.
+    Search order for admin defaults:
+      1) LLMCHAT_CONFIG_DIR/config.yaml
+      2) ./config/defaults.yaml (in app dir)
+      3) /etc/llmchat/config.yaml
+    User overrides:
+      ~/.config/llmchat/config.yaml
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">app_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">app_dir</span> <span class="o">=</span> <span class="n">app_dir</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">user_config_dir</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">expanduser</span><span class="p">(</span><span class="sh">"</span><span class="s">~/.config/llmchat</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">user_config_path</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">user_config_dir</span> <span class="o">/</span> <span class="sh">"</span><span class="s">config.yaml</span><span class="sh">"</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">defaults</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">user</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">effective</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">_load_yaml</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">yaml</span><span class="p">.</span><span class="nf">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">env_dir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">LLMCHAT_CONFIG_DIR</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">env_dir</span><span class="p">:</span>
+            <span class="n">candidates</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">env_dir</span><span class="p">)</span> <span class="o">/</span> <span class="sh">"</span><span class="s">config.yaml</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">candidates</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">app_dir</span> <span class="o">/</span> <span class="sh">"</span><span class="s">config</span><span class="sh">"</span> <span class="o">/</span> <span class="sh">"</span><span class="s">defaults.yaml</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">candidates</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="sh">"</span><span class="s">/etc/llmchat/config.yaml</span><span class="sh">"</span><span class="p">))</span>
+
+        <span class="n">merged</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="n">merged</span> <span class="o">=</span> <span class="nf">deep_merge_dict</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nf">_load_yaml</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">defaults</span> <span class="o">=</span> <span class="n">merged</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_load_yaml</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">user_config_path</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">effective</span> <span class="o">=</span> <span class="nf">deep_merge_dict</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">defaults</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">effective</span>
+
+    <span class="k">def</span> <span class="nf">save_user_overrides</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">patch</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Persist only user overrides (not the merged effective config).</span><span class="sh">"""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">user</span> <span class="o">=</span> <span class="nf">deep_merge_dict</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">user</span><span class="p">,</span> <span class="n">patch</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">user_config_dir</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">user_config_path</span><span class="p">,</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">yaml</span><span class="p">.</span><span class="nf">safe_dump</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">user</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">Get from effective using dotted path e.g. </span><span class="sh">'</span><span class="s">llm.api_base</span><span class="sh">'</span><span class="s">.</span><span class="sh">"""</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">path</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">effective</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">default</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cur</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="storagepy"><code class="language-plaintext highlighter-rouge">storage.py</code></h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">asdict</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Message</span><span class="p">:</span>
+    <span class="n">role</span><span class="p">:</span> <span class="nb">str</span>       <span class="c1"># "user" or "assistant" or "system"
+</span>    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Chat</span><span class="p">:</span>
+    <span class="n">chat_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">created_ts</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">updated_ts</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Message</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">ChatStorage</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">Manage chat files under ~/.local/share/llmchat/chats/ as JSON.</span><span class="sh">"""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">base_data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">chat_dir_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">chats</span><span class="sh">"</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">base_dir</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">base_data_dir</span><span class="p">).</span><span class="nf">expanduser</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chat_dir</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">base_dir</span> <span class="o">/</span> <span class="n">chat_dir_name</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chat_dir</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_chat_path</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">chat_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">chat_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">chat_id</span><span class="si">}</span><span class="s">.json</span><span class="sh">"</span>
+
+    <span class="k">def</span> <span class="nf">list_chats</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Chat</span><span class="p">]:</span>
+        <span class="n">chats</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nf">sorted</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">chat_dir</span><span class="p">.</span><span class="nf">glob</span><span class="p">(</span><span class="sh">"</span><span class="s">*.json</span><span class="sh">"</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">raw</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="n">chats</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_chat_from_raw</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+        <span class="c1"># Most recent first
+</span>        <span class="n">chats</span><span class="p">.</span><span class="nf">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="p">.</span><span class="n">updated_ts</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">chats</span>
+
+    <span class="k">def</span> <span class="nf">save_chat</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">chat</span><span class="p">:</span> <span class="n">Chat</span><span class="p">):</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="nf">asdict</span><span class="p">(</span><span class="n">chat</span><span class="p">)</span>
+        <span class="c1"># Convert dataclass Message list to serializable dicts
+</span>        <span class="n">raw</span><span class="p">[</span><span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nf">asdict</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">chat</span><span class="p">.</span><span class="n">messages</span><span class="p">]</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_chat_path</span><span class="p">(</span><span class="n">chat</span><span class="p">.</span><span class="n">chat_id</span><span class="p">),</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="p">.</span><span class="nf">dump</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">load_chat</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">chat_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Chat</span><span class="p">]:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_chat_path</span><span class="p">(</span><span class="n">chat_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_chat_from_raw</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">delete_chat</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">chat_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_chat_path</span><span class="p">(</span><span class="n">chat_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">unlink</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">export_chat_markdown</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">chat</span><span class="p">:</span> <span class="n">Chat</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="sh">"</span><span class="s"># </span><span class="si">{</span><span class="n">chat</span><span class="p">.</span><span class="n">title</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">chat</span><span class="p">.</span><span class="n">messages</span><span class="p">:</span>
+            <span class="n">who</span> <span class="o">=</span> <span class="sh">"</span><span class="s">You</span><span class="sh">"</span> <span class="k">if</span> <span class="n">m</span><span class="p">.</span><span class="n">role</span> <span class="o">==</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span> <span class="k">else</span> <span class="sh">"</span><span class="s">Assistant</span><span class="sh">"</span>
+            <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">**</span><span class="si">{</span><span class="n">who</span><span class="si">}</span><span class="s">:**</span><span class="sh">"</span><span class="p">)</span>
+            <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">""</span><span class="p">)</span>
+            <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">content</span><span class="p">)</span>
+            <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">""</span><span class="p">)</span>
+        <span class="n">out_path</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+        <span class="n">out_path</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_chat_from_raw</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Chat</span><span class="p">:</span>
+        <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span><span class="nc">Message</span><span class="p">(</span><span class="o">**</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])]</span>
+        <span class="k">return</span> <span class="nc">Chat</span><span class="p">(</span>
+            <span class="n">chat_id</span><span class="o">=</span><span class="n">raw</span><span class="p">[</span><span class="sh">"</span><span class="s">chat_id</span><span class="sh">"</span><span class="p">],</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">raw</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">title</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Untitled</span><span class="sh">"</span><span class="p">),</span>
+            <span class="n">created_ts</span><span class="o">=</span><span class="n">raw</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">created_ts</span><span class="sh">"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()),</span>
+            <span class="n">updated_ts</span><span class="o">=</span><span class="n">raw</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">updated_ts</span><span class="sh">"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()),</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">raw</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">),</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">raw</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">params</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}),</span>
+            <span class="n">messages</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="llm_clientpy"><code class="language-plaintext highlighter-rouge">llm_client.py</code></h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="k">class</span> <span class="nc">LLMClient</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    Minimal OpenAI-compatible client for /v1/chat/completions.
+    Supports: api_base, api_key, model, temperature, top_p, max_tokens, timeout_sec, verify_tls
+    </span><span class="sh">"""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+
+    <span class="k">def</span> <span class="nf">update_config</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+
+    <span class="k">def</span> <span class="nf">chat_completion</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">api_base</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">api_base</span><span class="sh">"</span><span class="p">].</span><span class="nf">rstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">api_base</span><span class="si">}</span><span class="s">/v1/chat/completions</span><span class="sh">"</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">Content-Type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">application/json</span><span class="sh">"</span><span class="p">}</span>
+        <span class="n">api_key</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">api_key</span><span class="p">:</span>
+            <span class="n">headers</span><span class="p">[</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Bearer </span><span class="si">{</span><span class="n">api_key</span><span class="si">}</span><span class="sh">"</span>
+
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">params</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">],</span>
+            <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="n">messages</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">:</span> <span class="nf">float</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">])),</span>
+            <span class="sh">"</span><span class="s">top_p</span><span class="sh">"</span><span class="p">:</span> <span class="nf">float</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">top_p</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">top_p</span><span class="sh">"</span><span class="p">])),</span>
+            <span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">:</span> <span class="nf">int</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">])),</span>
+            <span class="sh">"</span><span class="s">stream</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">timeout</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">,</span> <span class="mi">120</span><span class="p">))</span>
+        <span class="n">verify_tls</span> <span class="o">=</span> <span class="nf">bool</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">verify_tls</span><span class="sh">"</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">),</span>
+                          <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="n">verify_tls</span><span class="p">)</span>
+        <span class="n">r</span><span class="p">.</span><span class="nf">raise_for_status</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span>
+        <span class="c1"># OpenAI-compatible format
+</span>        <span class="n">content</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">content</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="ui_helperspy"><code class="language-plaintext highlighter-rouge">ui_helpers.py</code></h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="n">markdown</span> <span class="kn">import</span> <span class="n">markdown</span>
+
+<span class="k">def</span> <span class="nf">now_ts</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">md_to_html</span><span class="p">(</span><span class="n">md_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    Convert Markdown to HTML suitable for QTextBrowser.
+    </span><span class="sh">"""</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="nf">markdown</span><span class="p">(</span><span class="n">md_text</span><span class="p">,</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">fenced_code</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">tables</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">codehilite</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">sane_lists</span><span class="sh">"</span><span class="p">])</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">&lt;style&gt;</span><span class="si">{</span><span class="n">css</span><span class="si">}</span><span class="s">&lt;/style&gt;</span><span class="sh">"</span> <span class="k">if</span> <span class="n">css</span> <span class="k">else</span> <span class="sh">""</span>
+    <span class="c1"># Wrap with message container styling applied by caller
+</span>    <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">style</span><span class="si">}{</span><span class="n">body</span><span class="si">}</span><span class="sh">"</span>
+
+<span class="k">def</span> <span class="nf">messages_to_html</span><span class="p">(</span><span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">css</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="sh">"</span><span class="s">&lt;style&gt;</span><span class="si">{</span><span class="n">css</span><span class="si">}</span><span class="s">&lt;/style&gt;</span><span class="sh">"</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
+        <span class="n">klass</span> <span class="o">=</span> <span class="sh">"</span><span class="s">msg-user</span><span class="sh">"</span> <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">]</span> <span class="o">==</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span> <span class="k">else</span> <span class="sh">"</span><span class="s">msg-assistant</span><span class="sh">"</span>
+        <span class="n">parts</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">&lt;div class=</span><span class="sh">"</span><span class="si">{</span><span class="n">klass</span><span class="si">}</span><span class="sh">"</span><span class="s">&gt;</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">parts</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">md_to_html</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">]))</span>
+        <span class="n">parts</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">"</span><span class="s">&lt;/div&gt;</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="mainpy"><code class="language-plaintext highlighter-rouge">main.py</code></h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">uuid</span>
+<span class="kn">import</span> <span class="n">traceback</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="n">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QThreadPool</span><span class="p">,</span> <span class="n">QRunnable</span><span class="p">,</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">QSize</span>
+<span class="kn">from</span> <span class="n">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QKeySequence</span><span class="p">,</span> <span class="n">QCloseEvent</span><span class="p">,</span> <span class="n">QShortcut</span>
+<span class="kn">from</span> <span class="n">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QApplication</span><span class="p">,</span> <span class="n">QMainWindow</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QTextEdit</span><span class="p">,</span>
+    <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QListWidget</span><span class="p">,</span> <span class="n">QListWidgetItem</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QSplitter</span><span class="p">,</span>
+    <span class="n">QFormLayout</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span> <span class="n">QDoubleSpinBox</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QDockWidget</span><span class="p">,</span>
+    <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QTextBrowser</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QSystemTrayIcon</span><span class="p">,</span> <span class="n">QMenu</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="n">config_manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
+<span class="kn">from</span> <span class="n">storage</span> <span class="kn">import</span> <span class="n">ChatStorage</span><span class="p">,</span> <span class="n">Chat</span><span class="p">,</span> <span class="n">Message</span>
+<span class="kn">from</span> <span class="n">llm_client</span> <span class="kn">import</span> <span class="n">LLMClient</span>
+<span class="kn">from</span> <span class="n">ui_helpers</span> <span class="kn">import</span> <span class="n">now_ts</span><span class="p">,</span> <span class="n">messages_to_html</span>
+
+<span class="n">APP_NAME</span> <span class="o">=</span> <span class="sh">"</span><span class="s">LLMChat</span><span class="sh">"</span>
+
+<span class="c1"># ---------------- Worker infra ---------------- #
+</span>
+<span class="k">class</span> <span class="nc">WorkerSignals</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+    <span class="n">success</span> <span class="o">=</span> <span class="nc">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="nc">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">LLMWorker</span><span class="p">(</span><span class="n">QRunnable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">LLMClient</span><span class="p">,</span> <span class="n">messages_payload</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">messages_payload</span> <span class="o">=</span> <span class="n">messages_payload</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">signals</span> <span class="o">=</span> <span class="nc">WorkerSignals</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">reply</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="nf">chat_completion</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">messages_payload</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">signals</span><span class="p">.</span><span class="n">success</span><span class="p">.</span><span class="nf">emit</span><span class="p">(</span><span class="n">reply</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">tb</span> <span class="o">=</span> <span class="n">traceback</span><span class="p">.</span><span class="nf">format_exc</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">signals</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="nf">emit</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">tb</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># ---------------- Main Window ---------------- #
+</span>
+<span class="k">class</span> <span class="nc">MainWindow</span><span class="p">(</span><span class="n">QMainWindow</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">app_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">setWindowTitle</span><span class="p">(</span><span class="sh">"</span><span class="s">LLM Chat Client</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">app_dir</span> <span class="o">=</span> <span class="n">app_dir</span>
+
+        <span class="c1"># Config
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">cfg_mgr</span> <span class="o">=</span> <span class="nc">ConfigManager</span><span class="p">(</span><span class="n">app_dir</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg_mgr</span><span class="p">.</span><span class="nf">load</span><span class="p">()</span>
+
+        <span class="c1"># Storage
+</span>        <span class="n">data_dir</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">app</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">data_dir</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">~/.local/share/llmchat</span><span class="sh">"</span><span class="p">)).</span><span class="nf">expanduser</span><span class="p">()</span>
+        <span class="n">chat_dir_name</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">app</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">chat_dir_name</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">chats</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">storage</span> <span class="o">=</span> <span class="nc">ChatStorage</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">chat_dir_name</span><span class="p">)</span>
+
+        <span class="c1"># LLM client
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">client</span> <span class="o">=</span> <span class="nc">LLMClient</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">)</span>
+
+        <span class="c1"># State
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">thread_pool</span> <span class="o">=</span> <span class="n">QThreadPool</span><span class="p">.</span><span class="nf">globalInstance</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">:</span> <span class="n">Chat</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">markdown_css</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">ui</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">markdown_css</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_build_ui</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_load_chat_list</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_apply_initial_window_size</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_setup_tray</span><span class="p">()</span>
+
+    <span class="c1"># -------- UI construction -------- #
+</span>
+    <span class="k">def</span> <span class="nf">_build_ui</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">splitter</span> <span class="o">=</span> <span class="nc">QSplitter</span><span class="p">()</span>
+        <span class="n">splitter</span><span class="p">.</span><span class="nf">setChildrenCollapsible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="c1"># Left: chat list + controls
+</span>        <span class="n">left</span> <span class="o">=</span> <span class="nc">QWidget</span><span class="p">()</span>
+        <span class="n">left_layout</span> <span class="o">=</span> <span class="nc">QVBoxLayout</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span> <span class="o">=</span> <span class="nc">QListWidget</span><span class="p">()</span>
+        <span class="n">left_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nc">QLabel</span><span class="p">(</span><span class="sh">"</span><span class="s">Conversations</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">left_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">)</span>
+
+        <span class="n">btn_row</span> <span class="o">=</span> <span class="nc">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_new</span> <span class="o">=</span> <span class="nc">QPushButton</span><span class="p">(</span><span class="sh">"</span><span class="s">New</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_rename</span> <span class="o">=</span> <span class="nc">QPushButton</span><span class="p">(</span><span class="sh">"</span><span class="s">Rename</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_delete</span> <span class="o">=</span> <span class="nc">QPushButton</span><span class="p">(</span><span class="sh">"</span><span class="s">Delete</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">btn_row</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">btn_new</span><span class="p">)</span>
+        <span class="n">btn_row</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">btn_rename</span><span class="p">)</span>
+        <span class="n">btn_row</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">btn_delete</span><span class="p">)</span>
+        <span class="n">left_layout</span><span class="p">.</span><span class="nf">addLayout</span><span class="p">(</span><span class="n">btn_row</span><span class="p">)</span>
+
+        <span class="c1"># Right: conversation + input
+</span>        <span class="n">right</span> <span class="o">=</span> <span class="nc">QWidget</span><span class="p">()</span>
+        <span class="n">right_layout</span> <span class="o">=</span> <span class="nc">QVBoxLayout</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="nc">QTextBrowser</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setOpenExternalLinks</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">right_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">input_row</span> <span class="o">=</span> <span class="nc">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">input</span> <span class="o">=</span> <span class="nc">QTextEdit</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">input</span><span class="p">.</span><span class="nf">setPlaceholderText</span><span class="p">(</span><span class="sh">"</span><span class="s">Type your message… (Shift+Enter for newline, Ctrl+Enter to send)</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">input</span><span class="p">.</span><span class="nf">setAcceptRichText</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">input_row</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nb">input</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_send</span> <span class="o">=</span> <span class="nc">QPushButton</span><span class="p">(</span><span class="sh">"</span><span class="s">Send</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_send</span><span class="p">.</span><span class="nf">setDefault</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">input_row</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">btn_send</span><span class="p">)</span>
+        <span class="n">right_layout</span><span class="p">.</span><span class="nf">addLayout</span><span class="p">(</span><span class="n">input_row</span><span class="p">)</span>
+
+        <span class="n">splitter</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+        <span class="n">splitter</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+        <span class="n">splitter</span><span class="p">.</span><span class="nf">setStretchFactor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">setCentralWidget</span><span class="p">(</span><span class="n">splitter</span><span class="p">)</span>
+
+        <span class="c1"># Dock: model params &amp; endpoint
+</span>        <span class="n">dock</span> <span class="o">=</span> <span class="nc">QDockWidget</span><span class="p">(</span><span class="sh">"</span><span class="s">Model &amp; Endpoint</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">dock</span><span class="p">.</span><span class="nf">setAllowedAreas</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">RightDockWidgetArea</span> <span class="o">|</span> <span class="n">Qt</span><span class="p">.</span><span class="n">LeftDockWidgetArea</span><span class="p">)</span>
+        <span class="n">params_widget</span> <span class="o">=</span> <span class="nc">QWidget</span><span class="p">()</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="nc">QFormLayout</span><span class="p">(</span><span class="n">params_widget</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">edt_api_base</span> <span class="o">=</span> <span class="nc">QLineEdit</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">api_base</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">edt_api_key</span> <span class="o">=</span> <span class="nc">QLineEdit</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">edt_api_key</span><span class="p">.</span><span class="nf">setEchoMode</span><span class="p">(</span><span class="n">QLineEdit</span><span class="p">.</span><span class="n">Password</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">edt_model</span> <span class="o">=</span> <span class="nc">QLineEdit</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">))</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span> <span class="o">=</span> <span class="nc">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">.</span><span class="nf">setRange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">.</span><span class="nf">setSingleStep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">.</span><span class="nf">setValue</span><span class="p">(</span><span class="nf">float</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">)))</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span> <span class="o">=</span> <span class="nc">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">.</span><span class="nf">setRange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">.</span><span class="nf">setSingleStep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">.</span><span class="nf">setValue</span><span class="p">(</span><span class="nf">float</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">top_p</span><span class="sh">"</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">)))</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span> <span class="o">=</span> <span class="nc">QSpinBox</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span><span class="p">.</span><span class="nf">setRange</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32768</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span><span class="p">.</span><span class="nf">setValue</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">,</span> <span class="mi">512</span><span class="p">)))</span>
+
+        <span class="n">form</span><span class="p">.</span><span class="nf">addRow</span><span class="p">(</span><span class="nc">QLabel</span><span class="p">(</span><span class="sh">"</span><span class="s">API Base</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_api_base</span><span class="p">)</span>
+        <span class="n">form</span><span class="p">.</span><span class="nf">addRow</span><span class="p">(</span><span class="nc">QLabel</span><span class="p">(</span><span class="sh">"</span><span class="s">API Key</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_api_key</span><span class="p">)</span>
+        <span class="n">form</span><span class="p">.</span><span class="nf">addRow</span><span class="p">(</span><span class="nc">QLabel</span><span class="p">(</span><span class="sh">"</span><span class="s">Model</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_model</span><span class="p">)</span>
+        <span class="n">form</span><span class="p">.</span><span class="nf">addRow</span><span class="p">(</span><span class="nc">QLabel</span><span class="p">(</span><span class="sh">"</span><span class="s">Temperature</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">)</span>
+        <span class="n">form</span><span class="p">.</span><span class="nf">addRow</span><span class="p">(</span><span class="nc">QLabel</span><span class="p">(</span><span class="sh">"</span><span class="s">Top-p</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">)</span>
+        <span class="n">form</span><span class="p">.</span><span class="nf">addRow</span><span class="p">(</span><span class="nc">QLabel</span><span class="p">(</span><span class="sh">"</span><span class="s">Max tokens</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span><span class="p">)</span>
+
+        <span class="n">btns</span> <span class="o">=</span> <span class="nc">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_save_settings</span> <span class="o">=</span> <span class="nc">QPushButton</span><span class="p">(</span><span class="sh">"</span><span class="s">Save as My Defaults</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_apply</span> <span class="o">=</span> <span class="nc">QPushButton</span><span class="p">(</span><span class="sh">"</span><span class="s">Apply Now</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">btns</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">btn_apply</span><span class="p">)</span>
+        <span class="n">btns</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">btn_save_settings</span><span class="p">)</span>
+        <span class="n">form</span><span class="p">.</span><span class="nf">addRow</span><span class="p">(</span><span class="n">btns</span><span class="p">)</span>
+
+        <span class="n">params_widget</span><span class="p">.</span><span class="nf">setLayout</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+        <span class="n">dock</span><span class="p">.</span><span class="nf">setWidget</span><span class="p">(</span><span class="n">params_widget</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">addDockWidget</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">RightDockWidgetArea</span><span class="p">,</span> <span class="n">dock</span><span class="p">)</span>
+
+        <span class="c1"># Toolbar &amp; actions
+</span>        <span class="n">tb</span> <span class="o">=</span> <span class="nc">QToolBar</span><span class="p">(</span><span class="sh">"</span><span class="s">Main</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">tb</span><span class="p">.</span><span class="nf">setIconSize</span><span class="p">(</span><span class="nc">QSize</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">addToolBar</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+
+        <span class="n">act_new</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="sh">"</span><span class="s">New Chat</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">act_new</span><span class="p">.</span><span class="nf">setShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+N</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">act_send</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="sh">"</span><span class="s">Send</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">act_send</span><span class="p">.</span><span class="nf">setShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+Return</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">act_export</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="sh">"</span><span class="s">Export Markdown…</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">act_export</span><span class="p">.</span><span class="nf">setShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+S</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">act_delete</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="sh">"</span><span class="s">Delete Chat</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">act_delete</span><span class="p">.</span><span class="nf">setShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">Key_Delete</span><span class="p">))</span>
+        <span class="n">act_focus</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="sh">"</span><span class="s">Focus Input</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">act_focus</span><span class="p">.</span><span class="nf">setShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+L</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">act_settings</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="sh">"</span><span class="s">Save Settings</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">act_settings</span><span class="p">.</span><span class="nf">setShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+,</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">act_hide</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="sh">"</span><span class="s">Hide/Show</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">act_hide</span><span class="p">.</span><span class="nf">setShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+H</span><span class="sh">"</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">(</span><span class="n">act_new</span><span class="p">,</span> <span class="n">act_send</span><span class="p">,</span> <span class="n">act_export</span><span class="p">,</span> <span class="n">act_delete</span><span class="p">,</span> <span class="n">act_focus</span><span class="p">,</span> <span class="n">act_settings</span><span class="p">,</span> <span class="n">act_hide</span><span class="p">):</span>
+            <span class="n">tb</span><span class="p">.</span><span class="nf">addAction</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+        <span class="c1"># Connect signals
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">btn_new</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_new_chat</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_rename</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_rename_chat</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_delete</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_delete_chat</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="n">itemDoubleClicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_open_selected_chat</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="n">itemSelectionChanged</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_open_selected_chat</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_send</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_send</span><span class="p">)</span>
+        <span class="n">act_send</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_send</span><span class="p">)</span>
+        <span class="n">act_new</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_new_chat</span><span class="p">)</span>
+        <span class="n">act_export</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_export_chat_md</span><span class="p">)</span>
+        <span class="n">act_delete</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_delete_chat</span><span class="p">)</span>
+        <span class="n">act_focus</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nb">input</span><span class="p">.</span><span class="nf">setFocus</span><span class="p">())</span>
+        <span class="n">act_settings</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_save_settings_clicked</span><span class="p">)</span>
+        <span class="n">act_hide</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_toggle_hide</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_apply</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_apply_now</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">btn_save_settings</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_save_settings_clicked</span><span class="p">)</span>
+
+        <span class="c1"># Keyboard shortcut for Shift+Enter newline is default in QTextEdit
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+Enter</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_send</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="nf">statusBar</span><span class="p">().</span><span class="nf">showMessage</span><span class="p">(</span><span class="sh">"</span><span class="s">Ready</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_apply_initial_window_size</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">app</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">window</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">width</span><span class="sh">"</span><span class="p">,</span> <span class="mi">1100</span><span class="p">))</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">app</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">window</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">height</span><span class="sh">"</span><span class="p">,</span> <span class="mi">720</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">resize</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_setup_tray</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">ui</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">enable_tray</span><span class="sh">"</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tray</span> <span class="o">=</span> <span class="nc">QSystemTrayIcon</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tray</span><span class="p">.</span><span class="nf">setIcon</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">style</span><span class="p">().</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_ComputerIcon</span><span class="p">)</span> <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">style</span><span class="sh">"</span><span class="p">)</span> <span class="k">else</span> <span class="nc">QIcon</span><span class="p">())</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="nc">QMenu</span><span class="p">()</span>
+        <span class="n">act_show</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="sh">"</span><span class="s">Show</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">act_quit</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="sh">"</span><span class="s">Quit</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">act_show</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_show_from_tray</span><span class="p">)</span>
+        <span class="n">act_quit</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">QApplication</span><span class="p">.</span><span class="nf">instance</span><span class="p">().</span><span class="n">quit</span><span class="p">)</span>
+        <span class="n">menu</span><span class="p">.</span><span class="nf">addAction</span><span class="p">(</span><span class="n">act_show</span><span class="p">)</span>
+        <span class="n">menu</span><span class="p">.</span><span class="nf">addAction</span><span class="p">(</span><span class="n">act_quit</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tray</span><span class="p">.</span><span class="nf">setContextMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tray</span><span class="p">.</span><span class="n">activated</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">reason</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_show_from_tray</span><span class="p">()</span> <span class="k">if</span> <span class="n">reason</span> <span class="o">==</span> <span class="n">QSystemTrayIcon</span><span class="p">.</span><span class="n">Trigger</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tray</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+        <span class="n">QApplication</span><span class="p">.</span><span class="nf">instance</span><span class="p">().</span><span class="nf">setQuitOnLastWindowClosed</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="c1"># -------- Chat list ops -------- #
+</span>
+    <span class="k">def</span> <span class="nf">_load_chat_list</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">chat</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">list_chats</span><span class="p">():</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="nc">QListWidgetItem</span><span class="p">(</span><span class="n">chat</span><span class="p">.</span><span class="n">title</span><span class="p">)</span>
+            <span class="n">item</span><span class="p">.</span><span class="nf">setData</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">UserRole</span><span class="p">,</span> <span class="n">chat</span><span class="p">.</span><span class="n">chat_id</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">addItem</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_new_chat</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">setCurrentRow</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_new_chat</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">chat_id</span> <span class="o">=</span> <span class="n">uuid</span><span class="p">.</span><span class="nf">uuid4</span><span class="p">().</span><span class="nb">hex</span><span class="p">[:</span><span class="mi">12</span><span class="p">]</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_model</span><span class="p">.</span><span class="nf">text</span><span class="p">()</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">.</span><span class="nf">value</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">top_p</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">.</span><span class="nf">value</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span><span class="p">.</span><span class="nf">value</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="n">chat</span> <span class="o">=</span> <span class="nc">Chat</span><span class="p">(</span>
+            <span class="n">chat_id</span><span class="o">=</span><span class="n">chat_id</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="sh">"</span><span class="s">New Chat</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">created_ts</span><span class="o">=</span><span class="nf">now_ts</span><span class="p">(),</span>
+            <span class="n">updated_ts</span><span class="o">=</span><span class="nf">now_ts</span><span class="p">(),</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">],</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[]</span>
+        <span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">save_chat</span><span class="p">(</span><span class="n">chat</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_load_chat_list</span><span class="p">()</span>
+        <span class="c1"># Select new
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">count</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">item</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="nf">data</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">UserRole</span><span class="p">)</span> <span class="o">==</span> <span class="n">chat_id</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">setCurrentRow</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span> <span class="nf">_open_selected_chat</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">currentItem</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">chat_id</span> <span class="o">=</span> <span class="n">item</span><span class="p">.</span><span class="nf">data</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">UserRole</span><span class="p">)</span>
+        <span class="n">chat</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">load_chat</span><span class="p">(</span><span class="n">chat_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">chat</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span> <span class="o">=</span> <span class="n">chat</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_render_chat</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_rename_chat</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">currentItem</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">new_title</span><span class="p">,</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="p">.</span><span class="nf">getText</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">Rename</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Chat title:</span><span class="sh">"</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ok</span> <span class="ow">and</span> <span class="n">new_title</span><span class="p">.</span><span class="nf">strip</span><span class="p">():</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">new_title</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">updated_ts</span> <span class="o">=</span> <span class="nf">now_ts</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">save_chat</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">)</span>
+            <span class="n">item</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_delete_chat</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">currentItem</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">chat_id</span> <span class="o">=</span> <span class="n">item</span><span class="p">.</span><span class="nf">data</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">UserRole</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">QMessageBox</span><span class="p">.</span><span class="nf">question</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">Delete</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Delete this chat?</span><span class="sh">"</span><span class="p">)</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="p">.</span><span class="n">Yes</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">delete_chat</span><span class="p">(</span><span class="n">chat_id</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_load_chat_list</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_export_chat_md</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="p">.</span><span class="nf">getSaveFileName</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">Export Markdown</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">title</span><span class="si">}</span><span class="s">.md</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Markdown (*.md)</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">out</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">export_chat_markdown</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">,</span> <span class="nc">Path</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">statusBar</span><span class="p">().</span><span class="nf">showMessage</span><span class="p">(</span><span class="sh">"</span><span class="s">Exported</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># -------- Rendering -------- #
+</span>
+    <span class="k">def</span> <span class="nf">_render_chat</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># Refresh param controls from chat params
+</span>        <span class="n">p</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">params</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">edt_model</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">.</span><span class="nf">setValue</span><span class="p">(</span><span class="nf">float</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">.</span><span class="nf">value</span><span class="p">())))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">.</span><span class="nf">setValue</span><span class="p">(</span><span class="nf">float</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">top_p</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">.</span><span class="nf">value</span><span class="p">())))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span><span class="p">.</span><span class="nf">setValue</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span><span class="p">.</span><span class="nf">value</span><span class="p">())))</span>
+
+        <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span><span class="nf">dict</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="n">m</span><span class="p">.</span><span class="n">role</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">m</span><span class="p">.</span><span class="n">content</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="n">m</span><span class="p">.</span><span class="n">ts</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">messages</span><span class="p">]</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="nf">messages_to_html</span><span class="p">(</span><span class="n">msgs</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">markdown_css</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setHtml</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">moveCursor</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">textCursor</span><span class="p">().</span><span class="n">End</span><span class="p">)</span>
+
+    <span class="c1"># -------- Sending -------- #
+</span>
+    <span class="k">def</span> <span class="nf">_send</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nb">input</span><span class="p">.</span><span class="nf">toPlainText</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># Append user message
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Message</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="nf">now_ts</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">title</span> <span class="o">==</span> <span class="sh">"</span><span class="s">New Chat</span><span class="sh">"</span> <span class="ow">and</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">title</span> <span class="o">=</span> <span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="mi">48</span><span class="p">]</span> <span class="o">+</span> <span class="sh">"</span><span class="s">…</span><span class="sh">"</span><span class="p">)</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">48</span> <span class="k">else</span> <span class="n">text</span>
+            <span class="c1"># Update list title
+</span>            <span class="n">item</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">chat_list</span><span class="p">.</span><span class="nf">currentItem</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">item</span><span class="p">:</span>
+                <span class="n">item</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">title</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">updated_ts</span> <span class="o">=</span> <span class="nf">now_ts</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">save_chat</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">input</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_render_chat</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">statusBar</span><span class="p">().</span><span class="nf">showMessage</span><span class="p">(</span><span class="sh">"</span><span class="s">Sending…</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="c1"># Build effective runtime config (API base/key may have changed)
+</span>        <span class="n">runtime_cfg</span> <span class="o">=</span> <span class="nf">dict</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="n">runtime_cfg</span><span class="p">.</span><span class="nf">setdefault</span><span class="p">(</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">runtime_cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">api_base</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_api_base</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="n">runtime_cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">api_base</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">runtime_cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_api_key</span><span class="p">.</span><span class="nf">text</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="nf">update_config</span><span class="p">(</span><span class="n">runtime_cfg</span><span class="p">)</span>
+
+        <span class="c1"># Assemble payload
+</span>        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_model</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">.</span><span class="nf">value</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">top_p</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">.</span><span class="nf">value</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span><span class="p">.</span><span class="nf">value</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="n">messages_payload</span> <span class="o">=</span> <span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="n">m</span><span class="p">.</span><span class="n">role</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">m</span><span class="p">.</span><span class="n">content</span><span class="p">}</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">messages</span><span class="p">]</span>
+
+        <span class="n">worker</span> <span class="o">=</span> <span class="nc">LLMWorker</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">client</span><span class="p">,</span> <span class="n">messages_payload</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">worker</span><span class="p">.</span><span class="n">signals</span><span class="p">.</span><span class="n">success</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_on_llm_success</span><span class="p">)</span>
+        <span class="n">worker</span><span class="p">.</span><span class="n">signals</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_on_llm_error</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">thread_pool</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_llm_success</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">Message</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">reply</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="nf">now_ts</span><span class="p">()))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">updated_ts</span> <span class="o">=</span> <span class="nf">now_ts</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">save_chat</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_render_chat</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">statusBar</span><span class="p">().</span><span class="nf">showMessage</span><span class="p">(</span><span class="sh">"</span><span class="s">Reply received</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_llm_error</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">err</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">QMessageBox</span><span class="p">.</span><span class="nf">critical</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">LLM Error</span><span class="sh">"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">statusBar</span><span class="p">().</span><span class="nf">showMessage</span><span class="p">(</span><span class="sh">"</span><span class="s">Error</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># -------- Settings -------- #
+</span>
+    <span class="k">def</span> <span class="nf">_apply_now</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="c1"># Update current chat params without persisting as user defaults
+</span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">params</span><span class="p">.</span><span class="nf">update</span><span class="p">({</span>
+            <span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_model</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">.</span><span class="nf">value</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">top_p</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">.</span><span class="nf">value</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span><span class="p">.</span><span class="nf">value</span><span class="p">(),</span>
+        <span class="p">})</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">.</span><span class="n">params</span><span class="p">[</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">storage</span><span class="p">.</span><span class="nf">save_chat</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_chat</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">statusBar</span><span class="p">().</span><span class="nf">showMessage</span><span class="p">(</span><span class="sh">"</span><span class="s">Applied to current chat</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_save_settings_clicked</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">patch</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">llm</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">api_base</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_api_base</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">(),</span>
+                <span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_api_key</span><span class="p">.</span><span class="nf">text</span><span class="p">(),</span>
+                <span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">edt_model</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">(),</span>
+                <span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">:</span> <span class="nf">float</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">spin_temp</span><span class="p">.</span><span class="nf">value</span><span class="p">()),</span>
+                <span class="sh">"</span><span class="s">top_p</span><span class="sh">"</span><span class="p">:</span> <span class="nf">float</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">spin_top_p</span><span class="p">.</span><span class="nf">value</span><span class="p">()),</span>
+                <span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">:</span> <span class="nf">int</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">spin_max_toks</span><span class="p">.</span><span class="nf">value</span><span class="p">()),</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg_mgr</span><span class="p">.</span><span class="nf">save_user_overrides</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg_mgr</span><span class="p">.</span><span class="nf">load</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="nf">update_config</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">statusBar</span><span class="p">().</span><span class="nf">showMessage</span><span class="p">(</span><span class="sh">"</span><span class="s">Saved to ~/.config/llmchat/config.yaml</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># -------- Tray / Hide -------- #
+</span>
+    <span class="k">def</span> <span class="nf">_toggle_hide</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nf">isVisible</span><span class="p">():</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">hide</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">showNormal</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">raise_</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">activateWindow</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_show_from_tray</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">showNormal</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">raise_</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">activateWindow</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">QCloseEvent</span><span class="p">):</span>
+        <span class="c1"># If tray enabled, hide on close; Quit via tray menu.
+</span>        <span class="k">if</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">tray</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">event</span><span class="p">.</span><span class="nf">ignore</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">hide</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tray</span><span class="p">.</span><span class="nf">showMessage</span><span class="p">(</span><span class="sh">"</span><span class="s">LLM Chat</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Still running in the tray. Quit from tray menu.</span><span class="sh">"</span><span class="p">,</span> <span class="n">QSystemTrayIcon</span><span class="p">.</span><span class="n">Information</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nf">super</span><span class="p">().</span><span class="nf">closeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+<span class="c1"># ---------------- Entry ---------------- #
+</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">app_dir</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">__file__</span><span class="p">).</span><span class="nf">resolve</span><span class="p">().</span><span class="n">parent</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="nc">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">app</span><span class="p">.</span><span class="nf">setApplicationDisplayName</span><span class="p">(</span><span class="n">APP_NAME</span><span class="p">)</span>
+    <span class="n">win</span> <span class="o">=</span> <span class="nc">MainWindow</span><span class="p">(</span><span class="n">app_dir</span><span class="p">)</span>
+    <span class="n">win</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="n">app</span><span class="p">.</span><span class="nf">exec</span><span class="p">())</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="readmemd"><code class="language-plaintext highlighter-rouge">README.md</code></h2>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># LLMChat (PySide6)</span>
+
+A simple, fast LLM Chat client for Linux. OpenAI-compatible endpoint, Markdown rendering, multi-line input, chat log management, per-user settings with admin defaults, and handy shortcuts.
+
+<span class="gu">## Quick start (shared disk)</span>
+<span class="p">
+1.</span> Admin places the <span class="sb">`llmchat/`</span> folder on a shared disk accessible to users.
+<span class="p">2.</span> (Optional) Admin edits <span class="sb">`llmchat/config/defaults.yaml`</span> or creates <span class="sb">`/etc/llmchat/config.yaml`</span> to set initial defaults.
+<span class="p">3.</span> User runs:
+</code></pre></div></div>
+<p>cd /path/to/shared/llmchat
+   ./run.sh</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  4. First run creates a venv and installs dependencies.
+
+## Configuration
+
+**Admin defaults (read-only for users):**
+
+  * `./config/defaults.yaml` (in app dir) or `/etc/llmchat/config.yaml`
+
+  * Environment override: set `LLMCHAT_CONFIG_DIR=/shared/path/conf` (must contain `config.yaml`).
+
+**Per-user overrides (editable):**
+
+  * `~/.config/llmchat/config.yaml` (written when you click **Save as My Defaults**).
+
+Settings precedence: _admin defaults → user overrides_. Only user file is written.
+
+## Chat storage
+
+  * Files under `~/.local/share/llmchat/chats/*.json`.
+
+  * Export current chat as Markdown via **Export Markdown…**.
+
+## Shortcuts
+
+  * **Ctrl+Enter** : Send message
+
+  * **Shift+Enter** : New line
+
+  * **Ctrl+N** : New chat
+
+  * **Delete** : Delete chat
+
+  * **Ctrl+S** : Export chat (Markdown)
+
+  * **Ctrl+L** : Focus input
+
+  * **Ctrl+,** : Save settings (write user config)
+
+  * **Ctrl+H** : Hide/Show window (use tray to restore if hidden)
+
+## Endpoint compatibility
+
+Uses OpenAI-compatible `/v1/chat/completions`:
+
+  * Tested with **Ollama** (`ollama serve --api`) as `api_base: http://localhost:11434/v1`
+
+  * Also works with OpenAI-compatible gateways (set base and API key in sidebar).
+
+## Uninstall / Cleanup
+
+  * Remove venv: `rm -rf .venv`
+
+  * Remove user data: `rm -rf ~/.local/share/llmchat ~/.config/llmchat`
+</code></pre></div></div>
+<p>markdown</p>
+
+<hr />
+
+<h1 id="validation-meets-requirements">Validation (meets requirements)</h1>
+
+<ul>
+  <li><strong>Custom LLM endpoint</strong>: Sidebar fields for <code class="language-plaintext highlighter-rouge">API Base</code> and <code class="language-plaintext highlighter-rouge">API Key</code>; saved per-user; applied immediately.</li>
+  <li><strong>Multi-line input</strong>: <code class="language-plaintext highlighter-rouge">QTextEdit</code>, Shift+Enter newline, Ctrl+Enter send.</li>
+  <li><strong>Chat log management</strong>: New/rename/delete chats; auto-save per message; export to Markdown; persistent JSON in <code class="language-plaintext highlighter-rouge">~/.local/share/llmchat/chats/</code>.</li>
+  <li><strong>Change model parameters</strong>: Sidebar controls for model, temperature, top-p, max tokens; <strong>Apply Now</strong> for current chat; <strong>Save as My Defaults</strong> persists to <code class="language-plaintext highlighter-rouge">~/.config/llmchat/config.yaml</code>.</li>
+  <li><strong>Shortcut keys</strong>: Implemented (send/new/delete/export/focus/hide-show/settings).</li>
+  <li><strong>Render Markdown</strong>: <code class="language-plaintext highlighter-rouge">markdown</code> → HTML in <code class="language-plaintext highlighter-rouge">QTextBrowser</code>, with code fence and table support + CSS.</li>
+  <li><strong>Deployment on Linux with shared disk</strong>: No installer; <code class="language-plaintext highlighter-rouge">install.sh</code> bootstraps venv; <code class="language-plaintext highlighter-rouge">run.sh</code> launches; admin drops folder on shared disk and optionally seeds <code class="language-plaintext highlighter-rouge">/etc/llmchat/config.yaml</code> or edits <code class="language-plaintext highlighter-rouge">config/defaults.yaml</code>.</li>
+  <li><strong>Admin defaults + per-user overrides</strong>: Deep-merged config; only user file is written back.</li>
+  <li><strong>Clear code &amp; messages</strong>: Readable names, comments, straightforward control flow; concise labels in UI.</li>
+</ul>
+
+<h2 id="manual-smoke-test-linux">Manual smoke test (Linux)</h2>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">./run.sh</code> → window opens.</li>
+  <li>In sidebar, set <code class="language-plaintext highlighter-rouge">API Base</code> to <code class="language-plaintext highlighter-rouge">http://localhost:11434/v1</code> (if using Ollama) and <code class="language-plaintext highlighter-rouge">Model</code> (e.g., <code class="language-plaintext highlighter-rouge">llama3.1</code>). Click <strong>Apply Now</strong>.</li>
+  <li>Type multi-line prompt; <code class="language-plaintext highlighter-rouge">Ctrl+Enter</code> → assistant reply appears; Markdown renders.</li>
+  <li><strong>New</strong> → new conversation created; rename/delete work; export creates <code class="language-plaintext highlighter-rouge">.md</code>.</li>
+  <li><strong>Ctrl+H</strong> hides window; tray icon can restore; <strong>Ctrl+H</strong> toggles.</li>
+  <li><strong>Save as My Defaults</strong> writes <code class="language-plaintext highlighter-rouge">~/.config/llmchat/config.yaml</code>. Relaunch picks it up.</li>
+</ol>
+
+<h2 id="known-limitations--notes">Known limitations / notes</h2>
+
+<ul>
+  <li><strong>Global hotkey</strong> (system-wide hide/show) is <em>not</em> implemented to avoid extra dependencies; current <code class="language-plaintext highlighter-rouge">Ctrl+H</code> works when focused, and tray icon handles restoration. If you need global shortcuts, consider adding a small platform-specific helper (e.g. <code class="language-plaintext highlighter-rouge">pynput</code>) or an X11 DBus service.</li>
+  <li><strong>Streaming</strong> responses are not implemented to keep the core simple; <code class="language-plaintext highlighter-rouge">requests</code> is used synchronously in a worker thread. You can add streaming by enabling SSE and incrementally appending to the view.</li>
+  <li><strong>Syntax highlighting</strong> for code blocks uses basic styling only; integrate <code class="language-plaintext highlighter-rouge">pygments</code> + HTML CSS if you want richer highlighting.</li>
+</ul>
+
+<hr />
+
+<p>If you want this as a single-file app instead (one Python file), I can condense it while keeping all features.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;p class="chat--user" markdown="1"&gt;
+
+1\. Implement markdown rendering 2\. multi-endpoint support
+
+&lt;/p&gt;
+
+Got it — I’ll add (1) real Markdown rendering and (2) multi-endpoint support. Below is a **step-by-step** change plan followed by **drop-in file updates**.
+
+Step-by-step (what changes and why)
+
+  1. Markdown rendering
+
+  * Use the `markdown` library with `fenced_code`, `tables`, `sane_lists`, `codehilite`.
+
+  * Render once per page with clean HTML structure (`&lt;html&gt;&lt;head&gt;…&lt;/head&gt;&lt;body&gt;…`), avoiding repeated `&lt;style&gt;` tags.
+
+  * Keep styling driven by the existing `ui.markdown_css` in config.
+
+  2. Multi-endpoint support
+
+  * Extend config: `llm.endpoints[]` (each with `name`, `api_base`, `api_key`, `verify_tls`) and `llm.default_endpoint`.
+
+  * UI: add an “Endpoint” combo box + a “Manage…” button.
+
+  * Per-chat: store the chosen endpoint name in `chat.params['endpoint']`.
+
+  * Save flow: **Save as My Defaults** updates your `~/.config/llmchat/config.yaml` with the edited endpoint and default selection.
+
+  * Manage flow: “Manage Endpoints…” opens a small YAML editor dialog (simple and admin/user-friendly).
+
+* * *
+
+Replace the following files (copy/paste):
+
+`requirements.txt` (add Pygments for nicer code blocks)
+</code></pre></div></div>
+<p>txt</p>
+
+<p>PySide6&gt;=6.6
+requests&gt;=2.31
+PyYAML&gt;=6.0.1
+markdown&gt;=3.5
+Pygments&gt;=2.17</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`config/defaults.yaml` (adds multi-endpoint defaults; backward compatible)
+</code></pre></div></div>
+<p>yaml</p>
+
+<p>app:
+  data_dir: "~/.local/share/llmchat"
+  chat_dir_name: "chats"
+  window:
+    width: 1100
+    height: 720</p>
+
+<p>llm:
+  # New: multi-endpoint list and default
+  endpoints:
+    - name: "Local Ollama"
+      api_base: "http://localhost:11434/v1"
+      api_key: ""
+      verify_tls: true
+    - name: "OpenAI"
+      api_base: "https://api.openai.com"
+      api_key: ""
+      verify_tls: true
+  default_endpoint: "Local Ollama"</p>
+
+<p># Existing per-model params (still used)
+  model: "llama3.1"
+  temperature: 0.7
+  top_p: 0.95
+  max_tokens: 512
+  timeout_sec: 120
+  verify_tls: true  # kept for backward compat</p>
+
+<p>ui:
+  font_family: ""
+  font_size: 11
+  enable_tray: true
+  markdown_css: |
+    body { font-family: sans-serif; font-size: 13px; }
+    code, pre { font-family: "DejaVu Sans Mono", monospace; }
+    pre { background: #f5f5f5; padding: 8px; border-radius: 6px; overflow: auto; }
+    code { background: #f1f1f1; padding: 2px 4px; border-radius: 4px; }
+    .msg-user { background: #e8f0fe; padding: 8px 10px; border-radius: 10px; margin: 10px 0; }
+    .msg-assistant { background: #f7f7f7; padding: 8px 10px; border-radius: 10px; margin: 10px 0; }</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`ui_helpers.py` (clean one-pass Markdown → HTML)
+</code></pre></div></div>
+<p>python</p>
+
+<p>import time
+from typing import List
+from markdown import markdown</p>
+
+<p>def now_ts() -&gt; float:
+    return time.time()</p>
+
+<p>def md_to_html(md_text: str) -&gt; str:
+    """
+    Convert Markdown to HTML fragment (no <style> or &lt;html&gt; wrappers).
+    """
+    return markdown(
+        md_text,
+        extensions=[
+            "fenced_code",
+            "tables",
+            "codehilite",  # uses Pygments if installed
+            "sane_lists",
+        ],
+    )</style></p>
+
+<p>def messages_to_html(messages: List[dict], css: str) -&gt; str:
+    """
+    Render the whole conversation into a single HTML document.
+    """
+    parts = [
+        "&lt;html&gt;&lt;head&gt;<meta charset="utf-8" />",
+        f"<style>{css}</style>",
+        "&lt;/head&gt;&lt;body&gt;",
+    ]
+    for m in messages:
+        klass = "msg-user" if m["role"] == "user" else "msg-assistant"
+        parts.append(f'&lt;div class="{klass}"&gt;')
+        parts.append(md_to_html(m["content"]))
+        parts.append("&lt;/div&gt;")
+    parts.append("&lt;/body&gt;&lt;/html&gt;")
+    return "\n".join(parts)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`main.py` (adds endpoint combo, manage dialog, fixes small imports, wires per-chat endpoint)
+</code></pre></div></div>
+<p>python</p>
+
+<p>import sys
+import uuid
+import traceback
+from pathlib import Path</p>
+
+<p>import yaml  # NEW</p>
+
+<p>from PySide6.QtCore import Qt, QThreadPool, QRunnable, Signal, QObject, QSize
+from PySide6.QtGui import QAction, QIcon, QKeySequence, QCloseEvent
+from PySide6.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTextEdit,
+    QPushButton, QListWidget, QListWidgetItem, QLabel, QFileDialog, QSplitter,
+    QFormLayout, QLineEdit, QSpinBox, QDoubleSpinBox, QDockWidget,
+    QMessageBox, QTextBrowser, QToolBar, QSystemTrayIcon, QMenu,
+    QInputDialog, QStyle, QPlainTextEdit, QDialog, QDialogButtonBox, QComboBox
+)</p>
+
+<p>from config_manager import ConfigManager
+from storage import ChatStorage, Chat, Message
+from llm_client import LLMClient
+from ui_helpers import now_ts, messages_to_html</p>
+
+<p>APP_NAME = "LLMChat"</p>
+
+<h1 id="--worker-infra--">—————- Worker infra —————-</h1>
+
+<p>class WorkerSignals(QObject):
+    success = Signal(str)
+    error = Signal(str)</p>
+
+<p>class LLMWorker(QRunnable):
+    def <strong>init</strong>(self, client: LLMClient, messages_payload, params):
+        super().<strong>init</strong>()
+        self.client = client
+        self.messages_payload = messages_payload
+        self.params = params
+        self.signals = WorkerSignals()</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def run(self):
+    try:
+        reply = self.client.chat_completion(self.messages_payload, self.params)
+        self.signals.success.emit(reply)
+    except Exception as e:
+        tb = traceback.format_exc()
+        self.signals.error.emit(f"{e}\n{tb}")
+</code></pre></div></div>
+
+<h1 id="--endpoints-dialog--">—————- Endpoints dialog —————-</h1>
+
+<p>class EndpointsDialog(QDialog):
+    """
+    Simple YAML editor for endpoints list.
+    """
+    def <strong>init</strong>(self, parent, endpoints: list):
+        super().<strong>init</strong>(parent)
+        self.setWindowTitle("Manage Endpoints")
+        self.resize(600, 420)
+        layout = QVBoxLayout(self)
+        self.edit = QPlainTextEdit(self)
+        self.edit.setPlainText(yaml.safe_dump(endpoints or [], sort_keys=False))
+        layout.addWidget(QLabel("Edit YAML list of endpoints (name, api_base, api_key, verify_tls):"))
+        layout.addWidget(self.edit)
+        btns = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel, parent=self)
+        btns.accepted.connect(self.accept)
+        btns.rejected.connect(self.reject)
+        layout.addWidget(btns)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def get_endpoints(self):
+    try:
+        data = yaml.safe_load(self.edit.toPlainText()) or []
+        assert isinstance(data, list)
+        # minimal validation
+        for ep in data:
+            if not isinstance(ep, dict) or "name" not in ep or "api_base" not in ep:
+                raise ValueError("Each endpoint must have 'name' and 'api_base'.")
+        return data
+    except Exception as e:
+        QMessageBox.critical(self, "Invalid YAML", str(e))
+        return None
+</code></pre></div></div>
+
+<h1 id="--main-window--">—————- Main Window —————-</h1>
+
+<p>class MainWindow(QMainWindow):
+    def <strong>init</strong>(self, app_dir: Path):
+        super().<strong>init</strong>()
+        self.setWindowTitle("LLM Chat Client")
+        self.app_dir = app_dir</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    # Config
+    self.cfg_mgr = ConfigManager(app_dir)
+    self.cfg = self.cfg_mgr.load()
+
+    # Storage
+    data_dir = Path(self.cfg.get("app", {}).get("data_dir", "~/.local/share/llmchat")).expanduser()
+    chat_dir_name = self.cfg.get("app", {}).get("chat_dir_name", "chats")
+    self.storage = ChatStorage(data_dir, chat_dir_name)
+
+    # LLM client
+    self.client = LLMClient(self.cfg)
+
+    # State
+    self.thread_pool = QThreadPool.globalInstance()
+    self.current_chat: Chat | None = None
+    self.markdown_css = self.cfg.get("ui", {}).get("markdown_css", "")
+    self.endpoints_by_name = {}  # name -&gt; dict
+
+    self._build_ui()
+    self._refresh_endpoints()  # populate combo before chats
+    self._load_chat_list()
+    self._apply_initial_window_size()
+    self._setup_tray()
+
+# -------- UI construction -------- #
+
+def _build_ui(self):
+    splitter = QSplitter()
+    splitter.setChildrenCollapsible(False)
+
+    # Left: chat list + controls
+    left = QWidget()
+    left_layout = QVBoxLayout(left)
+    self.chat_list = QListWidget()
+    left_layout.addWidget(QLabel("Conversations"))
+    left_layout.addWidget(self.chat_list)
+
+    btn_row = QHBoxLayout()
+    self.btn_new = QPushButton("New")
+    self.btn_rename = QPushButton("Rename")
+    self.btn_delete = QPushButton("Delete")
+    btn_row.addWidget(self.btn_new)
+    btn_row.addWidget(self.btn_rename)
+    btn_row.addWidget(self.btn_delete)
+    left_layout.addLayout(btn_row)
+
+    # Right: conversation + input
+    right = QWidget()
+    right_layout = QVBoxLayout(right)
+
+    self.view = QTextBrowser()
+    self.view.setOpenExternalLinks(True)
+    right_layout.addWidget(self.view, 1)
+
+    input_row = QHBoxLayout()
+    self.input = QTextEdit()
+    self.input.setPlaceholderText("Type your message… (Shift+Enter for newline, Ctrl+Enter to send)")
+    self.input.setAcceptRichText(False)
+    input_row.addWidget(self.input, 1)
+    self.btn_send = QPushButton("Send")
+    self.btn_send.setDefault(True)
+    input_row.addWidget(self.btn_send)
+    right_layout.addLayout(input_row)
+
+    splitter.addWidget(left)
+    splitter.addWidget(right)
+    splitter.setStretchFactor(1, 3)
+    self.setCentralWidget(splitter)
+
+    # Dock: model params, endpoint picker
+    dock = QDockWidget("Model &amp; Endpoint", self)
+    dock.setAllowedAreas(Qt.RightDockWidgetArea | Qt.LeftDockWidgetArea)
+    params_widget = QWidget()
+    form = QFormLayout(params_widget)
+
+    # NEW: endpoint row (combo + manage)
+    ep_row = QHBoxLayout()
+    self.cmb_endpoint = QComboBox()
+    self.btn_manage_ep = QPushButton("Manage…")
+    ep_row.addWidget(self.cmb_endpoint, 1)
+    ep_row.addWidget(self.btn_manage_ep)
+    form.addRow(QLabel("Endpoint"), ep_row)
+
+    self.edt_api_base = QLineEdit(self.cfg.get("llm", {}).get("api_base", ""))
+    self.edt_api_key = QLineEdit(self.cfg.get("llm", {}).get("api_key", ""))
+    self.edt_api_key.setEchoMode(QLineEdit.Password)
+    self.edt_model = QLineEdit(self.cfg.get("llm", {}).get("model", ""))
+
+    self.spin_temp = QDoubleSpinBox()
+    self.spin_temp.setRange(0.0, 2.0)
+    self.spin_temp.setSingleStep(0.1)
+    self.spin_temp.setValue(float(self.cfg.get("llm", {}).get("temperature", 0.7)))
+
+    self.spin_top_p = QDoubleSpinBox()
+    self.spin_top_p.setRange(0.0, 1.0)
+    self.spin_top_p.setSingleStep(0.05)
+    self.spin_top_p.setValue(float(self.cfg.get("llm", {}).get("top_p", 0.95)))
+
+    self.spin_max_toks = QSpinBox()
+    self.spin_max_toks.setRange(16, 32768)
+    self.spin_max_toks.setValue(int(self.cfg.get("llm", {}).get("max_tokens", 512)))
+
+    form.addRow(QLabel("API Base"), self.edt_api_base)
+    form.addRow(QLabel("API Key"), self.edt_api_key)
+    form.addRow(QLabel("Model"), self.edt_model)
+    form.addRow(QLabel("Temperature"), self.spin_temp)
+    form.addRow(QLabel("Top-p"), self.spin_top_p)
+    form.addRow(QLabel("Max tokens"), self.spin_max_toks)
+
+    btns = QHBoxLayout()
+    self.btn_save_settings = QPushButton("Save as My Defaults")
+    self.btn_apply = QPushButton("Apply Now")
+    btns.addWidget(self.btn_apply)
+    btns.addWidget(self.btn_save_settings)
+    form.addRow(btns)
+
+    params_widget.setLayout(form)
+    dock.setWidget(params_widget)
+    self.addDockWidget(Qt.RightDockWidgetArea, dock)
+
+    # Toolbar &amp; actions
+    tb = QToolBar("Main")
+    tb.setIconSize(QSize(16, 16))
+    self.addToolBar(tb)
+
+    act_new = QAction("New Chat", self)
+    act_new.setShortcut(QKeySequence("Ctrl+N"))
+    act_send = QAction("Send", self)
+    act_send.setShortcut(QKeySequence("Ctrl+Return"))
+    act_export = QAction("Export Markdown…", self)
+    act_export.setShortcut(QKeySequence("Ctrl+S"))
+    act_delete = QAction("Delete Chat", self)
+    act_delete.setShortcut(QKeySequence(Qt.Key_Delete))
+    act_focus = QAction("Focus Input", self)
+    act_focus.setShortcut(QKeySequence("Ctrl+L"))
+    act_settings = QAction("Save Settings", self)
+    act_settings.setShortcut(QKeySequence("Ctrl+,"))
+    act_hide = QAction("Hide/Show", self)
+    act_hide.setShortcut(QKeySequence("Ctrl+H"))
+
+    for a in (act_new, act_send, act_export, act_delete, act_focus, act_settings, act_hide):
+        tb.addAction(a)
+
+    # Connect signals
+    self.btn_new.clicked.connect(self._new_chat)
+    self.btn_rename.clicked.connect(self._rename_chat)
+    self.btn_delete.clicked.connect(self._delete_chat)
+    self.chat_list.itemDoubleClicked.connect(lambda _: self._open_selected_chat())
+    self.chat_list.itemSelectionChanged.connect(self._open_selected_chat)
+
+    self.btn_send.clicked.connect(self._send)
+    act_send.triggered.connect(self._send)
+    act_new.triggered.connect(self._new_chat)
+    act_export.triggered.connect(self._export_chat_md)
+    act_delete.triggered.connect(self._delete_chat)
+    act_focus.triggered.connect(lambda: self.input.setFocus())
+    act_settings.triggered.connect(self._save_settings_clicked)
+    act_hide.triggered.connect(self._toggle_hide)
+
+    self.btn_apply.clicked.connect(self._apply_now)
+    self.btn_save_settings.clicked.connect(self._save_settings_clicked)
+
+    # NEW: endpoint handlers
+    self.cmb_endpoint.currentTextChanged.connect(self._on_endpoint_changed)
+    self.btn_manage_ep.clicked.connect(self._manage_endpoints)
+
+    self.statusBar().showMessage("Ready")
+
+def _apply_initial_window_size(self):
+    w = int(self.cfg.get("app", {}).get("window", {}).get("width", 1100))
+    h = int(self.cfg.get("app", {}).get("window", {}).get("height", 720))
+    self.resize(w, h)
+
+def _setup_tray(self):
+    if not self.cfg.get("ui", {}).get("enable_tray", True):
+        return
+    self.tray = QSystemTrayIcon(self)
+    self.tray.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
+    menu = QMenu()
+    act_show = QAction("Show", self)
+    act_quit = QAction("Quit", self)
+    act_show.triggered.connect(self._show_from_tray)
+    act_quit.triggered.connect(QApplication.instance().quit)
+    menu.addAction(act_show)
+    menu.addAction(act_quit)
+    self.tray.setContextMenu(menu)
+    self.tray.activated.connect(lambda reason: self._show_from_tray() if reason == QSystemTrayIcon.Trigger else None)
+    self.tray.show()
+    QApplication.instance().setQuitOnLastWindowClosed(False)
+
+# -------- Endpoints helpers -------- #
+
+def _refresh_endpoints(self):
+    eps = self.cfg.get("llm", {}).get("endpoints", []) or []
+    self.endpoints_by_name = {ep["name"]: ep for ep in eps if isinstance(ep, dict) and "name" in ep and "api_base" in ep}
+    cur_name = self.cmb_endpoint.currentText() if hasattr(self, "cmb_endpoint") else None
+
+    self.cmb_endpoint.blockSignals(True)
+    self.cmb_endpoint.clear()
+    for name in self.endpoints_by_name.keys():
+        self.cmb_endpoint.addItem(name)
+    self.cmb_endpoint.blockSignals(False)
+
+    default_name = self.cfg.get("llm", {}).get("default_endpoint")
+    to_select = cur_name or default_name or (next(iter(self.endpoints_by_name), ""))
+    if to_select:
+        self.cmb_endpoint.setCurrentText(to_select)
+        self._on_endpoint_changed(to_select)
+
+def _on_endpoint_changed(self, name: str):
+    ep = self.endpoints_by_name.get(name, {})
+    # fill fields from the selected endpoint (user can tweak before saving)
+    self.edt_api_base.setText(ep.get("api_base", self.edt_api_base.text()))
+    self.edt_api_key.setText(ep.get("api_key", self.edt_api_key.text()))
+
+def _manage_endpoints(self):
+    dialog = EndpointsDialog(self, list(self.endpoints_by_name.values()))
+    if dialog.exec() == QDialog.Accepted:
+        new_eps = dialog.get_endpoints()
+        if new_eps is None:
+            return
+        # Save to user overrides
+        self.cfg_mgr.save_user_overrides({"llm": {"endpoints": new_eps}})
+        self.cfg = self.cfg_mgr.load()
+        self._refresh_endpoints()
+        self.statusBar().showMessage("Endpoints saved")
+
+# -------- Chat list ops -------- #
+
+def _load_chat_list(self):
+    self.chat_list.clear()
+    for chat in self.storage.list_chats():
+        item = QListWidgetItem(chat.title)
+        item.setData(Qt.UserRole, chat.chat_id)
+        self.chat_list.addItem(item)
+    if self.chat_list.count() == 0:
+        self._new_chat()
+    else:
+        self.chat_list.setCurrentRow(0)
+
+def _new_chat(self):
+    chat_id = uuid.uuid4().hex[:12]
+    params = {
+        "endpoint": self.cmb_endpoint.currentText() or self.cfg.get("llm", {}).get("default_endpoint", ""),
+        "model": self.edt_model.text() or self.cfg.get("llm", {}).get("model", ""),
+        "temperature": self.spin_temp.value(),
+        "top_p": self.spin_top_p.value(),
+        "max_tokens": self.spin_max_toks.value(),
+    }
+    chat = Chat(
+        chat_id=chat_id,
+        title="New Chat",
+        created_ts=now_ts(),
+        updated_ts=now_ts(),
+        model=params["model"],
+        params=params,
+        messages=[]
+    )
+    self.storage.save_chat(chat)
+    self._load_chat_list()
+    # Select new
+    for i in range(self.chat_list.count()):
+        if self.chat_list.item(i).data(Qt.UserRole) == chat_id:
+            self.chat_list.setCurrentRow(i)
+            break
+
+def _open_selected_chat(self):
+    item = self.chat_list.currentItem()
+    if not item:
+        return
+    chat_id = item.data(Qt.UserRole)
+    chat = self.storage.load_chat(chat_id)
+    if not chat:
+        return
+    self.current_chat = chat
+
+    # apply chat params to UI, including endpoint
+    ep_name = self.current_chat.params.get("endpoint") or self.cfg.get("llm", {}).get("default_endpoint", "")
+    if ep_name and self.cmb_endpoint.findText(ep_name) != -1:
+        self.cmb_endpoint.setCurrentText(ep_name)
+    self._render_chat()
+
+def _rename_chat(self):
+    item = self.chat_list.currentItem()
+    if not item or not self.current_chat:
+        return
+    new_title, ok = QInputDialog.getText(self, "Rename", "Chat title:", text=self.current_chat.title)
+    if ok and new_title.strip():
+        self.current_chat.title = new_title.strip()
+        self.current_chat.updated_ts = now_ts()
+        self.storage.save_chat(self.current_chat)
+        item.setText(self.current_chat.title)
+
+def _delete_chat(self):
+    item = self.chat_list.currentItem()
+    if not item:
+        return
+    chat_id = item.data(Qt.UserRole)
+    if QMessageBox.question(self, "Delete", "Delete this chat?") == QMessageBox.Yes:
+        self.storage.delete_chat(chat_id)
+        self._load_chat_list()
+
+def _export_chat_md(self):
+    if not self.current_chat:
+        return
+    out, _ = QFileDialog.getSaveFileName(self, "Export Markdown", f"{self.current_chat.title}.md", "Markdown (*.md)")
+    if not out:
+        return
+    self.storage.export_chat_markdown(self.current_chat, Path(out))
+    self.statusBar().showMessage("Exported")
+
+# -------- Rendering -------- #
+
+def _render_chat(self):
+    if not self.current_chat:
+        return
+    # Refresh param controls from chat params
+    p = self.current_chat.params
+    self.edt_model.setText(str(p.get("model", "")))
+    self.spin_temp.setValue(float(p.get("temperature", self.spin_temp.value())))
+    self.spin_top_p.setValue(float(p.get("top_p", self.spin_top_p.value())))
+    self.spin_max_toks.setValue(int(p.get("max_tokens", self.spin_max_toks.value())))
+
+    msgs = [dict(role=m.role, content=m.content, ts=m.ts) for m in self.current_chat.messages]
+    html = messages_to_html(msgs, self.markdown_css)
+    self.view.setHtml(html)
+    self.view.moveCursor(self.view.textCursor().End)
+
+# -------- Sending -------- #
+
+def _send(self):
+    text = self.input.toPlainText().strip()
+    if not text or not self.current_chat:
+        return
+    # Append user message
+    self.current_chat.messages.append(Message(role="user", content=text, ts=now_ts()))
+    if self.current_chat.title == "New Chat" and text:
+        self.current_chat.title = (text[:48] + "…") if len(text) &gt; 48 else text
+        item = self.chat_list.currentItem()
+        if item:
+            item.setText(self.current_chat.title)
+
+    # Persist chosen endpoint in chat
+    self.current_chat.params["endpoint"] = self.cmb_endpoint.currentText()
+    self.current_chat.updated_ts = now_ts()
+    self.storage.save_chat(self.current_chat)
+    self.input.clear()
+    self._render_chat()
+    self.statusBar().showMessage("Sending…")
+
+    # Build effective runtime config from selected endpoint + editable fields
+    runtime_cfg = dict(self.cfg)
+    runtime_cfg.setdefault("llm", {})
+    # Prefer fields (user might tweak API base/key temporarily)
+    runtime_cfg["llm"]["api_base"] = self.edt_api_base.text().strip() or runtime_cfg["llm"].get("api_base", "")
+    runtime_cfg["llm"]["api_key"] = self.edt_api_key.text()
+
+    self.client.update_config(runtime_cfg)
+
+    # Assemble payload
+    params = {
+        "model": self.edt_model.text().strip(),
+        "temperature": self.spin_temp.value(),
+        "top_p": self.spin_top_p.value(),
+        "max_tokens": self.spin_max_toks.value(),
+    }
+    messages_payload = [{"role": m.role, "content": m.content} for m in self.current_chat.messages]
+
+    worker = LLMWorker(self.client, messages_payload, params)
+    worker.signals.success.connect(self._on_llm_success)
+    worker.signals.error.connect(self._on_llm_error)
+    self.thread_pool.start(worker)
+
+def _on_llm_success(self, reply: str):
+    if not self.current_chat:
+        return
+    self.current_chat.messages.append(Message(role="assistant", content=reply, ts=now_ts()))
+    self.current_chat.updated_ts = now_ts()
+    self.storage.save_chat(self.current_chat)
+    self._render_chat()
+    self.statusBar().showMessage("Reply received")
+
+def _on_llm_error(self, err: str):
+    QMessageBox.critical(self, "LLM Error", err)
+    self.statusBar().showMessage("Error")
+
+# -------- Settings -------- #
+
+def _apply_now(self):
+    if not self.current_chat:
+        return
+    self.current_chat.params.update({
+        "endpoint": self.cmb_endpoint.currentText(),
+        "model": self.edt_model.text().strip(),
+        "temperature": self.spin_temp.value(),
+        "top_p": self.spin_top_p.value(),
+        "max_tokens": self.spin_max_toks.value(),
+    })
+    self.current_chat.model = self.current_chat.params["model"]
+    self.storage.save_chat(self.current_chat)
+    self.statusBar().showMessage("Applied to current chat")
+
+def _save_settings_clicked(self):
+    # Update currently selected endpoint object with the API base/key from fields
+    selected = self.cmb_endpoint.currentText()
+    endpoints = self.cfg.get("llm", {}).get("endpoints", []) or []
+    new_endpoints = []
+    for ep in endpoints:
+        if ep.get("name") == selected:
+            ep = dict(ep)  # copy
+            ep["api_base"] = self.edt_api_base.text().strip()
+            ep["api_key"] = self.edt_api_key.text()
+        new_endpoints.append(ep)
+
+    patch = {
+        "llm": {
+            "endpoints": new_endpoints,
+            "default_endpoint": selected or self.cfg.get("llm", {}).get("default_endpoint", ""),
+            "model": self.edt_model.text().strip(),
+            "temperature": float(self.spin_temp.value()),
+            "top_p": float(self.spin_top_p.value()),
+            "max_tokens": int(self.spin_max_toks.value()),
+        }
+    }
+    self.cfg_mgr.save_user_overrides(patch)
+    self.cfg = self.cfg_mgr.load()
+    self._refresh_endpoints()
+    self.client.update_config(self.cfg)
+    self.statusBar().showMessage("Saved to ~/.config/llmchat/config.yaml")
+
+# -------- Tray / Hide -------- #
+
+def _toggle_hide(self):
+    if self.isVisible():
+        self.hide()
+    else:
+        self.showNormal()
+        self.raise_()
+        self.activateWindow()
+
+def _show_from_tray(self):
+    self.showNormal()
+    self.raise_()
+    self.activateWindow()
+
+def closeEvent(self, event: QCloseEvent):
+    if getattr(self, "tray", None):
+        event.ignore()
+        self.hide()
+        self.tray.showMessage("LLM Chat", "Still running in the tray. Quit from tray menu.", QSystemTrayIcon.Information, 2000)
+    else:
+        super().closeEvent(event)
+</code></pre></div></div>
+
+<h1 id="--entry--">—————- Entry —————-</h1>
+
+<p>def main():
+    app_dir = Path(<strong>file</strong>).resolve().parent
+    app = QApplication(sys.argv)
+    app.setApplicationDisplayName(APP_NAME)
+    win = MainWindow(app_dir)
+    win.show()
+    sys.exit(app.exec())</p>
+
+<p>if <strong>name</strong> == "<strong>main</strong>":
+    main()</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#llm" class="page__taxonomy-item p-category" rel="tag">llm</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-21T13:53:08+09:00">2025-08-21</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/python/python-dataclass-method/" class="pagination--pager" title="untitled">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-21T13:53:13+09:00">2025-08-21</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/python-dataclass-method/" rel="permalink">untitled
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-20T17:53:48+09:00">2025-08-20</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/python-class-tree/" rel="permalink">Python 클래스 트리 출력
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-20T15:45:34+09:00">2025-08-20</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/verilog/pyverilog-ir/" rel="permalink">PyVerilog AST 변환
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-20T14:24:23+09:00">2025-08-20</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
