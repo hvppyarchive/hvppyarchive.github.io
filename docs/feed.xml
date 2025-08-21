@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-21T13:53:22+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-21T13:53:22+09:00</published><updated>2025-08-21T13:53:22+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-21T17:30:43+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-21T17:30:43+09:00</published><updated>2025-08-21T17:30:43+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,1225 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">LLM Chatbot Client Plan</title><link href="https://hvppyarchive.github.io/llm/simple-chatbot-client/" rel="alternate" type="text/html" title="LLM Chatbot Client Plan" /><published>2025-08-21T13:53:19+09:00</published><updated>2025-08-21T13:53:19+09:00</updated><id>https://hvppyarchive.github.io/llm/simple-chatbot-client</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/simple-chatbot-client/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">Python TextBuffer 구현</title><link href="https://hvppyarchive.github.io/python/python-textbuffer/" rel="alternate" type="text/html" title="Python TextBuffer 구현" /><published>2025-08-21T17:30:40+09:00</published><updated>2025-08-21T17:30:40+09:00</updated><id>https://hvppyarchive.github.io/python/python-textbuffer</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-textbuffer/"><![CDATA[<p class="chat--user">
+
+Developer: 현재 Verilog 파일 처리와 관련된 여러 작업(예: 간단한 전처리/후처리 등)을 수행 중입니다. Raw Verilog 소스 코드를 저장할 수 있는 파이썬 클래스 개발을 검토하고 있습니다. Verilog 소스 코드는 문자열 형태로 보관하거나, 줄 단위로 split하여 List[str] 타입(줄바꿈 없이)으로 저장하거나, splitlines(keepends=True)를 사용해 줄바꿈이 포함된 리스트로 보관할 수 있습니다. 여러 방식이 프로젝트 내에서 혼용되면 혼란을 초래할 수 있으므로, 범용적으로 사용할 수 있도록 일관된 구조를 하나의 클래스에 통일할 것을 권장합니다. Begin with a concise checklist (3-7 bullets) of what you will do; keep items conceptual, not implementation-level. After each significant code or class design decision, briefly validate if the chosen approach aligns with the project's consistency and extensibility goals, and self-correct if needed.
+
+</p>
+
+<p>here’s the game plan:</p>
+
+<ul>
+  <li>
+    <p>Define one <strong>canonical, internal representation</strong> for Verilog source and convert to/from other views.</p>
+  </li>
+  <li>
+    <p>Normalize and <strong>track newline style</strong> for faithful round-trips (LF/CRLF/mixed).</p>
+  </li>
+  <li>
+    <p>Expose <strong>consistent views</strong> (<code class="language-plaintext highlighter-rouge">as_string()</code>, <code class="language-plaintext highlighter-rouge">as_lines(keepends=...)</code>) instead of multiple storage forms.</p>
+  </li>
+  <li>
+    <p>Provide a small, <strong>extensible transform pipeline</strong> for pre/post-processing (with history).</p>
+  </li>
+  <li>
+    <p>Make edits <strong>immutable by default</strong> (return a new instance) with an opt-in <code class="language-plaintext highlighter-rouge">in_place=True</code>.</p>
+  </li>
+  <li>
+    <p>Add <strong>I/O helpers</strong> (<code class="language-plaintext highlighter-rouge">from_*</code>, <code class="language-plaintext highlighter-rouge">to_file</code>) with explicit encoding and deterministic newline policy.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="key-design-decisions-with-quick-self-checks">Key design decisions (with quick self-checks)</h2>
+
+<ol>
+  <li>
+    <p><strong>Canonical storage = one normalized<code class="language-plaintext highlighter-rouge">str</code> (<code class="language-plaintext highlighter-rouge">\n</code> line endings).</strong></p>
+
+    <ul>
+      <li>
+        <p><em>Why:</em> single source of truth avoids drift between parallel representations; Python string ops are fast and familiar.</p>
+      </li>
+      <li>
+        <p><em>Consistency/Extensibility check:</em> callers always interact with one invariant; adding new views later won’t change storage. ✅</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Preserve original newline style as metadata (<code class="language-plaintext highlighter-rouge">'lf'|'crlf'|'mixed'</code>).</strong></p>
+
+    <ul>
+      <li>
+        <p><em>Why:</em> we normalize internally but can emit exactly what the file used before, unless caller overrides.</p>
+      </li>
+      <li>
+        <p><em>Check:</em> round-tripping is predictable across the project; future formatters can opt into a uniform style. ✅</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Views, not storage:</strong> <code class="language-plaintext highlighter-rouge">as_string(newline=...)</code> and <code class="language-plaintext highlighter-rouge">as_lines(keepends=False|True, newline=...)</code>.</p>
+
+    <ul>
+      <li>
+        <p><em>Why:</em> banishes ad-hoc lists/strings in the codebase; one class hands out consistent views.</p>
+      </li>
+      <li>
+        <p><em>Check:</em> API encourages a single pattern everywhere; avoids mixing representations in state. ✅</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Edits are immutable by default, with<code class="language-plaintext highlighter-rouge">in_place=True</code> for performance-critical paths.</strong></p>
+
+    <ul>
+      <li>
+        <p><em>Why:</em> functional style reduces surprise; explicit mutability keeps hot paths fast.</p>
+      </li>
+      <li>
+        <p><em>Check:</em> consistent with safety + speed; cache invalidation is centralized. ✅</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Lazy, cached line splits (both with and without<code class="language-plaintext highlighter-rouge">keepends</code>).</strong></p>
+
+    <ul>
+      <li>
+        <p><em>Why:</em> many tools need line access; caching avoids repeated <code class="language-plaintext highlighter-rouge">splitlines</code>.</p>
+      </li>
+      <li>
+        <p><em>Check:</em> cache invalidated on any text change; future features (e.g., line index) can reuse it. ✅</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Transform pipeline:<code class="language-plaintext highlighter-rouge">apply(transformer)</code> where a transformer is a callable <code class="language-plaintext highlighter-rouge">text -&gt; text</code>, plus history.</strong></p>
+
+    <ul>
+      <li>
+        <p><em>Why:</em> flexible slot for “pre/post-processing” like trimming, EOL fixing, simple macro munging, etc.</p>
+      </li>
+      <li>
+        <p><em>Check:</em> keeps responsibilities modular; easy to add/remove steps; provenance is recorded. ✅</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>I/O boundaries explicit:</strong> constructors for string/lines/file; <code class="language-plaintext highlighter-rouge">to_file(encoding, newline)</code>; no auto-detection magic.</p>
+
+    <ul>
+      <li>
+        <p><em>Why:</em> explicit beats implicit; fewer surprises across platforms and CI.</p>
+      </li>
+      <li>
+        <p><em>Check:</em> project-wide consistency; easy to thread encoding/newline policy from config. ✅</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="the-class">The class</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">time</span>
+
+<span class="n">NewlineStyle</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">mixed</span><span class="sh">"</span><span class="p">]</span>
+<span class="n">EmitNewline</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">TextTransformer</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">A simple, composable transformer: text -&gt; text.</span><span class="sh">"""</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="bp">...</span>
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">TransformRecord</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">before_sha1</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">after_sha1</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nf">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">VerilogSource</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    Canonical container for Verilog source.
+
+    Invariants:
+      - Internal storage `_text` always uses LF (</span><span class="sh">'</span><span class="se">\n</span><span class="sh">'</span><span class="s">) line endings.
+      - `_newline_style` records the original newline style encountered on load.
+      - All edit methods are immutable by default; pass in_place=True to mutate.
+    </span><span class="sh">"""</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sh">"</span><span class="s">_text</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">_newline_style</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">_encoding</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">_source_path</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">_version</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">_cached_lines</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">_cached_lines_keepends</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">_history</span><span class="sh">"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">newline_style</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NewlineStyle</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">source_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">_assume_normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_assume_normalized</span><span class="p">:</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">text</span>
+            <span class="n">style</span> <span class="o">=</span> <span class="n">newline_style</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">norm</span><span class="p">,</span> <span class="n">style</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_normalize_newlines</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">prefer</span><span class="o">=</span><span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># internal LF
+</span>            <span class="k">if</span> <span class="n">newline_style</span> <span class="ow">and</span> <span class="n">newline_style</span> <span class="o">!=</span> <span class="n">style</span><span class="p">:</span>
+                <span class="c1"># honor explicit override only for "mixed" -&gt; "lf/crlf" upgrade
+</span>                <span class="n">style</span> <span class="o">=</span> <span class="n">newline_style</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">norm</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span><span class="p">:</span> <span class="n">NewlineStyle</span> <span class="o">=</span> <span class="n">style</span>  <span class="c1"># how it *came in* (for round-trip)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">encoding</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_source_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">source_path</span><span class="p">)</span> <span class="k">if</span> <span class="n">source_path</span> <span class="k">else</span> <span class="bp">None</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span>              <span class="c1"># keepends=False
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span>     <span class="c1"># keepends=True
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">TransformRecord</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># ---------- creation / I/O ----------
+</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span>
+        <span class="n">cls</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">source_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nf">cls</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">source_path</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_lines</span><span class="p">(</span>
+        <span class="n">cls</span><span class="p">,</span>
+        <span class="n">lines</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">keepends</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">source_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">keepends</span><span class="p">:</span>
+            <span class="n">joined</span> <span class="o">=</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">joined</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">cls</span><span class="p">(</span><span class="n">joined</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">source_path</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span>
+        <span class="n">cls</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">cls</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">newline</span><span class="p">:</span> <span class="n">EmitNewline</span> <span class="o">=</span> <span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">ensure_trailing_newline</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_string</span><span class="p">(</span><span class="n">newline</span><span class="o">=</span><span class="n">newline</span><span class="p">,</span> <span class="n">ensure_trailing_newline</span><span class="o">=</span><span class="n">ensure_trailing_newline</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">write_text</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="n">_encoding</span><span class="p">)</span>
+
+    <span class="c1"># ---------- core views ----------
+</span>
+    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">newline</span><span class="p">:</span> <span class="n">EmitNewline</span> <span class="o">=</span> <span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">ensure_trailing_newline</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span>
+        <span class="k">if</span> <span class="n">ensure_trailing_newline</span> <span class="ow">is</span> <span class="bp">True</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span>
+        <span class="k">if</span> <span class="n">ensure_trailing_newline</span> <span class="ow">is</span> <span class="bp">False</span> <span class="ow">and</span> <span class="n">s</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">newline</span> <span class="o">==</span> <span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">style</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">style</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">}[</span><span class="n">newline</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">s</span>
+        <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># "mixed" -&gt; default to CRLF for lines that originally were CRLF? We can't reconstruct mixed reliably.
+</span>            <span class="c1"># project policy: emit LF for mixed unless caller overrides
+</span>            <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">def</span> <span class="nf">as_lines</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">keepends</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">keepends</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span><span class="p">)</span>
+
+    <span class="c1"># ---------- inspection ----------
+</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">source_path</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_source_path</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">newline_style</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NewlineStyle</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">encoding</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_encoding</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_version</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">history</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">TransformRecord</span><span class="p">,</span> <span class="p">...]:</span>
+        <span class="k">return</span> <span class="nf">tuple</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">line_count</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">get_line</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">keepend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="n">keepend</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lines</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="c1"># ---------- transforms / edits ----------
+</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">transformer</span><span class="p">:</span> <span class="n">TextTransformer</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">record</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">before</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span>
+        <span class="n">after</span> <span class="o">=</span> <span class="nf">transformer</span><span class="p">(</span><span class="n">before</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">after</span> <span class="ow">is</span> <span class="n">before</span><span class="p">:</span>
+            <span class="c1"># even if identity, return self or bump version in-place
+</span>            <span class="k">if</span> <span class="n">in_place</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">_bump_version</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">self</span>
+
+        <span class="k">if</span> <span class="n">in_place</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_set_text</span><span class="p">(</span><span class="n">after</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">record</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">_record</span><span class="p">(</span><span class="n">transformer</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inst</span> <span class="o">=</span> <span class="nc">VerilogSource</span><span class="p">(</span>
+                <span class="n">after</span><span class="p">,</span>
+                <span class="n">newline_style</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span><span class="p">,</span>
+                <span class="n">encoding</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_encoding</span><span class="p">,</span>
+                <span class="n">source_path</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_source_path</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">record</span><span class="p">:</span>
+                <span class="n">inst</span><span class="p">.</span><span class="n">_history</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nf">_mk_record</span><span class="p">(</span><span class="n">transformer</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="n">inst</span>
+
+    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">old</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">new</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">class</span> <span class="nc">_Repl</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">replace</span><span class="sh">"</span>
+            <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">text</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">apply</span><span class="p">(</span><span class="nf">_Repl</span><span class="p">(),</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_line</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">keepend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># edit with keepends to keep layout
+</span>        <span class="k">if</span> <span class="n">keepend</span><span class="p">:</span>
+            <span class="c1"># caller provided EOL
+</span>            <span class="n">lines</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">content</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># normalize to internal LF
+</span>            <span class="n">eol</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span> <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span> <span class="k">else</span> <span class="sh">""</span>
+            <span class="n">lines</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">content</span> <span class="o">+</span> <span class="n">eol</span>
+        <span class="n">new_text</span> <span class="o">=</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_with_text</span><span class="p">(</span><span class="n">new_text</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">insert_lines</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">new_lines</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">keepends</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="p">[</span><span class="n">ln</span> <span class="k">if</span> <span class="n">keepends</span> <span class="nf">else </span><span class="p">(</span><span class="n">ln</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">new_lines</span><span class="p">]</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">new_text</span> <span class="o">=</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[:</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">nl</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="n">idx</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_with_text</span><span class="p">(</span><span class="n">new_text</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">delete_lines</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">new_text</span> <span class="o">=</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[:</span><span class="n">start</span><span class="p">]</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="n">end</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_with_text</span><span class="p">(</span><span class="n">new_text</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">ensure_trailing_newline</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">self</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_with_text</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_text</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="c1"># ---------- internals ----------
+</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_normalize_newlines</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">prefer</span><span class="p">:</span> <span class="n">NewlineStyle</span> <span class="o">=</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NewlineStyle</span><span class="p">]:</span>
+        <span class="n">has_crlf</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">text</span>
+        <span class="n">has_lf</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">text</span>
+        <span class="k">if</span> <span class="n">has_crlf</span> <span class="ow">and</span> <span class="n">has_lf</span> <span class="ow">and</span> <span class="n">text</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span> <span class="o">!=</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">style</span><span class="p">:</span> <span class="n">NewlineStyle</span> <span class="o">=</span> <span class="sh">"</span><span class="s">mixed</span><span class="sh">"</span>
+        <span class="k">elif</span> <span class="n">has_crlf</span><span class="p">:</span>
+            <span class="n">style</span> <span class="o">=</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">style</span> <span class="o">=</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">).</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\r</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># coerce to LF
+</span>        <span class="k">return</span> <span class="n">norm</span><span class="p">,</span> <span class="n">style</span>
+
+    <span class="k">def</span> <span class="nf">_with_text</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">new_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">VerilogSource</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">in_place</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_set_text</span><span class="p">(</span><span class="n">new_text</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span>
+        <span class="n">inst</span> <span class="o">=</span> <span class="nc">VerilogSource</span><span class="p">(</span>
+            <span class="n">new_text</span><span class="p">,</span>
+            <span class="n">newline_style</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span><span class="p">,</span>
+            <span class="n">encoding</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_encoding</span><span class="p">,</span>
+            <span class="n">source_path</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_source_path</span><span class="p">,</span>
+            <span class="n">_assume_normalized</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">inst</span><span class="p">.</span><span class="n">_history</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inst</span>
+
+    <span class="k">def</span> <span class="nf">_set_text</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">new_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_text</span> <span class="o">=</span> <span class="n">new_text</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_invalidate_cache</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_bump_version</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_invalidate_cache</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_bump_version</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_version</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_mk_record</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformRecord</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nc">TransformRecord</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">before_sha1</span><span class="o">=</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha1</span><span class="p">(</span><span class="n">before</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)).</span><span class="nf">hexdigest</span><span class="p">(),</span>
+            <span class="n">after_sha1</span><span class="o">=</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha1</span><span class="p">(</span><span class="n">after</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)).</span><span class="nf">hexdigest</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_record</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_mk_record</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p><strong>Validation:</strong> The class enforces one storage invariant (LF string), exposes consistent views, and gives predictable I/O. It’s easy to extend with more transforms or richer metadata later. This aligns with our consistency goal and makes future preprocessors trivial to add. ✅</p>
+
+<hr />
+
+<h2 id="example-transformers-plug-and-play">Example transformers (plug-and-play)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">TrimTrailingWhitespace</span><span class="p">:</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">trim_trailing_ws</span><span class="sh">"</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># safe for Verilog; does not alter semantics
+</span>        <span class="k">return</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="nf">rstrip</span><span class="p">(</span><span class="sh">"</span><span class="s"> </span><span class="se">\t</span><span class="sh">"</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">())</span>
+
+<span class="k">class</span> <span class="nc">EnsureFinalNewline</span><span class="p">:</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">ensure_final_newline</span><span class="sh">"</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span> <span class="k">if</span> <span class="n">text</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span> <span class="nf">else </span><span class="p">(</span><span class="n">text</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Validation:</strong> Transformers are plain callables; team members can add steps without touching the core class. History records provenance. ✅</p>
+
+<hr />
+
+<h2 id="typical-usage-uniform-across-the-project">Typical usage (uniform across the project)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Load
+</span><span class="n">src</span> <span class="o">=</span> <span class="n">VerilogSource</span><span class="p">.</span><span class="nf">from_file</span><span class="p">(</span><span class="sh">"</span><span class="s">rtl/top.v</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># Get views (without changing internal storage form)
+</span><span class="n">text</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="nf">as_string</span><span class="p">()</span>                            <span class="c1"># normalized LF by default (round-tripped on write)
+</span><span class="n">lines</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">()</span>                            <span class="c1"># ['module top(', ...]
+</span><span class="n">lines_ke</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>            <span class="c1"># ['module top(\n', ...]
+</span>
+<span class="c1"># Edits (immutable by default)
+</span><span class="n">src2</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="nf">set_line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sh">"</span><span class="s">// AUTOGEN: do not edit</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">src3</span> <span class="o">=</span> <span class="n">src2</span><span class="p">.</span><span class="nf">apply</span><span class="p">(</span><span class="nc">TrimTrailingWhitespace</span><span class="p">())</span>
+
+<span class="c1"># Save with original newline style, enforcing final newline
+</span><span class="n">src3</span><span class="p">.</span><span class="nf">to_file</span><span class="p">(</span><span class="sh">"</span><span class="s">rtl/top.v</span><span class="sh">"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="p">,</span> <span class="n">ensure_trailing_newline</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Validation:</strong> This usage pattern prevents any accidental mixing of storage forms. Every operation goes through one API, keeping the project consistent. ✅</p>
+
+<hr />
+
+<h2 id="why-this-will-hold-up-on-bigger-needs">Why this will hold up on bigger needs</h2>
+
+<ul>
+  <li>
+    <p><strong>Round-trip safety:</strong> We track original newline style and encoding; callers can enforce a project-wide style by always passing <code class="language-plaintext highlighter-rouge">newline="lf"</code> if desired.</p>
+  </li>
+  <li>
+    <p><strong>Performance:</strong> Internal <code class="language-plaintext highlighter-rouge">str</code>, lazy line cache, optional in-place edits.</p>
+  </li>
+  <li>
+    <p><strong>Extensibility:</strong> Add richer transforms (comment stripping, lightweight <code class="language-plaintext highlighter-rouge">\</code>line continuation` merges, macro stubs) without changing the core.</p>
+  </li>
+  <li>
+    <p><strong>Determinism:</strong> No auto encoding detection; configs drive output style.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="optional-next-steps-if-you-want-them">Optional next steps (if you want them)</h3>
+
+<ul>
+  <li>
+    <p>Add a <code class="language-plaintext highlighter-rouge">LineIndex</code> helper for O(1) char-offset ↔ line/col mapping.</p>
+  </li>
+  <li>
+    <p>Provide <code class="language-plaintext highlighter-rouge">diff(other)</code> to aid review bots.</p>
+  </li>
+  <li>
+    <p>Introduce a config object (encoding/newline policy) to thread through I/O.</p>
+  </li>
+</ul>
+
+<p>If you share any project constraints (e.g., must always emit LF, or enforce final newline), I can wire them into defaults so every team member gets the same behavior automatically.</p>
+
+<p class="chat--user">
+
+보다보니 굳이 VerilogSource에 한정될 필요는 없는거 같은데 범용적인 방법 추천있어?
+
+</p>
+
+<p>아주 좋아요—Verilog 전용이 아니라 <strong>언어 무관(Text-agnostic)</strong> 하게 쓰면 팀 전체에 더 깔끔합니다. 아래처럼 일반화하죠.</p>
+
+<h3 id="체크리스트-개념-위주">체크리스트 (개념 위주)</h3>
+
+<ul>
+  <li>
+    <p>하나의 <strong>범용 텍스트 컨테이너</strong> 로 표준화하고, 내부 표현은 단일 규칙(LF)로 고정</p>
+  </li>
+  <li>
+    <p><strong>프로필(언어/포맷 메타데이터)</strong> 레이어로 주석/확장자 등만 바꿔 끼우기</p>
+  </li>
+  <li>
+    <p><strong>일관된 뷰 API</strong>(문자열/줄 리스트)만 노출, 저장 형식은 1개</p>
+  </li>
+  <li>
+    <p><strong>변환 파이프라인</strong>(transformer: <code class="language-plaintext highlighter-rouge">text -&gt; text</code>)과 기록(히스토리) 제공</p>
+  </li>
+  <li>
+    <p><strong>불변 편집 기본 + 선택적 in-place</strong> , 캐시/버전 관리</p>
+  </li>
+  <li>
+    <p>명시적 <strong>I/O 정책</strong>(인코딩/개행 방침)과 라운드트립 보장</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="설계-스텝각-스텝마다-빠른-검증-포함">설계 스텝(각 스텝마다 빠른 검증 포함)</h2>
+
+<ol>
+  <li>
+    <p><strong>범용 컨테이너 =<code class="language-plaintext highlighter-rouge">TextBuffer</code> (내부 LF 문자열 1개만 저장)</strong></p>
+
+    <ul>
+      <li>
+        <p><em>이유:</em> 상태가 하나면 표현 불일치가 사라짐.</p>
+      </li>
+      <li>
+        <p><em>검증:</em> 프로젝트 일관성(✅) / 다른 언어로 확장 쉬움(✅).</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>메타데이터/프로필(<code class="language-plaintext highlighter-rouge">TextProfile</code>) 분리</strong></p>
+
+    <ul>
+      <li>
+        <p>이름, 대표 확장자, 주석 마커 등은 “설명”일 뿐, 동작은 동일.</p>
+      </li>
+      <li>
+        <p><em>검증:</em> 텍스트 코어는 같고, 언어별 규칙은 얹기만 함 → 확장성(✅).</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>뷰 API =<code class="language-plaintext highlighter-rouge">as_string(newline=...)</code>, <code class="language-plaintext highlighter-rouge">as_lines(keepends=...)</code></strong></p>
+
+    <ul>
+      <li>
+        <p>저장은 1종, 뷰만 여러 형태로 “보여주기”.</p>
+      </li>
+      <li>
+        <p><em>검증:</em> 코드베이스에서 혼용 방지(✅). 새 뷰 추가 시 내부는 그대로(✅).</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>개행 정책과 라운드트립</strong></p>
+
+    <ul>
+      <li>
+        <p>로드 시 CRLF/혼합 감지 → 내부 LF로 정규화 + “원래 스타일” 메타 보존.</p>
+      </li>
+      <li>
+        <p>저장 시 <code class="language-plaintext highlighter-rouge">original|lf|crlf</code> 선택, <code class="language-plaintext highlighter-rouge">ensure_trailing_newline</code> 옵션 제공.</p>
+      </li>
+      <li>
+        <p><em>검증:</em> 재현성/예측가능성(✅). <em>혼합</em> 은 완전 복원 불가 → 정책상 LF로 내보내기(합리적 셀프코렉트).</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>변환 파이프라인 + 역사(sha1)</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">apply(transformer)</code>로 조합 가능; 이름/해시 기록.</p>
+      </li>
+      <li>
+        <p><em>검증:</em> 단계적 전/후처리의 표준 통로(✅). 원인 추적 용이(✅).</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>편집 모델: 불변 기본 +<code class="language-plaintext highlighter-rouge">in_place=True</code></strong></p>
+
+    <ul>
+      <li>
+        <p>안전한 기본값, 고성능 경로 필요 시 명시적 사용.</p>
+      </li>
+      <li>
+        <p><em>검증:</em> 안전/성능 균형(✅). 캐시 무효화 한 곳에서 관리(✅).</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>I/O 경계는 명시적</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">from_*</code>/<code class="language-plaintext highlighter-rouge">to_file(encoding,newline)</code>에서만 환경 영향을 받도록.</p>
+      </li>
+      <li>
+        <p><em>검증:</em> CI/OS 차이 최소화(✅).</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="범용-구현-스켈레톤-python">범용 구현 스켈레톤 (Python)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="n">hashlib</span><span class="p">,</span> <span class="n">time</span>
+
+<span class="c1"># ---- Profiles (언어/포맷 설명용 메타) ----
+</span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">TextProfile</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">plain</span><span class="sh">"</span>
+    <span class="n">file_exts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">line_comment_markers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">block_comment_markers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">()</span>
+
+<span class="c1"># 예시 프로필
+</span><span class="n">VERILOG</span> <span class="o">=</span> <span class="nc">TextProfile</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">verilog</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">file_exts</span><span class="o">=</span><span class="p">(</span><span class="sh">"</span><span class="s">.v</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">.sv</span><span class="sh">"</span><span class="p">),</span>
+    <span class="n">line_comment_markers</span><span class="o">=</span><span class="p">(</span><span class="sh">"</span><span class="s">//</span><span class="sh">"</span><span class="p">,),</span>
+    <span class="n">block_comment_markers</span><span class="o">=</span><span class="p">((</span><span class="sh">"</span><span class="s">/*</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">*/</span><span class="sh">"</span><span class="p">),),</span>
+<span class="p">)</span>
+<span class="n">PYTHON</span> <span class="o">=</span> <span class="nc">TextProfile</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">file_exts</span><span class="o">=</span><span class="p">(</span><span class="sh">"</span><span class="s">.py</span><span class="sh">"</span><span class="p">,),</span>
+    <span class="n">line_comment_markers</span><span class="o">=</span><span class="p">(</span><span class="sh">"</span><span class="s">#</span><span class="sh">"</span><span class="p">,),</span>
+<span class="p">)</span>
+
+<span class="n">NewlineStyle</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">mixed</span><span class="sh">"</span><span class="p">]</span>
+<span class="n">EmitNewline</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">TextTransformer</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="bp">...</span>
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">TransformRecord</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">before_sha1</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">after_sha1</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nf">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">TextBuffer</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    범용 텍스트 컨테이너(언어-무관).
+    내부 규칙:
+      - _text 는 항상 LF(</span><span class="sh">'</span><span class="se">\\</span><span class="s">n</span><span class="sh">'</span><span class="s">)로 정규화된 단일 문자열
+      - 원본 개행 스타일/인코딩/경로/프로필을 메타로 보관
+      - 불변 편집 기본, in_place=True로 명시적 변경 가능
+    </span><span class="sh">"""</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">_text</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">_newline_style</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">_encoding</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">_source_path</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">_profile</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="sh">"</span><span class="s">_version</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">_cached_lines</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">_cached_lines_keepends</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">_history</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">profile</span><span class="p">:</span> <span class="n">TextProfile</span> <span class="o">=</span> <span class="nc">TextProfile</span><span class="p">(),</span>
+        <span class="n">newline_style</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">NewlineStyle</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">source_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">_assume_normalized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_assume_normalized</span><span class="p">:</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">text</span>
+            <span class="n">style</span> <span class="o">=</span> <span class="n">newline_style</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">norm</span><span class="p">,</span> <span class="n">style</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_normalize_newlines</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">norm</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span><span class="p">:</span> <span class="n">NewlineStyle</span> <span class="o">=</span> <span class="n">style</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">encoding</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_source_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">source_path</span><span class="p">)</span> <span class="k">if</span> <span class="n">source_path</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_profile</span><span class="p">:</span> <span class="n">TextProfile</span> <span class="o">=</span> <span class="n">profile</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">TransformRecord</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># ---------- constructors / I-O ----------
+</span>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">profile</span><span class="p">:</span> <span class="n">TextProfile</span> <span class="o">=</span> <span class="nc">TextProfile</span><span class="p">(),</span>
+                    <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="n">source_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nf">cls</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">source_path</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_lines</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">keepends</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="n">profile</span><span class="p">:</span> <span class="n">TextProfile</span> <span class="o">=</span> <span class="nc">TextProfile</span><span class="p">(),</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+                   <span class="n">source_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">joined</span> <span class="o">=</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="k">if</span> <span class="n">keepends</span> <span class="k">else</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">cls</span><span class="p">(</span><span class="n">joined</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">source_path</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">profile</span><span class="p">:</span> <span class="n">TextProfile</span> <span class="o">=</span> <span class="nc">TextProfile</span><span class="p">(),</span>
+                  <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">cls</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                <span class="n">newline</span><span class="p">:</span> <span class="n">EmitNewline</span> <span class="o">=</span> <span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="p">,</span>
+                <span class="n">ensure_trailing_newline</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_string</span><span class="p">(</span><span class="n">newline</span><span class="o">=</span><span class="n">newline</span><span class="p">,</span> <span class="n">ensure_trailing_newline</span><span class="o">=</span><span class="n">ensure_trailing_newline</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">write_text</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="n">_encoding</span><span class="p">)</span>
+
+    <span class="c1"># ---------- views ----------
+</span>    <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">newline</span><span class="p">:</span> <span class="n">EmitNewline</span> <span class="o">=</span> <span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="p">,</span>
+                  <span class="n">ensure_trailing_newline</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span>
+        <span class="k">if</span> <span class="n">ensure_trailing_newline</span> <span class="ow">is</span> <span class="bp">True</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span>
+        <span class="k">if</span> <span class="n">ensure_trailing_newline</span> <span class="ow">is</span> <span class="bp">False</span> <span class="ow">and</span> <span class="n">s</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">style</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span> <span class="k">if</span> <span class="n">newline</span> <span class="o">==</span> <span class="sh">"</span><span class="s">original</span><span class="sh">"</span> <span class="k">else</span> <span class="p">{</span><span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">}[</span><span class="n">newline</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">s</span>
+        <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># mixed는 정확 복원이 불가 → 정책상 LF로 내보냄
+</span>            <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">def</span> <span class="nf">as_lines</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">keepends</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">keepends</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span><span class="p">)</span>
+
+    <span class="c1"># ---------- inspection ----------
+</span>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">profile</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextProfile</span><span class="p">:</span> <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_profile</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">source_path</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span> <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_source_path</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">newline_style</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NewlineStyle</span><span class="p">:</span> <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">encoding</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_encoding</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_version</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">history</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">TransformRecord</span><span class="p">,</span> <span class="p">...]:</span> <span class="k">return</span> <span class="nf">tuple</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">)</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">line_count</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="k">return</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">get_line</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">keepend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="n">keepend</span><span class="p">)[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="c1"># ---------- edits / transforms ----------
+</span>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">transformer</span><span class="p">:</span> <span class="n">TextTransformer</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+              <span class="n">record</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">before</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span>
+        <span class="n">after</span> <span class="o">=</span> <span class="nf">transformer</span><span class="p">(</span><span class="n">before</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">after</span> <span class="ow">is</span> <span class="n">before</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">in_place</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_bump_version</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">self</span>
+        <span class="k">if</span> <span class="n">in_place</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_set_text</span><span class="p">(</span><span class="n">after</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">record</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_record</span><span class="p">(</span><span class="n">transformer</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inst</span> <span class="o">=</span> <span class="nc">TextBuffer</span><span class="p">(</span><span class="n">after</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_profile</span><span class="p">,</span> <span class="n">newline_style</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span><span class="p">,</span>
+                              <span class="n">encoding</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_encoding</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_source_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">record</span><span class="p">:</span> <span class="n">inst</span><span class="p">.</span><span class="n">_history</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nf">_mk_record</span><span class="p">(</span><span class="n">transformer</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="n">inst</span>
+
+    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">old</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">class</span> <span class="nc">_Repl</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">replace</span><span class="sh">"</span>
+            <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="k">return</span> <span class="n">text</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">apply</span><span class="p">(</span><span class="nf">_Repl</span><span class="p">(),</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_line</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">keepend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                 <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">keepend</span><span class="p">:</span>
+            <span class="n">lines</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">content</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">eol</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span> <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span> <span class="k">else</span> <span class="sh">""</span>
+            <span class="n">lines</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">content</span> <span class="o">+</span> <span class="n">eol</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_with_text</span><span class="p">(</span><span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">insert_lines</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">new_lines</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">keepends</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                     <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="p">[</span><span class="n">ln</span> <span class="k">if</span> <span class="n">keepends</span> <span class="nf">else </span><span class="p">(</span><span class="n">ln</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">new_lines</span><span class="p">]</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_with_text</span><span class="p">(</span><span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[:</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">nl</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="n">idx</span><span class="p">:]),</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">delete_lines</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_with_text</span><span class="p">(</span><span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[:</span><span class="n">start</span><span class="p">]</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="n">end</span><span class="p">:]),</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">ensure_trailing_newline</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span> <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_text</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span> <span class="k">else</span> <span class="n">self</span><span class="p">.</span><span class="nf">_with_text</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_text</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+
+    <span class="c1"># ---------- internals ----------
+</span>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_normalize_newlines</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NewlineStyle</span><span class="p">]:</span>
+        <span class="n">has_crlf</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">text</span>
+        <span class="n">has_lf</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">text</span>
+        <span class="k">if</span> <span class="n">has_crlf</span> <span class="ow">and</span> <span class="n">has_lf</span> <span class="ow">and</span> <span class="n">text</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span> <span class="o">!=</span> <span class="n">text</span><span class="p">:</span> <span class="n">style</span><span class="p">:</span> <span class="n">NewlineStyle</span> <span class="o">=</span> <span class="sh">"</span><span class="s">mixed</span><span class="sh">"</span>
+        <span class="k">elif</span> <span class="n">has_crlf</span><span class="p">:</span> <span class="n">style</span> <span class="o">=</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">style</span> <span class="o">=</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span>
+        <span class="k">return</span> <span class="n">text</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">).</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\r</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">),</span> <span class="n">style</span>
+
+    <span class="k">def</span> <span class="nf">_with_text</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">new_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">in_place</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_set_text</span><span class="p">(</span><span class="n">new_text</span><span class="p">);</span> <span class="k">return</span> <span class="n">self</span>
+        <span class="n">inst</span> <span class="o">=</span> <span class="nc">TextBuffer</span><span class="p">(</span><span class="n">new_text</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_profile</span><span class="p">,</span> <span class="n">newline_style</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_newline_style</span><span class="p">,</span>
+                          <span class="n">encoding</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_encoding</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_source_path</span><span class="p">,</span> <span class="n">_assume_normalized</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">inst</span><span class="p">.</span><span class="n">_history</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inst</span>
+
+    <span class="k">def</span> <span class="nf">_set_text</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">new_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_text</span> <span class="o">=</span> <span class="n">new_text</span><span class="p">;</span> <span class="n">self</span><span class="p">.</span><span class="nf">_invalidate_cache</span><span class="p">();</span> <span class="n">self</span><span class="p">.</span><span class="nf">_bump_version</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_invalidate_cache</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines</span> <span class="o">=</span> <span class="bp">None</span><span class="p">;</span> <span class="n">self</span><span class="p">.</span><span class="n">_cached_lines_keepends</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_bump_version</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">_version</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_mk_record</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TransformRecord</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nc">TransformRecord</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">before_sha1</span><span class="o">=</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha1</span><span class="p">(</span><span class="n">before</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)).</span><span class="nf">hexdigest</span><span class="p">(),</span>
+            <span class="n">after_sha1</span><span class="o">=</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha1</span><span class="p">(</span><span class="n">after</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)).</span><span class="nf">hexdigest</span><span class="p">(),</span>
+        <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_record</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_history</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_mk_record</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p><strong>검증 요약:</strong> 내부 저장 1종(LF), 뷰 API 고정, 변환/편집/히스토리 표준화 → <strong>일관성</strong> 과 <strong>확장성</strong> 목표에 부합(✅). <em>혼합 개행 복원 한계</em> 는 정책으로 명시하여 팀 혼선을 차단(셀프코렉트 완료).</p>
+
+<hr />
+
+<h2 id="사용-예-언어-불문">사용 예 (언어 불문)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Verilog도 Python도 동일한 API
+</span><span class="n">buf</span> <span class="o">=</span> <span class="n">TextBuffer</span><span class="p">.</span><span class="nf">from_file</span><span class="p">(</span><span class="sh">"</span><span class="s">rtl/top.v</span><span class="sh">"</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">VERILOG</span><span class="p">)</span>
+
+<span class="c1"># 일관된 뷰
+</span><span class="n">text</span> <span class="o">=</span> <span class="n">buf</span><span class="p">.</span><span class="nf">as_string</span><span class="p">()</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">buf</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">()</span>
+<span class="n">lines_ke</span> <span class="o">=</span> <span class="n">buf</span><span class="p">.</span><span class="nf">as_lines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># 불변 편집 + 파이프라인
+</span><span class="k">class</span> <span class="nc">TrimTrailingWS</span><span class="p">:</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">trim_trailing_ws</span><span class="sh">"</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="nf">rstrip</span><span class="p">(</span><span class="sh">"</span><span class="s"> </span><span class="se">\t</span><span class="sh">"</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">t</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">())</span>
+
+<span class="n">buf2</span> <span class="o">=</span> <span class="n">buf</span><span class="p">.</span><span class="nf">set_line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sh">"</span><span class="s">// AUTOGEN: do not edit</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">buf3</span> <span class="o">=</span> <span class="n">buf2</span><span class="p">.</span><span class="nf">apply</span><span class="p">(</span><span class="nc">TrimTrailingWS</span><span class="p">())</span>
+<span class="n">buf3</span><span class="p">.</span><span class="nf">to_file</span><span class="p">(</span><span class="sh">"</span><span class="s">rtl/top.v</span><span class="sh">"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="p">,</span> <span class="n">ensure_trailing_newline</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="verilog-전용-api가-필요하면">Verilog 전용 API가 필요하면?</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">VerilogSource = TextBuffer</code>에 <code class="language-plaintext highlighter-rouge">profile=VERILOG</code>만 기본값으로 래핑(또는 서브클래싱)하면 됩니다. 코드베이스는 <strong>항상<code class="language-plaintext highlighter-rouge">TextBuffer</code> API</strong>만 사용하므로 혼용이 사라집니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="권장-정책팀-규칙으로-고정-추천">권장 정책(팀 규칙으로 고정 추천)</h2>
+
+<ul>
+  <li>
+    <p>저장 시 기본 <code class="language-plaintext highlighter-rouge">newline="original"</code>(레거시 유지) → 리포맷 단계에서 일괄 <code class="language-plaintext highlighter-rouge">lf</code> 전환 선택 가능.</p>
+  </li>
+  <li>
+    <p>모든 변환은 <strong>Transformer</strong> 로만 수행(직접 문자열 조작 금지).</p>
+  </li>
+  <li>
+    <p>CI에 <code class="language-plaintext highlighter-rouge">ensure_trailing_newline=True</code> + <code class="language-plaintext highlighter-rouge">TrimTrailingWS</code> 적용.</p>
+  </li>
+</ul>
+
+<p>필요하면 토큰화나 라인-오프셋 매핑, <code class="language-plaintext highlighter-rouge">diff(other)</code> 같은 유틸을 얹을 수 있게 설계해 두었습니다. 원하는 기본 프로필(Verilog/Lex/YAML 등) 목록을 알려주시면 템플릿으로 함께 추가해 드릴게요.</p>
+
+<p class="chat--user">
+
+이런 일을 하는 유명한 클래스나 파이썬 내장은 없어?
+
+</p>
+
+<p>다음 순서로 생각해볼게요 (개념 체크리스트):</p>
+
+<ul>
+  <li>
+    <p>표준 라이브러리에 “그 일을 전부” 하는 <strong>단일 클래스는 없다</strong> → 조합해서 써야 함.</p>
+  </li>
+  <li>
+    <p>가장 가까운 <strong>표준 도구들</strong> 이 무엇인지 파악하고, 무엇이 <strong>부족</strong> 한지 명확히 하기.</p>
+  </li>
+  <li>
+    <p>부족한 부분(개행 추적·일관된 뷰·변환 파이프라인)은 <strong>얇은 래퍼</strong> 로 보완.</p>
+  </li>
+  <li>
+    <p>최소주의 버전(함수 2–3개)과 확장형(클래스) 중 팀 정책에 맞게 선택.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="짧은-결론">짧은 결론</h2>
+
+<ul>
+  <li><strong>표준/유명 내장에 “텍스트 컨테이너 + 개행 정책 + 변환/히스토리”를 한 번에 제공하는 건 없습니다.</strong><br />
+따라서 지금까지 제안한 <code class="language-plaintext highlighter-rouge">TextBuffer</code> 같은 얇은 래퍼가 <strong>일관성</strong> 과 <strong>라운드트립 보장</strong> 면에서 가장 현실적입니다.<br />
+<em>검증:</em> 팀 전역 일관성과 확장성 목표에 부합. ✅</li>
+</ul>
+
+<hr />
+
+<h2 id="가장-가까운-표준-도구들무엇을-해주고못-해주는가">가장 가까운 표준 도구들(무엇을 해주고/못 해주는가)</h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">io.StringIO</code><br />
+메모리 파일 객체. 줄 단위 읽기/쓰기 쉽지만 <strong>원본 개행 스타일 추적 X</strong> , 변환/히스토리 X.<br />
+<em>검증:</em> “일관된 내부 표현” 요구에 미달 → 래퍼 필요. ❌</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">open(..., newline=...)</code> / <code class="language-plaintext highlighter-rouge">pathlib.Path.read_text()/write_text()</code><br />
+텍스트 모드에서 <strong>개행 변환을 제어</strong>(쓰기 시 <code class="language-plaintext highlighter-rouge">newline='\n'</code> 강제 등) 가능. 하지만 <strong>읽을 때 원본이 CRLF/혼합이었는지</strong> 를 보존하진 않음(보통 <code class="language-plaintext highlighter-rouge">\n</code>으로 흡수).<br />
+<em>검증:</em> 라운드트립용 “원래 개행 스타일” 메타 보존이 없다 → 래퍼 필요. ❌</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">fileinput</code><br />
+여러 파일을 한 줄 스트림처럼 순회. <strong>컨테이너 아님</strong> , 상태/뷰/히스토리 X. ❌</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">difflib</code><br />
+차이 계산·패치 출력을 도와줌. <strong>변환 파이프라인/저장소</strong> 는 아님. 보조 도구로는 유용. 🆗</p>
+  </li>
+  <li>
+    <p>(<code class="language-plaintext highlighter-rouge">tokenize</code>, <code class="language-plaintext highlighter-rouge">ast</code>, <code class="language-plaintext highlighter-rouge">parso</code> 등)<br />
+언어별 파서/토크나이저. “구문 인지 변환”에는 좋지만 <strong>범용 텍스트 컨테이너 역할</strong> 은 아님. 보조. 🆗</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>요약: <strong>조각들은 있지만, “일관 컨테이너 + 개행 정책 + 변환/히스토리” 조합은 직접 얇게 감싸야</strong> 합니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="최소주의-대안클래스-없이-함수-3개로">최소주의 대안(클래스 없이 함수 3개로)</h2>
+
+<p>클래스가 부담이면, 팀 규칙을 함수로 고정하세요.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">def</span> <span class="nf">detect_newline_style</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># "lf" | "crlf" | "mixed"
+</span>    <span class="n">crlf</span> <span class="o">=</span> <span class="n">raw</span><span class="p">.</span><span class="nf">count</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">lf</span> <span class="o">=</span> <span class="n">raw</span><span class="p">.</span><span class="nf">count</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">cr</span> <span class="o">=</span> <span class="n">raw</span><span class="p">.</span><span class="nf">count</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="se">\r</span><span class="sh">"</span><span class="p">)</span> <span class="o">-</span> <span class="n">crlf</span>
+    <span class="nf">if </span><span class="p">(</span><span class="n">crlf</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lf</span> <span class="o">-</span> <span class="n">crlf</span><span class="p">))</span> <span class="ow">or</span> <span class="n">cr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># 서로 섞여 있으면 mixed
+</span>        <span class="k">return</span> <span class="sh">"</span><span class="s">mixed</span><span class="sh">"</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">crlf</span><span class="sh">"</span> <span class="k">if</span> <span class="n">crlf</span> <span class="k">else</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span>
+
+<span class="k">def</span> <span class="nf">normalize_to_lf</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">).</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\r</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">emit_with_newline</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">style</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">s</span> <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="sh">"</span><span class="s">lf</span><span class="sh">"</span> <span class="k">else</span> <span class="n">s</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\r\n</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># mixed는 정책상 lf 취급 권장
+</span></code></pre></div></div>
+
+<p>사용 패턴:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">raw</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">p</span><span class="p">).</span><span class="nf">read_bytes</span><span class="p">()</span>
+<span class="n">style</span> <span class="o">=</span> <span class="nf">detect_newline_style</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>          <span class="c1"># 원본 스타일 메타
+</span><span class="n">text</span> <span class="o">=</span> <span class="nf">normalize_to_lf</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">'</span><span class="s">utf-8</span><span class="sh">'</span><span class="p">))</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">()</span>                  <span class="c1"># 필요한 뷰
+</span><span class="n">out</span> <span class="o">=</span> <span class="nf">emit_with_newline</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>       <span class="c1"># 저장 시 라운드트립
+</span></code></pre></div></div>
+
+<ul>
+  <li><em>검증:</em> “단일 내부 표현(LF 문자열) + 원본 개행 메타 보존”을 만족. 변환 파이프라인/히스토리는 여전히 없으므로, 필요 시 클래스로 승격. ✅</li>
+</ul>
+
+<hr />
+
+<h2 id="언제-표준만으로-충분하고-언제-래퍼가-필요한가">언제 표준만으로 충분하고, 언제 래퍼가 필요한가</h2>
+
+<ul>
+  <li>
+    <p><strong>충분한 경우:</strong> 단순 읽기/쓰기 + 포맷터(예: pre-commit 훅으로 trailing space 제거, EOF newline 강제). 변환 기록/뷰 일관성이 크게 중요치 않을 때.</p>
+  </li>
+  <li>
+    <p><strong>래퍼 필요:</strong></p>
+
+    <ul>
+      <li>
+        <p>라운드트립 정확도(원본 개행 정책 유지)가 중요</p>
+      </li>
+      <li>
+        <p>코드베이스에서 “문자열/lines 혼용”을 금지하고 <strong>한 API로 통일</strong> 하고 싶을 때</p>
+      </li>
+      <li>
+        <p>전/후처리를 <strong>파이프라인 + 히스토리</strong> 로 관리하고 싶을 때</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><em>검증:</em> 우리 요구사항(일관성·확장성·라운드트립) 기준으로는 래퍼가 맞음. ✅</p>
+
+<hr />
+
+<h2 id="참고서드파티-조합-아이디어">참고(서드파티 조합 아이디어)</h2>
+
+<ul>
+  <li>
+    <p><strong>pre-commit / pre-commit-hooks</strong> : <code class="language-plaintext highlighter-rouge">end-of-file-fixer</code>, <code class="language-plaintext highlighter-rouge">trailing-whitespace</code>, <code class="language-plaintext highlighter-rouge">mixed-line-ending</code> 등으로 저장소 수준 위생 관리.<br />
+<em>역할 보완:</em> 파이프라인 일부를 CI로 밀어내 일관성 강화. ✅</p>
+  </li>
+  <li>
+    <p><strong>difflib / unidiff</strong> : 변환 결과를 리뷰하기 쉬운 패치로 제시.<br />
+<em>역할 보완:</em> 팀 리뷰 경험 개선. ✅</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="정리">정리</h3>
+
+<ul>
+  <li>
+    <p>“그 일을 전부 하는” 유명 내장/클래스는 없음.</p>
+  </li>
+  <li>
+    <p>표준 도구(특히 <code class="language-plaintext highlighter-rouge">open/newline</code>, <code class="language-plaintext highlighter-rouge">Path.write_text(newline=...)</code>)는 <strong>출력 정책 강제</strong> 에는 충분하나, <strong>원본 개행 추적/일관 뷰/히스토리</strong> 는 커버하지 못함.</p>
+  </li>
+  <li>
+    <p>팀 차원의 일관성과 확장성을 원하면, 지금 설계한 <strong>얇은 범용 래퍼</strong>(또는 위의 <strong>함수 3개 + 규칙</strong>)가 가장 안전합니다.</p>
+  </li>
+</ul>
+
+<p class="chat--user">
+
+@classmethod def from_file(cls, path: Path | str, *, profile: TextProfile = TextProfile(), encoding: str = "utf-8") -&gt; "TextBuffer": p = Path(path) text = p.read_text(encoding=encoding) return cls(text, profile=profile, encoding=encoding, source_path=p) 여기 중간에 있는 * 은 뭐야? 이런 문법 처음봐
+
+</p>
+
+<p>짧게 체크리스트:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">*</code> 는 <strong>키워드 전용(Keyword-only) 인자 구분자</strong> 예요.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">*</code> 뒤에 나오는 파라미터는 <strong>반드시<code class="language-plaintext highlighter-rouge">name=value</code> 형태로</strong> 호출해야 해요.</p>
+  </li>
+  <li>
+    <p>목적: <strong>가독성↑</strong> , <strong>실수 방지</strong>(순서 착각), <strong>API 확장성</strong>(새 옵션 추가해도 안전).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">*</code> 자체는 <code class="language-plaintext highlighter-rouge">*args</code>와 다릅니다(수집 아님, <strong>구분자</strong> 일 뿐).</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="한-줄-요약">한 줄 요약</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">profile</span><span class="p">:</span> <span class="n">TextProfile</span> <span class="o">=</span> <span class="nc">TextProfile</span><span class="p">(),</span>
+              <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">TextBuffer</span><span class="sh">"</span><span class="p">:</span>
+</code></pre></div></div>
+
+<p>여기 가운데 <code class="language-plaintext highlighter-rouge">*</code> 때문에 <code class="language-plaintext highlighter-rouge">profile</code>과 <code class="language-plaintext highlighter-rouge">encoding</code>은 <strong>키워드로만</strong> 넘길 수 있습니다.</p>
+
+<ul>
+  <li>✅ 올바른 호출:
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TextBuffer</span><span class="p">.</span><span class="nf">from_file</span><span class="p">(</span><span class="sh">"</span><span class="s">rtl/top.v</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># 기본값 사용
+</span><span class="n">TextBuffer</span><span class="p">.</span><span class="nf">from_file</span><span class="p">(</span><span class="sh">"</span><span class="s">rtl/top.v</span><span class="sh">"</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">VERILOG</span><span class="p">)</span>
+<span class="n">TextBuffer</span><span class="p">.</span><span class="nf">from_file</span><span class="p">(</span><span class="sh">"</span><span class="s">rtl/top.v</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-16</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>❌ 잘못된 호출(순서로 넘김):
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TextBuffer</span><span class="p">.</span><span class="nf">from_file</span><span class="p">(</span><span class="sh">"</span><span class="s">rtl/top.v</span><span class="sh">"</span><span class="p">,</span> <span class="n">VERILOG</span><span class="p">)</span>
+<span class="c1"># TypeError: ... takes 2 positional arguments but 3 were given
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="왜-쓰나요-step-by-step-사고">왜 쓰나요? (step-by-step 사고)</h3>
+
+<ol>
+  <li>
+    <p><strong>의미가 분명해집니다.</strong><br />
+<code class="language-plaintext highlighter-rouge">profile=VERILOG</code> 처럼 이름이 보이니, 인자 의미를 헷갈릴 일이 줄어요.<br />
+→ 프로젝트 <strong>일관성</strong> 목표에 부합. ✅</p>
+  </li>
+  <li>
+    <p><strong>파라미터 순서 변경에 강합니다.</strong><br />
+나중에 옵션을 더 추가해도 기존 호출부는 <code class="language-plaintext highlighter-rouge">name=value</code>라 <strong>깨지지 않음</strong>.<br />
+→ API <strong>확장성</strong> 목표에 부합. ✅</p>
+  </li>
+  <li>
+    <p><strong>실수 방지.</strong><br />
+<code class="language-plaintext highlighter-rouge">profile</code>과 <code class="language-plaintext highlighter-rouge">encoding</code>을 순서로 바꿔 넣는 실수를 차단. ✅</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="-와-args-의-차이"><code class="language-plaintext highlighter-rouge">*</code> 와 <code class="language-plaintext highlighter-rouge">*args</code> 의 차이</h3>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">*</code> (단독): <strong>구분자</strong>. 뒤의 인자들을 <strong>키워드 전용</strong> 으로 만듭니다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">*args</code>: 남는 위치 인자들을 <strong>튜플로 수집</strong> 합니다. (수집 + 구분자 역할 모두)</p>
+  </li>
+</ul>
+
+<p>예:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>         <span class="c1"># b, c는 키워드-only
+</span>    <span class="bp">...</span>
+
+<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="c1"># a는 위치, args는 추가 위치들 수집, b는 키워드-only
+</span>    <span class="bp">...</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="보너스--positional-only-도-있어요">보너스: <code class="language-plaintext highlighter-rouge">/</code> (positional-only) 도 있어요</h3>
+
+<p>Python 3.8+ 부터는 <code class="language-plaintext highlighter-rouge">/</code> 로 <strong>위치 전용</strong> 인자를 강제할 수 있습니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">h</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>  <span class="c1"># a: 위치-only, b: 둘 다 가능, c: 키워드-only
+</span>    <span class="bp">...</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="타입-힌트-관련">타입 힌트 관련</h3>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Path | str</code> 는 <strong>Python 3.10+</strong> 의 Union 약식 문법입니다(이전 버전은 <code class="language-plaintext highlighter-rouge">Union[Path, str]</code>).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">TextProfile()</code> 을 기본값으로 두면 <strong>정의 시점에</strong> 한 번 생성된 인스턴스를 재사용합니다.<br />
+여기서는 <code class="language-plaintext highlighter-rouge">@dataclass(frozen=True)</code>라 <strong>불변</strong> 이므로 안전하지만,<br />
+일반적으로는 <code class="language-plaintext highlighter-rouge">None</code> 기본값 + 함수 내부에서 생성하는 패턴도 고려하세요.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하면, 팀 규칙으로 “옵션 인자는 모두 <code class="language-plaintext highlighter-rouge">*</code> 뒤에 배치”를 정해두면 호출부가 항상 <code class="language-plaintext highlighter-rouge">name=value</code>라 깔끔하고, 장기 유지보수에 유리합니다.</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">LLM Chatbot Client Plan</title><link href="https://hvppyarchive.github.io/llm/simple-chatbot-client/" rel="alternate" type="text/html" title="LLM Chatbot Client Plan" /><published>2025-08-21T13:53:19+09:00</published><updated>2025-08-21T13:53:19+09:00</updated><id>https://hvppyarchive.github.io/llm/simple-chatbot-client</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/simple-chatbot-client/"><![CDATA[<p class="chat--user">
 
 Developer: Role and Objective - Develop a simple, fast LLM Chatbot Client Application using Qt or PySide. Workflow Checklist - Begin with a concise checklist (3-7 bullets) of conceptual sub-tasks before implementation. Instructions - Design for easy, direct execution by users in a Linux environment with access to a shared disk. - Allow each user to save personal settings, while the default deployment settings are configured by the administrator. Deployment - The application should be distributed so users can launch it directly on supported Linux systems with shared disk access. - Initial, default application settings must be settable by an administrator; each user can override and save their preferences. Required Features - Allow setting a custom LLM (Large Language Model) endpoint. - Support multi-line message input. - Provide chat log management similar to applications like Ollama or OpenWebUI. - Enable changing model parameters from the interface. - Incorporate useful shortcut keys (e.g., hide/show window in workspace, start new conversation, etc.). - Render Markdown in chat messages. Code and Messaging Conventions - Code must be clear, well-commented, use readable variable names, and maintain straightforward control flow. - Application messaging and labels should be concise and clear to end users. Output Format - Default output is plain text. When documentation is required, use Markdown and backticks for file, directory, function, and class names. Validation - After implementation, validate that the application meets all feature and deployment requirements and is verified to run as specified in the Linux environment. Document any issues or unmet criteria. Stop Conditions - The task is complete once the client app fulfills all listed features and deployment criteria, has been validated as above, and any necessary corrections have been applied.
 
@@ -10330,780 +11548,4 @@ python gpt_oss_effort_smoke_test.py <span class="nt">--model</span> gpt-oss-20b 
   </li>
 </ul>
 
-<p>원하면 여기에 <strong>CSV 결과를 시각화하는 플롯 코드</strong> 를 붙여서, 한눈에 비교할 수 있게 만들어 드릴까요?</p>]]></content><author><name>hvppyarchive</name></author><category term="llm" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">vLLM Cline 연결 디버깅</title><link href="https://hvppyarchive.github.io/llm/vllm-cline-connection-debugging/" rel="alternate" type="text/html" title="vLLM Cline 연결 디버깅" /><published>2025-08-08T16:14:21+09:00</published><updated>2025-08-08T16:14:21+09:00</updated><id>https://hvppyarchive.github.io/llm/vllm-cline-connection-debugging</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/vllm-cline-connection-debugging/"><![CDATA[<p class="chat--user">
-
-vllm 서버에서 gpt-oss 120B 모델을 띄우고, 이 endpoint url에 VSCode Cline Extension을 연결해서 사용하고 있어.
-
-</p>
-
-<p>네, 상황을 정리하면 이렇게 되네요.</p>
-
-<ol>
-  <li>
-    <p><strong>vLLM 서버</strong> 에서 <strong>gpt-oss 120B 모델</strong> 을 띄움</p>
-  </li>
-  <li>
-    <p>그 모델의 <strong>endpoint URL</strong> 을 <strong>VSCode Cline Extension</strong> 에 연결해서 사용 중</p>
-  </li>
-</ol>
-
-<p>이 구성이 동작하려면 크게 세 단계가 필요합니다.</p>
-
-<hr />
-
-<h2 id="1-vllm-서버에서-gpt-oss-120b-모델-실행">1. vLLM 서버에서 gpt-oss 120B 모델 실행</h2>
-
-<ul>
-  <li><strong>vLLM 설치</strong>
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>vllm
-</code></pre></div>    </div>
-  </li>
-  <li><strong>모델 실행 예시</strong> (OpenAI API 호환 모드)
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> vllm.entrypoints.openai.api_server <span class="se">\</span>
-  <span class="nt">--model</span> gpt-oss-120b <span class="se">\</span>
-  <span class="nt">--tensor-parallel-size</span> 4 <span class="se">\</span>
-  <span class="nt">--port</span> 8000
-</code></pre></div>    </div>
-
-    <ul>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">--model</code> : Hugging Face 모델 경로 또는 로컬 경로</p>
-      </li>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">--tensor-parallel-size</code> : GPU 개수</p>
-      </li>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">--port</code> : API 서버 포트</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p>이렇게 하면 <code class="language-plaintext highlighter-rouge">http://&lt;서버IP&gt;:8000/v1</code> 엔드포인트가 생깁니다.</p>
-
-<hr />
-
-<h2 id="2-vscode-cline-extension-설정">2. VSCode Cline Extension 설정</h2>
-
-<p>Cline은 OpenAI API 형식을 따르기 때문에, vLLM 서버가 OpenAI 호환 모드로 띄워져 있어야 합니다.</p>
-
-<ul>
-  <li>
-    <p>VSCode → <strong>Cline Extension Settings</strong> → <strong>"API Provider"</strong>를 <code class="language-plaintext highlighter-rouge">OpenAI</code>로 선택</p>
-  </li>
-  <li><strong>API Base URL</strong> 을 vLLM 서버 주소로 설정:
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arduino
-    
-http://&lt;서버IP&gt;:8000/v1
-</code></pre></div>    </div>
-  </li>
-  <li><strong>API Key</strong> 는 vLLM 서버에서 인증을 사용하지 않으면 아무 값이나 넣어도 됩니다.<br />
-(예: <code class="language-plaintext highlighter-rouge">dummy-key</code>)</li>
-</ul>
-
-<hr />
-
-<h2 id="3-연결-확인">3. 연결 확인</h2>
-
-<p>터미널에서 다음 명령으로 정상 응답을 확인:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://&lt;서버IP&gt;:8000/v1/models
-</code></pre></div></div>
-
-<p>여기서 <code class="language-plaintext highlighter-rouge">gpt-oss-120b</code>가 뜨면 Cline에서도 바로 사용할 수 있습니다.</p>
-
-<hr />
-
-<p>💡 <strong>팁</strong></p>
-
-<ul>
-  <li>
-    <p>로컬 개발 환경에서 GPU 부족 시, vLLM 대신 Hugging Face Text Generation Inference(TGI)도 OpenAI API 호환 모드로 쓸 수 있습니다.</p>
-  </li>
-  <li>
-    <p>Cline이 <code class="language-plaintext highlighter-rouge">gpt-oss 120B</code> 같이 초대형 모델을 호출하면 응답이 느릴 수 있으니, 프롬프트를 최대한 압축하거나 서버 쪽에서 <code class="language-plaintext highlighter-rouge">--max-num-batched-tokens</code>를 조정하는 게 좋습니다.</p>
-  </li>
-</ul>
-
-<hr />
-
-<p>원하시면 제가 <strong>vLLM gpt-oss 120B + Cline 연결 전체 예제 설정 파일</strong> 을 만들어서 드릴 수 있습니다.<br />
-이렇게 하면 서버 띄우고 바로 Cline에 붙일 수 있게 됩니다.</p>
-
-<p class="chat--user">
-
-그런데 관련해서 디버깅을 좀 해보고 싶어. Cline이 서버로 보내는 쿼리와 받는 정보를 raw data에 가깝게 볼 수 있을까?
-
-</p>
-
-<p>가능해요. “최대한 원본(raw)에 가깝게” 보려면 <strong>프록시를 사이에 둬서 요청/응답을 그대로 덤프</strong> 하는 게 가장 깔끔합니다. 아래를 순서대로 해보세요. (짧게 → 깊게)</p>
-
-<hr />
-
-<h1 id="0-한줄-요약">0) 한줄 요약</h1>
-
-<ul>
-  <li>
-    <p><strong>권장:</strong> Cline ⇄ <strong>mitmproxy(reverse proxy)</strong> ⇄ vLLM</p>
-  </li>
-  <li>
-    <p><strong>보너스:</strong> VSCode 로그(Extension Host/Window), 서버측(access log), 마지막 수단으로 <code class="language-plaintext highlighter-rouge">ngrep/tcpdump</code></p>
-  </li>
-</ul>
-
-<hr />
-
-<h1 id="1-mitmproxy로-전체-http-캡처권장">1) mitmproxy로 전체 HTTP 캡처(권장)</h1>
-
-<p>Cline이 호출하는 OpenAI 호환 REST 요청을 <strong>바이트 단위로 시/헤더/바디/스트리밍까지</strong> 볼 수 있습니다.</p>
-
-<h3 id="1-1-mitmproxy-설치">1-1. mitmproxy 설치</h3>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>mitmproxy
-<span class="c"># 또는 macOS: brew install mitmproxy</span>
-</code></pre></div></div>
-
-<h3 id="1-2-vllm-뒤에-리버스-프록시-세우기">1-2. vLLM 뒤에 리버스 프록시 세우기</h3>
-
-<p>vLLM이 <code class="language-plaintext highlighter-rouge">http://&lt;VLLM_HOST&gt;:8000/v1</code> 라고 가정:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mitmproxy <span class="nt">-p</span> 8080 <span class="nt">--mode</span> reverse:http://&lt;VLLM_HOST&gt;:8000 <span class="nt">-w</span> cline_flows.mitm
-<span class="c"># GUI 원하면:</span>
-<span class="c"># mitmweb -p 8080 --mode reverse:http://&lt;VLLM_HOST&gt;:8000 -w cline_flows.mitm</span>
-</code></pre></div></div>
-
-<h3 id="1-3-cline의-base-url을-mitmproxy로-바꾸기">1-3. Cline의 Base URL을 mitmproxy로 바꾸기</h3>
-
-<p>Cline의 <strong>API Base URL</strong> 을:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:8080/v1
-</code></pre></div></div>
-
-<p>로 설정합니다. (API Key는 dummy 가능)</p>
-
-<blockquote>
-  <p>이제 mitm 화면에서 각 요청/응답을 클릭해 <strong>Headers / Content / Raw</strong> 탭으로 모두 확인 가능.<br />
- SSE(스트리밍)도 “Raw”에서 줄 단위로 보입니다.</p>
-</blockquote>
-
-<h3 id="1-4-본문까지-파일로-떨구고-싶다면옵션">1-4. 본문까지 파일로 떨구고 싶다면(옵션)</h3>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mitmdump <span class="nt">-p</span> 8080 <span class="nt">--mode</span> reverse:http://&lt;VLLM_HOST&gt;:8000 <span class="se">\</span>
-  <span class="nt">-s</span> <span class="s1">'"""
-from mitmproxy import http
-def response(flow: http.HTTPFlow):
-    with open("http_log.txt","ab") as f:
-        f.write((f"\\n=== {flow.request.method} {flow.request.pretty_url} ===\\n").encode())
-        f.write(flow.request.headers.bytes() + b"\\n\\n" + flow.request.raw_content + b"\\n")
-        f.write(b"--- RESPONSE ---\\n")
-        f.write(flow.response.headers.bytes() + b"\\n\\n" + (flow.response.raw_content or b"") + b"\\n")
-"""'</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p><strong>주의:</strong> 본문에 토큰/프롬프트 등 민감정보가 포함됩니다. 로컬에서만 사용!</p>
-</blockquote>
-
-<hr />
-
-<h1 id="2-초간단-로깅-프록시-직접-띄우기대체안">2) 초간단 “로깅 프록시” 직접 띄우기(대체안)</h1>
-
-<p>외부 도구 없이, <strong>작은 Node 프록시</strong> 를 넣어도 됩니다.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># server.js</span>
-const http <span class="o">=</span> require<span class="o">(</span><span class="s1">'http'</span><span class="o">)</span><span class="p">;</span>
-const <span class="o">{</span> request: httpRequest <span class="o">}</span> <span class="o">=</span> require<span class="o">(</span><span class="s1">'http'</span><span class="o">)</span><span class="p">;</span>
-
-const TARGET <span class="o">=</span> <span class="s1">'http://&lt;VLLM_HOST&gt;:8000'</span><span class="p">;</span>
-
-http.createServer<span class="o">((</span>clientReq, clientRes<span class="o">)</span> <span class="o">=&gt;</span> <span class="o">{</span>
-  <span class="nb">let </span>body <span class="o">=</span> <span class="o">[]</span><span class="p">;</span>
-  clientReq.on<span class="o">(</span><span class="s1">'data'</span>, chunk <span class="o">=&gt;</span> body.push<span class="o">(</span>chunk<span class="o">))</span><span class="p">;</span>
-  clientReq.on<span class="o">(</span><span class="s1">'end'</span>, <span class="o">()</span> <span class="o">=&gt;</span> <span class="o">{</span>
-    body <span class="o">=</span> Buffer.concat<span class="o">(</span>body<span class="o">)</span><span class="p">;</span>
-    console.log<span class="o">(</span><span class="s1">'\n=== REQUEST ==='</span><span class="o">)</span><span class="p">;</span>
-    console.log<span class="o">(</span>clientReq.method, clientReq.url<span class="o">)</span><span class="p">;</span>
-    console.log<span class="o">(</span>clientReq.headers<span class="o">)</span><span class="p">;</span>
-    console.log<span class="o">(</span>body.toString<span class="o">())</span><span class="p">;</span>
-
-    const opts <span class="o">=</span> <span class="o">{</span>
-      method: clientReq.method,
-      headers: clientReq.headers,
-      path: clientReq.url,
-      host: new URL<span class="o">(</span>TARGET<span class="o">)</span>.hostname,
-      port: new URL<span class="o">(</span>TARGET<span class="o">)</span>.port,
-    <span class="o">}</span><span class="p">;</span>
-
-    const proxyReq <span class="o">=</span> httpRequest<span class="o">(</span>opts, proxyRes <span class="o">=&gt;</span> <span class="o">{</span>
-      <span class="nb">let </span>resBody <span class="o">=</span> <span class="o">[]</span><span class="p">;</span>
-      proxyRes.on<span class="o">(</span><span class="s1">'data'</span>, chunk <span class="o">=&gt;</span> <span class="o">{</span>
-        resBody.push<span class="o">(</span>chunk<span class="o">)</span><span class="p">;</span>
-        clientRes.write<span class="o">(</span>chunk<span class="o">)</span><span class="p">;</span> // 스트리밍 패스스루
-      <span class="o">})</span><span class="p">;</span>
-      proxyRes.on<span class="o">(</span><span class="s1">'end'</span>, <span class="o">()</span> <span class="o">=&gt;</span> <span class="o">{</span>
-        resBody <span class="o">=</span> Buffer.concat<span class="o">(</span>resBody<span class="o">)</span><span class="p">;</span>
-        console.log<span class="o">(</span><span class="s1">'\n--- RESPONSE ---'</span><span class="o">)</span><span class="p">;</span>
-        console.log<span class="o">(</span>proxyRes.statusCode, proxyRes.headers<span class="o">)</span><span class="p">;</span>
-        console.log<span class="o">(</span>resBody.toString<span class="o">())</span><span class="p">;</span>
-        clientRes.end<span class="o">()</span><span class="p">;</span>
-      <span class="o">})</span><span class="p">;</span>
-    <span class="o">})</span><span class="p">;</span>
-
-    proxyReq.on<span class="o">(</span><span class="s1">'error'</span>, e <span class="o">=&gt;</span> <span class="o">{</span>
-      console.error<span class="o">(</span><span class="s1">'proxy error'</span>, e<span class="o">)</span><span class="p">;</span>
-      clientRes.statusCode <span class="o">=</span> 502<span class="p">;</span>
-      clientRes.end<span class="o">(</span><span class="s1">'proxy error'</span><span class="o">)</span><span class="p">;</span>
-    <span class="o">})</span><span class="p">;</span>
-
-    proxyReq.write<span class="o">(</span>body<span class="o">)</span><span class="p">;</span>
-    proxyReq.end<span class="o">()</span><span class="p">;</span>
-  <span class="o">})</span><span class="p">;</span>
-<span class="o">})</span>.listen<span class="o">(</span>8080, <span class="o">()</span> <span class="o">=&gt;</span> console.log<span class="o">(</span><span class="s1">'logging proxy on :8080'</span><span class="o">))</span><span class="p">;</span>
-</code></pre></div></div>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node server.js
-<span class="c"># 그리고 Cline Base URL을 http://localhost:8080/v1 로</span>
-</code></pre></div></div>
-
-<hr />
-
-<h1 id="3-vscode-쪽에서-볼-수-있는-로그">3) VSCode 쪽에서 볼 수 있는 로그</h1>
-
-<ol>
-  <li>
-    <p><strong>Output 패널</strong></p>
-
-    <ul>
-      <li>
-        <p>VSCode: View → Output → 드롭다운에서</p>
-
-        <ul>
-          <li><strong>“Log (Extension Host)”</strong> , <strong>“Log (Window)”</strong> , 혹시 있다면 <strong>“Cline”</strong> 채널 확인</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>로그 레벨 올리기</strong></p>
-
-    <ul>
-      <li>Settings에서 <strong>“Log Level” → “Trace”</strong>로 설정</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Developer Tools</strong></p>
-
-    <ul>
-      <li>
-        <p>Help → Toggle Developer Tools → Console 탭</p>
-      </li>
-      <li>
-        <p>일부 네트워크/콘솔 로그가 찍힙니다(확장 작동 방식에 따라 차이)</p>
-      </li>
-    </ul>
-  </li>
-</ol>
-
-<blockquote>
-  <p>확장마다 남기는 로그 범위가 달라 실제 <strong>요청/응답 바디 전체</strong> 는 안 나올 수 있어요. 그래서 위의 <strong>프록시 접근이 가장 확실</strong> 합니다.</p>
-</blockquote>
-
-<hr />
-
-<h1 id="4-서버vllm-측-로그를-좀-더-보기">4) 서버(vLLM) 측 로그를 좀 더 보기</h1>
-
-<ul>
-  <li>
-    <p>vLLM OpenAI 서버는 Uvicorn 위에서 돌아가므로 <strong>access log</strong> 는 기본적으로 나옵니다.</p>
-  </li>
-  <li>
-    <p>더 자세히 보려면(바디는 기본 미포함):</p>
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> vllm.entrypoints.openai.api_server <span class="se">\</span>
-  <span class="nt">--model</span> gpt-oss-120b <span class="se">\</span>
-  <span class="nt">--port</span> 8000 <span class="se">\</span>
-  <span class="nt">--log-level</span> debug
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<blockquote>
-  <p>이건 라우트/상태 정도만 보이고, <strong>요청/응답 바디는 노출되지 않습니다.</strong><br />
- 원본 바디가 필요하면 1번(프록시)로 가는 게 정석.</p>
-</blockquote>
-
-<hr />
-
-<h1 id="5-네트워크-레벨에서-그냥-까보기http일-때만">5) 네트워크 레벨에서 “그냥 까보기”(HTTP일 때만)</h1>
-
-<p>서버와 Cline 사이가 <strong>평문 HTTP</strong> 라면, 패킷 레벨로도 확인 가능합니다.</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">ngrep</code> (가독성 좋음)
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ngrep <span class="nt">-d</span> any <span class="nt">-W</span> byline port 8000
-</code></pre></div>    </div>
-  </li>
-  <li><code class="language-plaintext highlighter-rouge">tcpdump</code> (바이너리/헤더까지)
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>tcpdump <span class="nt">-A</span> <span class="nt">-s0</span> <span class="s1">'tcp port 8000'</span>
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<blockquote>
-  <p>HTTPS라면 내용은 해독이 안 되니 프록시가 필요합니다.</p>
-</blockquote>
-
-<hr />
-
-<h1 id="6-재현용-curl로-같은-요청-만들어보기">6) 재현용: curl로 같은 요청 만들어보기</h1>
-
-<p>Cline이 보내는 페이로드를 캡처했으면, <strong>동일한 요청</strong> 을 <code class="language-plaintext highlighter-rouge">curl</code>로 반복 재현하면서 비교 디버깅하기 좋습니다.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-v</span> http://localhost:8080/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer dummy"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model": "gpt-oss-120b",
-    "messages": [{"role":"user","content":"hello"}],
-    "stream": true
-  }'</span>
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">-v</code>/<code class="language-plaintext highlighter-rouge">--trace-ascii dump.txt</code>로 <strong>wire-level</strong> 로그 확보 가능</li>
-</ul>
-
-<hr />
-
-<h2 id="어떤-방법이-제일-나을까">어떤 방법이 제일 나을까?</h2>
-
-<ul>
-  <li>
-    <p><strong>가장 확실하고 빠른 해법은 1) mitmproxy reverse</strong> 입니다. UI로 한눈에 보이고, 파일로도 저장 가능.</p>
-  </li>
-  <li>
-    <p>VSCode 로그는 “보조”.</p>
-  </li>
-  <li>
-    <p>서버 로그/패킷 스니핑은 상황 따라 도움.</p>
-  </li>
-</ul>
-
-<p>원하시면, <strong>현재 환경(IP/포트/HTTPS 여부)</strong> 알려주면 제가 <strong>딱 맞춘 명령어와 Cline 설정 스크린샷 가이드</strong> 까지 만들어드릴게요.</p>
-
-<p class="chat--user">
-
-API 키 입력이 필요하면?
-
-</p>
-
-<p>Cline이 API 키를 <strong>반드시</strong> 요구하는 경우라도, vLLM 서버가 인증을 쓰지 않는다면 사실상 <strong>아무 문자열이나 넣으면 됩니다.</strong><br />
-왜냐면 vLLM의 OpenAI 호환 API는 기본적으로 API 키 검증을 하지 않기 때문이에요.</p>
-
-<hr />
-
-<h2 id="1-인증-없는-vllm-서버일-때">1. 인증 없는 vLLM 서버일 때</h2>
-
-<ul>
-  <li>
-    <p>Cline의 API Key 입력칸에 <code class="language-plaintext highlighter-rouge">dummy</code> 또는 <code class="language-plaintext highlighter-rouge">test</code>처럼 아무 값 입력</p>
-  </li>
-  <li>
-    <p>mitmproxy/프록시/서버 모두 그대로 통과합니다.</p>
-  </li>
-  <li>
-    <p>요청 헤더 예시:</p>
-    <div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">Authorization</span><span class="o">:</span> <span class="nf">Bearer dummy</span>
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="2-vllm에서-api-키-검증을-켠-경우">2. vLLM에서 API 키 검증을 켠 경우</h2>
-
-<p>만약 <code class="language-plaintext highlighter-rouge">--api-key</code> 같은 인증 옵션을 활성화했다면(또는 API Gateway 뒤에 둔 경우):</p>
-
-<ol>
-  <li><strong>서버에서 설정한 키</strong> 를 기억하거나 환경변수로 확인
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">VLLM_API_KEY</span><span class="o">=</span><span class="s2">"my-secret-key"</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Cline API Key 입력란에 해당 키를 입력</p>
-  </li>
-  <li>프록시나 mitmproxy로 캡처 시에도 이 키가 그대로 Authorization 헤더에 뜹니다.</li>
-</ol>
-
-<hr />
-
-<h2 id="3-디버깅-프록시에서-키를-안전하게-처리하는-팁">3. 디버깅 프록시에서 키를 안전하게 처리하는 팁</h2>
-
-<ul>
-  <li>요청 로깅 시 Authorization 헤더를 <strong>마스킹</strong> 하면 좋습니다.
-    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># mitmproxy 스크립트 예시
-</span><span class="kn">from</span> <span class="n">mitmproxy</span> <span class="kn">import</span> <span class="n">http</span>
-<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">flow</span><span class="p">:</span> <span class="n">http</span><span class="p">.</span><span class="n">HTTPFlow</span><span class="p">):</span>
-    <span class="k">if</span> <span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">flow</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">headers</span><span class="p">:</span>
-        <span class="n">flow</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">headers</span><span class="p">[</span><span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">Bearer ***MASKED***</span><span class="sh">"</span>
-</code></pre></div>    </div>
-  </li>
-  <li>내부 개발/로컬 환경이면 그냥 그대로 봐도 무방하지만, 키가 외부로 유출되면 안 됩니다.</li>
-</ul>
-
-<hr />
-
-<p>📌 <strong>결론</strong></p>
-
-<ul>
-  <li>
-    <p>인증 없으면 Cline에 임의 문자열 넣으면 끝.</p>
-  </li>
-  <li>
-    <p>인증 있으면 vLLM 서버에 설정한 키를 넣어야 함.</p>
-  </li>
-  <li>
-    <p>디버깅 시엔 프록시에서 키를 가려주는 습관을 들이면 안전합니다.</p>
-  </li>
-</ul>
-
-<hr />
-
-<p>필요하다면 제가 <strong>API 키 유무별 Cline–vLLM–mitmproxy 연결 전체 그림</strong> 을 그려서, 어떤 값이 어디로 흘러가는지 보여드릴 수 있습니다.<br />
-그렇게 하면 디버깅 흐름이 한눈에 보입니다.</p>
-
-<p class="chat--user">
-
-했는데 API Streaming Failed Unexpected token 173781 while expecting start token 200006 에러가 떠 cline에서
-
-</p>
-
-<p>이 증상, 거의 100% <strong>스트리밍 파서/포맷 불일치</strong> 예요.<br />
-특히 메시지에 나온 <code class="language-plaintext highlighter-rouge">start token 200006</code>는 OpenAI o-series(=gpt-4o 계열) 토크나이저의 특수 토큰 ID라서, <strong>Cline이 o-series/Harmony 포맷을 기대</strong> 하는데 vLLM의 <strong>일반 Chat Completions 스트림</strong> 을 받는 경우에 잘 터집니다. <a href="https://docs.cline.bot/provider-config/openai-compatible?utm_source=chatgpt.com">docs.cline.bot</a><a href="https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html?utm_source=chatgpt.com">VLLM Docs</a></p>
-
-<p>아래 순서대로 체크해보세요. (위에서부터 한 단계씩)</p>
-
-<hr />
-
-<h3 id="1-cline가-responses-api-가-아니라-chat-completions-를-때리게-만들기">1) Cline가 <strong>Responses API</strong> 가 아니라 <strong>Chat Completions</strong> 를 때리게 만들기</h3>
-
-<ul>
-  <li>
-    <p>Cline 설정 → <strong>API Provider: OpenAI Compatible</strong></p>
-  </li>
-  <li>
-    <p><strong>Base URL</strong> : <code class="language-plaintext highlighter-rouge">http://&lt;서버IP&gt;:8000/v1</code></p>
-  </li>
-  <li>
-    <p><strong>Model ID</strong> : vLLM에 띄운 <strong>정확한 이름</strong>(예: <code class="language-plaintext highlighter-rouge">gpt-oss-120b</code>)</p>
-  </li>
-  <li>
-    <p>가능하면 <strong>Responses API(“/v1/responses”) 옵션/모드 꺼두기</strong> → vLLM은 공식적으로 <strong>/v1/chat/completions</strong> 스트림을 지원합니다. <a href="https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html?utm_source=chatgpt.com">VLLM Docs</a></p>
-  </li>
-</ul>
-
-<blockquote>
-  <p>왜? vLLM의 OpenAI 호환 서버는 Completions/Chat/Embeddings까지만 구현되어 있고, OpenAI의 최신 <strong>Responses/Harmony(o-series)</strong> 이벤트 스트림과는 필드/이벤트명이 달라서 Cline 파서가 못 알아듣습니다. <a href="https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html?utm_source=chatgpt.com">VLLM Docs</a></p>
-</blockquote>
-
-<hr />
-
-<h3 id="2-cline에서-o-seriesreasoningcomputer-use병렬-툴콜-꺼두기">2) Cline에서 “o-series/Reasoning/Computer Use/병렬 툴콜” 꺼두기</h3>
-
-<ul>
-  <li>
-    <p>모델을 <strong>o1/o3/gpt-4o</strong> 류가 아닌 <strong>일반 채팅형</strong> 으로 고정</p>
-  </li>
-  <li>
-    <p><strong>Tool/Computer Use</strong> 기능을 일단 <strong>OFF</strong> (vLLM의 함수/툴콜 구현과 Cline의 기대치가 어긋날 수 있음)</p>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="3-스트리밍-자체가-문제인지-분리">3) 스트리밍 자체가 문제인지 분리</h3>
-
-<ul>
-  <li>
-    <p>Cline 설정에서 <strong>Stream 비활성화</strong> 가 가능하면 잠시 꺼서 테스트</p>
-  </li>
-  <li>
-    <p>혹은 동일 요청을 <strong>curl로 재현</strong> 해 보세요:</p>
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 스트림 OFF로 테스트(파서 우회)</span>
-curl http://&lt;서버IP&gt;:8000/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer dummy"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{
-    "model":"gpt-oss-120b",
-    "messages":[{"role":"user","content":"ping"}],
-    "stream": false
-  }'</span>
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<p>이건 잘 되는데 Cline에서만 터지면 <strong>Cline의 SSE 파서/옵션 불일치</strong> 로 확정.</p>
-
-<hr />
-
-<h3 id="4-mitmproxy로-실제-스트림-모양-확인">4) mitmproxy로 실제 스트림 모양 확인</h3>
-
-<ul>
-  <li>Cline ↔ vLLM 사이에 <strong>mitmproxy(reverse)</strong>를 두고 <strong>SSE 라인</strong> 을 봅니다.<br />
-<code class="language-plaintext highlighter-rouge">data: { ... }</code>가 JSON 청크로 오다가 마지막에 <code class="language-plaintext highlighter-rouge">data: [DONE]</code>으로 끝나야 Cline이 행복합니다. 만약 <strong>Responses API 이벤트명</strong>(예: <code class="language-plaintext highlighter-rouge">event: response.delta</code>) 비슷한 게 보이면 라우팅이 잘못된 겁니다. <a href="https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html?utm_source=chatgpt.com">VLLM Docs</a></li>
-</ul>
-
-<hr />
-
-<h3 id="5-vllm-서버-쪽-권장-실행-플래그">5) vLLM 서버 쪽 권장 실행 플래그</h3>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> vllm.entrypoints.openai.api_server <span class="se">\</span>
-  <span class="nt">--model</span> gpt-oss-120b <span class="se">\</span>
-  <span class="nt">--host</span> 0.0.0.0 <span class="nt">--port</span> 8000 <span class="se">\</span>
-  <span class="nt">--tensor-parallel-size</span> &lt;GPU수&gt; <span class="se">\</span>
-  <span class="nt">--enable-log-requests</span>  <span class="c">#(문제시 요청 로깅 보조)</span>
-</code></pre></div></div>
-
-<ul>
-  <li>반드시 Cline이 <strong>/v1/chat/completions</strong> 로 치는지 확인하세요. (mitmproxy/curl)</li>
-</ul>
-
-<hr />
-
-<h3 id="6-흔한-함정-정리">6) 흔한 함정 정리</h3>
-
-<ul>
-  <li>
-    <p><strong>Base URL 끝에 /v1 빠짐</strong> → 404/파서오류 유발</p>
-  </li>
-  <li>
-    <p><strong>Model ID 오타</strong> → 일부 게이트웨이는 다른 엔드포인트로 우회 응답</p>
-  </li>
-  <li>
-    <p><strong>JSON 모드/Response Format 강제</strong>(예: json_schema) → 일부 모델에서 스트림 형식이 달라져 파서 에러</p>
-  </li>
-  <li>
-    <p><strong>HTTP 압축/프록시 변환</strong> 이 SSE 줄바꿈을 깨뜨리는 경우</p>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="왜-200006이-보였나">왜 200006이 보였나?</h3>
-
-<p>o-series(Harmony) 포맷에서 쓰는 특수 토큰 ID들이 있고, 글 중에도 <code class="language-plaintext highlighter-rouge">200006</code> 같은 ID가 언급됩니다. Cline이 그 <strong>포맷(=특정 토큰 경계/이벤트)을 기대</strong> 했는데, vLLM이 <strong>일반 Chat 스트림</strong> 을 보내니 “기대하던 시작 토큰이 아니다” 류의 에러가 난 것으로 추정됩니다. <a href="https://simonwillison.net/2025/Aug/5/gpt-oss/?utm_source=chatgpt.com">Simon Willison’s Weblog</a></p>
-
-<hr />
-
-<p>필요하면 지금 Cline 설정 스크린샷(모델/엔드포인트/토글 항목)과 <strong>mitmproxy 캡처</strong> 한두 건만 올려 주세요.<br />
-그대로 보고 <strong>“어느 지점에서 Responses↔Chat이 엇갈리는지”</strong> 정확히 짚어드릴게요.</p>
-
-<p class="chat--user">
-
-근데 mitmproxy를 안쓰면 저 에러가 안나
-
-</p>
-
-<p>오—그럼 <strong>원인 범위가 mitmproxy 쪽</strong> 으로 꽤 좁혀졌어요.<br />
-SSE(서버센트 이벤트) 스트림을 mitmproxy가 <strong>버퍼링/재인코딩/HTTP2 변환</strong> 하면서 Cline의 파서가 기대하는 포맷이 깨지는 전형적인 케이스 같습니다.</p>
-
-<p>아래 순서대로 “한 가지씩” 바꿔 보세요. (위에서부터 효과 큰 것 ▶ 세부)</p>
-
-<hr />
-
-<h2 id="1-mitmproxy-실행-옵션을-스트리밍-친화적으로-바꾸기">1) mitmproxy 실행 옵션을 스트리밍 친화적으로 바꾸기</h2>
-
-<p>SSE는 라인 경계(줄바꿈)와 chunking이 아주 민감해요. 다음 옵션이 핵심입니다.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mitmproxy <span class="se">\</span>
-  <span class="nt">--mode</span> reverse:http://&lt;VLLM_HOST&gt;:8000 <span class="se">\</span>
-  <span class="nt">-p</span> 8080 <span class="se">\</span>
-  <span class="nt">--set</span> <span class="nv">http2</span><span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
-  <span class="nt">--set</span> <span class="nv">connection_strategy</span><span class="o">=</span>lazy <span class="se">\</span>
-  <span class="nt">--set</span> <span class="nv">stream_large_bodies</span><span class="o">=</span>1
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">http2=false</code> : 업스트림/다운스트림에서 HTTP/2로 변환되는 걸 막아서 <strong>SSE 라인 경계 깨짐</strong> 을 예방</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">connection_strategy=lazy</code> : 불필요한 선연결/재사용 줄임</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">stream_large_bodies=1</code> : <strong>응답을 버퍼링하지 말고 바로바로 흘려보냄</strong> (SSE 필수)</p>
-  </li>
-</ul>
-
-<blockquote>
-  <p>Cline Base URL은 <code class="language-plaintext highlighter-rouge">http://localhost:8080/v1</code> 로 유지</p>
-</blockquote>
-
-<hr />
-
-<h2 id="2-바디-찍는-mitm-스크립트는-일단-끄기">2) “바디 찍는” mitm 스크립트는 일단 끄기</h2>
-
-<p>제가 전에 드린 예시처럼 <code class="language-plaintext highlighter-rouge">flow.response.raw_content</code>를 파일로 쓰면 <strong>mitm이 본문을 수집하려고 버퍼링</strong> 할 수 있어요.<br />
-<strong>스크립트 없이</strong> UI에서 Raw 탭으로 먼저 확인해 보세요.<br />
-(로그를 꼭 남겨야 한다면, <code class="language-plaintext highlighter-rouge">responseheaders</code> 이벤트에서 헤더만 찍고 바디는 건드리지 않는 방식으로…)</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># headers만 로깅(버퍼링 방지)
-</span><span class="kn">from</span> <span class="n">mitmproxy</span> <span class="kn">import</span> <span class="n">http</span>
-<span class="k">def</span> <span class="nf">responseheaders</span><span class="p">(</span><span class="n">flow</span><span class="p">:</span> <span class="n">http</span><span class="p">.</span><span class="n">HTTPFlow</span><span class="p">):</span>
-    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">=== RESPONSE HEADERS ===</span><span class="sh">"</span><span class="p">)</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">flow</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">,</span> <span class="nf">dict</span><span class="p">(</span><span class="n">flow</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">))</span>
-    <span class="c1"># 스트리밍 강제
-</span>    <span class="n">flow</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">stream</span> <span class="o">=</span> <span class="bp">True</span>
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="3-gzip인코딩-간섭-줄이기">3) gzip/인코딩 간섭 줄이기</h2>
-
-<p>가능하면 Cline 쪽에서 <strong>Accept-Encoding: identity</strong> 를 강제하거나, vLLM이 <code class="language-plaintext highlighter-rouge">text/event-stream</code>에 대해 압축을 안 하도록(기본적으로는 안 함) 둡니다.<br />
-압축이 끼면 중간 프록시가 <strong>재압축/해제</strong> 하면서 줄 경계가 어긋날 수 있어요.</p>
-
-<hr />
-
-<h2 id="4-프록시-경로중복-prefix-확인">4) 프록시 경로/중복 prefix 확인</h2>
-
-<p>reverse 모드에서 <strong>Base URL이<code class="language-plaintext highlighter-rouge">/v1</code></strong> 인데, upstream에도 <code class="language-plaintext highlighter-rouge">/v1</code>가 붙은 주소로 중복되면 라우팅 꼬입니다.</p>
-
-<ul>
-  <li>
-    <p>mitmproxy: <code class="language-plaintext highlighter-rouge">--mode reverse:http://&lt;VLLM_HOST&gt;:8000</code></p>
-  </li>
-  <li>
-    <p>Cline Base URL: <code class="language-plaintext highlighter-rouge">http://localhost:8080/v1</code></p>
-  </li>
-  <li>
-    <p><strong>Upstream vLLM 라우트는<code class="language-plaintext highlighter-rouge">/v1/chat/completions</code></strong> 로 딱 한 번만 들어가야 합니다.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="5-재현-테스트-직접-curl로-cline-대신-쏘기">5) 재현 테스트 (직접 curl로 Cline 대신 쏘기)</h2>
-
-<p>mitm를 끼웠을 때만 깨지는지, 그리고 옵션 수정 후 복구됐는지 빠르게 확인:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Stream 켠 채로 mitm 경유</span>
-curl <span class="nt">-N</span> <span class="nt">-v</span> http://localhost:8080/v1/chat/completions <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer dummy"</span> <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{ "model":"gpt-oss-120b",
-        "messages":[{"role":"user","content":"ping"}],
-        "stream": true }'</span>
-</code></pre></div></div>
-
-<p>정상이라면 이런 패턴으로 흘러와야 합니다:</p>
-<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="p">:</span> <span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="s">"..."</span><span class="p">,</span><span class="s">"object"</span><span class="p">:</span><span class="s">"chat.completion.chunk"</span><span class="p">,</span> <span class="o">..</span><span class="p">.}</span>
-<span class="n">data</span><span class="p">:</span> <span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="s">"..."</span><span class="p">,</span><span class="s">"object"</span><span class="p">:</span><span class="s">"chat.completion.chunk"</span><span class="p">,</span> <span class="o">..</span><span class="p">.}</span>
-<span class="o">..</span><span class="p">.</span>
-<span class="n">data</span><span class="p">:</span> <span class="p">[</span><span class="nc">DONE</span><span class="p">]</span>
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="6-그래도-안-되면-대안-2가지">6) 그래도 안 되면: 대안 2가지</h2>
-
-<ul>
-  <li>
-    <p><strong>HTTP/1.1 고정 프록시</strong>(tinyproxy/nginx/HAProxy)로 단순 패스스루만 하게 하기</p>
-
-    <ul>
-      <li>nginx 예: <code class="language-plaintext highlighter-rouge">proxy_http_version 1.1; proxy_set_header Connection ""; proxy_buffering off;</code></li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>ngrep/tcpdump</strong> 로 패킷 레벨 캡처(프록시 없이도 raw 확인 가능)</p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="7-체크리스트한-번에-훑기">7) 체크리스트(한 번에 훑기)</h2>
-
-<ul>
-  <li>
-    <p>mitm <code class="language-plaintext highlighter-rouge">http2=false</code>, <code class="language-plaintext highlighter-rouge">stream_large_bodies=1</code> 적용</p>
-  </li>
-  <li>
-    <p>커스텀 mitm 스크립트에서 <strong>본문 접근 제거</strong> (헤더만 로깅)</p>
-  </li>
-  <li>
-    <p>Base URL 경로 중복 없음(<code class="language-plaintext highlighter-rouge">/v1</code> 한 번만)</p>
-  </li>
-  <li>
-    <p>SSE 응답 헤더 확인: <code class="language-plaintext highlighter-rouge">Content-Type: text/event-stream</code>, <code class="language-plaintext highlighter-rouge">Cache-Control: no-cache</code></p>
-  </li>
-  <li>
-    <p>gzip/deflate 비활성화(가능하다면)</p>
-  </li>
-  <li>
-    <p>Cline이 <strong>/v1/responses</strong> 가 아닌 <strong>/v1/chat/completions</strong> 로 호출 중</p>
-  </li>
-</ul>
-
-<hr />
-
-<p>원하시면 지금 쓰신 mitm 실행 커맨드랑(옵션 포함), Cline Base URL/모델 설정을 알려주세요.<br />
-그대로 맞춰서 <strong>오류 재현 → 최소 수정 세트</strong> 를 딱 뽑아드릴게요.</p>
-
-<p class="chat--user">
-
-http2=false 옵션 하나만 추가하니 잘 돼네
-
-</p>
-
-<p>아, 그럼 원인이 거의 확정이네요 — <strong>mitmproxy가 기본으로 HTTP/2로 업스트림 연결</strong> 을 시도하면서 SSE(서버센트 이벤트) 스트림의 줄 경계나 전송 방식이 미묘하게 변형돼서, Cline 파서가 깨졌던 겁니다.</p>
-
-<hr />
-
-<h2 id="왜-http2false로-해결됐나">왜 <code class="language-plaintext highlighter-rouge">http2=false</code>로 해결됐나</h2>
-
-<ul>
-  <li>
-    <p>SSE는 <strong>HTTP/1.1의 chunked transfer</strong> 에 의존하는 경우가 많습니다.</p>
-  </li>
-  <li>
-    <p>mitmproxy가 HTTP/2로 업스트림을 붙으면, 내부에서 <strong>프레임 단위로 전송</strong> → 중간에 라인 경계(<code class="language-plaintext highlighter-rouge">\n\n</code>)가 바뀌거나 버퍼링 타이밍이 달라짐.</p>
-  </li>
-  <li>
-    <p>특히 Cline 같이 실시간 토큰 단위 파서를 쓰는 쪽은 이 변화에 민감해서, <strong>"Unexpected token"</strong> 같은 오류를 뿜습니다.</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">--set http2=false</code>는 mitmproxy가 업/다운 스트림 모두 <strong>HTTP/1.1로 고정</strong> 하게 해서 원본 chunking/SSE 형식을 보존하게 만듭니다.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="안전하게-쓰는-mitmproxy-sse-프록시-실행-예시">안전하게 쓰는 mitmproxy SSE 프록시 실행 예시</h2>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mitmproxy <span class="se">\</span>
-  <span class="nt">--mode</span> reverse:http://&lt;VLLM_HOST&gt;:8000 <span class="se">\</span>
-  <span class="nt">-p</span> 8080 <span class="se">\</span>
-  <span class="nt">--set</span> <span class="nv">http2</span><span class="o">=</span><span class="nb">false</span> <span class="se">\</span>
-  <span class="nt">--set</span> <span class="nv">connection_strategy</span><span class="o">=</span>lazy <span class="se">\</span>
-  <span class="nt">--set</span> <span class="nv">stream_large_bodies</span><span class="o">=</span>1
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">connection_strategy=lazy</code> → 불필요한 선연결 방지</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">stream_large_bodies=1</code> → 응답 버퍼링 없이 바로 흘려보냄</p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="앞으로-비슷한-상황-방지-팁">앞으로 비슷한 상황 방지 팁</h2>
-
-<ol>
-  <li>
-    <p><strong>SSE 프록시에는 HTTP/2 강제 비활성</strong></p>
-  </li>
-  <li>
-    <p>본문 로깅이 필요하면 <strong>stream 모드에서 헤더만 찍고 바디는 건드리지 않기</strong></p>
-  </li>
-  <li>
-    <p>gzip/deflate 같은 압축은 가급적 꺼두기 → 중간 해제 시 줄 경계 깨짐 방지</p>
-  </li>
-  <li>
-    <p>프록시로 테스트한 curl 요청이 정상 스트리밍이면, Cline에서도 99% 잘 동작</p>
-  </li>
-</ol>
-
-<hr />
-
-<p>이제 <code class="language-plaintext highlighter-rouge">http2=false</code>로 고정한 상태에서 디버깅 로그 수집도 문제없이 가능할 거예요.<br />
-원하시면 제가 <strong>Cline↔mitmproxy↔vLLM 흐름도</strong> 그려서, 데이터가 어떻게 흘러가고 어디서 줄 경계가 깨지는지 시각적으로 보여드릴 수도 있습니다.</p>]]></content><author><name>hvppyarchive</name></author><category term="llm" /><summary type="html"><![CDATA[]]></summary></entry></feed>
+<p>원하면 여기에 <strong>CSV 결과를 시각화하는 플롯 코드</strong> 를 붙여서, 한눈에 비교할 수 있게 만들어 드릴까요?</p>]]></content><author><name>hvppyarchive</name></author><category term="llm" /><summary type="html"><![CDATA[]]></summary></entry></feed>
