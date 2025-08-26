@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-26T15:26:46+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-26T15:26:46+09:00</published><updated>2025-08-26T15:26:46+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-26T16:19:27+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-26T16:19:27+09:00</published><updated>2025-08-26T16:19:27+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">작업 폴더 구성 추천</title><link href="https://hvppyarchive.github.io/misc/work-directory-structure/" rel="alternate" type="text/html" title="작업 폴더 구성 추천" /><published>2025-08-26T15:26:41+09:00</published><updated>2025-08-26T15:26:41+09:00</updated><id>https://hvppyarchive.github.io/misc/work-directory-structure</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/work-directory-structure/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">작업 폴더 구성 추천</title><link href="https://hvppyarchive.github.io/misc/work-directory-structure/" rel="alternate" type="text/html" title="작업 폴더 구성 추천" /><published>2025-08-26T16:19:22+09:00</published><updated>2025-08-26T16:19:22+09:00</updated><id>https://hvppyarchive.github.io/misc/work-directory-structure</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/work-directory-structure/"><![CDATA[<p class="chat--user">
 
 회사에서 작업 폴더 구성을 도와줘. 뭔가 작업 폴더를 꾸미는 것에 대한 일반적인 추천 같은게 있을까?
 
@@ -3427,7 +3427,974 @@ echo "Pinned: $label -&gt; $rel | $cmd"
 
 <hr />
 
-<p>원하면 지금 스타터에 <code class="language-plaintext highlighter-rouge">10_Today/wrappers/</code>와 <code class="language-plaintext highlighter-rouge">80_Tools/scripts/INDEX.md</code> 틀, 그리고 <code class="language-plaintext highlighter-rouge">checksum_all.sh</code>/<code class="language-plaintext highlighter-rouge">release_copy.sh</code> 같은 <strong>실사용 공용 스크립트</strong> 샘플까지 바로 만들어서 붙여줄게. 어느 셸(Bash/Zsh/tcsh/PowerShell)을 주력으로 쓰는지도 알려줘!</p>]]></content><author><name>hvppyarchive</name></author><category term="misc" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">LLM Chatbot Client Plan</title><link href="https://hvppyarchive.github.io/llm/simple-chatbot-client/" rel="alternate" type="text/html" title="LLM Chatbot Client Plan" /><published>2025-08-21T19:11:25+09:00</published><updated>2025-08-21T19:11:25+09:00</updated><id>https://hvppyarchive.github.io/llm/simple-chatbot-client</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/simple-chatbot-client/"><![CDATA[<p class="chat--user">
+<p>원하면 지금 스타터에 <code class="language-plaintext highlighter-rouge">10_Today/wrappers/</code>와 <code class="language-plaintext highlighter-rouge">80_Tools/scripts/INDEX.md</code> 틀, 그리고 <code class="language-plaintext highlighter-rouge">checksum_all.sh</code>/<code class="language-plaintext highlighter-rouge">release_copy.sh</code> 같은 <strong>실사용 공용 스크립트</strong> 샘플까지 바로 만들어서 붙여줄게. 어느 셸(Bash/Zsh/tcsh/PowerShell)을 주력으로 쓰는지도 알려줘!</p>
+
+<p class="chat--user">
+
+근데 config를 교육자료랑 같은 폴더에 두는게 난 좀 이상해
+
+</p>
+
+<p>완전 공감해요. <strong>교육자료(edu)</strong>와 <strong>설정(config)</strong>은 성격이 달라서 분리하는 게 깔끔합니다.<br />
+아래처럼 <strong>전용 루트 <code class="language-plaintext highlighter-rouge">32_Configs/</code></strong>를 새로 두고, 기존 구조를 살짝 조정해요.</p>
+
+<hr />
+
+<h1 id="왜-분리">왜 분리?</h1>
+
+<ul>
+  <li>
+    <p><strong>의도 분리</strong> : 문서/학습(읽기) vs 설정/프리셋(실행·적용)</p>
+  </li>
+  <li>
+    <p><strong>권한/백업</strong> : 개인설정은 민감·빈도 높음 → 별도 관리가 안전</p>
+  </li>
+  <li>
+    <p><strong>레이어링 명확</strong> : <code class="language-plaintext highlighter-rouge">shared(골든)</code> ↔ <code class="language-plaintext highlighter-rouge">personal(오버라이드)</code> 우선순위가 뚜렷</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="수정된-최종-트리설정만-이동-나머지-동일">수정된 최종 트리(설정만 이동, 나머지 동일)</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgsql
+
+Work/
+  00_Inbox/
+  10_Today/
+  20_Projects/
+  25_Jobs/
+  30_Areas/
+    worklog/
+    environments/
+    knowledge_base/
+      tips/ cheatsheets/ howtos/
+  31_Labs/
+  32_Configs/                         - ★ 설정 전용 루트
+    shared/                           - 조직/프로젝트에 공유 가능한 '골든'
+      global/                         - 도구별 표준 설정(전역)
+        vscode/ ruff/ pytest/ pyinstaller/ pyside6/ jupyter/
+      projects/                       - 특정 프로젝트 전용 기본설정
+        sample-app/                   - 예: 프로젝트별 pytest.ini, ruff.toml 등
+      README.md                       - 적용 원칙/우선순위
+    personal/                         - 나만의 오버라이드(비공개)
+      os/{mac,win,linux}/             - OS별 세팅(키보드/입력기 등)
+      shell/{bash,zsh,tcsh,powershell}/ - 프로필·별칭
+      editors/vscode/                 - settings.user.json, keybindings.user.json
+      git/                            - .gitconfig.local 등
+      python/                         - pip.conf, poetry.toml, pypirc
+      tools/                          - 각 툴 개인 프리셋
+      secrets/README.md               - (실제 비밀은 두지 말 것)
+      .gitignore                      - *.local, secrets/*, *.pem 등 폭넓게 제외
+  40_Resources/                       - 레퍼런스/교육/매뉴얼(설정 X)
+    edu/ (courses, tutorials, papers/…)
+    manuals/ (&lt;vendor&gt;/&lt;product&gt;/&lt;version&gt;/)
+    reference/                        - (선택) 스펙/표준 문서 등 '읽을거리'만
+  50_Snippets/
+  60_Assets/
+  70_Exports/
+  75_Releases/
+  80_Tools/
+    installers/ bin/ scripts/ devcontainer/
+  85_Environments/ (conda/ venv/ docker/)
+  99_Archive/
+</code></pre></div></div>
+
+<blockquote>
+  <p>포인트: <strong>설정은 전부<code class="language-plaintext highlighter-rouge">32_Configs/</code>로 이동</strong>. 40_Resources엔 더 이상 설정이 없고, 순수 레퍼런스/학습 자료만 남깁니다.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="레이어링우선순위-규칙">레이어링(우선순위) 규칙</h1>
+
+<ol>
+  <li>
+    <p><strong>Project 로컬</strong>(리포 내부 설정)</p>
+  </li>
+  <li>
+    <p><strong>32_Configs/personal/</strong> (내 오버라이드)</p>
+  </li>
+  <li>
+    <p>**32_Configs/shared/projects/ <proj>/** (프로젝트용 골든)</proj></p>
+  </li>
+  <li>
+    <p><strong>32_Configs/shared/global/</strong> (전역 골든)</p>
+  </li>
+</ol>
+
+<p>예: pytest는 순서대로 <code class="language-plaintext highlighter-rouge">pytest.ini</code>를 찾고, 없으면 상위로 올라가며 대체.</p>
+
+<hr />
+
+<h1 id="마이그레이션3분-컷">마이그레이션(3분 컷)</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 1) 디렉터리 생성</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> ~/Work/32_Configs/shared/<span class="o">{</span>global,projects<span class="o">}</span> ~/Work/32_Configs/personal
+
+<span class="c"># 2) 기존 설정 이동</span>
+<span class="c">#   (전역 골든)</span>
+<span class="nb">mv</span> ~/Work/40_Resources/reference/configs/<span class="k">*</span> ~/Work/32_Configs/shared/global/ 2&gt;/dev/null <span class="o">||</span> <span class="nb">true</span>
+<span class="c">#   (개인)</span>
+<span class="nb">mv</span> ~/Work/40_Resources/personal/configs/<span class="k">*</span>  ~/Work/32_Configs/personal/     2&gt;/dev/null <span class="o">||</span> <span class="nb">true</span>
+
+<span class="c"># 3) 흔적 정리(선택)</span>
+<span class="nb">rmdir</span> ~/Work/40_Resources/reference/configs ~/Work/40_Resources/personal/configs 2&gt;/dev/null <span class="o">||</span> <span class="nb">true</span>
+</code></pre></div></div>
+
+<p>PowerShell:</p>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">New-Item</span><span class="w"> </span><span class="nt">-ItemType</span><span class="w"> </span><span class="nx">Directory</span><span class="w"> </span><span class="nt">-Force</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\32_Configs\shared\global"</span><span class="p">,</span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\32_Configs\shared\projects"</span><span class="p">,</span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\32_Configs\personal"</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Out-Null</span><span class="w">
+</span><span class="nx">Move-Item</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\40_Resources\reference\configs\*"</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\32_Configs\shared\global"</span><span class="w"> </span><span class="nt">-ErrorAction</span><span class="w"> </span><span class="nx">SilentlyContinue</span><span class="w">
+</span><span class="n">Move-Item</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\40_Resources\personal\configs\*"</span><span class="w">  </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\32_Configs\personal"</span><span class="w">     </span><span class="nt">-ErrorAction</span><span class="w"> </span><span class="nx">SilentlyContinue</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h1 id="부트스트랩홈-설정-연결-예시">부트스트랩(홈 설정 연결 예시)</h1>
+
+<p>Bash/Zsh:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">WORK_DIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/Work"</span>
+<span class="nb">export </span><span class="nv">WORK_CONFIGS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/32_Configs"</span>
+<span class="c"># 예: zsh 개인설정 연결</span>
+<span class="nb">ln</span> <span class="nt">-snf</span> <span class="s2">"</span><span class="nv">$WORK_CONFIGS</span><span class="s2">/personal/shell/zsh/.zshrc"</span> ~/.zshrc
+<span class="c"># VSCode 사용자 설정</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> ~/Library/Application<span class="se">\ </span>Support/Code/User
+<span class="nb">ln</span> <span class="nt">-snf</span> <span class="s2">"</span><span class="nv">$WORK_CONFIGS</span><span class="s2">/personal/editors/vscode/settings.user.json"</span> <span class="se">\</span>
+        ~/Library/Application<span class="se">\ </span>Support/Code/User/settings.json
+</code></pre></div></div>
+
+<p>PowerShell:</p>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$W</span><span class="o">=</span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\32_Configs\personal"</span><span class="w">
+</span><span class="n">New-Item</span><span class="w"> </span><span class="nt">-Type</span><span class="w"> </span><span class="nx">SymbolicLink</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"</span><span class="w"> </span><span class="nt">-Target</span><span class="w"> </span><span class="s2">"</span><span class="nv">$W</span><span class="s2">\shell\powershell\profile.ps1"</span><span class="w"> </span><span class="nt">-Force</span><span class="w">
+</span></code></pre></div></div>
+
+<p>tcsh:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+setenv WORK_CONFIGS "$HOME/Work/32_Configs"
+ln -snf "$WORK_CONFIGS/personal/shell/tcsh/.tcshrc" ~/.tcshrc
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="프로젝트에서-설정-불러오기권장-패턴">프로젝트에서 설정 불러오기(권장 패턴)</h1>
+
+<h3 id="패턴-a-base--local">패턴 A) <code class="language-plaintext highlighter-rouge">*.base.*</code> + <code class="language-plaintext highlighter-rouge">*.local.*</code></h3>
+
+<ul>
+  <li>
+    <p>리포 내 <code class="language-plaintext highlighter-rouge">pyproject.toml</code>/<code class="language-plaintext highlighter-rouge">ruff.toml</code>/<code class="language-plaintext highlighter-rouge">pytest.ini</code>는 <strong>기본</strong></p>
+  </li>
+  <li>
+    <p>내 개인 오버라이드는 같은 디렉터리의 <code class="language-plaintext highlighter-rouge">*.local.*</code></p>
+  </li>
+  <li>
+    <p>스크립트에서 발견 시 병합:</p>
+  </li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">test</span> <span class="nt">-f</span> ruff.local.toml <span class="o">&amp;&amp;</span> <span class="nb">export </span><span class="nv">RUFF_ARGS</span><span class="o">=</span><span class="s2">"--config ruff.local.toml"</span>
+</code></pre></div></div>
+
+<h3 id="패턴-b-configd-디렉터리-병합">패턴 B) <code class="language-plaintext highlighter-rouge">config.d/</code> 디렉터리 병합</h3>
+
+<ul>
+  <li>
+    <p>프로젝트 내 <code class="language-plaintext highlighter-rouge">config.d/00-base.toml</code>, <code class="language-plaintext highlighter-rouge">10-ci.toml</code></p>
+  </li>
+  <li>
+    <p>개인은 <code class="language-plaintext highlighter-rouge">config.d/90-local.toml</code>로 추가(깃 무시)</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="today런처에서도-바로-접근"><code class="language-plaintext highlighter-rouge">today</code>/런처에서도 바로 접근</h1>
+
+<p><code class="language-plaintext highlighter-rouge">Work/10_Today/shortcuts.list</code>에 자주 쓰는 설정 편집/링크 추가:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Edit pytest <span class="o">(</span>shared<span class="o">)</span>   | 32_Configs/shared/global/pytest   | <span class="k">${</span><span class="nv">EDITOR</span><span class="k">:-</span><span class="nv">vi</span><span class="k">}</span> pytest.ini
+Edit ruff <span class="o">(</span>personal<span class="o">)</span>   | 32_Configs/personal/python        | <span class="k">${</span><span class="nv">EDITOR</span><span class="k">:-</span><span class="nv">vi</span><span class="k">}</span> ruff.local.toml
+Bootstrap dotfiles     | 80_Tools/scripts                  | ./bootstrap_configs.sh
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="요약-1">요약</h1>
+
+<ul>
+  <li>
+    <p><strong>설정 =<code class="language-plaintext highlighter-rouge">32_Configs/</code>로 완전 분리</strong> (shared/personal, global/projects 계층)</p>
+  </li>
+  <li>
+    <p><strong>교육/레퍼런스 =<code class="language-plaintext highlighter-rouge">40_Resources/</code></strong> (설정 없음)</p>
+  </li>
+  <li>
+    <p><strong>우선순위</strong> : Project → personal → shared/projects → shared/global</p>
+  </li>
+  <li>
+    <p><strong>부트스트랩 스크립트</strong> 로 홈/IDE에 심볼릭 링크나 복사 연결</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">today</code> 런처나 <code class="language-plaintext highlighter-rouge">pin</code>으로 <strong>설정 편집/적용을 콘솔 한 번</strong> 에</p>
+  </li>
+</ul>
+
+<p>원하면 <code class="language-plaintext highlighter-rouge">bootstrap_configs.sh</code>/<code class="language-plaintext highlighter-rouge">.ps1</code>와 <code class="language-plaintext highlighter-rouge">32_Configs/shared</code> 템플릿 파일들(ruff/pytest/VSC)까지 <strong>실제 파일</strong> 로 생성한 압축본을 바로 만들어줄게.</p>
+
+<p class="chat--user">
+
+왜 하필 32야?
+
+</p>
+
+<p>짧게 말하면, <strong>정렬·근접성·확장성</strong> 때문에 <code class="language-plaintext highlighter-rouge">32_Configs</code>로 잡았어요.</p>
+
+<h2 id="왜-하필-32">왜 하필 32?</h2>
+
+<ul>
+  <li><strong>정렬(시각적 그룹화)</strong><br />
+상위 레벨을 10 단위로 끊어 두었죠.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>30_Areas   ← 장기 운영(업무 영역)
+31_Labs    ← 가벼운 실험
+32_Configs ← 설정(실행·적용 중심)
+40_Resources ← 읽을거리/레퍼런스
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>→ <code class="language-plaintext highlighter-rouge">Configs</code>가 <strong>Labs와 Resources 사이</strong> 에 오도록 32를 줘서, “업무(30) → 실험(31) → 설정적용(32) → 참고자료(40)” 흐름으로 자연스럽게 스캔됩니다.</p>
+
+<ul>
+  <li>
+    <p><strong>근접성(자주 손대는 것끼리)</strong><br />
+설정은 주로 <strong>Areas/Labs에서 파생</strong> 돼요(실험하다 설정을 고치고, 운영하면서 정책을 조정). 그래서 30대에 붙여 <strong>손 닿는 데</strong> 두었습니다.</p>
+  </li>
+  <li>
+    <p><strong>확장성(번호 남겨두기)</strong><br />
+33~39 사이에 여유가 생겨요. 나중에 필요하면:</p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">33_Templates</code> (문서/코드 템플릿)</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">34_Policies</code> (보안/품질 정책 문서)</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">35_Checklists</code>(QA/릴리스 체크리스트)<br />
+… 같은 식으로 <strong>중간번호를 끼워넣기</strong> 쉽습니다.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="꼭-32여야-해">꼭 32여야 해?</h2>
+
+<p>아니요. 아래처럼 취향대로 바꿔도 좋아요—핵심은 <strong>일관성</strong>.</p>
+
+<ul>
+  <li>
+    <p><strong>35_Configs</strong> : 홀수만 써서 시각적으로 구분 원할 때</p>
+  </li>
+  <li>
+    <p><strong>28_Configs</strong> : Projects(20대)와 운영(30대) 사이로 끌어당기고 싶을 때</p>
+  </li>
+  <li>
+    <p><strong>82_Configs</strong> : Tools(80대)와 묶고 싶을 때(개인 취향/DevOps 성향)</p>
+  </li>
+</ul>
+
+<h2 id="바꾸고-싶다면-안전하게-리네임">바꾸고 싶다면 (안전하게 리네임)</h2>
+
+<blockquote>
+  <p>두 곳 이상에서 쓰는 스크립트/런처가 있으면 경로만 함께 바꿔주면 됩니다.</p>
+</blockquote>
+
+<p><strong>bash/zsh</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mv</span> ~/Work/32_Configs ~/Work/35_Configs
+<span class="c"># today 런처 목록 등 경로 업데이트</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">''</span> <span class="s1">'s#/32_Configs/#/35_Configs/#g'</span> ~/Work/10_Today/shortcuts.list 2&gt;/dev/null <span class="o">||</span> <span class="nb">true</span>
+</code></pre></div></div>
+
+<p><strong>PowerShell</strong></p>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Rename-Item</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\32_Configs"</span><span class="w"> </span><span class="s2">"35_Configs"</span><span class="w">
+</span><span class="p">(</span><span class="n">Get-Content</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\10_Today\shortcuts.list"</span><span class="p">)</span><span class="w"> </span><span class="o">-replace</span><span class="w"> </span><span class="s1">'/32_Configs/'</span><span class="p">,</span><span class="w"> </span><span class="s1">'/35_Configs/'</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Set-Content</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\10_Today\shortcuts.list"</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="현재-상위-번호-체계-요약기억용">현재 상위 번호 체계 요약(기억용)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mathematica
+
+00  Inbox         | 10  Today          | 20  Projects      | 25  Jobs
+30  Areas         | 31  Labs            | 32  Configs       | 40  Resources
+50  Snippets      | 60  Assets          | 70  Exports       | 75  Releases
+80  Tools         | 85  Environments    | 99  Archive
+</code></pre></div></div>
+
+<p>원하면 네 취향(짝수만/홀수만/문자 프리픽스 등)에 맞춰 <strong>전체 번호 리패터닝 표</strong> 랑 자동 마이그레이션 스크립트도 같이 만들어줄게.</p>
+
+<p class="chat--user">
+
+90을 개인용 Configs 로 하자. 최종적으로 각 폴더명(영어)과 담을 내용(한글)을 정리해줘. 그리고 10가지 정도 업무 예시에 대해 Workflow를 작성해줘. 예를 들어 프로젝트 만들기, 분석 작업하기, 개인용 스크립트 만들기, 툴 설치하기, 개인 shell alias 설정하기 등등이 있을 수 있어.
+
+</p>
+
+<p>좋아—요청대로 <strong>폴더명은 영어</strong> , <strong>설명은 한글</strong> 로 정리하고, 마지막에 <strong>대표 업무 10가지 워크플로우</strong> 를 단계별로 붙일게.<br />
+(개인용 설정은 <code class="language-plaintext highlighter-rouge">90_Configs</code>로 확정, “공유/골든 설정”은 <code class="language-plaintext highlighter-rouge">32_Configs</code>에 유지)</p>
+
+<hr />
+
+<h1 id="1-최종-폴더-구조-영문-이름--한글-설명--예시-하위">1) 최종 폴더 구조 (영문 이름 + 한글 설명 + 예시 하위)</h1>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Work</span><span class="o">/</span>                                     <span class="o">-</span> <span class="mi">1</span><span class="n">인</span> <span class="n">개발용</span> <span class="n">작업</span> <span class="n">루트</span>
+  <span class="mo">00</span><span class="n">_Inbox</span><span class="o">/</span>                               <span class="o">-</span> <span class="n">급히</span> <span class="n">던져두는</span> <span class="nf">임시함</span><span class="p">(</span><span class="n">매일</span><span class="o">/</span><span class="n">주기적으로</span> <span class="n">비우기</span><span class="p">)</span>
+
+  <span class="mi">10</span><span class="n">_Today</span><span class="o">/</span>                               <span class="o">-</span> <span class="n">오늘</span> <span class="n">작업</span> <span class="nf">대시보드</span><span class="p">(</span><span class="n">콘솔</span> <span class="n">중심</span> <span class="n">실행</span> <span class="n">출발점</span><span class="p">)</span>
+    <span class="n">shortcuts</span><span class="o">.</span><span class="n">list</span>                        <span class="o">-</span> <span class="n">today</span> <span class="n">런처가</span> <span class="n">읽는</span> <span class="err">“</span><span class="n">라벨</span><span class="o">|</span><span class="n">경로</span><span class="o">|</span><span class="n">명령</span><span class="err">”</span> <span class="nf">목록</span>
+    <span class="p">(</span><span class="n">wrappers</span><span class="sr">/)                           - 파이프/</span><span class="n">복잡</span> <span class="n">인자용</span> <span class="n">임시</span> <span class="n">래퍼</span> <span class="nf">스크립트</span><span class="p">(</span><span class="n">단기</span> <span class="n">보관</span><span class="p">)</span>
+
+  <span class="mi">20</span><span class="n">_Projects</span><span class="o">/</span>                            <span class="o">-</span> <span class="nf">툴</span><span class="p">(</span><span class="n">파이썬</span> <span class="n">패키지</span><span class="p">)</span> <span class="nf">개발</span><span class="p">(</span><span class="n">코드</span> <span class="n">수명</span> <span class="n">중심</span><span class="p">)</span>
+    <span class="kt">PRJ</span><span class="o">-</span><span class="kt">YYYY</span><span class="o">-</span><span class="kt">NNN_name</span><span class="o">/</span>                    <span class="o">-</span> <span class="n">개별</span> <span class="nf">프로젝트</span><span class="p">(</span><span class="nv">예</span><span class="p">:</span> <span class="kt">PRJ</span><span class="o">-</span><span class="mi">2025</span><span class="o">-</span><span class="mo">001</span><span class="n">_sample_app</span><span class="p">)</span>
+      <span class="n">src</span><span class="sr">/&lt;package_name&gt;/</span>                 <span class="o">-</span> <span class="n">패키지</span> <span class="n">소스</span>
+      <span class="n">tests</span><span class="o">/</span>                              <span class="o">-</span> <span class="n">pytest</span> <span class="n">테스트</span>
+      <span class="n">scripts</span><span class="o">/</span>                            <span class="o">-</span> <span class="n">install</span><span class="sr">/run/build/lint/test 스크립트(.sh/</span><span class="o">.</span><span class="n">ps1</span><span class="p">)</span>
+      <span class="n">examples</span><span class="sr">/{data,scripts,docs}/</span>       <span class="o">-</span> <span class="n">배포용</span> <span class="n">최소</span> <span class="n">실행</span> <span class="n">예제</span>
+      <span class="n">issues</span><span class="sr">/BUG-YYYY-NNN/                - 버그/</span><span class="n">개선</span> <span class="n">이슈</span> <span class="n">노트</span>
+      <span class="n">docs</span><span class="o">/</span>                               <span class="o">-</span> <span class="n">설계</span><span class="err">·</span><span class="kt">ADR</span><span class="err">·</span><span class="n">가이드</span>
+      <span class="o">.</span><span class="n">devcontainer</span><span class="o">/</span>                      <span class="o">-</span> <span class="n">개발</span> <span class="n">컨테이너</span> <span class="n">설정</span>
+      <span class="n">pyproject</span><span class="o">.</span><span class="n">toml</span><span class="p">,</span> <span class="kt">README</span><span class="o">.</span><span class="n">md</span><span class="p">,</span> <span class="o">.</span><span class="n">gitignore</span><span class="p">,</span> <span class="o">.</span><span class="n">editorconfig</span>
+
+  <span class="mi">25</span><span class="n">_Jobs</span><span class="o">/</span>                                <span class="o">-</span> <span class="err">“</span><span class="n">산출물</span> <span class="n">작업</span> <span class="n">단위</span><span class="err">”</span><span class="p">(</span><span class="n">프로세스</span> <span class="n">수명</span> <span class="n">중심</span><span class="p">)</span>
+    <span class="kt">JOB</span><span class="o">-</span><span class="kt">YYYY</span><span class="o">-</span><span class="kt">NNN_name</span><span class="o">/</span>                    <span class="o">-</span> <span class="n">일반</span> <span class="n">산출</span> <span class="kt">Job</span><span class="p">(</span><span class="n">입력</span><span class="err">→</span><span class="n">설정</span><span class="err">→</span><span class="n">실행</span><span class="err">→</span><span class="n">산출</span><span class="p">)</span>
+      <span class="mo">01</span><span class="n">_Brief</span><span class="o">/</span>                           <span class="o">-</span> <span class="n">요구사항</span><span class="sr">/수락 기준/</span><span class="n">마감</span>
+      <span class="mo">02</span><span class="n">_Input</span><span class="sr">/raw/</span>                       <span class="o">-</span> <span class="n">원천</span> <span class="nf">데이터</span><span class="p">(</span><span class="n">읽기</span> <span class="n">전용</span> <span class="n">보관</span><span class="p">)</span>
+      <span class="mo">03</span><span class="n">_Config</span><span class="o">/</span>                          <span class="o">-</span> <span class="nf">파라미터</span><span class="p">(</span><span class="n">yml</span><span class="o">/</span><span class="n">json</span><span class="p">),</span> <span class="n">실행</span> <span class="n">설정</span>
+      <span class="mo">04</span><span class="n">_Run</span><span class="o">/</span>                             <span class="o">-</span> <span class="n">run</span><span class="o">.</span><span class="n">sh</span><span class="o">|</span><span class="n">ps1</span><span class="p">,</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span><span class="p">,</span> <span class="n">로그</span>
+      <span class="mo">05</span><span class="n">_Output</span><span class="o">/</span>                          <span class="o">-</span> <span class="n">중간</span><span class="o">/</span><span class="n">최종</span> <span class="nf">산출물</span><span class="p">(</span><span class="n">작업</span> <span class="n">영역</span><span class="p">)</span>
+      <span class="mo">06</span><span class="n">_Export</span><span class="o">/</span>                          <span class="o">-</span> <span class="nf">전달본</span><span class="p">(</span><span class="n">최종</span> <span class="n">산출물</span><span class="p">)</span>
+      <span class="mi">90</span><span class="n">_Archive</span><span class="o">/</span>                         <span class="o">-</span> <span class="n">완료</span> <span class="n">후</span> <span class="n">장기</span> <span class="n">보관</span>
+    <span class="kt">BUG</span><span class="o">-</span><span class="kt">YYYY</span><span class="o">-</span><span class="kt">NNN_name</span><span class="o">/</span>                    <span class="o">-</span> <span class="n">배포</span> <span class="n">버그</span> <span class="n">재현</span><span class="sr">/증거/</span><span class="n">수정</span> <span class="n">검증</span>
+      <span class="mo">01</span><span class="n">_Report</span><span class="o">/</span> <span class="mo">02</span><span class="n">_Repro</span><span class="sr">/input/ 03_Config/ 04_Run/ 05_Evidence/logs/ 06_FixValidation/</span>
+    <span class="kt">EX</span><span class="o">-</span><span class="kt">YYYY</span><span class="o">-</span><span class="kt">NNN_name</span><span class="o">/</span>                     <span class="o">-</span> <span class="err">“</span><span class="n">툴</span> <span class="n">예제</span><span class="err">”</span> <span class="n">패키징용</span> <span class="kt">Job</span><span class="p">(</span><span class="n">선택</span><span class="p">)</span>
+    <span class="kt">SMOKE</span><span class="o">-</span><span class="kt">YYYY</span><span class="o">-</span><span class="kt">NNN_tool</span><span class="o">/</span>                  <span class="o">-</span> <span class="n">새</span> <span class="n">툴</span> <span class="n">설치</span> <span class="n">후</span> <span class="n">스모크</span><span class="o">/</span><span class="n">feasibility</span> <span class="n">테스트</span>
+
+  <span class="mi">30</span><span class="n">_Areas</span><span class="o">/</span>                               <span class="o">-</span> <span class="n">장기</span> <span class="n">운영</span> <span class="nf">영역</span><span class="p">(</span><span class="n">지속</span> <span class="n">업무</span><span class="p">)</span>
+    <span class="n">worklog</span><span class="sr">/YYYY/YY-MM/DATE.md            - 일일/</span><span class="n">주간</span> <span class="mi">5</span><span class="n">줄</span> <span class="n">로그</span>
+    <span class="n">environments</span><span class="o">/</span>                         <span class="o">-</span> <span class="n">공통</span> <span class="n">환경</span> <span class="n">메모</span><span class="o">/</span><span class="nf">전략</span><span class="p">(</span><span class="nv">예</span><span class="p">:</span> <span class="n">파이썬</span> <span class="n">버전</span> <span class="n">정책</span><span class="p">)</span>
+    <span class="n">knowledge_base</span><span class="sr">/{tips,cheatsheets,howtos}/</span>
+                                           <span class="o">-</span> <span class="n">축적</span> <span class="nv">지식</span><span class="p">:</span> <span class="n">팁</span><span class="sr">/치트시트/</span><span class="n">가이드</span>
+
+  <span class="mi">31</span><span class="n">_Labs</span><span class="o">/</span>                                <span class="o">-</span> <span class="nf">실험실</span><span class="p">(</span><span class="n">짧은</span> <span class="n">테스트</span><span class="o">/</span><span class="n">프로토</span><span class="p">;</span> <span class="n">재현</span> <span class="n">불필요</span><span class="p">)</span>
+    <span class="n">jupyter</span><span class="o">/</span>                              <span class="o">-</span> <span class="n">스크래치</span> <span class="nf">노트북</span><span class="p">(</span><span class="nv">예</span><span class="p">:</span> <span class="n">regex_scratch</span><span class="o">.</span><span class="n">ipynb</span><span class="p">)</span>
+
+  <span class="mi">32</span><span class="n">_Configs</span><span class="o">/</span>                             <span class="o">-</span> <span class="n">공유</span><span class="o">/</span><span class="n">골든</span> <span class="nf">설정</span><span class="p">(</span><span class="n">문서화</span><span class="err">·</span><span class="n">재사용</span> <span class="n">대상</span><span class="p">)</span>
+    <span class="n">shared</span><span class="o">/</span>
+      <span class="n">global</span><span class="sr">/{vscode,ruff,pytest,pyinstaller,pyside6,jupyter}/</span>
+                                           <span class="o">-</span> <span class="n">전역</span> <span class="n">표준</span> <span class="n">설정</span>
+      <span class="n">projects</span><span class="sr">/&lt;project_slug&gt;/</span>             <span class="o">-</span> <span class="n">특정</span> <span class="n">프로젝트</span> <span class="n">기본설정</span>
+      <span class="kt">README</span><span class="o">.</span><span class="n">md</span>                            <span class="o">-</span> <span class="n">적용</span> <span class="n">원칙</span><span class="o">/</span><span class="n">우선순위</span>
+
+  <span class="mi">40</span><span class="n">_Resources</span><span class="o">/</span>                           <span class="o">-</span> <span class="n">참고</span> <span class="nf">자료</span><span class="p">(</span><span class="n">교육</span><span class="sr">/매뉴얼/</span><span class="n">스펙</span><span class="err">—</span><span class="n">설정</span> <span class="n">제외</span><span class="p">)</span>
+    <span class="n">edu</span><span class="sr">/{courses,tutorials,papers/…}/</span>      <span class="o">-</span> <span class="n">강의</span><span class="err">·</span><span class="n">튜토리얼</span><span class="err">·</span><span class="nf">논문</span><span class="p">(</span><span class="n">읽을거리</span> <span class="n">중심</span><span class="p">)</span>
+    <span class="n">manuals</span><span class="sr">/&lt;vendor&gt;/&lt;product&gt;/&lt;version&gt;/  - 매뉴얼/가이드(PDF/HTML/</span><span class="kt">MD</span><span class="p">)</span>
+    <span class="n">reference</span><span class="o">/</span>                             <span class="o">-</span> <span class="n">표준</span><span class="o">/</span><span class="n">스펙</span> <span class="n">문서</span> <span class="n">등</span> <span class="n">레퍼런스</span>
+
+  <span class="mi">50</span><span class="n">_Snippets</span><span class="sr">/{sql,text,bash}/            - 재사용 코드/</span><span class="n">문구</span> <span class="nf">조각</span><span class="p">(</span><span class="n">짧은</span> <span class="n">예제</span><span class="err">·</span><span class="n">원라이너</span><span class="p">)</span>
+
+  <span class="mi">60</span><span class="n">_Assets</span><span class="o">/</span>                              <span class="o">-</span> <span class="n">로고</span><span class="sr">/폰트/</span><span class="n">템플릿</span> <span class="n">등</span> <span class="n">브랜딩</span> <span class="n">리소스</span>
+
+  <span class="mi">70</span><span class="n">_Exports</span><span class="o">/</span>                             <span class="o">-</span> <span class="n">여러</span> <span class="kt">Job의</span> <span class="err">“</span><span class="n">최종</span> <span class="n">전달본</span><span class="err">”</span> <span class="nf">모아보기</span><span class="p">(</span><span class="n">선택</span><span class="p">)</span>
+
+  <span class="mi">75</span><span class="n">_Releases</span><span class="o">/</span>                            <span class="o">-</span> <span class="n">유저</span> <span class="n">배포</span> <span class="n">전용</span> <span class="n">중앙</span> <span class="nf">보관소</span><span class="p">(</span><span class="n">버전드</span><span class="p">)</span>
+    <span class="o">&lt;</span><span class="n">project_slug</span><span class="o">&gt;/</span><span class="n">vX</span><span class="o">.</span><span class="kt">Y</span><span class="o">.</span><span class="kt">Z</span><span class="sr">/{installers,wheels,portable,docs,licenses,checksums}/</span>
+    <span class="o">&lt;</span><span class="n">project_slug</span><span class="o">&gt;/</span><span class="n">latest</span><span class="o">/</span>                 <span class="o">-</span> <span class="n">최신</span> <span class="n">버전</span> <span class="n">포인터</span>
+    <span class="n">catalog</span><span class="o">.</span><span class="n">json</span>                           <span class="o">-</span> <span class="p">(</span><span class="n">선택</span><span class="p">)</span> <span class="n">버전</span><span class="o">/</span><span class="n">파일</span> <span class="n">인덱스</span>
+
+  <span class="mi">80</span><span class="n">_Tools</span><span class="o">/</span>                               <span class="o">-</span> <span class="n">설치파일</span><span class="sr">/포터블/</span><span class="n">자동화</span> <span class="n">스크립트</span>
+    <span class="n">installers</span><span class="o">/</span>                            <span class="o">-</span> <span class="n">오프라인</span> <span class="n">설치</span> <span class="n">파일</span> <span class="o">+</span> <span class="n">install_notes</span><span class="o">.</span><span class="nf">md</span><span class="p">(</span><span class="n">버전</span><span class="err">·</span><span class="n">체크섬</span><span class="p">)</span>
+    <span class="n">bin</span><span class="o">/</span>                                   <span class="o">-</span> <span class="n">포터블</span> <span class="nf">실행파일</span><span class="p">(</span><span class="kt">PATH에</span> <span class="n">추가</span> <span class="n">가능</span><span class="p">)</span>
+    <span class="n">scripts</span><span class="o">/</span>                               <span class="o">-</span> <span class="n">bootstrap</span><span class="sr">/release/</span><span class="n">checksum</span> <span class="n">등</span> <span class="n">공용</span> <span class="n">스크립트</span>
+    <span class="n">devcontainer</span><span class="o">/</span>                          <span class="o">-</span> <span class="n">개발</span> <span class="n">컨테이너</span> <span class="n">툴</span>
+
+  <span class="mi">85</span><span class="n">_Environments</span><span class="o">/</span>                        <span class="o">-</span> <span class="n">재현</span> <span class="n">가능한</span> <span class="n">개발</span> <span class="n">환경</span> <span class="n">샘플</span>
+    <span class="n">conda</span><span class="o">/</span><span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+    <span class="n">venv</span><span class="o">/</span><span class="kt">README</span><span class="o">.</span><span class="n">md</span>
+    <span class="n">docker</span><span class="o">/</span><span class="kt">Dockerfile</span>
+
+  <span class="mi">90</span><span class="n">_Configs</span><span class="o">/</span>                             <span class="o">-</span> <span class="err">★</span><span class="n">개인</span> <span class="nf">설정</span><span class="p">(</span><span class="n">오버라이드</span><span class="err">·</span><span class="n">비공개</span><span class="p">)</span>
+    <span class="n">os</span><span class="sr">/{mac,win,linux}/                    - OS별 설정(키맵/</span><span class="n">입력기</span> <span class="n">등</span><span class="p">)</span>
+    <span class="n">shell</span><span class="sr">/{bash,zsh,tcsh,powershell}/</span>      <span class="o">-</span> <span class="n">프로필</span><span class="err">·</span><span class="nf">별칭</span><span class="p">(</span><span class="n">개인용</span><span class="p">)</span>
+    <span class="n">editors</span><span class="sr">/vscode/</span><span class="p">{</span><span class="n">settings</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">json</span><span class="p">,</span><span class="n">keybindings</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">json</span><span class="p">}</span>
+    <span class="n">git</span><span class="o">/.</span><span class="n">gitconfig</span><span class="o">.</span><span class="n">local</span>
+    <span class="n">python</span><span class="o">/</span><span class="p">{</span><span class="n">pip</span><span class="o">.</span><span class="n">conf</span><span class="p">,</span><span class="n">poetry</span><span class="o">.</span><span class="n">toml</span><span class="p">,</span><span class="n">pypirc</span><span class="p">}</span>
+    <span class="n">tools</span><span class="o">/</span>                                 <span class="o">-</span> <span class="n">각</span> <span class="n">툴</span> <span class="n">개인</span> <span class="n">프리셋</span>
+    <span class="n">secrets</span><span class="o">/</span><span class="kt">README</span><span class="o">.</span><span class="n">md</span>                      <span class="o">-</span> <span class="p">(</span><span class="n">실제</span> <span class="n">비밀은</span> <span class="n">두지</span> <span class="n">말고</span> <span class="n">안내만</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">gitignore</span>                             <span class="o">-</span> <span class="o">*.</span><span class="n">local</span><span class="p">,</span> <span class="n">secrets</span><span class="cm">/*, *.pem 등 광범위 제외
+
+  99_Archive/                             - 완료 Project/Job/자료 장기 보관(읽기 전용)
+</span></code></pre></div></div>
+
+<hr />
+
+<h1 id="2-대표-업무-10가지-workflow-step-by-step">2) 대표 업무 10가지 Workflow (Step-by-step)</h1>
+
+<h2 id="1-새-프로젝트-만들기-python-패키지데스크탑-툴">1) 새 프로젝트 만들기 (Python 패키지/데스크탑 툴)</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">20_Projects/PRJ-YYYY-NNN_&lt;name&gt;/</code> 생성(템플릿 복사).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">./scripts/install.(sh|ps1)</code>로 venv + dev 의존성 설치.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">src/&lt;pkg&gt;/</code>, <code class="language-plaintext highlighter-rouge">pyproject.toml</code> 패키지명과 엔트리포인트 수정.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">tests/</code>에 최소 <code class="language-plaintext highlighter-rouge">test_smoke.py</code> 추가 → <code class="language-plaintext highlighter-rouge">./scripts/test.*</code> 실행.</p>
+  </li>
+  <li>
+    <p>필요 시 GUI 의존성(<code class="language-plaintext highlighter-rouge">.[gui]</code>) 추가, <code class="language-plaintext highlighter-rouge">scripts/run_gui.*</code>로 확인.</p>
+  </li>
+  <li>
+    <p>README에 사용법/예제/버전 정책 기입.</p>
+  </li>
+</ol>
+
+<h2 id="2-분석산출물-작업-수행도구-사용--결과-전달">2) 분석·산출물 작업 수행(도구 사용 → 결과 전달)</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">25_Jobs/JOB-YYYY-NNN_&lt;title&gt;/</code> 생성.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">01_Brief/</code>에 요구사항·마감·검수 기준 작성.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">02_Input/raw/</code>에 입력 배치, <code class="language-plaintext highlighter-rouge">03_Config/config.yml</code> 작성.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">04_Run/run.(sh|ps1)</code> 실행 → <code class="language-plaintext highlighter-rouge">06_Export/</code>에 최종본, 로그/manifest 생성.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">qa_checklist.md</code> 통과 → 필요 시 <code class="language-plaintext highlighter-rouge">70_Exports/</code>에도 복사.</p>
+  </li>
+</ol>
+
+<h2 id="3-개인용-스크립트-만들기">3) 개인용 스크립트 만들기</h2>
+
+<ol>
+  <li>
+    <p>오늘만 쓸 임시면 <code class="language-plaintext highlighter-rouge">10_Today/wrappers/</code>에 작성 → <code class="language-plaintext highlighter-rouge">shortcuts.list</code>에서 호출.</p>
+  </li>
+  <li>
+    <p>여러 프로젝트에서 재사용되면 <code class="language-plaintext highlighter-rouge">80_Tools/scripts/</code>로 <strong>승격</strong> + <code class="language-plaintext highlighter-rouge">--help</code>/README 작성.</p>
+  </li>
+  <li>
+    <p>PATH에 <code class="language-plaintext highlighter-rouge">80_Tools/scripts</code> 추가.</p>
+  </li>
+  <li>
+    <p>프로젝트 전용이면 <code class="language-plaintext highlighter-rouge">20_Projects/PRJ-…/scripts/</code>에 두고 README의 Scripts 섹션에 문서화.</p>
+  </li>
+</ol>
+
+<h2 id="4-새-툴-설치-스모크-테스트">4) 새 툴 설치(+ 스모크 테스트)</h2>
+
+<ol>
+  <li>
+    <p>설치파일을 <code class="language-plaintext highlighter-rouge">80_Tools/installers/</code>에 보관, <code class="language-plaintext highlighter-rouge">install_notes.md</code>에 버전·체크섬 기록.</p>
+  </li>
+  <li>
+    <p>설치 후 <code class="language-plaintext highlighter-rouge">25_Jobs/SMOKE-YYYY-NNN_&lt;tool&gt;/</code> 생성.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">03_Config/commands.txt</code>에 <code class="language-plaintext highlighter-rouge">tool --version</code> 등 기본 명령 기입.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">04_Run/smoke.(sh|ps1)</code> 실행 → <code class="language-plaintext highlighter-rouge">06_Export/result.txt</code> 확인.</p>
+  </li>
+  <li>
+    <p>통과하면 <code class="language-plaintext highlighter-rouge">10_Today/shortcuts.list</code>에 단축 명령 추가.</p>
+  </li>
+</ol>
+
+<h2 id="5-개인-shell-alias프로필-설정">5) 개인 shell alias/프로필 설정</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">90_Configs/shell/&lt;your_shell&gt;/</code>에 프로필·별칭 작성(예: <code class="language-plaintext highlighter-rouge">.zshrc</code>, <code class="language-plaintext highlighter-rouge">profile.ps1</code>).</p>
+  </li>
+  <li>
+    <p>홈으로 심볼릭 링크 연결(또는 복사):</p>
+
+    <ul>
+      <li>
+        <p>macOS/Linux: <code class="language-plaintext highlighter-rouge">ln -snf "$HOME/Work/90_Configs/shell/zsh/.zshrc" ~/.zshrc</code></p>
+      </li>
+      <li>
+        <p>PowerShell: 프로필 링크/로드.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>재시작 또는 <code class="language-plaintext highlighter-rouge">source</code> 후 동작 확인.</p>
+  </li>
+  <li>
+    <p>공용으로 권장하고 싶은 항목은 <code class="language-plaintext highlighter-rouge">32_Configs/shared/global/</code>에도 복제.</p>
+  </li>
+</ol>
+
+<h2 id="6-배포-버전-만들기release">6) 배포 버전 만들기(Release)</h2>
+
+<ol>
+  <li>
+    <p>프로젝트에서 <code class="language-plaintext highlighter-rouge">./scripts/build_cli.*</code>/<code class="language-plaintext highlighter-rouge">build_gui.*</code>로 빌드.</p>
+  </li>
+  <li>
+    <p>릴리스 검증 Job(선택): <code class="language-plaintext highlighter-rouge">25_Jobs/REL-YYYY-NNN_&lt;proj&gt;_vX.Y.Z/</code>에서 체크섬·노트 자동화.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">75_Releases/&lt;project&gt;/vX.Y.Z/</code>에 <code class="language-plaintext highlighter-rouge">{installers,wheels,portable,docs,licenses,checksums}/</code> 정리.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ReleaseNotes.md</code> 작성, <code class="language-plaintext highlighter-rouge">latest/</code> 갱신.</p>
+  </li>
+  <li>
+    <p>필요 시 사내/외부 배포 링크 공지.</p>
+  </li>
+</ol>
+
+<h2 id="7-버그-제보--디버깅--패치">7) 버그 제보 → 디버깅 → 패치</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">25_Jobs/BUG-YYYY-NNN_&lt;title&gt;/01_Report/</code>에 제보/환경/재현절차 작성.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">02_Repro/input/</code>, <code class="language-plaintext highlighter-rouge">03_Config/</code> 준비 → <code class="language-plaintext highlighter-rouge">04_Run/repro.*</code>로 재현.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">05_Evidence/logs/</code>에 로그·스크린샷·체크섬 수집.</p>
+  </li>
+  <li>
+    <p>코드는 <code class="language-plaintext highlighter-rouge">20_Projects/.../issues/BUG-.../</code>에서 triage/fix_notes 관리.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">06_FixValidation/</code> 시나리오 통과 후 패치 릴리스(Workflow 6로 이동).</p>
+  </li>
+</ol>
+
+<h2 id="8-빠른-실험정규식파이썬-문법-등">8) 빠른 실험(정규식/파이썬 문법 등)</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">31_Labs/jupyter/</code>에서 스크래치(작게, 5분/50줄 규칙).</p>
+  </li>
+  <li>
+    <p>가치가 있으면 <code class="language-plaintext highlighter-rouge">30_Areas/knowledge_base/{tips,cheatsheets,howtos}</code>로 <strong>승격 요약</strong>.</p>
+  </li>
+  <li>
+    <p>재현/증빙이 필요해지면 <strong>SMOKE Job</strong> 이나 일반 <strong>JOB</strong> 으로 전환.</p>
+  </li>
+</ol>
+
+<h2 id="9-교육논문-자료-관리">9) 교육·논문 자료 관리</h2>
+
+<ol>
+  <li>
+    <p>PDF는 <code class="language-plaintext highlighter-rouge">40_Resources/edu/papers/to_read/</code>에 저장.</p>
+  </li>
+  <li>
+    <p>읽으면서 <code class="language-plaintext highlighter-rouge">reading_notes/YYYY-MM-DD_Title.md</code> 작성(템플릿 사용).</p>
+  </li>
+  <li>
+    <p>한 달에 한 번 <code class="language-plaintext highlighter-rouge">summaries/</code>에 1~2페이지 요약 정리.</p>
+  </li>
+  <li>
+    <p>코드/알고리즘으로 채택되면 관련 PRJ의 <code class="language-plaintext highlighter-rouge">docs/</code> 또는 Job으로 연결하여 실험/결과 보관.</p>
+  </li>
+</ol>
+
+<h2 id="10-설정-레이어링-적용골든--개인">10) 설정 레이어링 적용(골든 ↔ 개인)</h2>
+
+<ol>
+  <li>
+    <p><strong>우선순위</strong> : Project 로컬 → <code class="language-plaintext highlighter-rouge">90_Configs/personal</code> → <code class="language-plaintext highlighter-rouge">32_Configs/shared/projects/&lt;proj&gt;</code> → <code class="language-plaintext highlighter-rouge">32_Configs/shared/global</code>.</p>
+  </li>
+  <li>
+    <p>VSCode/ruff/pytest 등은 프로젝트에서 기본 설정, 개인은 <code class="language-plaintext highlighter-rouge">*.local.*</code> 오버라이드.</p>
+  </li>
+  <li>
+    <p>부트스트랩 스크립트(<code class="language-plaintext highlighter-rouge">80_Tools/scripts/bootstrap_configs.*</code>)로 홈/IDE에 링크·복사 자동 적용.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">10_Today/shortcuts.list</code>에 “Edit ruff (personal)” 같은 단축키 추가.</p>
+  </li>
+</ol>
+
+<hr />
+
+<p>원하면 위 변경(특히 <code class="language-plaintext highlighter-rouge">90_Configs</code> 신설)까지 <strong>실제 폴더와 샘플 파일을 생성한 스타터 압축본</strong> 으로 바로 만들어 줄 수 있어. 어떤 셸을 주력으로 쓰는지만 알려줘(예: zsh, tcsh, PowerShell).</p>
+
+<p class="chat--user">
+
+90_Configs랑 32_Configs랑 이름이 겹쳐. rename이 필요해 보여
+
+</p>
+
+<p>좋은 지적! 이름 충돌을 없애고 <strong>의도가 한눈에 보이도록</strong> 이렇게 바꿉니다.</p>
+
+<h1 id="새-이름-명확일관">새 이름 (명확·일관)</h1>
+
+<ul>
+  <li>
+    <p>**32<em>SharedConfigs** → _공유/골든 설정</em> (팀·프로젝트가 재사용하는 표준)</p>
+  </li>
+  <li>
+    <p>**90<em>PersonalConfigs** → _개인 설정</em> (내 취향/오버라이드/비공개)</p>
+  </li>
+</ul>
+
+<p>둘 다 <code class="language-plaintext highlighter-rouge">Configs</code>를 유지하되 접두로 <strong>Shared / Personal</strong> 을 붙여 구분을 확실히 했어요.</p>
+
+<hr />
+
+<h1 id="최종-구조해당-부분만-발췌">최종 구조(해당 부분만 발췌)</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgsql
+
+Work/
+  32_SharedConfigs/                     - 공유/골든 설정(문서화·재사용 대상)
+    global/{vscode,ruff,pytest,pyinstaller,pyside6,jupyter}/
+                                         - 전역 표준 설정
+    projects/&lt;project_slug&gt;/             - 특정 프로젝트 기본설정
+    README.md                            - 적용 원칙/우선순위
+
+  90_PersonalConfigs/                   - 개인 설정(오버라이드·비공개)
+    os/{mac,win,linux}/                  - OS별 설정
+    shell/{bash,zsh,tcsh,powershell}/    - 프로필·별칭
+    editors/vscode/{settings.user.json,keybindings.user.json}
+    git/.gitconfig.local
+    python/{pip.conf,poetry.toml,pypirc}
+    tools/                               - 각 툴 개인 프리셋
+    secrets/README.md                    - (실제 비밀은 두지 말 것)
+    .gitignore                           - *.local, secrets/*, *.pem 등 폭넓게 제외
+</code></pre></div></div>
+
+<h2 id="설정-레이어링우선순위-그대로-유지">설정 레이어링(우선순위 그대로 유지)</h2>
+
+<p>Project 로컬 → <strong>90_PersonalConfigs</strong> → 32_SharedConfigs/projects → 32_SharedConfigs/global</p>
+
+<hr />
+
+<h1 id="안전한-리네임3분-컷">안전한 리네임(3분 컷)</h1>
+
+<h2 id="macoslinux-bashzsh">macOS/Linux (bash/zsh)</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/Work
+<span class="nb">mv </span>32_Configs 32_SharedConfigs 2&gt;/dev/null <span class="o">||</span> <span class="nb">true
+mv </span>90_Configs 90_PersonalConfigs 2&gt;/dev/null <span class="o">||</span> <span class="nb">true</span>
+
+<span class="c"># today 목록 경로 일괄 치환</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">''</span> <span class="s1">'s#/32_Configs/#/32_SharedConfigs/#g'</span> 10_Today/shortcuts.list 2&gt;/dev/null <span class="o">||</span> <span class="nb">true
+sed</span> <span class="nt">-i</span> <span class="s1">''</span> <span class="s1">'s#/90_Configs/#/90_PersonalConfigs/#g'</span> 10_Today/shortcuts.list 2&gt;/dev/null <span class="o">||</span> <span class="nb">true</span>
+
+<span class="c"># 홈 심볼릭 링크 재연결 예시</span>
+<span class="nb">ln</span> <span class="nt">-snf</span> <span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/Work/90_PersonalConfigs/shell/zsh/.zshrc"</span> ~/.zshrc
+</code></pre></div></div>
+
+<h2 id="windows-powershell-1">Windows (PowerShell)</h2>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Rename-Item</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\32_Configs"</span><span class="w"> </span><span class="s2">"32_SharedConfigs"</span><span class="w"> </span><span class="nt">-ErrorAction</span><span class="w"> </span><span class="nx">SilentlyContinue</span><span class="w">
+</span><span class="n">Rename-Item</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\90_Configs"</span><span class="w"> </span><span class="s2">"90_PersonalConfigs"</span><span class="w"> </span><span class="nt">-ErrorAction</span><span class="w"> </span><span class="nx">SilentlyContinue</span><span class="w">
+
+</span><span class="p">(</span><span class="n">Get-Content</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\10_Today\shortcuts.list"</span><span class="p">)</span><span class="w"> </span><span class="se">`
+</span><span class="w">  </span><span class="o">-replace</span><span class="w"> </span><span class="s1">'/32_Configs/'</span><span class="p">,</span><span class="w"> </span><span class="s1">'/32_SharedConfigs/'</span><span class="w"> </span><span class="se">`
+</span><span class="w">  </span><span class="o">-replace</span><span class="w"> </span><span class="s1">'/90_Configs/'</span><span class="p">,</span><span class="w"> </span><span class="s1">'/90_PersonalConfigs/'</span><span class="w"> </span><span class="se">`
+</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">Set-Content</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\10_Today\shortcuts.list"</span><span class="w">
+
+</span><span class="c"># 예: 개인 프로필 링크 재설정</span><span class="w">
+</span><span class="c"># New-Item -Type SymbolicLink -Path "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" `</span><span class="w">
+</span><span class="c">#   -Target "$HOME\Work\90_PersonalConfigs\shell\powershell\profile.ps1" -Force</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="tcsh">tcsh</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+cd ~/Work
+if ( -d 32_Configs )  mv 32_Configs 32_SharedConfigs
+if ( -d 90_Configs )  mv 90_Configs 90_PersonalConfigs
+# shortcuts.list 내 경로는 수동 또는 sed로 치환
+sed -i '' 's#/32_Configs/#/32_SharedConfigs/#g; s#/90_Configs/#/90_PersonalConfigs/#g' 10_Today/shortcuts.list
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="부트스트랩런처에서의-새-경로-사용-예">부트스트랩/런처에서의 새 경로 사용 예</h1>
+
+<p><strong><code class="language-plaintext highlighter-rouge">shortcuts.list</code> 예시</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Edit pytest <span class="o">(</span>shared<span class="o">)</span>   | 32_SharedConfigs/global/pytest   | <span class="k">${</span><span class="nv">EDITOR</span><span class="k">:-</span><span class="nv">vi</span><span class="k">}</span> pytest.ini
+Edit ruff <span class="o">(</span>personal<span class="o">)</span>   | 90_PersonalConfigs/python        | <span class="k">${</span><span class="nv">EDITOR</span><span class="k">:-</span><span class="nv">vi</span><span class="k">}</span> ruff.local.toml
+Bootstrap dotfiles     | 80_Tools/scripts                 | ./bootstrap_configs.sh
+</code></pre></div></div>
+
+<p><strong>심볼릭 링크 예시</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># VSCode 사용자 설정</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> ~/Library/Application<span class="se">\ </span>Support/Code/User
+<span class="nb">ln</span> <span class="nt">-snf</span> <span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/Work/90_PersonalConfigs/editors/vscode/settings.user.json"</span> <span class="se">\</span>
+        ~/Library/Application<span class="se">\ </span>Support/Code/User/settings.json
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="왜-이-이름이-좋은가-짧게">왜 이 이름이 좋은가 (짧게)</h2>
+
+<ul>
+  <li>
+    <p><strong>가독성</strong> : 폴더를 보는 순간 “공유용 vs 개인용”이 즉시 구분.</p>
+  </li>
+  <li>
+    <p><strong>검색성</strong> : <code class="language-plaintext highlighter-rouge">SharedConfigs</code>, <code class="language-plaintext highlighter-rouge">PersonalConfigs</code> 키워드로 코드·문서·스크립트에서 쉽게 grep.</p>
+  </li>
+  <li>
+    <p><strong>확장성</strong> : 나중에 <code class="language-plaintext highlighter-rouge">33_Templates/</code>, <code class="language-plaintext highlighter-rouge">34_Policies/</code> 같은 디렉터리도 무리 없이 추가.</p>
+  </li>
+</ul>
+
+<p>필요하면 위 리네임을 반영한 <strong>today 런처/핀 스크립트</strong> 샘플 업데이트와 <code class="language-plaintext highlighter-rouge">bootstrap_configs.(sh|ps1|csh)</code>까지 만들어서 드릴게.</p>
+
+<p class="chat--user">
+
+근데 shortcuts가 그렇게 유용해? 여러 군데서 사용하네
+
+</p>
+
+<p>좋은 포인트야. <strong>shortcuts.list</strong> 가 “유용하냐”는 건 작업 스타일/규모에 따라 갈려.<br />
+정리하자면:</p>
+
+<h2 id="결론-의사결정-매트릭스">결론 (의사결정 매트릭스)</h2>
+
+<ul>
+  <li>
+    <p><strong>명령이 5~20개</strong> 정도로 “매일 반복”된다 → <code class="language-plaintext highlighter-rouge">shortcuts.list</code> 유지 (번호 선택 한 방, 쉘/OS 무관).</p>
+  </li>
+  <li>
+    <p><strong>명령이 들쭉날쭉·많음( &gt;30)</strong> → <code class="language-plaintext highlighter-rouge">shortcuts.list</code> <em>없애고</em> <strong>자동 탐색 러너</strong> 로 전환.</p>
+  </li>
+  <li>
+    <p><strong>프로젝트별로만 돌림</strong> → 각 PRJ에 <strong>Make/just/invoke/nox</strong> 같은 <strong>로컬 태스크 러너</strong> 두고, Today는 단순 점프만.</p>
+  </li>
+</ul>
+
+<p>아래에 <strong>세 가지 운용안</strong> 을 다 줬어. 너한테 맞는 걸 골라 쓰면 돼.</p>
+
+<hr />
+
+<h1 id="옵션-a-shortcutslist-계속-쓸-때-유지비-최소-트릭">옵션 A) shortcuts.list 계속 쓸 때 (유지비 최소 트릭)</h1>
+
+<ul>
+  <li>
+    <p><strong>등록은 1줄</strong> : <code class="language-plaintext highlighter-rouge">pin</code>(bash/zsh/ps/tcsh)로 현재 폴더·명령을 자동 추가 → 타이핑 부담 최소.</p>
+  </li>
+  <li>
+    <p><strong>정리 주기</strong> : 금요일 5분에 <strong>TOP10만 남기고 나머지 아카이브</strong>.</p>
+  </li>
+  <li>
+    <p><strong>한 곳에서만 사용</strong> : <code class="language-plaintext highlighter-rouge">today</code> 러너만 이 파일을 읽게 하고, 다른 스크립트/도구는 <strong>직접 파싱 금지</strong>(중복도입 방지).</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>이미 우리가 만든 <code class="language-plaintext highlighter-rouge">today</code>/<code class="language-plaintext highlighter-rouge">pin</code> 세트는 이 전제를 만족해. (=한 군데에서만 소비)</p>
+</blockquote>
+
+<hr />
+
+<h1 id="옵션-b-자동-탐색-러너추천-명령이-많거나-자주-변할-때">옵션 B) <strong>자동 탐색 러너</strong>(추천: 명령이 많거나 자주 변할 때)</h1>
+
+<blockquote>
+  <p>리스트 관리 자체가 귀찮다면, <strong>Work 전체를 스캔</strong> 해서 “돌릴 수 있는 스크립트”를 <strong>자동으로</strong> 메뉴로 보여주면 끝이야.<br />
+ <code class="language-plaintext highlighter-rouge">shortcuts.list</code> 없이 바로 사용.</p>
+</blockquote>
+
+<h2 id="bashzsh-work-run-fzf-있으면-퍼지-선택-없으면-번호-선택">bash/zsh: <code class="language-plaintext highlighter-rouge">work-run</code> (fzf 있으면 퍼지 선택, 없으면 번호 선택)</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> <span class="nt">-euo</span> pipefail
+<span class="nv">W</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">WORK_DIR</span><span class="k">:-</span><span class="nv">$HOME</span><span class="p">/Work</span><span class="k">}</span><span class="s2">"</span>
+
+<span class="c"># (1) 후보 수집: 자주 쓰는 엔트리 스크립트 패턴</span>
+<span class="nb">mapfile</span> <span class="nt">-t</span> CANDIDATES &lt; &lt;<span class="o">(</span>
+  find <span class="s2">"</span><span class="nv">$W</span><span class="s2">"</span> <span class="nt">-type</span> f <span class="se">\(</span> <span class="se">\</span>
+      <span class="nt">-path</span> <span class="s2">"</span><span class="nv">$W</span><span class="s2">/20_Projects/*/scripts/*.sh"</span> <span class="nt">-o</span> <span class="se">\</span>
+      <span class="nt">-path</span> <span class="s2">"</span><span class="nv">$W</span><span class="s2">/25_Jobs/*/04_Run/*.sh"</span> <span class="nt">-o</span> <span class="se">\</span>
+      <span class="nt">-path</span> <span class="s2">"</span><span class="nv">$W</span><span class="s2">/25_Jobs/*/04_Run/*.ps1"</span> <span class="nt">-o</span> <span class="se">\</span>
+      <span class="nt">-path</span> <span class="s2">"</span><span class="nv">$W</span><span class="s2">/80_Tools/scripts/*.sh"</span> <span class="se">\</span>
+    <span class="se">\)</span> 2&gt;/dev/null <span class="se">\</span>
+  | <span class="nb">sort</span>
+<span class="o">)</span>
+
+<span class="o">((</span> <span class="k">${#</span><span class="nv">CANDIDATES</span><span class="p">[@]</span><span class="k">}</span> <span class="o">))</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">"No runnable scripts found."</span><span class="p">;</span> <span class="nb">exit </span>1<span class="p">;</span> <span class="o">}</span>
+
+pick_with_fzf<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">command</span> <span class="nt">-v</span> fzf <span class="o">&gt;</span>/dev/null 2&gt;&amp;1 <span class="o">||</span> <span class="k">return </span>1
+  <span class="nb">printf</span> <span class="s1">'%s\n'</span> <span class="s2">"</span><span class="k">${</span><span class="nv">CANDIDATES</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span> <span class="se">\</span>
+    | <span class="nb">sed</span> <span class="s2">"s|^</span><span class="nv">$W</span><span class="s2">/||"</span> <span class="se">\</span>
+    | fzf <span class="nt">--prompt</span><span class="o">=</span><span class="s2">"work-run&gt; "</span> <span class="nt">--height</span><span class="o">=</span>40% <span class="nt">--reverse</span> <span class="se">\</span>
+          <span class="nt">--preview</span><span class="o">=</span><span class="s2">"sed -n '1,80p' </span><span class="se">\"</span><span class="nv">$W</span><span class="s2">/{}</span><span class="se">\"</span><span class="s2">"</span> <span class="se">\</span>
+    | <span class="nb">sed</span> <span class="s2">"s|^|</span><span class="nv">$W</span><span class="s2">/|"</span>
+<span class="o">}</span>
+
+<span class="nv">SEL</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span>pick_with_fzf <span class="o">||</span> <span class="nb">true</span><span class="si">)</span><span class="s2">"</span>
+<span class="k">if</span> <span class="o">[[</span> <span class="nt">-z</span> <span class="s2">"</span><span class="k">${</span><span class="nv">SEL</span><span class="k">:-}</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="c"># fallback: 번호 선택</span>
+  <span class="nv">i</span><span class="o">=</span>1
+  <span class="k">for </span>p <span class="k">in</span> <span class="s2">"</span><span class="k">${</span><span class="nv">CANDIDATES</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+    </span><span class="nv">rel</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">p</span><span class="p">#</span><span class="nv">$W</span><span class="p">/</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="nb">printf</span> <span class="s2">"%2d) %s</span><span class="se">\n</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$i</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$rel</span><span class="s2">"</span><span class="p">;</span> <span class="o">((</span>i++<span class="o">))</span>
+  <span class="k">done
+  </span><span class="nb">read</span> <span class="nt">-rp</span> <span class="s2">"work-run&gt; "</span> idx
+  <span class="o">[[</span> <span class="s2">"</span><span class="nv">$idx</span><span class="s2">"</span> <span class="o">=</span>~ ^[0-9]+<span class="nv">$ </span><span class="o">]]</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">"Invalid"</span><span class="p">;</span> <span class="nb">exit </span>1<span class="p">;</span> <span class="o">}</span>
+  <span class="nv">SEL</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">CANDIDATES</span><span class="p">[</span><span class="k">$((</span>idx-1<span class="k">))</span><span class="p">]</span><span class="k">}</span><span class="s2">"</span>
+<span class="k">fi
+
+</span><span class="nb">dir</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span><span class="nb">dirname</span> <span class="s2">"</span><span class="nv">$SEL</span><span class="s2">"</span><span class="si">)</span><span class="s2">"</span><span class="p">;</span> <span class="nv">file</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span><span class="nb">basename</span> <span class="s2">"</span><span class="nv">$SEL</span><span class="s2">"</span><span class="si">)</span><span class="s2">"</span>
+<span class="nb">cd</span> <span class="s2">"</span><span class="nv">$dir</span><span class="s2">"</span>
+<span class="k">case</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="k">in</span>
+  <span class="k">*</span>.ps1<span class="p">)</span>  pwsh <span class="nt">-NoLogo</span> <span class="nt">-NoProfile</span> <span class="nt">-File</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="p">;;</span>   <span class="c"># pwsh있으면 PS 스크립트도 실행</span>
+  <span class="k">*</span>.sh<span class="p">)</span>   <span class="nb">chmod</span> +x <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> 2&gt;/dev/null <span class="o">||</span> <span class="nb">true</span><span class="p">;</span> <span class="s2">"./</span><span class="nv">$file</span><span class="s2">"</span> <span class="p">;;</span>
+  <span class="k">*</span><span class="p">)</span>      <span class="nb">echo</span> <span class="s2">"Unknown type: </span><span class="nv">$file</span><span class="s2">"</span><span class="p">;</span> <span class="nb">exit </span>1 <span class="p">;;</span>
+<span class="k">esac</span>
+</code></pre></div></div>
+
+<p>사용:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x ~/Work/80_Tools/scripts/work-run
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/Work/80_Tools/scripts:</span><span class="nv">$PATH</span><span class="s2">"</span>
+work-run
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>패턴은 필요하면 추가해(예: <code class="language-plaintext highlighter-rouge">build_*.sh</code>, <code class="language-plaintext highlighter-rouge">repro.sh</code>, <code class="language-plaintext highlighter-rouge">smoke.sh</code> 등).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">fzf</code>가 있으면 퍼지 검색/프리뷰, 없으면 번호 메뉴.</p>
+  </li>
+</ul>
+
+<h2 id="tcsh-work-runcsh-간단-번호-선택">tcsh: <code class="language-plaintext highlighter-rouge">work-run.csh</code> (간단 번호 선택)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+#!/bin/tcsh -f
+set W = "$HOME/Work"
+if ( $?WORK_DIR ) set W = "$WORK_DIR"
+
+set tmp = "/tmp/work-run.$$"
+# 후보: scripts/*.sh, 04_Run/*.sh, 80_Tools/scripts/*.sh
+find "$W" -type f \( \
+  -path "$W/20_Projects/*/scripts/*.sh" -o \
+  -path "$W/25_Jobs/*/04_Run/*.sh" -o \
+  -path "$W/80_Tools/scripts/*.sh" \
+\) | sort | sed "s|^$W/||" &gt; "$tmp"
+
+set n = `wc -l &lt; "$tmp"`
+if ( "$n" == 0 ) then
+  echo "No runnable scripts found."; /bin/rm -f "$tmp"; exit 0
+endif
+
+set i = 1
+foreach line (`cat "$tmp"`)
+  echo "$i) $line"
+  @ i++
+end
+echo -n "work-run&gt; "
+set idx = $&lt;
+set sel = `sed -n "${idx}p" "$tmp"`; /bin/rm -f "$tmp"
+set full = "$W/$sel"
+set dir = `dirname "$full"`; set file = `basename "$full"`
+cd "$dir"
+if ( "$file:e" == "sh" ) then
+  chmod +x "$file" &gt;/dev/null
+  ./"$file"
+else
+  echo "Unknown type: $file"
+endif
+</code></pre></div></div>
+
+<p>사용:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+chmod +x ~/Work/80_Tools/scripts/work-run.csh
+setenv PATH "$HOME/Work/80_Tools/scripts:$PATH"
+work-run.csh
+</code></pre></div></div>
+
+<blockquote>
+  <p>이 방식이면 <strong>여러 군데서 shortcuts를 쓰지 않아도</strong> 되고, 새 스크립트를 만들면 자동으로 메뉴에 잡혀.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="옵션-c-프로젝트-로컬-태스크-러너-로-통일">옵션 C) <strong>프로젝트 로컬 태스크 러너</strong> 로 통일</h1>
+
+<ul>
+  <li>
+    <p>각 PRJ 루트에 아래 중 하나를 채택:</p>
+
+    <ul>
+      <li>
+        <p><strong>Makefile</strong> : <code class="language-plaintext highlighter-rouge">make test</code>, <code class="language-plaintext highlighter-rouge">make build</code>, <code class="language-plaintext highlighter-rouge">make run</code></p>
+      </li>
+      <li>
+        <p><strong>justfile</strong>(추천): 사람이 읽기 쉬운 문법, <code class="language-plaintext highlighter-rouge">just build</code>, <code class="language-plaintext highlighter-rouge">just test</code></p>
+      </li>
+      <li>
+        <p><strong>Invoke/Fab</strong>(파이썬 태스크): <code class="language-plaintext highlighter-rouge">inv build</code>, <code class="language-plaintext highlighter-rouge">inv release</code></p>
+      </li>
+      <li>
+        <p><strong>nox/tox</strong>(테스트/세션): <code class="language-plaintext highlighter-rouge">nox -s lint tests</code></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">10_Today</code>에서는 <strong>그 프로젝트로 cd만</strong> 하고, 나머지는 로컬 태스크로 실행.</p>
+  </li>
+  <li>
+    <p>장점: <strong>유지보수 최소</strong> , CI/CD와 스크립트 공유 쉬움.</p>
+  </li>
+  <li>
+    <p>단점: 프로젝트마다 태스크 정의 필요.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="어느-걸-쓰면-좋을까-현실-규칙">어느 걸 쓰면 좋을까? (현실 규칙)</h2>
+
+<ul>
+  <li>
+    <p><strong>초기 셋업/개인 워크스페이스</strong> : B(자동 탐색) → 관리 부담 0</p>
+  </li>
+  <li>
+    <p><strong>안정화되면</strong> : C(프로젝트 태스크 러너)로 고정해 품질↑</p>
+  </li>
+  <li>
+    <p><strong>매일 도는 Top10 명령이 뚜렷</strong> : A(shotcuts.list) 유지 + <code class="language-plaintext highlighter-rouge">pin</code>으로 등록을 “노가다 0”으로</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="보너스-혼용-예시-실전형">보너스: 혼용 예시 (실전형)</h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">work-run</code>으로 전체 스크립트 <strong>퍼지 검색</strong> 해서 바로 실행</p>
+  </li>
+  <li>
+    <p>자주 쓰는 5~10개는 <code class="language-plaintext highlighter-rouge">shortcuts.list</code>에 <strong>고정 슬롯</strong></p>
+  </li>
+  <li>
+    <p>프로젝트 내부에는 <code class="language-plaintext highlighter-rouge">justfile</code>로 <code class="language-plaintext highlighter-rouge">build/test/run</code> 표준화</p>
+  </li>
+</ul>
+
+<p>이렇게 잡으면 “여러 군데서 shortcuts를 쓴다”는 느낌 없이,<br />
+<strong>한 가지 진입점(work-run 혹은 today)</strong> 만 기억하면 되고,<br />
+필요할 때만 최소한으로 <code class="language-plaintext highlighter-rouge">shortcuts.list</code>를 운용하면 돼.</p>]]></content><author><name>hvppyarchive</name></author><category term="misc" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">LLM Chatbot Client Plan</title><link href="https://hvppyarchive.github.io/llm/simple-chatbot-client/" rel="alternate" type="text/html" title="LLM Chatbot Client Plan" /><published>2025-08-21T19:11:25+09:00</published><updated>2025-08-21T19:11:25+09:00</updated><id>https://hvppyarchive.github.io/llm/simple-chatbot-client</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/simple-chatbot-client/"><![CDATA[<p class="chat--user">
 
 Developer: Role and Objective - Develop a simple, fast LLM Chatbot Client Application using Qt or PySide. Workflow Checklist - Begin with a concise checklist (3-7 bullets) of conceptual sub-tasks before implementation. Instructions - Design for easy, direct execution by users in a Linux environment with access to a shared disk. - Allow each user to save personal settings, while the default deployment settings are configured by the administrator. Deployment - The application should be distributed so users can launch it directly on supported Linux systems with shared disk access. - Initial, default application settings must be settable by an administrator; each user can override and save their preferences. Required Features - Allow setting a custom LLM (Large Language Model) endpoint. - Support multi-line message input. - Provide chat log management similar to applications like Ollama or OpenWebUI. - Enable changing model parameters from the interface. - Incorporate useful shortcut keys (e.g., hide/show window in workspace, start new conversation, etc.). - Render Markdown in chat messages. Code and Messaging Conventions - Code must be clear, well-commented, use readable variable names, and maintain straightforward control flow. - Application messaging and labels should be concise and clear to end users. Output Format - Default output is plain text. When documentation is required, use Markdown and backticks for file, directory, function, and class names. Validation - After implementation, validate that the application meets all feature and deployment requirements and is verified to run as specified in the Linux environment. Document any issues or unmet criteria. Stop Conditions - The task is complete once the client app fulfills all listed features and deployment criteria, has been validated as above, and any necessary corrections have been applied.
 
