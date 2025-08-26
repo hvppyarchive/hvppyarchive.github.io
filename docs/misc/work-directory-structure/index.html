@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-08-26T15:20:52+09:00">
+  <meta property="article:published_time" content="2025-08-26T15:26:41+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="작업 폴더 구성 추천">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-08-26T15:20:52+09:00">
+    <meta itemprop="datePublished" content="2025-08-26T15:26:41+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-26T15:20:52+09:00">2025-08-26</time>
+        <time datetime="2025-08-26T15:26:41+09:00">2025-08-26</time>
       </span>
     
 
@@ -3280,6 +3280,216 @@ echo "Pinned: $label -&gt; $rel | $cmd"
 
 <p>필요하면 <code class="language-plaintext highlighter-rouge">today.csh</code>에 <strong>즐겨찾기 고정/검색/필터</strong> 같은 옵션(menu 검색, 번호 다중 실행 등)도 추가해 줄게.</p>
 
+<p class="chat--user">
+
+간단한 스크립트는 어디 모아야할까
+
+</p>
+
+<p>좋은 질문! “간단한 스크립트”는 <strong>쓰임새(범위·수명)</strong>로 나눠서 보관하면 헷갈림이 사라져요. 아래 <strong>결정표</strong> 대로 두면 됩니다. 필요에 따라 폴더 하나(▶ 추가 표시)도 제안했어요.</p>
+
+<hr />
+
+<h2 id="어디에-둘까-결정표">어디에 둘까? (결정표)</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>상황/목적</th>
+      <th>보관 위치</th>
+      <th>이유/메모</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>프로젝트 전용 작업</strong> (빌드/테스트/런)</td>
+      <td><code class="language-plaintext highlighter-rouge">20_Projects/PRJ-…/scripts/</code></td>
+      <td>프로젝트 루트 기준 경로가 고정. 팀/CI도 그대로 사용 가능.</td>
+    </tr>
+    <tr>
+      <td><strong>Job 실행 파이프라인</strong> (입력→설정→실행→산출)</td>
+      <td><code class="language-plaintext highlighter-rouge">25_Jobs/&lt;JOB&gt;/04_Run/</code></td>
+      <td>재현·증빙 목적. 로그/매니페스트와 같은 맥락에 둠.</td>
+    </tr>
+    <tr>
+      <td><strong>여러 프로젝트에서 재사용하는 범용 스크립트</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">80_Tools/scripts/</code></td>
+      <td>공용(골든) 도구. <strong>PATH</strong> 에 추가해서 어디서든 호출.</td>
+    </tr>
+    <tr>
+      <td><strong>오늘만 쓰는 임시 래퍼/런처</strong> (콘솔 중심)</td>
+      <td>▶ <code class="language-plaintext highlighter-rouge">10_Today/wrappers/</code></td>
+      <td><code class="language-plaintext highlighter-rouge">shortcuts.list</code>에서 부르는 작은 래퍼를 모아두는 임시 구역. EOD/주 1회 정리.</td>
+    </tr>
+    <tr>
+      <td><strong>짧은 1~3줄 트릭/반복 명령(코드 조각)</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">50_Snippets/bash/</code></td>
+      <td>‘실행파일’이 아니라 <strong>참고용 조각</strong>. 나중에 성숙하면 스크립트로 승격.</td>
+    </tr>
+    <tr>
+      <td><strong>실험·프로토타입</strong> (버려도 되는 테스트)</td>
+      <td><code class="language-plaintext highlighter-rouge">31_Labs/jupyter/</code> 또는 해당 실험 폴더</td>
+      <td>아이디어 검증 단계. 유효해지면 상위 위치로 승격.</td>
+    </tr>
+    <tr>
+      <td><strong>개인 셸 함수/별칭</strong> (환경 설정)</td>
+      <td><code class="language-plaintext highlighter-rouge">40_Resources/personal/configs/shell/{bash,zsh,tcsh,powershell}/</code></td>
+      <td>로그인 시 자동 로딩. 비공유/취향/OS별로 분리.</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>▶ <strong>신규 폴더 제안</strong> : <code class="language-plaintext highlighter-rouge">10_Today/wrappers/</code></p>
+
+  <ul>
+    <li>
+      <p>예: <code class="language-plaintext highlighter-rouge">today</code>에서 파이프(<code class="language-plaintext highlighter-rouge">|</code>), 복잡한 인자 등이 필요할 때 짧은 래퍼(<code class="language-plaintext highlighter-rouge">*.sh</code>, <code class="language-plaintext highlighter-rouge">*.ps1</code>, <code class="language-plaintext highlighter-rouge">*.csh</code>)를 여기에 두고 <code class="language-plaintext highlighter-rouge">shortcuts.list</code>에서는 그 래퍼만 호출.</p>
+    </li>
+    <li>
+      <p>정리 주기: <strong>하루~일주일</strong>. 재사용 가치가 생기면 <code class="language-plaintext highlighter-rouge">80_Tools/scripts/</code>나 <code class="language-plaintext highlighter-rouge">PRJ-…/scripts/</code>로 <strong>승격</strong>.</p>
+    </li>
+  </ul>
+
+</blockquote>
+
+<hr />
+
+<h2 id="운용-규칙-간단실전형">운용 규칙 (간단·실전형)</h2>
+
+<ol>
+  <li><strong>PATH 설정</strong>(단 한 번)</li>
+</ol>
+
+<ul>
+  <li>Bash/Zsh/tcsh:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/Work/80_Tools/scripts:</span><span class="nv">$PATH</span><span class="s2">"</span>
+</code></pre></div>    </div>
+  </li>
+  <li>PowerShell:
+    <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$</span><span class="nn">env</span><span class="p">:</span><span class="nv">Path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\80_Tools\scripts;"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">$</span><span class="nn">env</span><span class="p">:</span><span class="nv">Path</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<blockquote>
+  <p>이렇게 하면 어디서든 <code class="language-plaintext highlighter-rouge">my-tool.sh</code> 같은 공용 스크립트를 바로 실행.</p>
+</blockquote>
+
+<ol>
+  <li><strong>승격 루트</strong></li>
+</ol>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">50_Snippets/bash/one-liner.txt</code> → 좋아서 자주 쓰게 됨 →<br />
+<code class="language-plaintext highlighter-rouge">10_Today/wrappers/say_hello.sh</code>로 임시 사용 → 여전히 유용 →<br />
+<code class="language-plaintext highlighter-rouge">80_Tools/scripts/say_hello.sh</code>로 <strong>승격</strong> + <code class="language-plaintext highlighter-rouge">--help</code>/설명 추가.</li>
+</ul>
+
+<ol>
+  <li><strong>이름 규칙</strong></li>
+</ol>
+
+<ul>
+  <li>
+    <p><strong>동사-목적</strong> : <code class="language-plaintext highlighter-rouge">build_cli.sh</code>, <code class="language-plaintext highlighter-rouge">release_copy.ps1</code>, <code class="language-plaintext highlighter-rouge">repro_bug.csh</code></p>
+  </li>
+  <li>
+    <p><strong>OS/셸 태그</strong>(필요 시): <code class="language-plaintext highlighter-rouge">*_mac.sh</code>, <code class="language-plaintext highlighter-rouge">*_win.ps1</code>, <code class="language-plaintext highlighter-rouge">*_nix.sh</code>, <code class="language-plaintext highlighter-rouge">*_tcsh.csh</code></p>
+  </li>
+  <li>
+    <p><strong>프로젝트 한정</strong> 이면 파일명에 <strong>프로젝트 약어</strong> 붙이기: <code class="language-plaintext highlighter-rouge">build_cli_app1.sh</code></p>
+  </li>
+</ul>
+
+<ol>
+  <li><strong>헤더/안전 옵션(필수)</strong></li>
+</ol>
+
+<ul>
+  <li>Bash/Zsh:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> <span class="nt">-euo</span> pipefail
+</code></pre></div>    </div>
+  </li>
+  <li>PowerShell:
+    <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="bp">$Error</span><span class="n">ActionPreference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Stop"</span><span class="w">
+</span><span class="n">Set-StrictMode</span><span class="w"> </span><span class="nt">-Version</span><span class="w"> </span><span class="nx">Latest</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+  <li>tcsh:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+    
+#!/bin/tcsh -f
+</code></pre></div>    </div>
+  </li>
+  <li>최상단 주석 3줄(설명/의존성/예시):
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># build_cli.sh - Build CLI as onefile with PyInstaller</span>
+<span class="c"># deps: pyinstaller&gt;=6, Python 3.11 venv activated</span>
+<span class="c"># usage: ./build_cli.sh</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<ol>
+  <li><strong>문서화 위치</strong></li>
+</ol>
+
+<ul>
+  <li>
+    <p>공용 스크립트 목록은 <code class="language-plaintext highlighter-rouge">80_Tools/scripts/INDEX.md</code> 한 장으로 관리<br />
+(이름, 한줄 설명, 사용 예시).</p>
+  </li>
+  <li>
+    <p>프로젝트 전용은 <code class="language-plaintext highlighter-rouge">PRJ-…/README.md</code>의 “Scripts” 섹션에 표로 정리.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="예시-배치-샘플">예시 배치 (샘플)</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Work/
+  10_Today/
+    wrappers/
+      hotfix_export.sh         <span class="c"># 오늘만 쓸 임시 래퍼 (EOD 삭제/승격)</span>
+  20_Projects/PRJ-2025-001_sample_app/
+    scripts/
+      install.sh | .ps1
+      run_cli.sh | .ps1
+      build_cli.sh | .ps1
+  25_Jobs/JOB-2025-010_report/04_Run/
+    run.sh | run.ps1            <span class="c"># Job 실행 진입점</span>
+  50_Snippets/bash/
+    tmux_one_liners.md
+    git_tricks.md
+  80_Tools/scripts/
+    release_copy.sh             <span class="c"># 공용: dist → 75_Releases 로 전개</span>
+    checksum_all.sh             <span class="c"># 공용: SHA256 생성</span>
+    today                       <span class="c"># 콘솔 런처(선택)</span>
+    today.csh                   <span class="c"># tcsh 런처(선택)</span>
+    today.ps1                   <span class="c"># PS 런처(선택)</span>
+  40_Resources/personal/configs/shell/
+    .zshrc, .tcshrc, Microsoft.PowerShell_profile.ps1
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="shortcutslist와-궁합-좋게-쓰는-팁"><code class="language-plaintext highlighter-rouge">shortcuts.list</code>와 궁합 좋게 쓰는 팁</h2>
+
+<ul>
+  <li>
+    <p>파이프/복잡 명령이 필요하면 <code class="language-plaintext highlighter-rouge">10_Today/wrappers/*.sh</code>에 래퍼로 만들고,<br />
+<code class="language-plaintext highlighter-rouge">shortcuts.list</code>에서는 <code class="language-plaintext highlighter-rouge">./wrappers/that_task.sh</code>만 호출 → 깔끔.</p>
+  </li>
+  <li>
+    <p>래퍼가 일주일 내내 유용하면 <code class="language-plaintext highlighter-rouge">80_Tools/scripts/</code>로 <strong>승격</strong> + PATH에서 직접 호출.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>원하면 지금 스타터에 <code class="language-plaintext highlighter-rouge">10_Today/wrappers/</code>와 <code class="language-plaintext highlighter-rouge">80_Tools/scripts/INDEX.md</code> 틀, 그리고 <code class="language-plaintext highlighter-rouge">checksum_all.sh</code>/<code class="language-plaintext highlighter-rouge">release_copy.sh</code> 같은 <strong>실사용 공용 스크립트</strong> 샘플까지 바로 만들어서 붙여줄게. 어느 셸(Bash/Zsh/tcsh/PowerShell)을 주력으로 쓰는지도 알려줘!</p>
+
         
       </section>
 
@@ -3305,7 +3515,7 @@ echo "Pinned: $label -&gt; $rel | $cmd"
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-26T15:20:52+09:00">2025-08-26</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-26T15:26:41+09:00">2025-08-26</time></p>
 
       </footer>
 
@@ -3359,7 +3569,7 @@ echo "Pinned: $label -&gt; $rel | $cmd"
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-26T15:20:56+09:00">2025-08-26</time>
+        <time datetime="2025-08-26T15:26:46+09:00">2025-08-26</time>
       </span>
     
 
