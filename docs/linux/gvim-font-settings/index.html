@@ -1,0 +1,855 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>gvim 폰트 설정 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="gvim 폰트 설정">
+<meta property="og:url" content="https://hvppyarchive.github.io/linux/gvim-font-settings/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-08-26T18:12:41+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/linux/gvim-font-settings/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="gvim 폰트 설정">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-08-26T18:12:41+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/linux/gvim-font-settings/" itemprop="url">gvim 폰트 설정
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-26T18:12:41+09:00">2025-08-26</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+gvim에서 글자 높이 간격 조절 못하나
+
+</p>
+
+<p>가능해요! gVim(그래픽 Vim)에서는 <strong><code class="language-plaintext highlighter-rouge">'linespace'</code> 옵션</strong>으로 줄 간격(글자 높이 사이 여백)을 조절합니다.</p>
+
+<h3 id="바로-써보기-일시적으로">바로 써보기 (일시적으로)</h3>
+
+<p>명령줄 창에서:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:set <span class="nv">linespace</span><span class="o">=</span>4      <span class="s2">" 줄 사이에 4픽셀 여유
+:set linespace=0      "</span> 기본값<span class="o">(</span>여유 없음<span class="o">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>값은 “픽셀” 단위예요. 숫자가 클수록 줄 간격이 넓어집니다.</p>
+  </li>
+  <li>
+    <p>일부 환경에선 음수도 되지만(줄을 더 촘촘히), 글자 잘림이 생길 수 있어 보통 <strong>0 이상</strong> 을 권장합니다.</p>
+  </li>
+</ul>
+
+<h3 id="항상-적용하기-gvimrc">항상 적용하기 (gvimrc)</h3>
+
+<p>GUI에서만 적용하려면 gVim 전용 설정 파일에 넣는 게 깔끔해요.</p>
+
+<ul>
+  <li>
+    <p><strong>Windows:</strong> <code class="language-plaintext highlighter-rouge">_gvimrc</code></p>
+  </li>
+  <li>
+    <p><strong>macOS/Linux:</strong> <code class="language-plaintext highlighter-rouge">~/.gvimrc</code></p>
+  </li>
+</ul>
+
+<p>예시:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+
+" ~/.gvimrc
+set linespace=3
+</code></pre></div></div>
+
+<h3 id="참고팁">참고/팁</h3>
+
+<ul>
+  <li>
+    <p><strong>터미널 Vim</strong>(콘솔에서 돌리는 Vim)은 <code class="language-plaintext highlighter-rouge">linespace</code>가 없어요. 그땐 터미널 앱 자체의 “line spacing/line height” 설정을 조절해야 합니다.</p>
+  </li>
+  <li>줄 간격이 너무 빽빽하거나 헐렁하면 <strong>폰트 크기</strong> 도 같이 조절해 보세요:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+    
+" 예) Windows
+set guifont=Consolas:h14
+" 예) macOS
+set guifont=Menlo:h14
+</code></pre></div>    </div>
+  </li>
+  <li>도움말: <code class="language-plaintext highlighter-rouge">:help 'linespace'</code></li>
+</ul>
+
+<p>원하시는 느낌(조금만 넓게: 2<del>3, 더 넓게: 4</del> 6)을 몇 값 시도해 보시고 가장 편한 숫자로 정착하시면 됩니다.</p>
+
+<p class="chat--user">
+
+한글 폰트가 별로라서 읽기 힘든건가. sudo 권한 없이 redhat 8.x에 폰트 설치해서 gvim에 사용하고 싶어
+
+</p>
+
+<p>가능하죠! <code class="language-plaintext highlighter-rouge">sudo</code> 없이도 <strong>개인 사용자 영역</strong> 에 폰트를 넣고 gVim에서 바로 쓸 수 있어요.<br />
+아래 순서 그대로 따라오세요 (RHEL 8.x 기준).</p>
+
+<h1 id="1-내-폰트-폴더-준비">1) 내 폰트 폴더 준비</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> ~/.local/share/fonts      <span class="c"># 표준 위치 (권장)</span>
+<span class="c"># (구형 환경 호환용) ~/.fonts 도 인식되지만, RHEL 8이라면 위 경로를 쓰세요.</span>
+</code></pre></div></div>
+
+<h1 id="2-폰트-파일-복사">2) 폰트 파일 복사</h1>
+
+<p>다운로드한 <code class="language-plaintext highlighter-rouge">.ttf</code>/<code class="language-plaintext highlighter-rouge">.otf</code> 파일을 위 폴더로 옮깁니다.<br />
+(예: D2Coding, NanumGothicCoding 같은 한글 모노스페이스 폰트가 gVim에 잘 맞습니다.)</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cp</span> ~/Downloads/D2Coding<span class="k">*</span>.ttf ~/.local/share/fonts/
+</code></pre></div></div>
+
+<h1 id="3-폰트-캐시-갱신-sudo-불필요">3) 폰트 캐시 갱신 (sudo 불필요)</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fc-cache <span class="nt">-f</span> <span class="nt">-v</span> ~/.local/share/fonts
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>정상이라면 새로 스캔된 폰트 목록이 주르륵 출력돼요.</p>
+  </li>
+  <li>
+    <p>확인용:</p>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fc-list | <span class="nb">grep</span> <span class="nt">-i</span> d2coding
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="4-gvim에서-폰트-적용">4) gVim에서 폰트 적용</h1>
+
+<h2 id="a-일시-적용">(a) 일시 적용</h2>
+
+<p>gVim 명령줄(<code class="language-plaintext highlighter-rouge">:</code>)에서:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+
+:set guifont=D2Coding\ 12
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>공백은 <code class="language-plaintext highlighter-rouge">\</code>로 이스케이프합니다. (<code class="language-plaintext highlighter-rouge">D2Coding 12</code> → <code class="language-plaintext highlighter-rouge">D2Coding\ 12</code>)</p>
+  </li>
+  <li>
+    <p>다른 예:</p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+    
+:set guifont=NanumGothic\ Coding\ 13
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="b-항상-적용-권장">(b) 항상 적용 (권장)</h2>
+
+<p><code class="language-plaintext highlighter-rouge">~/.gvimrc</code>에 추가:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+
+" 기본 인코딩과 폰트
+set encoding=utf-8
+set guifont=D2Coding\ 12
+
+" 줄 간격이 답답하면 조금 늘리기
+set linespace=3
+</code></pre></div></div>
+
+<ul>
+  <li>폰트 후보를 콤마로 여러 개 적어 <strong>첫 번째로 사용 가능한</strong> 폰트를 쓰게 할 수도 있어요:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+    
+set guifont=D2Coding\ 12,NanumGothic\ Coding\ 13,DejaVu\ Sans\ Mono\ 12
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="5-선택-렌더링-품질-개선">5) (선택) 렌더링 품질 개선</h1>
+
+<p>개인 설정으로 안티앨리어싱/힌팅을 켜면 가독성이 더 좋아집니다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> ~/.config/fontconfig/conf.d
+<span class="nb">cat</span> <span class="o">&gt;</span> ~/.config/fontconfig/conf.d/99-user-rendering.conf <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">EOF</span><span class="sh">'
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
+&lt;fontconfig&gt;
+  &lt;match target="font"&gt;
+    &lt;edit name="antialias" mode="assign"&gt;&lt;bool&gt;true&lt;/bool&gt;&lt;/edit&gt;
+    &lt;edit name="hinting"   mode="assign"&gt;&lt;bool&gt;true&lt;/bool&gt;&lt;/edit&gt;
+    &lt;edit name="hintstyle" mode="assign"&gt;&lt;const&gt;hintslight&lt;/const&gt;&lt;/edit&gt;
+    &lt;edit name="rgba"      mode="assign"&gt;&lt;const&gt;rgb&lt;/const&gt;&lt;/edit&gt;
+    &lt;edit name="lcdfilter" mode="assign"&gt;&lt;const&gt;lcddefault&lt;/const&gt;&lt;/edit&gt;
+  &lt;/match&gt;
+&lt;/fontconfig&gt;
+</span><span class="no">EOF
+</span>fc-cache <span class="nt">-f</span> <span class="nt">-v</span>
+</code></pre></div></div>
+
+<h1 id="6-문제-해결-팁">6) 문제 해결 팁</h1>
+
+<ul>
+  <li>
+    <p><strong>gVim 재시작</strong> 후에도 폰트가 안 바뀌면 <code class="language-plaintext highlighter-rouge">:echo &amp;guifont</code>로 적용값 확인.</p>
+  </li>
+  <li>
+    <p>폰트 이름은 <code class="language-plaintext highlighter-rouge">fc-list | cut -d: -f2 | sort -u | less</code>로 실제 등록명을 확인하세요.</p>
+  </li>
+  <li>
+    <p>일부 개발 폰트(예: JetBrains Mono, Cascadia Code)는 <strong>한글 글리프가 부족</strong> 할 수 있어요.<br />
+한글 포함 모노스페이스(예: <strong>D2Coding</strong> , <strong>NanumGothic Coding</strong>)을 우선 사용하세요.</p>
+  </li>
+  <li>
+    <p>터미널용 Vim은 <code class="language-plaintext highlighter-rouge">guifont</code>/<code class="language-plaintext highlighter-rouge">linespace</code>가 적용되지 않으니 <strong>gVim(GUI)</strong>에서만 테스트하세요.</p>
+  </li>
+</ul>
+
+<p>원하시면 쓰시는 폰트 후보를 알려주시면, gVim에 맞게 정확한 <code class="language-plaintext highlighter-rouge">guifont</code> 문자열까지 딱 맞춰 드릴게요!</p>
+
+<p class="chat--user">
+
+회사에서 써도 괜찮은 좋은 폰트 추천해줘
+
+</p>
+
+<p>좋아요—<strong>회사(상업)에서도 안심하고 쓸 수 있는 한글 친화 폰트</strong> 만 골라 드릴게요. 전부 <strong>SIL Open Font License(OFL 1.1)</strong> 등으로 기업 사용에 제약이 없고, RHEL 8에서도 <code class="language-plaintext highlighter-rouge">~/.local/share/fonts</code>에 넣어 바로 쓸 수 있습니다.</p>
+
+<h1 id="어떻게-골랐나-짧게">어떻게 골랐나 (짧게)</h1>
+
+<ul>
+  <li>
+    <p><strong>기업 사용 OK 라이선스(OFL 1.1 등)</strong></p>
+  </li>
+  <li>
+    <p><strong>한글 글리프 품질/범위</strong>(개발용은 모노스페이스 우선)</p>
+  </li>
+  <li>
+    <p><strong>가독성 &amp; 유지 보수</strong>(업데이트/배포 경로 확실)</p>
+  </li>
+</ul>
+
+<h1 id="개발용-모노스페이스-gvim에-딱">개발용 (모노스페이스, gVim에 딱)</h1>
+
+<ol>
+  <li>
+    <p><strong>D2Coding</strong> – 개발자용 한글 고정폭, 리가처 버전도 있음<br />
+라이선스: <strong>SIL OFL 1.1</strong>. 네이버 배포. <a href="https://github.com/naver/d2codingfont/wiki/Open-Font-License?utm_source=chatgpt.com">GitHub+1</a></p>
+
+    <ul>
+      <li>gVim: <code class="language-plaintext highlighter-rouge">:set guifont=D2Coding\ 12</code></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>NanumGothic Coding</strong> – 화면 힌팅 좋아 가독성 안정적<br />
+라이선스: <strong>OFL 1.1(오픈소스)</strong>. <a href="https://fonts.adobe.com/fonts/nanum-gothic-coding?utm_source=chatgpt.com">Adobe Fonts</a><a href="https://www.fontsquirrel.com/license/nanumgothic?utm_source=chatgpt.com">Font Squirrel</a></p>
+
+    <ul>
+      <li>gVim: <code class="language-plaintext highlighter-rouge">:set guifont=NanumGothic\ Coding\ 12</code></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Noto Sans Mono CJK KR</strong> – 구글/어도비 합작 CJK 고정폭, 범용성 최고<br />
+라이선스: <strong>OFL 1.1</strong> , CJK 전각/한글 폭 맞춤에 강점. <a href="https://fontinfo.opensuse.org/fonts/NotoSansMonoCJKKRBold.html?utm_source=chatgpt.com">fontinfo.opensuse.org</a><a href="https://notofonts.github.io/noto-docs/specimen/NotoSansMonoCJKsc/?utm_source=chatgpt.com">notofonts.github.io</a><a href="https://github.com/notofonts/noto-cjk?utm_source=chatgpt.com">GitHub</a></p>
+
+    <ul>
+      <li>gVim: <code class="language-plaintext highlighter-rouge">:set guifont=Noto\ Sans\ Mono\ CJK\ KR\ 12</code></li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>추천 세트(충돌 대비 폴백):<br />
+ <code class="language-plaintext highlighter-rouge">:set guifont=D2Coding\ 12,Noto\ Sans\ Mono\ CJK\ KR\ 12,NanumGothic\ Coding\ 12</code></p>
+</blockquote>
+
+<h1 id="ui문서용-비고정폭-터미널-밖프레젠테이션-등">UI·문서용 (비고정폭, 터미널 밖/프레젠테이션 등)</h1>
+
+<ul>
+  <li>
+    <p><strong>Pretendard</strong> – 한국어 UI에 많이 쓰이는 산세리프, 가중치 폭넓음<br />
+오픈소스 라이선스 표기(상업 사용 가능). <a href="https://fonts.adobe.com/fonts/pretendard?utm_source=chatgpt.com">Adobe Fonts</a></p>
+  </li>
+  <li>
+    <p><strong>SUIT</strong> – UI 본문 최적화 한국어 산세리프, 가벼운 톤<br />
+라이선스: <strong>OFL 1.1</strong>. <a href="https://github.com/sun-typeface/SUIT?utm_source=chatgpt.com">GitHub</a></p>
+  </li>
+  <li>
+    <p><strong>Noto Sans CJK KR</strong> – 글로벌 프로덕트에서 검증된 범용 한글 산세리프<br />
+오픈소스 라이선스 표기(상업 사용 가능). <a href="https://fonts.adobe.com/fonts/noto-sans-cjk-kr?utm_source=chatgpt.com">Adobe Fonts</a><a href="https://github.com/adobe-fonts/source-han-sans?utm_source=chatgpt.com">GitHub</a></p>
+  </li>
+</ul>
+
+<h1 id="참고-라틴-전용-개발-폰트와의-병용">(참고) 라틴 전용 개발 폰트와의 병용</h1>
+
+<ul>
+  <li><strong>JetBrains Mono</strong> , <strong>Cascadia Code</strong> 는 라이선스상 기업 사용 OK(OFL 1.1)이지만 <strong>한글 글리프는 제한적</strong> 이라 보통 위 CJK 폰트와 <strong>폴백</strong> 으로 같이 씁니다. <a href="https://www.jetbrains.com/lp/mono/?utm_source=chatgpt.com">JetBrains</a><a href="https://fonts.google.com/specimen/JetBrains%2BMono?utm_source=chatgpt.com">Google Fonts</a><a href="https://learn.microsoft.com/en-us/windows/terminal/cascadia-code?utm_source=chatgpt.com">Microsoft Learn</a></li>
+</ul>
+
+<h1 id="gvim에-바로-적용하는-예">gVim에 바로 적용하는 예</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
+
+" ~/.gvimrc
+set encoding=utf-8
+" 개발용 모노스페이스 + 폴백
+set guifont=D2Coding\ 12,Noto\ Sans\ Mono\ CJK\ KR\ 12,NanumGothic\ Coding\ 12
+" 줄 간격 조금만 넓게
+set linespace=2
+</code></pre></div></div>
+
+<h1 id="빠른-설치-요약-sudo-없이">빠른 설치 요약 (sudo 없이)</h1>
+
+<ol>
+  <li>
+    <p>폰트 복사: <code class="language-plaintext highlighter-rouge">~/.local/share/fonts/</code></p>
+  </li>
+  <li>
+    <p>캐시 갱신: <code class="language-plaintext highlighter-rouge">fc-cache -f -v ~/.local/share/fonts</code></p>
+  </li>
+  <li>
+    <p>gVim에서 <code class="language-plaintext highlighter-rouge">:set guifont=...</code>으로 테스트</p>
+  </li>
+</ol>
+
+<p>원하시면 <strong>화면 스샷(샘플 코드·한글 문장) 기준으로 2~3개</strong> 더 좁혀 드릴게요. 회사 모니터 환경(해상도/스케일) 알려주시면 줄 간격(<code class="language-plaintext highlighter-rouge">linespace</code>) 권장값도 같이 맞춰 드립니다!</p>
+
+<p class="chat--user">
+
+~/.config/fontconfig/conf.d/99-user-rendering.conf 이 파일은 어떤 application에서 적용되는 설정이야?
+
+</p>
+
+<p>짧게 말하면:<br />
+<code class="language-plaintext highlighter-rouge">~/.config/fontconfig/conf.d/99-user-rendering.conf</code>는 <strong>Fontconfig</strong> 를 쓰는 모든 리눅스 앱에 “사용자 단위”로 적용되는 설정이에요. 그래서 <strong>gVim(GTK 빌드)</strong> , 브라우저(Firefox/Chrome), 터미널 에뮬레이터(GNOME Terminal/Kitty 등), VS Code, LibreOffice, 대부분의 Qt/GTK 앱들이 전부 영향을 받아요.</p>
+
+<p>아래 순서로 이해하면 편합니다.</p>
+
+<h1 id="1-무엇에-적용되나">1) 무엇에 적용되나?</h1>
+
+<ul>
+  <li>
+    <p><strong>적용됨 (Fontconfig 사용하는 앱)</strong></p>
+
+    <ul>
+      <li>
+        <p>gVim(보통 GTK3 빌드 → Pango/Cairo/Fontconfig 경유)</p>
+      </li>
+      <li>
+        <p>대부분의 <strong>GTK/Qt</strong> 앱, <strong>Electron</strong> /Chromium 계열, <strong>Firefox</strong> , <strong>LibreOffice</strong> , <strong>Java(OpenJDK) AWT/Swing</strong> 등</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>적용 안 됨 (Fontconfig 안 쓰는 경우)</strong></p>
+
+    <ul>
+      <li>
+        <p><strong>순수 콘솔 TTY</strong>(Ctrl+Alt+F3 같은 가상콘솔): 커널 비트맵 폰트라 Fontconfig 경로를 안 탑니다.</p>
+      </li>
+      <li>
+        <p>일부 특수/옛날 앱(자체 렌더러·정적 링크 등), 컨테이너/샌드박스에서 <strong>호스트의 Fontconfig를 안 읽는</strong> 경우(예: 일부 Flatpak/Snap 빌드).</p>
+      </li>
+      <li>
+        <p><strong>터미널 안의 Vim(콘솔 Vim)</strong> 텍스트는 터미널 에뮬레이터가 그리므로 Vim 자체엔 적용 안 되고, <strong>터미널 에뮬레이터</strong> 가 Fontconfig 설정을 반영합니다.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="2-gvim에선-어떻게">2) gVim에선 어떻게?</h1>
+
+<ul>
+  <li>
+    <p>RHEL 8의 gVim이 <strong>GTK 빌드</strong> 면 이 파일의 안티앨리어싱/힌팅/서브픽셀 설정이 <strong>그대로 반영</strong> 됩니다.</p>
+  </li>
+  <li>확인:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gvim <span class="nt">--version</span> | <span class="nb">grep</span> <span class="nt">-i</span> gtk     <span class="c"># +GTK3 같은 표시가 보이면 GTK 빌드</span>
+</code></pre></div>    </div>
+  </li>
+  <li>콘솔 Vim은 <code class="language-plaintext highlighter-rouge">guifont</code>, Fontconfig 렌더링과 무관합니다(터미널 앱이 폰트를 렌더링).</li>
+</ul>
+
+<h1 id="3-우선순위적용-타이밍">3) 우선순위/적용 타이밍</h1>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">~/.config/fontconfig/conf.d/</code>는 <strong>사용자 전용</strong> 오버레이 경로이며, 파일명 앞 숫자가 <strong>적용 순서</strong> 를 결정합니다. <code class="language-plaintext highlighter-rouge">99-...</code>면 보통 가장 늦게 적용되어 <strong>덮어쓰기</strong> 에 유리합니다.</p>
+  </li>
+  <li>
+    <p><strong>폰트 추가/삭제</strong> 가 아닐 땐 <code class="language-plaintext highlighter-rouge">fc-cache</code>는 보통 필요 없습니다(설정만 바꾼 경우). 앱을 <strong>재시작</strong> 하면 반영됩니다.</p>
+  </li>
+</ul>
+
+<h1 id="4-제대로-적용됐는지-빠르게-검증">4) 제대로 적용됐는지 빠르게 검증</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 현재 사용자 설정까지 반영된 최종 매칭/렌더링 옵션 보기</span>
+fc-match <span class="nt">-v</span> <span class="s2">"D2Coding:style=Regular:size=12"</span> | egrep <span class="s1">'antialias|hinting|hintstyle|rgba|lcdfilter'</span>
+</code></pre></div></div>
+
+<p>여기 출력이 <code class="language-plaintext highlighter-rouge">99-user-rendering.conf</code>의 값과 일치하면, Fontconfig를 쓰는 앱들은 동일하게 그 설정을 따릅니다.</p>
+
+<hr />
+
+<p>원하시면 사용 중인 앱(예: 터미널/브라우저/에디터)별로 <strong>필요한 최소 설정 스니펫</strong> 과 함께, 충돌 가능성이 있는 <strong>데스크톱 글꼴 설정(GNOME/Plasma)</strong>과의 정리 방법도 적어 드릴게요.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#linux" class="page__taxonomy-item p-category" rel="tag">linux</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-26T18:12:41+09:00">2025-08-26</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/misc/work-directory-structure/" class="pagination--pager" title="작업 폴더 구성 추천">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-26T18:12:47+09:00">2025-08-26</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/work-directory-structure/" rel="permalink">작업 폴더 구성 추천
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-26T17:44:48+09:00">2025-08-26</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/simple-chatbot-client/" rel="permalink">LLM Chatbot Client Plan
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-21T19:11:25+09:00">2025-08-21</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/python-textbuffer/" rel="permalink">Python TextBuffer 구현
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-21T19:10:46+09:00">2025-08-21</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
