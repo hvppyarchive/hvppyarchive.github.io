@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-26T16:19:27+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-26T16:19:27+09:00</published><updated>2025-08-26T16:19:27+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-26T17:17:28+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-26T17:17:28+09:00</published><updated>2025-08-26T17:17:28+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">작업 폴더 구성 추천</title><link href="https://hvppyarchive.github.io/misc/work-directory-structure/" rel="alternate" type="text/html" title="작업 폴더 구성 추천" /><published>2025-08-26T16:19:22+09:00</published><updated>2025-08-26T16:19:22+09:00</updated><id>https://hvppyarchive.github.io/misc/work-directory-structure</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/work-directory-structure/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">작업 폴더 구성 추천</title><link href="https://hvppyarchive.github.io/misc/work-directory-structure/" rel="alternate" type="text/html" title="작업 폴더 구성 추천" /><published>2025-08-26T17:17:24+09:00</published><updated>2025-08-26T17:17:24+09:00</updated><id>https://hvppyarchive.github.io/misc/work-directory-structure</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/work-directory-structure/"><![CDATA[<p class="chat--user">
 
 회사에서 작업 폴더 구성을 도와줘. 뭔가 작업 폴더를 꾸미는 것에 대한 일반적인 추천 같은게 있을까?
 
@@ -4394,7 +4394,1052 @@ work-run.csh
 
 <p>이렇게 잡으면 “여러 군데서 shortcuts를 쓴다”는 느낌 없이,<br />
 <strong>한 가지 진입점(work-run 혹은 today)</strong> 만 기억하면 되고,<br />
-필요할 때만 최소한으로 <code class="language-plaintext highlighter-rouge">shortcuts.list</code>를 운용하면 돼.</p>]]></content><author><name>hvppyarchive</name></author><category term="misc" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">LLM Chatbot Client Plan</title><link href="https://hvppyarchive.github.io/llm/simple-chatbot-client/" rel="alternate" type="text/html" title="LLM Chatbot Client Plan" /><published>2025-08-21T19:11:25+09:00</published><updated>2025-08-21T19:11:25+09:00</updated><id>https://hvppyarchive.github.io/llm/simple-chatbot-client</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/simple-chatbot-client/"><![CDATA[<p class="chat--user">
+필요할 때만 최소한으로 <code class="language-plaintext highlighter-rouge">shortcuts.list</code>를 운용하면 돼.</p>
+
+<p class="chat--user">
+
+만약에 교육 실험(LAB)을 따라해보고 싶다면 어디서 해야할까
+
+</p>
+
+<p>좋은 질문! <strong>교육 실험(LAB)</strong>은 “자료(읽기)”와 “실습(실행)”을 분리해서 관리하면 깔끔합니다.</p>
+
+<h2 id="한-줄-결론">한 줄 결론</h2>
+
+<ul>
+  <li>
+    <p><strong>자료(강의/튜토리얼/노트)</strong> : <code class="language-plaintext highlighter-rouge">40_Resources/edu/...</code> (읽기 전용 레퍼런스)</p>
+  </li>
+  <li>
+    <p><strong>가벼운 따라하기·짧은 탐색( &lt;30분)</strong>: <code class="language-plaintext highlighter-rouge">31_Labs/jupyter/</code> (스크래치)</p>
+  </li>
+  <li>
+    <p><strong>데이터·설정·결과를 남기는 제대로 된 실습</strong> : <code class="language-plaintext highlighter-rouge">25_Jobs/LAB-YYYY-NNN_&lt;topic&gt;/</code> (재현 가능한 구조)</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="어디서-무엇을-하나요">어디서 무엇을 하나요?</h1>
+
+<h2 id="1-자료는-여기-40_resourcesedu">1) 자료는 여기: <code class="language-plaintext highlighter-rouge">40_Resources/edu/</code></h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">courses/&lt;provider&gt;/&lt;course-name&gt;/</code> : 강의 슬라이드/수업 링크</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">tutorials/&lt;topic&gt;/</code> : 튜토리얼 링크/README</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">papers/</code> : 논문 워크플로(to_read → reading_notes → summaries)</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>역할: “읽을거리/레퍼런스” 저장소. <strong>실행 파일이나 산출물은 두지 않음</strong>.</p>
+</blockquote>
+
+<h2 id="2-짧은-실습은-여기-31_labsjupyter">2) 짧은 실습은 여기: <code class="language-plaintext highlighter-rouge">31_Labs/jupyter/</code></h2>
+
+<ul>
+  <li>
+    <p>파일 예: <code class="language-plaintext highlighter-rouge">2025-08-26_pytorch-tensor-basics.ipynb</code>, <code class="language-plaintext highlighter-rouge">regex_scratch.ipynb</code></p>
+  </li>
+  <li>
+    <p>용도: API 감, 문법/정규식 테스트, 작은 코드 실험(5분/50줄 규칙)</p>
+  </li>
+  <li>
+    <p>끝나고 유용하면 <strong>요약을</strong> <code class="language-plaintext highlighter-rouge">30_Areas/knowledge_base/{tips|cheatsheets|howtos}</code>로 <strong>승격</strong><br />
+(예: “PyTorch 텐서 기본” 치트시트)</p>
+  </li>
+</ul>
+
+<h2 id="3-본격-실습데이터산출리포트-필요은-여기-25_jobslab-yyyy-nnn_topic">3) 본격 실습(데이터·산출·리포트 필요)은 여기: <code class="language-plaintext highlighter-rouge">25_Jobs/LAB-YYYY-NNN_&lt;topic&gt;/</code></h2>
+
+<blockquote>
+  <p>LAB을 <strong>JOB의 한 타입</strong> 으로 보면 됩니다(재현성/증빙 목적).</p>
+</blockquote>
+
+<h3 id="권장-스켈레톤">권장 스켈레톤</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arduino
+
+25_Jobs/
+  LAB-2025-012_pytorch-cnn/
+    01_Brief/            - 학습 목표, 평가 기준(예: 정확도 ≥ 90%), 마감
+    02_Input/
+      raw/               - 원천 데이터(큰 파일은 심볼릭 링크 권장)
+    03_Config/
+      env.yml            - conda/venv 의존성 명세(또는 requirements.txt)
+      params.yml         - 하이퍼파라미터/경로 설정
+    04_Run/
+      notebooks/         - 실습 노트북(실행 본문)
+      run.sh|run.ps1     - 일괄실행/로그/시드고정
+      manifest.json      - 자동 생성(환경/버전/체크섬)
+    05_Output/
+      intermediate/      - 체크포인트/중간 산출
+      reports/           - 리포트 파일(HTML/PDF)
+    06_Export/
+      final/             - 제출/공유용 최종본
+</code></pre></div></div>
+
+<h3 id="왜-job-형태">왜 Job 형태?</h3>
+
+<ul>
+  <li>
+    <p>입력/설정/실행/산출이 분리되어 <strong>다시 돌리기 쉬움</strong></p>
+  </li>
+  <li>
+    <p>체크섬·환경 버전이 <strong>manifest로 기록</strong> → 결과 신뢰도↑</p>
+  </li>
+  <li>
+    <p>팀/미래의 나에게 <strong>재현 가능한 증거</strong> 가 됨</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="실전-워크플로-lab-따라하기">실전 워크플로 (LAB 따라하기)</h1>
+
+<h2 id="a-짧게-맛보기-유튜토리얼블로그-코드-몇-줄">A) “짧게 맛보기” (유튜토리얼/블로그 코드 몇 줄)</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">40_Resources/edu/tutorials/&lt;topic&gt;/</code>에 링크/원문 저장</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">31_Labs/jupyter/2025-08-26_&lt;topic&gt;.ipynb</code>에서 바로 실습</p>
+  </li>
+  <li>
+    <p>유용하면 → <code class="language-plaintext highlighter-rouge">30_Areas/knowledge_base/tips/&lt;topic&gt;.md</code>에 요약 10줄</p>
+  </li>
+</ol>
+
+<h2 id="b-실제-데이터로-결과를-내야-함성능리포트-필요">B) “실제 데이터로 결과를 내야 함”(성능/리포트 필요)</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">25_Jobs/LAB-YYYY-NNN_&lt;topic&gt;/</code> 생성</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">01_Brief/</code>에 목표/평가 기준/데이터 출처 작성</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">02_Input/raw/</code>에 데이터 배치(대용량은 경로만, 심링크 추천)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">03_Config/env.yml</code>, <code class="language-plaintext highlighter-rouge">params.yml</code> 작성</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">04_Run/notebooks/</code>에 노트북 저장, <code class="language-plaintext highlighter-rouge">run.sh</code>에서 순서·시드 고정</p>
+  </li>
+  <li>
+    <p>실행 → <code class="language-plaintext highlighter-rouge">05_Output/</code>에 중간물, <code class="language-plaintext highlighter-rouge">06_Export/final/</code>에 최종 리포트/PDF</p>
+  </li>
+  <li>
+    <p>성과가 재사용 가능하면, <strong>도구화</strong> 해서 <code class="language-plaintext highlighter-rouge">20_Projects/PRJ-...</code>로 승격</p>
+  </li>
+</ol>
+
+<h2 id="c-lab이-결국-재사용-툴로-발전">C) “LAB이 결국 재사용 툴로 발전”</h2>
+
+<ol>
+  <li>
+    <p>실습 코드에서 공통 로직을 <strong>패키지화</strong> → <code class="language-plaintext highlighter-rouge">20_Projects/PRJ-.../src/&lt;pkg&gt;/</code></p>
+  </li>
+  <li>
+    <p>예제는 <code class="language-plaintext highlighter-rouge">20_Projects/.../examples/</code>로 옮겨 <strong>최소 실행 샘플</strong> 제공</p>
+  </li>
+  <li>
+    <p>학습 기록/리포트는 기존 <code class="language-plaintext highlighter-rouge">LAB-...</code> Job에 그대로 보존(출처·증빙)</p>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="환경설정은-어디서">환경/설정은 어디서?</h1>
+
+<ul>
+  <li>
+    <p><strong>공유/골든 설정</strong> : <code class="language-plaintext highlighter-rouge">32_SharedConfigs/</code> (예: 표준 <code class="language-plaintext highlighter-rouge">pytest.ini</code>, <code class="language-plaintext highlighter-rouge">ruff.toml</code>)</p>
+  </li>
+  <li>
+    <p><strong>개인 설정(오버라이드)</strong> : <code class="language-plaintext highlighter-rouge">90_PersonalConfigs/</code> (셸 프로필, 개인 ruff/VSCode 등)</p>
+  </li>
+  <li>
+    <p><strong>특정 LAB 전용 의존성</strong> : <code class="language-plaintext highlighter-rouge">LAB-.../03_Config/env.yml</code> 또는 <code class="language-plaintext highlighter-rouge">requirements.txt</code><br />
+(프로젝트로 승격되면 PRJ 리포 안으로 옮기기)</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="today-런처자동-러너에-연결-선택">Today 런처/자동 러너에 연결 (선택)</h1>
+
+<ul>
+  <li>
+    <p>그냥 콘솔에서 자주 돌리면:</p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">work-run</code> 자동 탐색 러너를 쓰면 <code class="language-plaintext highlighter-rouge">LAB-.../04_Run/*.sh</code>가 자동 후보에 올라옵니다.</p>
+      </li>
+      <li>
+        <p>또는 <code class="language-plaintext highlighter-rouge">10_Today/shortcuts.list</code>에 한 줄 추가:</p>
+        <div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Run</span> <span class="kt">LAB</span> <span class="kt">CNN</span> <span class="o">|</span> <span class="mi">25</span><span class="n">_Jobs</span><span class="sr">/LAB-2025-012_pytorch-cnn/04_Run | ./</span><span class="n">run</span><span class="o">.</span><span class="n">sh</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="언제-어디서-할지-결정-규칙요약">언제 어디서 할지 결정 규칙(요약)</h1>
+
+<ul>
+  <li>
+    <p><strong>&lt; 30분 / 재현 불요 / 개인 확인</strong> → <code class="language-plaintext highlighter-rouge">31_Labs/jupyter</code></p>
+  </li>
+  <li>
+    <p><strong>데이터·결과·평가 필요 / 공유·재현 필요</strong> → <code class="language-plaintext highlighter-rouge">25_Jobs/LAB-YYYY-...</code></p>
+  </li>
+  <li>
+    <p><strong>도구로 발전</strong> → <code class="language-plaintext highlighter-rouge">20_Projects/PRJ-...</code> (LAB은 기록으로 남김)</p>
+  </li>
+</ul>
+
+<p>필요하면 <strong>LAB용 템플릿(Job 스캐폴드 + env/params 샘플 + run 스크립트)</strong>을 바로 만들어줄게. 어떤 주제(예: PyTorch, Pandas, NLP, 시각화)로 실습할지 알려주면 거기에 맞춰 뼈대까지 넣어 드릴 수 있어!</p>
+
+<p class="chat--user">
+
+25_Jobs가 엄청 뚱뚱해지네
+
+</p>
+
+<p>맞아—그 느낌 정상이에요. <strong>25_Jobs가 비대해지기 쉬운 폴더</strong> 라서, 구조·정책·자동화 3가지만 잡으면 금방 얇아집니다. 아래 그대로 적용해보자.</p>
+
+<hr />
+
+<h1 id="1-구조-25_jobs를-타입연도상태로-쪼개기">1) 구조: 25_Jobs를 “타입×연도×상태”로 쪼개기</h1>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">Work/</span>
+  <span class="s">25_Jobs/                          ← 산출 작업 루트</span>
+    <span class="s">_active/                        ← 지금 진행 중(12개 이내 유지)</span>
+    <span class="s">_templates/                     ← 복제용 스캐폴드(빈 템플릿)</span>
+    <span class="s">JOB/                            ← 일반 작업(연도별 보관)</span>
+      <span class="s">2025/</span>
+      <span class="s">2024/</span>
+    <span class="s">BUG/                            ← 배포 버그 재현/검증</span>
+      <span class="s">2025/</span>
+    <span class="s">SMOKE/                          ← 새 툴 스모크/feasibility</span>
+      <span class="s">2025/</span>
+    <span class="s">LAB/                            ← 교육 실습 중 “재현형” 실습</span>
+      <span class="s">2025/</span>
+    <span class="s">EX/                             ← 배포 예제 패키징</span>
+      <span class="s">2025/</span>
+    <span class="s">REL/                            ← 릴리스 준비/검증(Job 형태)</span>
+      <span class="s">2025/</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>새 작업은 <strong>항상 <code class="language-plaintext highlighter-rouge">25_Jobs/_active/타입-YYYY-NNN_제목/</code></strong>로 시작 → 끝나면 <strong>동일 타입의 연도 폴더로 이동</strong>.</p>
+  </li>
+  <li>
+    <p>템플릿은 전부 <strong><code class="language-plaintext highlighter-rouge">_templates/</code>에 모아두고</strong> 복제만 한다(중복 템플릿 방지).</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>예) 진행 중 버그: <code class="language-plaintext highlighter-rouge">_active/BUG-2025-013_crash_xxx/</code><br />
+ 완료 후 이동: <code class="language-plaintext highlighter-rouge">BUG/2025/BUG-2025-013_crash_xxx/</code></p>
+</blockquote>
+
+<hr />
+
+<h1 id="2-정책-수명주기hot--warm--cold">2) 정책: 수명주기(Hot → Warm → Cold)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>단계</th>
+      <th>위치</th>
+      <th>기간/기준</th>
+      <th>해야 할 일</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Hot</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">_active/</code></td>
+      <td>작업 중</td>
+      <td>매일 편집, 로그/메모 살림</td>
+    </tr>
+    <tr>
+      <td><strong>Warm</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">타입/2025/</code></td>
+      <td><strong>완료 후 ~90일</strong></td>
+      <td>중간산출물 정리, <code class="language-plaintext highlighter-rouge">05_Output/intermediate</code> 압축/삭제</td>
+    </tr>
+    <tr>
+      <td><strong>Cold</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">99_Archive/25_Jobs/2025/</code></td>
+      <td>90일↑ 또는 재사용 낮음</td>
+      <td>전체 폴더 이동(읽기 전용), 필요 파일만 <code class="language-plaintext highlighter-rouge">70_Exports</code> 링크</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>
+    <p><strong>상한선</strong> : <code class="language-plaintext highlighter-rouge">_active/</code>는 <strong>12개 이내</strong> (넘으면 가장 오래된 것부터 Warm으로 이동).</p>
+  </li>
+  <li>
+    <p><strong>원천데이터</strong> : 큰 파일은 <code class="language-plaintext highlighter-rouge">02_Input/raw</code>에 <strong>심볼릭 링크/경로만</strong>(실파일은 별도 데이터 저장소; 아래 5번 참고).</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="3-인덱스-가벼운-카탈로그-1장검색정리용">3) 인덱스: 가벼운 카탈로그 1장(검색·정리용)</h1>
+
+<p><code class="language-plaintext highlighter-rouge">25_Jobs/index.csv</code> (또는 <code class="language-plaintext highlighter-rouge">catalog.json</code>) — 최소 필드:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgsql
+
+job_code,type,year,title,status,owner,tags,start,end,path
+JOB-2025-041,JOB,2025,"보고서 A",done,me,"report,pdf",2025-08-20,2025-08-22,25_Jobs/JOB/2025/JOB-2025-041_보고서A
+BUG-2025-013,BUG,2025,"crash on save",warm,me,"win11,pyinstaller",2025-08-15,2025-08-16,25_Jobs/BUG/2025/BUG-2025-013_crash
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>새 Job 만들 때 <strong>한 줄 추가</strong> → 완료 시 <code class="language-plaintext highlighter-rouge">status</code>만 <code class="language-plaintext highlighter-rouge">done</code>으로 바꿔도 검색이 편함.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">work-run</code>(자동 탐색 러너)나 간단 스크립트가 이 인덱스를 참고하면 더 빨라져요.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="4-자동화-얇게-유지하는-4가지-루틴">4) 자동화: 얇게 유지하는 4가지 루틴</h1>
+
+<h3 id="a-close--move핫--웜">A) “Close &amp; Move”(핫 → 웜)</h3>
+
+<ul>
+  <li>
+    <p>종료 커밋/정리 후:</p>
+
+    <ol>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">05_Output/intermediate</code> 압축 또는 삭제</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">06_Export</code>만 남기고 나머지 로그는 7~30일 보존</p>
+      </li>
+      <li>
+        <p>폴더를 <code class="language-plaintext highlighter-rouge">타입/연도/</code>로 <strong>mv</strong></p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">index.csv</code> 상태 <code class="language-plaintext highlighter-rouge">done</code> 업데이트</p>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h3 id="b-archive웜--콜드">B) “Archive”(웜 → 콜드)</h3>
+
+<ul>
+  <li>
+    <p>90일 지난 <code class="language-plaintext highlighter-rouge">done</code> → <code class="language-plaintext highlighter-rouge">99_Archive/25_Jobs/연도/</code>로 이동</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">70_Exports</code>엔 최종본 링크 또는 복사</p>
+  </li>
+</ul>
+
+<h3 id="c-thin-logs">C) “Thin Logs”</h3>
+
+<ul>
+  <li>
+    <p>30일 지난 <code class="language-plaintext highlighter-rouge">*.log</code>는 <code class="language-plaintext highlighter-rouge">gzip</code></p>
+  </li>
+  <li>
+    <p>대용량 <code class="language-plaintext highlighter-rouge">*.csv</code> 중간 산출은 해시만 남기고 삭제 가능</p>
+  </li>
+</ul>
+
+<h3 id="d-top-n-active-rule">D) “Top-N Active Rule”</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_active/</code>가 12개 초과 시 today에 경고: <strong>가장 오래된 3개</strong> 를 Warm로 이동</li>
+</ul>
+
+<blockquote>
+  <p>원하면 위 4개를 묶은 <strong>주간 스윕 스크립트</strong> 도 내줄 수 있어요(쉘/PS/tcsh 버전).</p>
+</blockquote>
+
+<hr />
+
+<h1 id="5-선택-대용량-데이터-분리">5) (선택) 대용량 데이터 분리</h1>
+
+<p>대용량 원천/중간 데이터가 많은 편이면 아래처럼 분리하면 Jobs가 가벼워집니다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Work/
+  26_Data/
+    raw/&lt;dataset or <span class="nb">source</span><span class="o">&gt;</span>/...
+    cache/&lt;tool or proj&gt;/...
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Job의 <code class="language-plaintext highlighter-rouge">02_Input/raw</code>에는 <strong>심볼릭 링크</strong> 또는 <strong>경로만</strong> 두기</p>
+  </li>
+  <li>
+    <p>데이터 버전 기록은 Job의 <code class="language-plaintext highlighter-rouge">03_Config/params.yml</code>에 해시/버전/경로로 남김</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="6-콘솔에서-빠르게-찾기열기-예시-스니펫">6) 콘솔에서 빠르게 찾기/열기 (예시 스니펫)</h1>
+
+<h3 id="bashzsh-타입별상태별-리스트">Bash/Zsh: 타입별/상태별 리스트</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jobs-find<span class="o">()</span> <span class="o">{</span> find <span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/Work/25_Jobs/</span><span class="k">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">_active</span><span class="k">}</span><span class="s2">"</span> <span class="nt">-maxdepth</span> 2 <span class="nt">-type</span> d <span class="nt">-name</span> <span class="s2">"*-20*"</span> | <span class="nb">sort</span><span class="p">;</span> <span class="o">}</span>
+jobs-open<span class="o">()</span> <span class="o">{</span> <span class="nb">cd</span> <span class="s2">"</span><span class="si">$(</span>jobs-find <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> | fzf<span class="si">)</span><span class="s2">"</span> <span class="o">||</span> <span class="k">return</span><span class="p">;</span> <span class="o">}</span>
+<span class="c"># 사용: jobs-open _active  /  jobs-open BUG/2025</span>
+</code></pre></div></div>
+
+<h3 id="powershell-2">PowerShell:</h3>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">function</span><span class="w"> </span><span class="nf">JobsOpen</span><span class="p">(</span><span class="nv">$path</span><span class="o">=</span><span class="s2">"</span><span class="bp">$_</span><span class="s2">active"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="nv">$root</span><span class="o">=</span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\25_Jobs\</span><span class="nv">$path</span><span class="s2">"</span><span class="w">
+  </span><span class="n">Get-ChildItem</span><span class="w"> </span><span class="nv">$root</span><span class="w"> </span><span class="nt">-Recurse</span><span class="w"> </span><span class="nt">-Depth</span><span class="w"> </span><span class="nx">2</span><span class="w"> </span><span class="nt">-Directory</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Out-GridView</span><span class="w"> </span><span class="nt">-PassThru</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Set-Location</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p><em>(tcsh 버전도 원하면 줄게요.)</em></p>
+
+<hr />
+
+<h1 id="7-템플릿은-한-곳에만">7) 템플릿은 한 곳에만</h1>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">25_Jobs/_templates/</code> 에 <strong>JOB/BUG/SMOKE/LAB/EX/REL</strong> 스켈레톤 6개만 유지</p>
+  </li>
+  <li>
+    <p>새 작업은 항상 여기서 <strong>복제</strong> → 템플릿 중복을 없애고 한 번만 관리</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="8-today런처와의-연동-가볍게">8) Today/런처와의 연동 (가볍게)</h1>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">_active/</code>만 <strong>런처 대상</strong> 에 포함 → 완료와 동시에 자동 제외</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">work-run</code> 자동 탐색 러너를 쓰면 <code class="language-plaintext highlighter-rouge">_active/**/04_Run/*.sh|ps1</code>만 우선 순위로 스캔</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="오늘-할-일3분-셋업">오늘 할 일(3분 셋업)</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">25_Jobs</code> 안에 <strong><code class="language-plaintext highlighter-rouge">_active/</code>, <code class="language-plaintext highlighter-rouge">_templates/</code>, <code class="language-plaintext highlighter-rouge">JOB/2025</code>, <code class="language-plaintext highlighter-rouge">BUG/2025</code>, <code class="language-plaintext highlighter-rouge">SMOKE/2025</code>, <code class="language-plaintext highlighter-rouge">LAB/2025</code>, <code class="language-plaintext highlighter-rouge">EX/2025</code>, <code class="language-plaintext highlighter-rouge">REL/2025</code></strong> 만들기</p>
+  </li>
+  <li>
+    <p>진행 중 Job을 전부 <code class="language-plaintext highlighter-rouge">_active/</code>로 옮기기(12개 이하로)</p>
+  </li>
+  <li>
+    <p>완료된 것들은 타입/연도 폴더로 정리</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">index.csv</code> 초안 만들어 상단 10개만 우선 채우기</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="요약-2">요약</h3>
+
+<ul>
+  <li>
+    <p><strong>모든 새 작업은<code class="language-plaintext highlighter-rouge">_active/</code>에서 시작 → 끝나면 타입/연도로 이동 → 오래되면 99_Archive.</strong></p>
+  </li>
+  <li>
+    <p>템플릿은 <strong>한 군데</strong>(<code class="language-plaintext highlighter-rouge">_templates/</code>)만.</p>
+  </li>
+  <li>
+    <p>(원하면) <strong>26_Data</strong> 로 대용량 분리.</p>
+  </li>
+  <li>
+    <p>주간 스윕 스크립트/자동 탐색 러너로 <strong>손 가는 정리 작업 0에 가깝게</strong>.</p>
+  </li>
+</ul>
+
+<p>필요하면 위 구조로 <strong>폴더/인덱스/스윕 스크립트 세트</strong> 를 바로 만들어 드릴게—쓰는 셸(bash/zsh/PowerShell/tcsh)만 알려줘!</p>
+
+<p class="chat--user">
+
+DB 같은 데이터셋들을 저장하고 싶을 땐 어디에 해야할까?
+
+</p>
+
+<p>좋은 질문! <strong>DB 같은 데이터셋</strong> 은 코드/산출과 분리해서 <strong>전용 루트</strong> 에 보관하는 게 최고예요.<br />
+내역 추적·복구·용량 관리가 쉬워지고, 25_Jobs도 가벼워집니다.</p>
+
+<hr />
+
+<h1 id="추천-위치-work26_data-데이터-전용-루트">추천 위치: <code class="language-plaintext highlighter-rouge">Work/26_Data/</code> (데이터 전용 루트)</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php-template
+
+26_Data/                                   ← 데이터셋 중앙 저장소
+├─ registry/                               ← 카탈로그(메타데이터)
+│  ├─ catalog.csv
+│  └─ README.md
+├─ raw/                                    ← 원본(불변) 스냅샷/덤프
+│  ├─ db/
+│  │  ├─ postgres/&lt;db_name&gt;/snapshots/YYYY/&lt;TS&gt;/  ← .dump(.gz) or .sql.gz
+│  │  │  ├─ dump.sql.gz
+│  │  │  ├─ SHA256SUMS
+│  │  │  └─ manifest.yml                   ← 출처/버전/테이블/PII/라이선스 등
+│  │  └─ mysql/&lt;db_name&gt;/snapshots/...
+│  └─ files/&lt;source&gt;/&lt;dataset&gt;/&lt;YYYY-MM-DD&gt;/  ← CSV/JSON/ZIP 등 외부 파일 원본
+├─ processed/                              ← 정제/정규화/파케이(Parquet) 등 2차 산출
+│  └─ &lt;dataset&gt;/&lt;version&gt;/
+├─ samples/                                ← 예제/테스트용 소용량 서브셋
+│  └─ &lt;dataset&gt;/&lt;version&gt;/
+├─ cache/                                  ← 일시 캐시(삭제 가능)
+│  ├─ project/&lt;PRJ-slug&gt;/
+│  └─ job/&lt;JOB-code&gt;/
+└─ schemas/                                ← DDL/스키마(JSON/SQL)
+   └─ &lt;engine&gt;/&lt;db_name&gt;/
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>원칙</strong></p>
+
+  <ul>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">raw/</code>는 <strong>불변(immutable)</strong> 로 취급: 덮어쓰지 말고 <strong>스냅샷을 추가</strong> 만 합니다.</p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">processed/</code>는 파생 데이터(정제/집계), <code class="language-plaintext highlighter-rouge">samples/</code>는 작은 학습/테스트셋.</p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">cache/</code>는 언제든 지워도 되는 중간물.</p>
+    </li>
+    <li>
+      <p>큰 원본은 <strong>여기</strong> 에 두고, <strong>Job/Project에서는 경로 참조나 심볼릭 링크</strong> 만 사용.</p>
+    </li>
+  </ul>
+
+</blockquote>
+
+<hr />
+
+<h2 id="db-덤프스냅샷-표준-네이밍">DB 덤프/스냅샷 표준 네이밍</h2>
+
+<ul>
+  <li>
+    <p>디렉터리: <code class="language-plaintext highlighter-rouge">raw/db/&lt;engine&gt;/&lt;db_name&gt;/snapshots/&lt;YYYY&gt;/&lt;YYYYMMDD-HHMMSS&gt;/</code></p>
+  </li>
+  <li>
+    <p>파일:</p>
+
+    <ul>
+      <li>
+        <p>Postgres: <code class="language-plaintext highlighter-rouge">&lt;db_name&gt;_&lt;YYYYMMDD-HHMMSS&gt;.dump.gz</code> (pg_dump -Fc 후 gzip)</p>
+      </li>
+      <li>
+        <p>MySQL: <code class="language-plaintext highlighter-rouge">&lt;db_name&gt;_&lt;YYYYMMDD-HHMMSS&gt;.sql.gz</code></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>무결성: <code class="language-plaintext highlighter-rouge">SHA256SUMS</code> (여러 파일이면 모두 기록)</p>
+  </li>
+  <li>
+    <p>메타: <code class="language-plaintext highlighter-rouge">manifest.yml</code> 예시
+```yaml
+dataset: postgres/salesdb
+snapshot: 2025-08-26T10-20-00
+source: prod-rds
+pii_level: medium          # none/low/medium/high
+license: internal
+tables:</p>
+    <ul>
+      <li>customers: {rows: 120342}</li>
+      <li>orders: {rows: 502113}
+checksum:
+  dump.sql.gz: "ab12…ef"
+restore:
+  engine: postgres
+  target_db: salesdb_local
+```</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="26_data-카탈로그인덱스-예시">26_Data 카탈로그(인덱스) 예시</h2>
+
+<p><code class="language-plaintext highlighter-rouge">26_Data/registry/catalog.csv</code></p>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">kind</span><span class="p">,</span><span class="n">engine</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">version_or_ts</span><span class="p">,</span><span class="n">tags</span><span class="p">,</span><span class="n">path</span><span class="p">,</span><span class="n">pii</span><span class="p">,</span><span class="n">notes</span>
+<span class="n">db</span><span class="p">,</span><span class="n">postgres</span><span class="p">,</span><span class="n">salesdb</span><span class="p">,</span><span class="mi">2025</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">26</span><span class="kt">T10</span><span class="o">-</span><span class="mi">20</span><span class="o">-</span><span class="mo">00</span><span class="p">,</span><span class="s">"prod,snapshot"</span><span class="p">,</span><span class="n">raw</span><span class="sr">/db/postgres/salesdb/snapshots/2025/</span><span class="mi">20250826</span><span class="o">-</span><span class="mi">102000</span><span class="p">,</span><span class="n">medium</span><span class="p">,</span><span class="s">"month-end"</span>
+<span class="n">files</span><span class="p">,</span><span class="n">ext</span><span class="p">,</span><span class="n">ad_events</span><span class="p">,</span><span class="mi">2025</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mo">01</span><span class="p">,</span><span class="s">"ads,csv"</span><span class="p">,</span><span class="n">raw</span><span class="sr">/files/ad_platform/ad_events/</span><span class="mi">2025</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mo">01</span><span class="p">,</span><span class="n">low</span><span class="p">,</span><span class="s">"export via API"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="워크플로-db-기준-postgres-예시">워크플로 (DB 기준, Postgres 예시)</h1>
+
+<h2 id="1-스냅샷덤프-만들기--26_data에-보관">1) 스냅샷(덤프) 만들기 → 26_Data에 보관</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 예: Postgres</span>
+<span class="nv">TS</span><span class="o">=</span><span class="si">$(</span><span class="nb">date</span> +%Y%m%d-%H%M%S<span class="si">)</span>
+<span class="nv">BASE</span><span class="o">=</span>~/Work/26_Data/raw/db/postgres/salesdb/snapshots/<span class="si">$(</span><span class="nb">date</span> +%Y<span class="si">)</span>
+<span class="nv">DEST</span><span class="o">=</span><span class="nv">$BASE</span>/<span class="nv">$TS</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> <span class="s2">"</span><span class="nv">$DEST</span><span class="s2">"</span>
+pg_dump <span class="nt">-Fc</span> <span class="s2">"postgresql://user:pass@host:5432/salesdb"</span> <span class="nt">-f</span> <span class="s2">"</span><span class="nv">$DEST</span><span class="s2">/dump.dump"</span>
+<span class="nb">gzip</span> <span class="s2">"</span><span class="nv">$DEST</span><span class="s2">/dump.dump"</span>
+<span class="nb">sha256sum</span> <span class="s2">"</span><span class="nv">$DEST</span><span class="s2">/dump.dump.gz"</span> <span class="o">&gt;</span> <span class="s2">"</span><span class="nv">$DEST</span><span class="s2">/SHA256SUMS"</span>
+<span class="c"># manifest.yml 작성(템플릿 복사 후 수정)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>MySQL</strong> : <code class="language-plaintext highlighter-rouge">mysqldump -u user -p --databases salesdb | gzip &gt; "$DEST/dump.sql.gz"</code></p>
+</blockquote>
+
+<ul>
+  <li><strong>자격증명</strong> 은 <code class="language-plaintext highlighter-rouge">90_PersonalConfigs/secrets/.env-db.local</code> 같은 곳에 두고, 스크립트는 <strong>환경변수 참조</strong> 만 하세요(비밀 직접 기록 금지).</li>
+</ul>
+
+<h2 id="2-로컬-복원실험job용">2) 로컬 복원(실험/Job용)</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Postgres</span>
+createdb salesdb_local
+<span class="nb">gunzip</span> <span class="nt">-c</span> <span class="s2">"</span><span class="nv">$DEST</span><span class="s2">/dump.dump.gz"</span> | pg_restore <span class="nt">-d</span> salesdb_local
+<span class="c"># 또는: pg_restore -d salesdb_local "$DEST/dump.dump.gz"</span>
+</code></pre></div></div>
+
+<ul>
+  <li>컨테이너 사용 시(권장): <code class="language-plaintext highlighter-rouge">85_Environments/docker/docker-compose.yml</code>에 DB 서비스 정의하고,<br />
+<code class="language-plaintext highlighter-rouge">26_Data/db/postgres/_volumes/&lt;name&gt;:/var/lib/postgresql/data</code> 볼륨으로 붙입니다.</li>
+</ul>
+
+<h2 id="3-jobproject에서-쓰기-링크-또는-경로-참조">3) Job/Project에서 쓰기 (링크 또는 경로 참조)</h2>
+
+<ul>
+  <li><strong>링크(맥/리눅스)</strong> :
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ln</span> <span class="nt">-s</span> ~/Work/26_Data/raw/db/postgres/salesdb/snapshots/2025/20250826-102000 <span class="se">\</span>
+      ~/Work/25_Jobs/JOB-2025-041_report/02_Input/raw/salesdb_20250826
+</code></pre></div>    </div>
+  </li>
+  <li><strong>경로 설정</strong> : <code class="language-plaintext highlighter-rouge">25_Jobs/.../03_Config/params.yml</code>에 기록
+    <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">inputs</span><span class="pi">:</span>
+  <span class="na">salesdb_snapshot</span><span class="pi">:</span> <span class="s2">"</span><span class="s">../../../26_Data/raw/db/postgres/salesdb/snapshots/2025/20250826-102000"</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>크레덴셜</strong> : <code class="language-plaintext highlighter-rouge">90_PersonalConfigs/secrets/.env-db.local</code>에, Job 스크립트는 <code class="language-plaintext highlighter-rouge">source</code>만.</li>
+</ul>
+
+<h2 id="4-샘플서브셋-만들기">4) 샘플/서브셋 만들기</h2>
+
+<ul>
+  <li>테이블 일부만 CSV로 덤프:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psql salesdb_local <span class="nt">-c</span> <span class="s2">"</span><span class="se">\c</span><span class="s2">opy (SELECT * FROM customers LIMIT 1000) TO 'customers_sample.csv' CSV HEADER"</span>
+<span class="nb">mv </span>customers_sample.csv ~/Work/26_Data/samples/salesdb/v2025.08/
+</code></pre></div>    </div>
+  </li>
+  <li>반복 쓰면 스크립트화 → <code class="language-plaintext highlighter-rouge">80_Tools/scripts/make_sample_salesdb.sh</code>로 <strong>승격</strong>.</li>
+</ul>
+
+<h2 id="5-정제정규화-파이프라인">5) 정제/정규화 파이프라인</h2>
+
+<ul>
+  <li>
+    <p>ETL/정제 결과는 <code class="language-plaintext highlighter-rouge">processed/&lt;dataset&gt;/&lt;version&gt;/...</code>에 저장(Parquet 권장).</p>
+  </li>
+  <li>
+    <p>파라미터/코드/환경은 해당 Job/Project 쪽에 남기고, <strong>결과물만</strong> processed에.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="보안거버넌스-체크리스트">보안/거버넌스 체크리스트</h1>
+
+<ul>
+  <li>
+    <p><strong>PII/민감도 태깅</strong> : <code class="language-plaintext highlighter-rouge">manifest.yml</code>에 <code class="language-plaintext highlighter-rouge">pii_level</code> 필수.</p>
+  </li>
+  <li><strong>접근권한</strong> : 고(高) 민감도 스냅샷은 디스크 암호화 또는 gpg로 파일 단위 암호화:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg <span class="nt">-c</span> dump.dump.gz   <span class="c"># 복호화는 gpg dump.dump.gz.gpg</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>보존 정책</strong> : <code class="language-plaintext highlighter-rouge">raw/</code>는 N개월 보관(예: 12개월); <code class="language-plaintext highlighter-rouge">cache/</code>는 7~30일 후 정리.</p>
+  </li>
+  <li><strong>.gitignore</strong> : Work 전체를 git에 올리지 않더라도, <code class="language-plaintext highlighter-rouge">26_Data</code> 루트에 보호용 <code class="language-plaintext highlighter-rouge">.gitignore</code> 권장:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diff
+    
+*
+!registry/
+!registry/catalog.csv
+!.gitignore
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>(의도치 않은 업로드 방지)</p>
+
+<hr />
+
+<h1 id="25_jobs가-가벼워지는-이유">25_Jobs가 가벼워지는 이유</h1>
+
+<ul>
+  <li>
+    <p><strong>대용량은 전부<code class="language-plaintext highlighter-rouge">26_Data</code></strong>: Job에는 <strong>링크/경로/manifest만</strong>.</p>
+  </li>
+  <li>
+    <p>완료된 Job을 아카이브해도 데이터는 중앙(<code class="language-plaintext highlighter-rouge">26_Data</code>)에 남아 <strong>중복 저장 없음</strong>.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="today런처-연결선택">Today/런처 연결(선택)</h1>
+
+<p><code class="language-plaintext highlighter-rouge">10_Today/shortcuts.list</code> 또는 <code class="language-plaintext highlighter-rouge">work-run</code> 자동 러너에서 스냅샷·복원 스크립트를 호출:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgsql
+
+Snapshot salesdb | 26_Data/raw/db/postgres/salesdb/snapshots | ./../../../../80_Tools/scripts/pg_snapshot_salesdb.sh
+Restore salesdb  | 26_Data/raw/db/postgres/salesdb/snapshots/2025/20250826-102000 | ./../../../../80_Tools/scripts/pg_restore_local.sh
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="요약-3">요약</h2>
+
+<ul>
+  <li>
+    <p><strong>데이터는<code class="language-plaintext highlighter-rouge">26_Data</code>로 일원화</strong>: <code class="language-plaintext highlighter-rouge">raw/</code>(불변) · <code class="language-plaintext highlighter-rouge">processed/</code> · <code class="language-plaintext highlighter-rouge">samples/</code> · <code class="language-plaintext highlighter-rouge">cache/</code> · <code class="language-plaintext highlighter-rouge">schemas/</code> · <code class="language-plaintext highlighter-rouge">registry/</code>.</p>
+  </li>
+  <li>
+    <p><strong>DB 스냅샷은 엔진/DB/연도/타임스탬프</strong> 체계로 보관 + <code class="language-plaintext highlighter-rouge">manifest.yml</code> + <code class="language-plaintext highlighter-rouge">SHA256SUMS</code>.</p>
+  </li>
+  <li>
+    <p><strong>Job/Project는 경로 참조/심링크</strong> 만 사용 → 25_Jobs 비대화 방지.</p>
+  </li>
+  <li>
+    <p><strong>비밀/크레덴셜은<code class="language-plaintext highlighter-rouge">90_PersonalConfigs/secrets</code></strong>, 설정 표준은 <code class="language-plaintext highlighter-rouge">32_SharedConfigs</code>, 개인 오버라이드는 <code class="language-plaintext highlighter-rouge">90_PersonalConfigs</code>.</p>
+  </li>
+</ul>
+
+<p>원하면 Postgres/MySQL 기준으로 <strong>스냅샷/복원 스크립트 두 개(리눅스·PowerShell·tcsh)</strong>와 <code class="language-plaintext highlighter-rouge">manifest.yml</code> 템플릿, 그리고 <code class="language-plaintext highlighter-rouge">registry/catalog.csv</code> 초기 파일까지 <strong>실제 파일</strong> 로 만들어줄게.</p>
+
+<p class="chat--user">
+
+그런 db는 아니고 dataset (input/output 등)을 저장하려고
+
+</p>
+
+<p>굿! <strong>DB 덤프가 아니라 ‘데이터셋(입력/출력)’</strong>을 보관하려는 거라면, 코드는 그대로 두고 <strong>데이터만 중앙화</strong> 하면 깔끔해요. 아래처럼 정리하면 됩니다.</p>
+
+<hr />
+
+<h1 id="한-줄-요약">한 줄 요약</h1>
+
+<ul>
+  <li>
+    <p><strong>중앙 저장소</strong> : <code class="language-plaintext highlighter-rouge">Work/26_Data/</code></p>
+  </li>
+  <li>
+    <p><strong>입력 데이터셋</strong> : <code class="language-plaintext highlighter-rouge">26_Data/datasets/…</code></p>
+  </li>
+  <li>
+    <p><strong>가공/출력 데이터셋</strong>(여러 Job에서 재사용할 가치가 있는 결과): <code class="language-plaintext highlighter-rouge">26_Data/derived/…</code></p>
+  </li>
+  <li>
+    <p><strong>Job/Project</strong> 에서는 <strong>경로 참조 또는 심볼릭 링크만 사용</strong> (복사 금지)</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="폴더-구조권장">폴더 구조(권장)</h1>
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">26</span><span class="n">_Data</span><span class="o">/</span>                                  <span class="err">←</span> <span class="n">데이터</span> <span class="n">전용</span> <span class="n">루트</span>
+<span class="err">├─</span> <span class="n">registry</span><span class="o">/</span>                               <span class="err">←</span> <span class="n">카탈로그</span><span class="o">/</span><span class="n">색인</span>
+<span class="err">│</span>  <span class="err">├─</span> <span class="n">catalog</span><span class="o">.</span><span class="n">csv</span>                          <span class="err">←</span> <span class="n">데이터셋</span> <span class="n">목록</span><span class="sr">/버전/</span><span class="n">경로</span>
+<span class="err">│</span>  <span class="err">└─</span> <span class="kt">README</span><span class="o">.</span><span class="n">md</span>                            <span class="err">←</span> <span class="n">등록</span> <span class="n">규칙</span>
+<span class="err">├─</span> <span class="n">datasets</span><span class="o">/</span>                               <span class="err">←</span> <span class="err">“</span><span class="n">입력</span><span class="err">”</span> <span class="nf">데이터셋</span><span class="p">(</span><span class="n">원본</span><span class="o">/</span><span class="n">정제</span><span class="p">)</span>
+<span class="err">│</span>  <span class="err">└─</span> <span class="o">&lt;</span><span class="n">dataset_name</span><span class="o">&gt;/</span>
+<span class="err">│</span>     <span class="err">└─</span> <span class="n">vYYYY</span><span class="o">.</span><span class="kt">MMDD</span><span class="o">/</span>                       <span class="err">←</span> <span class="n">날짜</span> <span class="n">버전</span> <span class="nf">추천</span><span class="p">(</span><span class="n">또는</span> <span class="n">semver</span><span class="p">)</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">raw</span><span class="o">/</span>                           <span class="err">←</span> <span class="n">주로</span> <span class="n">외부</span> <span class="nf">원본</span><span class="p">(</span><span class="n">가급적</span> <span class="n">불변</span><span class="p">)</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">interim</span><span class="o">/</span>                       <span class="err">←</span> <span class="n">일시</span> <span class="nf">정제</span><span class="p">(</span><span class="n">중간물</span><span class="p">)</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">processed</span><span class="o">/</span>                     <span class="err">←</span> <span class="n">분석</span><span class="o">/</span><span class="n">모델에</span> <span class="n">투입</span> <span class="n">가능한</span> <span class="n">정제본</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">samples</span><span class="o">/</span>                       <span class="err">←</span> <span class="n">소용량</span> <span class="nf">서브셋</span><span class="p">(</span><span class="n">테스트</span><span class="o">/</span><span class="n">예제</span><span class="p">)</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">docs</span><span class="o">/</span>                          <span class="err">←</span> <span class="kt">README</span><span class="p">,</span> <span class="n">dataset_card</span><span class="o">.</span><span class="n">md</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">manifest</span><span class="o">.</span><span class="n">yml</span>                   <span class="err">←</span> <span class="n">출처</span><span class="sr">/라이선스/</span><span class="n">체크섬</span> <span class="n">등</span> <span class="n">메타</span>
+<span class="err">│</span>        <span class="err">└─</span> <span class="kt">SHA256SUMS</span>                     <span class="err">←</span> <span class="n">무결성</span>
+<span class="err">├─</span> <span class="n">derived</span><span class="o">/</span>                                <span class="err">←</span> <span class="err">“</span><span class="n">출력</span><span class="o">/</span><span class="n">가공</span> <span class="n">결과</span><span class="err">”</span> <span class="nf">데이터셋</span><span class="p">(</span><span class="n">재사용</span> <span class="n">가치</span> <span class="n">있음</span><span class="p">)</span>
+<span class="err">│</span>  <span class="err">└─</span> <span class="o">&lt;</span><span class="n">artifact_name</span><span class="o">&gt;/</span>
+<span class="err">│</span>     <span class="err">└─</span> <span class="n">vYYYY</span><span class="o">.</span><span class="kt">MMDD</span><span class="o">/</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">data</span><span class="o">/</span>                          <span class="err">←</span> <span class="nf">결과물</span><span class="p">(</span><span class="nv">예</span><span class="p">:</span> <span class="n">parquet</span><span class="sr">/csv/</span><span class="n">images</span><span class="p">)</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">metrics</span><span class="o">/</span>                       <span class="err">←</span> <span class="n">점수</span><span class="sr">/리포트/</span><span class="n">지표</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">docs</span><span class="o">/</span>
+<span class="err">│</span>        <span class="err">├─</span> <span class="n">manifest</span><span class="o">.</span><span class="n">yml</span>
+<span class="err">│</span>        <span class="err">└─</span> <span class="kt">SHA256SUMS</span>
+<span class="err">└─</span> <span class="n">cache</span><span class="o">/</span>                                  <span class="err">←</span> <span class="n">언제</span> <span class="n">지워도</span> <span class="n">되는</span> <span class="nf">캐시</span><span class="p">(</span><span class="n">속도용</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>의미</strong></p>
+
+  <ul>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">datasets/</code> = 입력 측 “공급원” 저장소</p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">derived/</code> = 여러 Job에서 재사용할 <strong>결과물</strong> 저장소(“출력 데이터셋” 승격본)</p>
+    </li>
+    <li>
+      <p>Job 안의 <code class="language-plaintext highlighter-rouge">06_Export</code>는 <strong>전달본</strong> 이고, 장기 재사용 가치가 생기면 <code class="language-plaintext highlighter-rouge">derived/</code>로 승격</p>
+    </li>
+  </ul>
+
+</blockquote>
+
+<hr />
+
+<h1 id="네이밍--메타짧게">네이밍 &amp; 메타(짧게)</h1>
+
+<ul>
+  <li>
+    <p><strong>버전</strong> : <code class="language-plaintext highlighter-rouge">vYYYY.MMDD</code> (예: <code class="language-plaintext highlighter-rouge">v2025.0825</code>) 권장. 바꾸면 <code class="language-plaintext highlighter-rouge">manifest.yml</code>에 이유 기록.</p>
+  </li>
+  <li>
+    <p><strong>파일 형식</strong> : 가능하면 <strong>Parquet</strong>(열 지향, 스키마/압축 유리), 그 외 CSV/JSON.</p>
+  </li>
+  <li><strong>manifest.yml 예시</strong>
+    <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">ad_events</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s">v2025.0826</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">dataset</span>            <span class="c1"># or derived</span>
+<span class="na">license</span><span class="pi">:</span> <span class="s">internal</span>
+<span class="na">source</span><span class="pi">:</span> <span class="s2">"</span><span class="s">ad_platform</span><span class="nv"> </span><span class="s">export</span><span class="nv"> </span><span class="s">API"</span>
+<span class="na">schema</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">rows</span><span class="pi">:</span> <span class="nv">5_021_113</span><span class="pi">,</span> <span class="nv">format</span><span class="pi">:</span> <span class="nv">parquet</span><span class="pi">}</span>
+<span class="na">pii_level</span><span class="pi">:</span> <span class="s">low</span>           <span class="c1"># none/low/medium/high</span>
+<span class="na">checksum</span><span class="pi">:</span>
+  <span class="na">processed/events.parquet</span><span class="pi">:</span> <span class="s2">"</span><span class="s">ab12...ef"</span>
+<span class="na">notes</span><span class="pi">:</span> <span class="s2">"</span><span class="s">tz</span><span class="nv"> </span><span class="s">normalized</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">UTC,</span><span class="nv"> </span><span class="s">invalid</span><span class="nv"> </span><span class="s">rows</span><span class="nv"> </span><span class="s">dropped"</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>dataset_card.md</strong> : 용도/전처리/열 설명/예시 쿼리 1~2개만.</li>
+</ul>
+
+<hr />
+
+<h1 id="jobproject에서-쓰는-법복사-금지-링크경로-참조">Job/Project에서 쓰는 법(복사 금지! 링크/경로 참조)</h1>
+
+<h3 id="심볼릭-링크맥리눅스">심볼릭 링크(맥/리눅스)</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ln</span> <span class="nt">-s</span> ~/Work/26_Data/datasets/ad_events/v2025.0826/processed <span class="se">\</span>
+      ~/Work/25_Jobs/JOB-2025-041_report/02_Input/raw/ad_events
+</code></pre></div></div>
+
+<h3 id="powershell윈도우-디렉터리-링크">PowerShell(윈도우, 디렉터리 링크)</h3>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cmd</span><span class="w"> </span><span class="nx">/c</span><span class="w"> </span><span class="nx">mklink</span><span class="w"> </span><span class="nx">/D</span><span class="w"> </span><span class="err">^</span><span class="w">
+  </span><span class="s2">"%USERPROFILE%\Work\25_Jobs\JOB-2025-041_report\02_Input\raw\ad_events"</span><span class="w"> </span><span class="err">^</span><span class="w">
+  </span><span class="s2">"%USERPROFILE%\Work\26_Data\datasets\ad_events\v2025.0826\processed"</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="job-설정에-경로-기입">Job 설정에 경로 기입</h3>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 25_Jobs/.../03_Config/params.yml</span>
+<span class="na">inputs</span><span class="pi">:</span>
+  <span class="na">ad_events_dir</span><span class="pi">:</span> <span class="s2">"</span><span class="s">../../../26_Data/datasets/ad_events/v2025.0826/processed"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="워크플로우간단">워크플로우(간단)</h1>
+
+<h2 id="a-새-입력-데이터셋-추가">A) 새 “입력” 데이터셋 추가</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">26_Data/datasets/&lt;name&gt;/vYYYY.MMDD/</code> 생성</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">raw/</code>에 원본 배치 → 필요 시 <code class="language-plaintext highlighter-rouge">interim/</code>→<code class="language-plaintext highlighter-rouge">processed/</code> 정제</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">manifest.yml</code>/<code class="language-plaintext highlighter-rouge">dataset_card.md</code>/<code class="language-plaintext highlighter-rouge">SHA256SUMS</code> 작성</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">registry/catalog.csv</code>에 한 줄 등록</p>
+  </li>
+</ol>
+
+<h2 id="b-job에서-사용">B) Job에서 사용</h2>
+
+<ol>
+  <li>
+    <p>심링크 or <code class="language-plaintext highlighter-rouge">params.yml</code>에 절대/상대 경로 지정</p>
+  </li>
+  <li>
+    <p>실행 시 <strong>입력버전</strong> 을 매니페스트에 기록(재현성)</p>
+  </li>
+</ol>
+
+<h2 id="c-job-출력을-재사용-데이터셋으로-승격">C) Job “출력”을 재사용 데이터셋으로 승격</h2>
+
+<ol>
+  <li>
+    <p>Job의 <code class="language-plaintext highlighter-rouge">06_Export</code> 결과 중 <strong>일반화된 산출물</strong> 만 추려</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">26_Data/derived/&lt;artifact&gt;/vYYYY.MMDD/</code>에 배치</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">manifest.yml</code>과 지표(<code class="language-plaintext highlighter-rouge">metrics/</code>) 작성 → <code class="language-plaintext highlighter-rouge">catalog.csv</code> 등록</p>
+  </li>
+</ol>
+
+<h2 id="d-정리청소">D) 정리/청소</h2>
+
+<ul>
+  <li>
+    <p>60~90일 지난 <code class="language-plaintext highlighter-rouge">interim/</code>, 대용량 CSV는 <strong>압축 또는 삭제</strong>(hash/로그만 보존)</p>
+  </li>
+  <li>
+    <p><strong>cache/</strong>는 언제든 삭제 가능</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="do--dont-1">Do / Don’t</h1>
+
+<ul>
+  <li>
+    <p>✅ <strong>중앙화</strong> : 입력/출력 데이터셋은 <strong>26_Data</strong> 에만, Job/Project는 링크/경로만</p>
+  </li>
+  <li>
+    <p>✅ <strong>버전 고정</strong> : Job 매니페스트에 <strong>dataset 버전</strong> 을 박아두기</p>
+  </li>
+  <li>
+    <p>✅ <strong>작은 샘플</strong> : <code class="language-plaintext highlighter-rouge">samples/</code>를 만들어 테스트/예제에 활용</p>
+  </li>
+  <li>
+    <p>❌ <strong>복사본 남기기</strong> : Job 안에 원본 데이터를 복제해서 쌓지 않기</p>
+  </li>
+  <li>
+    <p>❌ <strong>비밀 넣기</strong> : 자격증명/토큰은 <code class="language-plaintext highlighter-rouge">90_PersonalConfigs/secrets/</code>에만</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>원하면 <strong>초기 스캐폴드(폴더/manifest 템플릿/csv 카탈로그)</strong>와<br />
+<code class="language-plaintext highlighter-rouge">symlink</code>/<code class="language-plaintext highlighter-rouge">catalog 등록</code>을 자동으로 해주는 간단 스크립트(bash·PowerShell·tcsh)도 바로 만들어 줄게.</p>
+
+<p class="chat--user">
+
+번호는 26번 괜찮아?
+
+</p>
+
+<p>짧은 결론: <strong>네, 26번 아주 괜찮아요.</strong><br />
+지금 쓰는 번호 체계(20=Projects, 25=Jobs, 30대=운영/학습, 40=레퍼런스…)에서 <strong>데이터셋은 Jobs보다 살짝 뒤</strong> 에 두면 “코드→실행→데이터 자산” 흐름이 자연스럽고, 26은 그 목적에 딱 맞습니다.</p>
+
+<hr />
+
+<h2 id="왜-26인가-step-by-step">왜 26인가 (step-by-step)</h2>
+
+<ol>
+  <li>
+    <p><strong>시각적 그룹화</strong> :<br />
+<code class="language-plaintext highlighter-rouge">20_Projects → 25_Jobs → 26_(Data|Datasets) → 30_Areas</code><br />
+= 코드 → 실행 → <strong>데이터 자산(공유 입력/출력)</strong> → 장기 운영 순서로 정렬.</p>
+  </li>
+  <li>
+    <p><strong>근접성</strong> :<br />
+Job이 쓰는 입력/출력 경로를 <strong>한 단계 옆(25↔26)</strong> 에 두면 경로 참조/심볼릭 링크가 짧고 관리가 쉬움.</p>
+  </li>
+  <li>
+    <p><strong>확장 여지</strong> :<br />
+27~29 비워둬서, 나중에 <code class="language-plaintext highlighter-rouge">27_ModelStore</code>, <code class="language-plaintext highlighter-rouge">28_FeatureStore</code> 같은 확장도 자연스럽게 끼워 넣기 가능.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="이름은-26_data-vs-26_datasets-중-택1">이름은 <code class="language-plaintext highlighter-rouge">26_Data</code> vs <code class="language-plaintext highlighter-rouge">26_Datasets</code> 중 택1</h2>
+
+<ul>
+  <li>
+    <p><strong>26_Datasets</strong> : “입력/출력 데이터셋”에 초점(당신 목적에 가장 명확)</p>
+  </li>
+  <li>
+    <p><strong>26_Data</strong> : DB 덤프·원천 파일·캐시까지 <strong>넓게</strong> 포함할 때</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>지금 대화 맥락상 <strong><code class="language-plaintext highlighter-rouge">26_Datasets</code></strong> 추천. (원하면 <code class="language-plaintext highlighter-rouge">datasets/derived/cache/registry</code> 하위 그대로 유지)</p>
+</blockquote>
+
+<p>예시:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>26_Datasets/
+  registry/         <span class="c"># 카탈로그</span>
+  datasets/         <span class="c"># 입력 데이터셋(버전별: vYYYY.MMDD)</span>
+  derived/          <span class="c"># 여러 Job에서 재사용할 출력 데이터셋(승격본)</span>
+  cache/            <span class="c"># 삭제 가능 캐시</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="이미-만들어-둔-구조와의-연결-규칙요약">이미 만들어 둔 구조와의 연결 규칙(요약)</h2>
+
+<ul>
+  <li>
+    <p><strong>Job/Project에는 복사 금지</strong> → <strong>심볼릭 링크/경로만</strong> 참조</p>
+  </li>
+  <li>
+    <p>Job 매니페스트에 <strong>dataset 버전</strong> 기록(재현성)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">06_Export</code>의 결과 중 “재사용 가치” 있는 건 <code class="language-plaintext highlighter-rouge">26_Datasets/derived</code>로 <strong>승격</strong></p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="바꾸고-싶을-때안전-리네임">바꾸고 싶을 때(안전 리네임)</h2>
+
+<p>bash/zsh:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/Work
+<span class="nb">mv </span>26_Data 26_Datasets 2&gt;/dev/null <span class="o">||</span> <span class="nb">true
+sed</span> <span class="nt">-i</span> <span class="s1">''</span> <span class="s1">'s#/26_Data/#/26_Datasets/#g'</span> 10_Today/shortcuts.list 2&gt;/dev/null <span class="o">||</span> <span class="nb">true</span>
+</code></pre></div></div>
+
+<p>PowerShell:</p>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Rename-Item</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\26_Data"</span><span class="w"> </span><span class="s2">"26_Datasets"</span><span class="w"> </span><span class="nt">-ErrorAction</span><span class="w"> </span><span class="nx">SilentlyContinue</span><span class="w">
+</span><span class="p">(</span><span class="n">Get-Content</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\10_Today\shortcuts.list"</span><span class="p">)</span><span class="w"> </span><span class="o">-replace</span><span class="w"> </span><span class="s1">'/26_Data/'</span><span class="p">,</span><span class="s1">'/26_Datasets/'</span><span class="w"> </span><span class="o">|</span><span class="w">
+  </span><span class="n">Set-Content</span><span class="w"> </span><span class="s2">"</span><span class="bp">$HOME</span><span class="s2">\Work\10_Today\shortcuts.list"</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="최종-추천-한-줄">최종 추천 한 줄</h2>
+
+<ul>
+  <li><strong>번호는 26 유지</strong> , 이름은 <strong><code class="language-plaintext highlighter-rouge">26_Datasets</code></strong>로 명확성↑ — 지금 쓰는 워크플로(25_Jobs, 75_Releases, 32_SharedConfigs, 90_PersonalConfigs)와도 정렬이 아주 잘 맞습니다.</li>
+</ul>]]></content><author><name>hvppyarchive</name></author><category term="misc" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">LLM Chatbot Client Plan</title><link href="https://hvppyarchive.github.io/llm/simple-chatbot-client/" rel="alternate" type="text/html" title="LLM Chatbot Client Plan" /><published>2025-08-21T19:11:25+09:00</published><updated>2025-08-21T19:11:25+09:00</updated><id>https://hvppyarchive.github.io/llm/simple-chatbot-client</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/simple-chatbot-client/"><![CDATA[<p class="chat--user">
 
 Developer: Role and Objective - Develop a simple, fast LLM Chatbot Client Application using Qt or PySide. Workflow Checklist - Begin with a concise checklist (3-7 bullets) of conceptual sub-tasks before implementation. Instructions - Design for easy, direct execution by users in a Linux environment with access to a shared disk. - Allow each user to save personal settings, while the default deployment settings are configured by the administrator. Deployment - The application should be distributed so users can launch it directly on supported Linux systems with shared disk access. - Initial, default application settings must be settable by an administrator; each user can override and save their preferences. Required Features - Allow setting a custom LLM (Large Language Model) endpoint. - Support multi-line message input. - Provide chat log management similar to applications like Ollama or OpenWebUI. - Enable changing model parameters from the interface. - Incorporate useful shortcut keys (e.g., hide/show window in workspace, start new conversation, etc.). - Render Markdown in chat messages. Code and Messaging Conventions - Code must be clear, well-commented, use readable variable names, and maintain straightforward control flow. - Application messaging and labels should be concise and clear to end users. Output Format - Default output is plain text. When documentation is required, use Markdown and backticks for file, directory, function, and class names. Validation - After implementation, validate that the application meets all feature and deployment requirements and is verified to run as specified in the Linux environment. Document any issues or unmet criteria. Stop Conditions - The task is complete once the client app fulfills all listed features and deployment criteria, has been validated as above, and any necessary corrections have been applied.
 
