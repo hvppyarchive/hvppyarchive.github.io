@@ -10,7 +10,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>PEG 비율 설명 - ARCHIVE</title>
+<!-- begin _includes/seo.html --><title>tcsh 스크립트 구분 - ARCHIVE</title>
 <meta name="description" content="">
 
 
@@ -23,8 +23,8 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="ARCHIVE">
-<meta property="og:title" content="PEG 비율 설명">
-<meta property="og:url" content="https://hvppyarchive.github.io/investing/peg/">
+<meta property="og:title" content="tcsh 스크립트 구분">
+<meta property="og:url" content="https://hvppyarchive.github.io/linux/tcsh-run-check/">
 
 
   <meta property="og:description" content="">
@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-07-30T23:30:44+09:00">
+  <meta property="article:published_time" content="2025-08-28T18:17:54+09:00">
 
 
 
@@ -46,7 +46,7 @@
   
 
 
-<link rel="canonical" href="https://hvppyarchive.github.io/investing/peg/">
+<link rel="canonical" href="https://hvppyarchive.github.io/linux/tcsh-run-check/">
 
 
 
@@ -150,16 +150,16 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="PEG 비율 설명">
+    <meta itemprop="headline" content="tcsh 스크립트 구분">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-07-30T23:30:44+09:00">
+    <meta itemprop="datePublished" content="2025-08-28T18:17:54+09:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
           <h1 id="page-title" class="page__title" itemprop="headline">
-            <a href="https://hvppyarchive.github.io/investing/peg/" itemprop="url">PEG 비율 설명
+            <a href="https://hvppyarchive.github.io/linux/tcsh-run-check/" itemprop="url">tcsh 스크립트 구분
 </a>
           </h1>
           
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-07-30T23:30:44+09:00">2025-07-30</time>
+        <time datetime="2025-08-28T18:17:54+09:00">2025-08-28</time>
       </span>
     
 
@@ -189,104 +189,102 @@
         
         <p class="chat--user">
 
-주식에서 PEG가 뭐야?
+tcsh 스크립트에서 두 가지 경우를 구분할 수 있어? 1) 쉘에서 “스크립트명”만 쳐서 실행한 경우 2) tcsh에서 “source 스크립트”를 한 경우 두 경우를 구분해서 1)번에서만 동작하는 스크립트(2로 시작시 경고 띄우고 종료), 2)번에서만 동작하는 스크립트(1로 시작시 경고 띄우고 종료) 각각 만들어주면 좋겠어
 
 </p>
 
-<p>주식 투자에서 <strong>PEG</strong> 는 <code class="language-plaintext highlighter-rouge">Price/Earnings to Growth</code>의 약자로, <strong>주가수익성장비율</strong> 이라고도 합니다. 주가가
-기업의 <strong>수익 성장률을 반영하여 적정한지를 평가하기 위한 지표</strong> 입니다.</p>
-
-<hr />
-
-<h2 id="-peg-비율-공식">📌 PEG 비율 공식</h2>
-
-<p>PEG=PEREPS 성장률 (%)\text{PEG} = \frac{\text{PER}}{\text{EPS 성장률 (\%)}}PEG=EPS
-성장률 (%)PER​</p>
+<p>좋지! tcsh에서 “직접 실행” vs “source로 실행”을 구분하는 가장 안전한 방법은 <code class="language-plaintext highlighter-rouge">$0</code>(실행 엔트리 이름)을 보는 거야.</p>
 
 <ul>
   <li>
-    <p><strong>PER (Price to Earnings Ratio)</strong> : 주가를 주당순이익(EPS)으로 나눈 값. 즉, 주가가 이익의 몇 배인가.</p>
+    <p>스크립트를 <strong>직접 실행</strong> 하면 <code class="language-plaintext highlighter-rouge">$0</code> = 스크립트 파일명(혹은 경로)</p>
   </li>
   <li>
-    <p><strong>EPS 성장률</strong> : 향후 몇 년간 예상되는 연간 EPS 성장률 (보통은 3~5년 예측 사용).</p>
+    <p>스크립트를 <strong>source로 실행</strong> 하면 <code class="language-plaintext highlighter-rouge">$0</code> = 현재 쉘 이름(보통 <code class="language-plaintext highlighter-rouge">tcsh</code>, <code class="language-plaintext highlighter-rouge">-tcsh</code>, <code class="language-plaintext highlighter-rouge">csh</code>, <code class="language-plaintext highlighter-rouge">-csh</code>)</p>
   </li>
 </ul>
 
-<hr />
-
-<h2 id="-peg의-해석">📈 PEG의 해석</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>PEG 비율</th>
-      <th>해석</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>&lt; 1</strong></td>
-      <td>성장률 대비 주가가 저평가됨 → <strong>매수 신호로 간주될 수 있음</strong></td>
-    </tr>
-    <tr>
-      <td><strong>≈ 1</strong></td>
-      <td>적정 가치에 근접</td>
-    </tr>
-    <tr>
-      <td><strong>&gt; 1</strong></td>
-      <td>주가가 성장률 대비 고평가됨 → 주의 필요</td>
-    </tr>
-  </tbody>
-</table>
-
-<blockquote>
-  <p>예시:</p>
-
-  <ul>
-    <li>어떤 기업의 PER이 20이고, 연평균 EPS 성장률이 25%라면,</li>
-  </ul>
-
-  <p>PEG=2025=0.8⇒저평가일수있음\text{PEG} = \frac{20}{25} = 0.8 \Rightarrow 저평가일 수
-있음PEG=2520​=0.8⇒저평가일수있음</p>
-
-</blockquote>
+<p>이 원리를 이용해서 두 버전(직접 실행 전용 / source 전용)을 만들면 돼.<br />
+아래 예제는 각각 “틀린 방식”으로 실행되면 경고를 띄우고 바로 종료해.</p>
 
 <hr />
 
-<h2 id="-peg-사용-시-주의사항">📋 PEG 사용 시 주의사항</h2>
+<h1 id="1-직접-실행에서만-동작하는-스크립트-source로-시작-시-경고-후-종료">1) “직접 실행”에서만 동작하는 스크립트 (source로 시작 시 경고 후 종료)</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+#!/bin/tcsh
+# run-only.csh — 직접 실행 전용
+
+# basename만 뽑아서 쉘 이름과 비교
+set base = "$0:t"
+
+# base가 쉘 이름이면 =&gt; source로 실행된 것
+if ( "$base" == "tcsh" || "$base" == "-tcsh" || "$base" == "csh" || "$base" == "-csh" ) then
+    echo "경고: 이 스크립트는 'source'로 실행하면 안 됩니다. 파일명을 직접 실행하세요."
+    echo "예) chmod +x run-only.csh &amp;&amp; ./run-only.csh"
+    # source 환경에서는 exit가 사용자의 쉘을 종료하므로 return으로 빠져나감
+    return 1
+endif
+
+# ---- 여기부터 정상 동작 영역 (직접 실행된 경우만 도달) ----
+echo "OK: 직접 실행됨 (not sourced)"
+# 당신의 실제 로직을 여기에 작성
+# ...
+exit 0
+</code></pre></div></div>
+
+<p>테스트:</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x run-only.csh
+./run-only.csh          <span class="c"># 정상 동작</span>
+<span class="nb">source </span>run-only.csh     <span class="c"># 경고 후 조용히 종료(return)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="2-source에서만-동작하는-스크립트-직접-실행-시-경고-후-종료">2) “source”에서만 동작하는 스크립트 (직접 실행 시 경고 후 종료)</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+#!/bin/tcsh
+# source-only.csh — source 전용
+
+set base = "$0:t"
+
+# base가 쉘 이름이 아니면 =&gt; 직접 실행된 것(새 프로세스)
+if ( "$base" != "tcsh" &amp;&amp; "$base" != "-tcsh" &amp;&amp; "$base" != "csh" &amp;&amp; "$base" != "-csh" ) then
+    echo "경고: 이 스크립트는 'source'로만 실행해야 합니다."
+    echo "예) source source-only.csh"
+    # 여기서는 별도의 프로세스이므로 안전하게 exit로 종료
+    exit 1
+endif
+
+# ---- 여기부터 정상 동작 영역 (source된 경우만 도달) ----
+echo "OK: source로 실행됨"
+# 당신의 실제 로직을 여기에 작성
+# ...
+# source된 파일 끝에 도달하면 자동으로 반환되지만, 의도를 명확히 하려면 return 사용 가능
+return 0
+</code></pre></div></div>
+
+<p>테스트:</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source </span>source-only.csh  <span class="c"># 정상 동작</span>
+./source-only.csh       <span class="c"># 경고 후 종료(exit 1)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="참고주의사항-한눈에">참고/주의사항 (한눈에)</h2>
 
 <ol>
   <li>
-    <p><strong>성장률 예측의 불확실성</strong> : 미래 성장률(EPS 추정)은 변동성이 커서 오차가 있을 수 있음.</p>
+    <p><code class="language-plaintext highlighter-rouge">exit</code>는 <strong>직접 실행된 새 tcsh 프로세스</strong> 를 끝낼 때만 사용하세요. <code class="language-plaintext highlighter-rouge">source</code> 상황에서 <code class="language-plaintext highlighter-rouge">exit</code>를 쓰면 사용자의 쉘이 통째로 종료됩니다. 그래서 위처럼 <code class="language-plaintext highlighter-rouge">source</code>로 들어온 경우에는 <code class="language-plaintext highlighter-rouge">return</code>으로 빠져나갑니다.</p>
   </li>
   <li>
-    <p><strong>업종에 따라 PEG 해석이 다름</strong> : 안정적인 업종(예: 유틸리티)과 고성장 업종(예: 테크, 바이오)의 적정 PEG 기준은 다를 수 있음.</p>
+    <p><code class="language-plaintext highlighter-rouge">$0</code>을 패턴 <code class="language-plaintext highlighter-rouge">*csh</code>로만 검사하면, <strong>파일명이 <code class="language-plaintext highlighter-rouge">something.csh</code></strong>일 때 오탐지될 수 있어요. 그래서 <strong>정확히 <code class="language-plaintext highlighter-rouge">tcsh</code>, <code class="language-plaintext highlighter-rouge">-tcsh</code>, <code class="language-plaintext highlighter-rouge">csh</code>, <code class="language-plaintext highlighter-rouge">-csh</code></strong>와 비교합니다(위 코드처럼 <code class="language-plaintext highlighter-rouge">:t</code>로 basename만 비교).</p>
   </li>
   <li>
-    <p><strong>음의 성장률</strong> : EPS 성장률이 음수이면 PEG 해석이 무의미함.</p>
-  </li>
-  <li>
-    <p><strong>PER이 마이너스인 경우</strong> : 이익이 적자인 기업은 PEG 계산이 성립하지 않음.</p>
+    <p>사용자가 <code class="language-plaintext highlighter-rouge">tcsh myscript.csh</code>처럼 “쉘 이름 + 스크립트”로 실행하면 <code class="language-plaintext highlighter-rouge">$0</code>이 <code class="language-plaintext highlighter-rouge">tcsh</code>가 되어 <strong>source처럼 인식</strong> 됩니다. 질문에서 1) “스크립트명만 쳐서 실행”이라고 했으니, 위 방식이 요구사항에 맞습니다(실행은 shebang + 직접 실행을 가정).</p>
   </li>
 </ol>
-
-<hr />
-
-<h2 id="-요약">📚 요약</h2>
-
-<ul>
-  <li>
-    <p><strong>PEG는 PER을 성장률로 보정한 지표</strong> 로, 주가의 상대적 가치를 판단할 때 유용합니다.</p>
-  </li>
-  <li>
-    <p><strong>PEG &lt; 1</strong>이면 잠재적으로 저평가, <strong>&gt; 1</strong>이면 고평가 가능성을 시사합니다.</p>
-  </li>
-  <li>
-    <p>하지만 <strong>단독 지표로 투자 판단하면 안 되며</strong> , PER, PBR, ROE 등 다른 지표들과 함께 분석하는 것이 중요합니다.</p>
-  </li>
-</ul>
-
-<p>필요하시면 PEG를 적용한 기업 분석 예제도 보여드릴 수 있어요.</p>
 
         
       </section>
@@ -305,7 +303,7 @@
     <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
     <span itemprop="keywords">
     
-      <a href="/categories/#investing" class="page__taxonomy-item p-category" rel="tag">investing</a>
+      <a href="/categories/#linux" class="page__taxonomy-item p-category" rel="tag">linux</a>
     
     </span>
   </p>
@@ -313,7 +311,7 @@
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-07-30T23:30:44+09:00">2025-07-30</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-28T18:17:54+09:00">2025-08-28</time></p>
 
       </footer>
 
@@ -322,10 +320,10 @@
       
   <nav class="pagination">
     
-      <a href="/llm/vllm-curl/" class="pagination--pager" title="Curl로 vLLM 쿼리 보내기">Previous</a>
+      <a href="/misc/work-directory-structure/" class="pagination--pager" title="작업 폴더 구성 추천">Previous</a>
     
     
-      <a href="/python/python-priority-queue/" class="pagination--pager" title="Python 우선순위 큐 예제">Next</a>
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
     
   </nav>
 
@@ -378,47 +376,6 @@
 
 
     <p class="archive__item-excerpt" itemprop="description">
-</p>
-  </article>
-</div>
-
-    
-      
-      
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/linux/tcsh-run-check/" rel="permalink">tcsh 스크립트 구분
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <!-- hvppyarchive: remove date icon
-        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
-        -->
-        
-        <time datetime="2025-08-28T18:17:54+09:00">2025-08-28</time>
-      </span>
-    
-
-    
-
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">
-
 </p>
   </article>
 </div>
@@ -490,6 +447,47 @@
         -->
         
         <time datetime="2025-08-27T10:12:37+09:00">2025-08-27</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/work-directory-structure/" rel="permalink">작업 폴더 구성 추천
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-08-26T18:45:35+09:00">2025-08-26</time>
       </span>
     
 
