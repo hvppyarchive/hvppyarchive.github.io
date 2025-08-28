@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-28T18:17:56+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-28T18:17:56+09:00</published><updated>2025-08-28T18:17:56+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-08-28T19:09:12+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-08-28T19:09:12+09:00</published><updated>2025-08-28T19:09:12+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">tcsh 스크립트 구분</title><link href="https://hvppyarchive.github.io/linux/tcsh-run-check/" rel="alternate" type="text/html" title="tcsh 스크립트 구분" /><published>2025-08-28T18:17:54+09:00</published><updated>2025-08-28T18:17:54+09:00</updated><id>https://hvppyarchive.github.io/linux/tcsh-run-check</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/tcsh-run-check/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">tcsh 스크립트 실행 및 위치 파악</title><link href="https://hvppyarchive.github.io/linux/tcsh-run-check/" rel="alternate" type="text/html" title="tcsh 스크립트 실행 및 위치 파악" /><published>2025-08-28T19:09:08+09:00</published><updated>2025-08-28T19:09:08+09:00</updated><id>https://hvppyarchive.github.io/linux/tcsh-run-check</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/tcsh-run-check/"><![CDATA[<p class="chat--user">
 
 tcsh 스크립트에서 두 가지 경우를 구분할 수 있어? 1) 쉘에서 “스크립트명”만 쳐서 실행한 경우 2) tcsh에서 “source 스크립트”를 한 경우 두 경우를 구분해서 1)번에서만 동작하는 스크립트(2로 시작시 경고 띄우고 종료), 2)번에서만 동작하는 스크립트(1로 시작시 경고 띄우고 종료) 각각 만들어주면 좋겠어
 
@@ -223,7 +223,232 @@ return 0
   <li>
     <p>사용자가 <code class="language-plaintext highlighter-rouge">tcsh myscript.csh</code>처럼 “쉘 이름 + 스크립트”로 실행하면 <code class="language-plaintext highlighter-rouge">$0</code>이 <code class="language-plaintext highlighter-rouge">tcsh</code>가 되어 <strong>source처럼 인식</strong> 됩니다. 질문에서 1) “스크립트명만 쳐서 실행”이라고 했으니, 위 방식이 요구사항에 맞습니다(실행은 shebang + 직접 실행을 가정).</p>
   </li>
-</ol>]]></content><author><name>hvppyarchive</name></author><category term="linux" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">작업 폴더 구성 추천</title><link href="https://hvppyarchive.github.io/misc/work-directory-structure/" rel="alternate" type="text/html" title="작업 폴더 구성 추천" /><published>2025-08-28T18:16:41+09:00</published><updated>2025-08-28T18:16:41+09:00</updated><id>https://hvppyarchive.github.io/misc/work-directory-structure</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/work-directory-structure/"><![CDATA[<p class="chat--user">
+</ol>
+
+<p class="chat--user">
+
+source 시 소스 당한 tcsh 스크립트 입장에서 현재 실행된 스크립트의 파일 위치와 디렉터리를 알 수 있어? 실행했을 때도 알 수 있어?
+
+</p>
+
+<p>결론부터 말하면:</p>
+
+<ul>
+  <li>
+    <p><strong>실행된(tcsh가 새 프로세스로 스크립트를 실행)</strong> 경우: <code class="language-plaintext highlighter-rouge">$0</code>에 스크립트 경로가 옵니다.</p>
+  </li>
+  <li>
+    <p><strong>source 된(현재 쉘에서 불려 들어온)</strong> 경우: <strong>스크립트 맨 첫 줄에서</strong> <code class="language-plaintext highlighter-rouge">$_</code>(직전 명령줄)을 읽으면 <code class="language-plaintext highlighter-rouge">source &lt;파일&gt;</code> 형태가 들어있어서 파일 경로를 뽑아낼 수 있습니다. 이건 tcsh가 <code class="language-plaintext highlighter-rouge">$_</code>를 “마지막에 실행된 명령줄”로 유지하기 때문이에요. <a href="https://unix.stackexchange.com/questions/4650/how-to-determine-the-path-to-a-sourced-tcsh-or-bash-shell-script-from-within-the?utm_source=chatgpt.com">Unix &amp; Linux Stack Exchange+1</a></p>
+  </li>
+</ul>
+
+<p>아래는 두 경우 모두에서 <strong>스크립트 파일의 절대 경로(SELF)와 디렉터리(DIR)</strong> 를 얻는 “붙여넣기용” 헤더입니다. <strong>반드시 파일 최상단</strong>(주석 다음, 모든 명령 이전)에 넣으세요 — 그래야 <code class="language-plaintext highlighter-rouge">$_</code>가 <code class="language-plaintext highlighter-rouge">source …</code>를 가리킵니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+# ==== BEGIN: resolve SELF and DIR (works for exec + source) ====
+# 캡처: 직전 명령줄 (예: 'source /path/to/me.csh ...')
+set __prev = ($_)
+
+# 어떻게 호출됐는지 판단 + 스크립트 경로 얻기
+set SELF = ""
+set __0t = "$0:t"
+
+# 1) 보통 실행: shebang으로 직접 실행되면 $0에 파일 경로가 옴
+if ( "$__0t" != "tcsh" &amp;&amp; "$__0t" != "-tcsh" &amp;&amp; "$__0t" != "csh" &amp;&amp; "$__0t" != "-csh" ) then
+    set SELF = "$0"
+endif
+
+# 2) source 되었거나 'tcsh script.csh'처럼 쉘로 실행한 경우: $_을 파싱
+if ( "$SELF" == "" ) then
+    if ( $#__prev &gt;= 2 &amp;&amp; "$__prev[1]" == "source" ) then
+        # source &lt;file&gt; [args...]
+        set SELF = "$__prev[2]"
+    else if ( $#__prev &gt;= 2 &amp;&amp; ( "$__prev[1]" == "tcsh" || "$__prev[1]" == "-tcsh" || "$__prev[1]" == "csh" || "$__prev[1]" == "-csh" ) ) then
+        # tcsh &lt;file&gt; [args...] 로 실행된 케이스
+        set SELF = "$__prev[2]"
+    endif
+endif
+
+# 3) 최후의 보루: 호출자가 파일 경로를 첫 인자로 넘겨줬다면 사용
+if ( "$SELF" == "" &amp;&amp; $#argv &gt;= 1 &amp;&amp; -e "$argv[1]" ) then
+    set SELF = "$argv[1]"
+    shift argv
+endif
+
+# 4) 절대 경로화 + DIR 계산 (+선택: 심볼릭 링크 해제)
+if ( "$SELF" !~ /* ) set SELF = "$cwd/$SELF"
+if ( -x /usr/bin/realpath ) then
+    set SELF = `/usr/bin/realpath "$SELF"`
+else if ( -x /bin/readlink ) then
+    set __tmp = `/bin/readlink -f "$SELF" 2&gt;/dev/null`
+    if ( "$status" == 0 ) set SELF = "$__tmp"
+endif
+set DIR = "$SELF:h"
+
+# 정리
+unset __prev __0t __tmp
+# ==== END: resolve SELF and DIR ====
+</code></pre></div></div>
+
+<p>이제 어디서든 <code class="language-plaintext highlighter-rouge">echo $SELF</code> / <code class="language-plaintext highlighter-rouge">echo $DIR</code>를 쓰면 됩니다.<br />
+(<code class="language-plaintext highlighter-rouge">:h</code>, <code class="language-plaintext highlighter-rouge">:t</code> 같은 tcsh 파일명 모디파이어로 경로/파일명을 쉽게 분리할 수 있어요. 예: <code class="language-plaintext highlighter-rouge">$SELF:h</code>는 디렉터리, <code class="language-plaintext highlighter-rouge">$SELF:t</code>는 파일명. <a href="https://en.wikibooks.org/wiki/C_Shell_Scripting/Modifiers?utm_source=chatgpt.com">위키책</a>)</p>
+
+<hr />
+
+<h2 id="동작-원리한-걸음씩">동작 원리(한 걸음씩)</h2>
+
+<ol>
+  <li>
+    <p><strong>실행(exec)</strong><br />
+shebang(<code class="language-plaintext highlighter-rouge">#!/bin/tcsh</code>) + 실행권한으로 돌리면 <code class="language-plaintext highlighter-rouge">$0</code>에 스크립트 경로가 그대로 들어옵니다. 그래서 1번 분기에서 바로 <code class="language-plaintext highlighter-rouge">SELF=$0</code>. (만약 <code class="language-plaintext highlighter-rouge">tcsh script.csh</code>처럼 쉘로 실행하면 <code class="language-plaintext highlighter-rouge">$0</code>이 <code class="language-plaintext highlighter-rouge">tcsh</code>가 되므로 다음 단계로 넘어갑니다.) <a href="https://www.cs.plattsburgh.edu/~plazaja/home/computing/help/tcsh.htm?utm_source=chatgpt.com">cs.plattsburgh.edu</a></p>
+  </li>
+  <li>
+    <p><strong>source</strong><br />
+tcsh의 <code class="language-plaintext highlighter-rouge">$_</code>는 “마지막으로 실행한 명령줄”을 담습니다. <code class="language-plaintext highlighter-rouge">source</code>로 불리면 그 직전 명령줄이 <code class="language-plaintext highlighter-rouge">source /경로/파일.csh ...</code> 이므로, 스크립트 <strong>첫 줄에서</strong> <code class="language-plaintext highlighter-rouge">set __prev = ($_ )</code>로 잡아두고 <code class="language-plaintext highlighter-rouge">__prev[2]</code>에서 파일 경로를 꺼냅니다. (여기서 공백·따옴표가 있어도 단어 분리가 유지되는 편이라 실무에서 잘 통합니다.) <a href="https://unix.stackexchange.com/questions/183176/what-does-dollar-underscore-mean-in-tcsh?utm_source=chatgpt.com">Unix &amp; Linux Stack Exchange+1</a></p>
+  </li>
+  <li>
+    <p><strong>쉘로 실행(<code class="language-plaintext highlighter-rouge">tcsh file.csh</code>)</strong><br />
+이 경우 <code class="language-plaintext highlighter-rouge">$0</code>은 <code class="language-plaintext highlighter-rouge">tcsh</code>라 1번이 비어 있고, <code class="language-plaintext highlighter-rouge">$_</code>에는 방금 명령줄 <code class="language-plaintext highlighter-rouge">tcsh file.csh ...</code>이 남아 있으므로 <code class="language-plaintext highlighter-rouge">__prev[2]</code>에서 파일을 얻습니다. <a href="https://unix.stackexchange.com/questions/183176/what-does-dollar-underscore-mean-in-tcsh?utm_source=chatgpt.com">Unix &amp; Linux Stack Exchange</a></p>
+  </li>
+  <li>
+    <p><strong>예외 대비(안전망)</strong><br />
+드물게 비대화·특수 환경에서 <code class="language-plaintext highlighter-rouge">$_</code>이 기대대로 안 채워질 수 있습니다. 그럴 땐 호출 측에서<br />
+<code class="language-plaintext highlighter-rouge">source mylib.csh "$cwd/mylib.csh"</code> 처럼 <strong>파일 경로를 첫 인자로 넘겨</strong> 두면 위 코드가 자동으로 주워서 씁니다. tcsh의 <code class="language-plaintext highlighter-rouge">source</code>는 인자를 허용하며, 이 인자들은 <code class="language-plaintext highlighter-rouge">$argv</code>로 들어옵니다. <a href="https://www.ibm.com/docs/en/zos/2.4.0?topic=tics-source-built-in-command-tcsh-read-execute-commands-from-name&amp;utm_source=chatgpt.com">IBM</a></p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="예시">예시</h2>
+
+<h3 id="a-실행해-보기">A. 실행해 보기</h3>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x whereami.csh
+./whereami.csh
+<span class="c"># -&gt; SELF=/절대/경로/whereami.csh</span>
+<span class="c"># -&gt; DIR=/절대/경로</span>
+</code></pre></div></div>
+
+<h3 id="b-source-해-보기">B. source 해 보기</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+tcsh&gt; source whereami.csh
+# -&gt; SELF=/절대/경로/whereami.csh
+# -&gt; DIR=/절대/경로
+</code></pre></div></div>
+
+<h3 id="c-tcsh-스크립트명으로-실행">C. ‘tcsh 스크립트명’으로 실행</h3>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh whereami.csh
+<span class="c"># -&gt; SELF=/절대/경로/whereami.csh</span>
+<span class="c"># -&gt; DIR=/절대/경로</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="팁">팁</h2>
+
+<ul>
+  <li>
+    <p>경로를 더 정교하게 쪼갤 때는 tcsh 모디파이어를 활용하세요:<br />
+<code class="language-plaintext highlighter-rouge">$SELF:h</code>(디렉터리), <code class="language-plaintext highlighter-rouge">$SELF:t</code>(파일명), <code class="language-plaintext highlighter-rouge">$SELF:r</code>(확장자 제외), <code class="language-plaintext highlighter-rouge">$SELF:e</code>(확장자). <a href="https://en.wikibooks.org/wiki/C_Shell_Scripting/Modifiers?utm_source=chatgpt.com">위키책</a></p>
+  </li>
+  <li>
+    <p><strong>source 스크립트에서<code class="language-plaintext highlighter-rouge">exit</code>를 쓰면 사용자의 쉘이 종료</strong>됩니다. 소스된 스크립트를 끝낼 땐 <code class="language-plaintext highlighter-rouge">return</code>을 쓰세요. (이건 지난 답변에서 다뤘던 포인트 👀)</p>
+  </li>
+</ul>
+
+<p>필요하면 위 헤더를 살짝 래핑해서 공용 유틸로 만들어 드릴 수도 있어요.</p>
+
+<p class="chat--user">
+
+어렵네
+
+</p>
+
+<p>맞아요, tcsh에선 좀 까다롭죠 😅<br />
+“쉽게 쓰는 초간단판”을 드릴게요. 그대로 복붙해서 <strong>스크립트 맨 위</strong> 에 넣으면 됩니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+# ==== simple-whereami.csh (exec + source 둘 다) ====
+# 반드시 파일 최상단에 둘 것!
+set SELF = "$0"
+
+# $0이 쉘 이름이면(= source 되었거나 'tcsh file.csh'로 실행)
+if ( "$SELF:t" == "tcsh" || "$SELF:t" == "-tcsh" || "$SELF:t" == "csh" || "$SELF:t" == "-csh" ) then
+    # 직전 명령줄($_)에서 파일명을 뽑는다: [source|tcsh] &lt;file&gt; ...
+    set __w = ( $_ )
+    if ( $#__w &gt;= 2 ) set SELF = "$__w[2]"
+endif
+
+# 절대경로로 만들고, 디렉터리 계산
+if ( "$SELF" !~ /* ) set SELF = "$cwd/$SELF"
+set DIR = "$SELF:h"
+
+# 필요 시 확인용 출력
+# echo "SELF=$SELF"
+# echo "DIR=$DIR"
+# ==== end ====
+</code></pre></div></div>
+
+<h3 id="어떻게-동작하나요-step-by-step">어떻게 동작하나요? (step-by-step)</h3>
+
+<ol>
+  <li>
+    <p><strong>우선<code class="language-plaintext highlighter-rouge">$0</code>을 잡아</strong>요.</p>
+
+    <ul>
+      <li>직접 실행(<code class="language-plaintext highlighter-rouge">./myscript.csh</code>)이면 <code class="language-plaintext highlighter-rouge">$0</code>이 스크립트 경로를 그대로 가리킵니다.</li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">$0:t</code>가 <code class="language-plaintext highlighter-rouge">tcsh</code>/<code class="language-plaintext highlighter-rouge">csh</code>(또는 <code class="language-plaintext highlighter-rouge">-tcsh</code>/<code class="language-plaintext highlighter-rouge">-csh</code>)면,</p>
+
+    <ul>
+      <li>
+        <p>이건 <strong>source로 불렸거나</strong> <code class="language-plaintext highlighter-rouge">tcsh myscript.csh</code>처럼 쉘을 통해 실행된 거예요.</p>
+      </li>
+      <li>
+        <p>그래서 <strong>직전 명령줄</strong> <code class="language-plaintext highlighter-rouge">$_</code>을 단어 배열로 쪼개서 <code class="language-plaintext highlighter-rouge">__w[2]</code>에서 파일 경로를 가져옵니다.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>상대경로면 <code class="language-plaintext highlighter-rouge">$cwd</code>와 합쳐 <strong>절대경로</strong> 로 바꾸고,</p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">:h</code> 모디파이어로 <strong>디렉터리(DIR)</strong> 를 얻습니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="바로-써보기">바로 써보기</h3>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod</span> +x myscript.csh
+
+<span class="c"># 1) 직접 실행</span>
+./myscript.csh
+
+<span class="c"># 2) source</span>
+tcsh&gt; <span class="nb">source </span>myscript.csh
+</code></pre></div></div>
+
+<p>둘 다 <code class="language-plaintext highlighter-rouge">SELF</code>는 스크립트의 절대경로, <code class="language-plaintext highlighter-rouge">DIR</code>은 그 디렉터리가 됩니다.</p>
+
+<hr />
+
+<h3 id="보너스-모드직접소스-판별-초간단-스니펫">보너스: 모드(직접/소스) 판별 초간단 스니펫</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+set __base = "$0:t"
+if ( "$__base" == "tcsh" || "$__base" == "-tcsh" || "$__base" == "csh" || "$__base" == "-csh" ) then
+    set MODE = "sourced"   # source 또는 'tcsh file.csh'
+else
+    set MODE = "executed"  # ./file.csh
+endif
+# echo "MODE=$MODE"
+</code></pre></div></div>
+
+<blockquote>
+  <p>참고: 위 “초간단판”은 대부분의 실무 케이스에 충분합니다. 정말 모든 엣지케이스까지 막으려면 지난번에 드린 “견고판”을 쓰셔요. 필요하면 그 버전도 더 줄여 드릴게요!</p>
+</blockquote>]]></content><author><name>hvppyarchive</name></author><category term="linux" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">작업 폴더 구성 추천</title><link href="https://hvppyarchive.github.io/misc/work-directory-structure/" rel="alternate" type="text/html" title="작업 폴더 구성 추천" /><published>2025-08-28T18:16:41+09:00</published><updated>2025-08-28T18:16:41+09:00</updated><id>https://hvppyarchive.github.io/misc/work-directory-structure</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/work-directory-structure/"><![CDATA[<p class="chat--user">
 
 회사에서 작업 폴더 구성을 도와줘. 뭔가 작업 폴더를 꾸미는 것에 대한 일반적인 추천 같은게 있을까?
 
