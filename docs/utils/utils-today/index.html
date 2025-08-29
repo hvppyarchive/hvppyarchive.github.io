@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-08-29T14:23:46+09:00">
+  <meta property="article:published_time" content="2025-08-29T16:18:01+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Today 업무 보조 툴">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-08-29T14:23:46+09:00">
+    <meta itemprop="datePublished" content="2025-08-29T16:18:01+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-29T14:23:46+09:00">2025-08-29</time>
+        <time datetime="2025-08-29T16:18:01+09:00">2025-08-29</time>
       </span>
     
 
@@ -1023,6 +1023,495 @@ endif
 
 <p>원하시면 <code class="language-plaintext highlighter-rouge">today.csh</code>에서 <code class="language-plaintext highlighter-rouge">--no-color</code>를 전달하도록 바꾸거나, 라벨/경로 너비 고정값을 조정하는 옵션도 바로 넣어드릴게요.</p>
 
+<p class="chat--user">
+
+1. json 말고 일반인이 직관적으로 config 편집하기 좋은 포맷은 없을까 2. remove를 빼고 edit 선택 시 에디터로 config가 열리고 거기서 편집/삭제하는게 더 편할 것 같아.
+
+</p>
+
+<p>좋은 아이디어예요. 정리하면:</p>
+
+<ol>
+  <li>
+    <p><strong>JSON 대신 편집 친화 포맷</strong> → <strong>TOML</strong> 추천</p>
+
+    <ul>
+      <li>
+        <p>배열과 문자열을 직관적으로 쓰기 좋고, 주석도 달 수 있어요.</p>
+      </li>
+      <li>
+        <p>예:</p>
+        <div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># ~/.config/today/shortcuts.toml</span>
+<span class="c"># path를 빼면(cd 생략) 현재 디렉터리를 유지합니다.</span>
+       
+<span class="nn">[[shortcut]]</span>
+<span class="py">label</span> <span class="p">=</span> <span class="s">"repo"</span>
+<span class="py">path</span> <span class="p">=</span> <span class="s">"/work/repo"</span>
+<span class="py">commands</span> <span class="p">=</span> <span class="p">[</span><span class="s">"git status"</span><span class="p">,</span> <span class="s">"git pull"</span><span class="p">]</span>
+       
+<span class="nn">[[shortcut]]</span>
+<span class="py">label</span> <span class="p">=</span> <span class="s">"here-no-cd"</span>
+<span class="py">commands</span> <span class="p">=</span> <span class="p">[</span><span class="s">"ls -al"</span><span class="p">]</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Remove 대신 Edit</strong></p>
+
+    <ul>
+      <li>
+        <p>메뉴에서 <code class="language-plaintext highlighter-rouge">D</code>를 없애고 <strong>E(편집)</strong> 추가 → <strong>$VISUAL/$EDITOR</strong>(없으면 vi)로 TOML을 열어 <strong>직접 수정/삭제</strong>.</p>
+      </li>
+      <li>
+        <p>저장 후 닫으면 파서로 검증하고, <strong>실패 시 백업에서 복원</strong>.</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>아래는 그 기능까지 반영한 최종 코드입니다. (이전 컬러/표 출력도 그대로 지원; <code class="language-plaintext highlighter-rouge">rich</code> 있으면 더 예쁘게 표 출력)</p>
+
+<hr />
+
+<h2 id="todaycsh">today.csh</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+#!/bin/tcsh
+# today.csh - tcsh wrapper that calls today.py and sources the generated command file
+# Usage: type `today` in your tcsh (after setting alias) to run interactively.
+
+# Ensure config directory exists
+if ( ! -d "$HOME/.config/today" ) then
+    mkdir -p "$HOME/.config/today"
+endif
+
+set config_dir = "$HOME/.config/today"
+set config_file = "$config_dir/shortcuts.toml"
+set timestamp = `date +"%y%m%d_%H%M%S"`
+set out_file = "$config_dir/command_$timestamp.csh"
+
+# Prefer python3
+set python = `which python3`
+if ( "$python" == "" ) then
+    echo "python3 not found in PATH"
+    exit 1
+endif
+
+# Default install path for today.py (adjust if you put it elsewhere)
+set script_path = "$HOME/.local/bin/today.py"
+if ( ! -e "$script_path" ) then
+    echo "today.py not found at $script_path"
+    echo "Please place today.py there or edit today.csh to point to the correct path."
+    exit 1
+endif
+
+# Run the Python helper (it writes $out_file if you selected a shortcut to run)
+"$python" "$script_path" --db "$config_file" --out "$out_file"
+set code = $status
+if ( $code != 0 ) then
+    exit $code
+endif
+
+# If a command file was produced, source it in the CURRENT shell, then remove it
+if ( -e "$out_file" ) then
+    source "$out_file"
+    /bin/rm -f "$out_file"
+endif
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="todaypy">today.py</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+# today.py - interactive shortcut runner/editor for tcsh via today.csh
+# - Config: TOML (~/.config/today/shortcuts.toml)
+# - E(편집): $VISUAL/$EDITOR(없으면 vi)로 TOML을 열어 수정/삭제
+# - Optional pretty list with 'rich' if available
+</span><span class="kn">import</span> <span class="n">argparse</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">shutil</span><span class="p">,</span> <span class="n">subprocess</span><span class="p">,</span> <span class="n">shlex</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># ---------- Optional pretty output ----------
+</span><span class="n">HAVE_RICH</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">console</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="n">rich.console</span> <span class="kn">import</span> <span class="n">Console</span>
+    <span class="kn">from</span> <span class="n">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
+    <span class="kn">from</span> <span class="n">rich</span> <span class="kn">import</span> <span class="n">box</span>
+    <span class="n">HAVE_RICH</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">console</span> <span class="o">=</span> <span class="nc">Console</span><span class="p">()</span>
+<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+    <span class="n">HAVE_RICH</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">console</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">term_width</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">shutil</span><span class="p">.</span><span class="nf">get_terminal_size</span><span class="p">((</span><span class="n">default</span><span class="p">,</span> <span class="mi">20</span><span class="p">)).</span><span class="n">columns</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default</span>
+
+<span class="k">def</span> <span class="nf">ansi_enabled</span><span class="p">(</span><span class="n">no_color_flag</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">no_color_flag</span><span class="p">:</span> <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">NO_COLOR</span><span class="sh">"</span><span class="p">):</span> <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="n">sys</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="nf">isatty</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">S</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">on</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">on</span> <span class="o">=</span> <span class="n">on</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">reset</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[0m</span><span class="sh">"</span> <span class="k">if</span> <span class="n">on</span> <span class="k">else</span> <span class="sh">""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">header</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[1;36m</span><span class="sh">"</span> <span class="k">if</span> <span class="n">on</span> <span class="k">else</span> <span class="sh">""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">index</span>  <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[1;33m</span><span class="sh">"</span> <span class="k">if</span> <span class="n">on</span> <span class="k">else</span> <span class="sh">""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">ok</span>     <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[1;32m</span><span class="sh">"</span> <span class="k">if</span> <span class="n">on</span> <span class="k">else</span> <span class="sh">""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">warn</span>   <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[1;31m</span><span class="sh">"</span> <span class="k">if</span> <span class="n">on</span> <span class="k">else</span> <span class="sh">""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">dim</span>    <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[2m</span><span class="sh">"</span>    <span class="k">if</span> <span class="n">on</span> <span class="k">else</span> <span class="sh">""</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">bold</span>   <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[1m</span><span class="sh">"</span>    <span class="k">if</span> <span class="n">on</span> <span class="k">else</span> <span class="sh">""</span>
+
+<span class="c1"># ---------- TOML parsing/writing ----------
+# Parse: prefer tomllib (py3.11+), fallback tomli
+</span><span class="n">_TOML</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="n">tomllib</span> <span class="k">as</span> <span class="n">_TOML</span>  <span class="c1"># Python 3.11+
+</span><span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="n">tomli</span> <span class="k">as</span> <span class="n">_TOML</span>  <span class="c1"># pip install tomli
+</span>    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="n">_TOML</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">parse_toml</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">shortcut</span><span class="sh">"</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="k">if</span> <span class="n">_TOML</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">TOML parser not found. Use Python 3.11+ or `pip install tomli`.</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">path</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">rb</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_TOML</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">shortcut</span><span class="sh">"</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="n">data</span><span class="p">.</span><span class="nf">setdefault</span><span class="p">(</span><span class="sh">"</span><span class="s">shortcut</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+<span class="k">def</span> <span class="nf">_escape_toml_string</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="nf">return </span><span class="p">(</span>
+        <span class="n">s</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\\</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\\\\</span><span class="sh">"</span><span class="p">)</span>
+         <span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\"</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\\\"</span><span class="sh">"</span><span class="p">)</span>
+         <span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\t</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\\</span><span class="s">t</span><span class="sh">"</span><span class="p">)</span>
+         <span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\\</span><span class="s">n</span><span class="sh">"</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">dump_toml</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    Write as:
+    [[shortcut]]
+    label = </span><span class="sh">"</span><span class="s">...</span><span class="sh">"</span><span class="s">
+    path = </span><span class="sh">"</span><span class="s">/path</span><span class="sh">"</span><span class="s">   # optional; omit for </span><span class="sh">'</span><span class="s">no cd</span><span class="sh">'</span><span class="s">
+    commands = [</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">b</span><span class="sh">"</span><span class="s">]
+    </span><span class="sh">"""</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">"</span><span class="s"># today shortcuts (TOML)</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">"</span><span class="s"># path 키를 생략하면(cd 생략) 현재 디렉터리를 유지합니다.</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">""</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">it</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">label</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">).</span><span class="nf">strip</span><span class="p">()</span>
+        <span class="n">pathv</span> <span class="o">=</span> <span class="n">it</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">cmds</span>  <span class="o">=</span> <span class="n">it</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">command_list</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">"</span><span class="s">[[shortcut]]</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">label = </span><span class="sh">"</span><span class="si">{</span><span class="nf">_escape_toml_string</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="si">}</span><span class="sh">"'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pathv</span><span class="p">:</span>
+            <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">path = </span><span class="sh">"</span><span class="si">{</span><span class="nf">_escape_toml_string</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">pathv</span><span class="p">))</span><span class="si">}</span><span class="sh">"'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cmds</span><span class="p">:</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="se">\"</span><span class="si">{</span><span class="nf">_escape_toml_string</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="se">\"</span><span class="sh">"</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cmds</span><span class="p">)</span>
+            <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">commands = [</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">"</span><span class="s">commands = []</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">lines</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">""</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">path</span><span class="p">.</span><span class="nf">with_suffix</span><span class="p">(</span><span class="sh">"</span><span class="s">.tmp</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tmp</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+<span class="c1"># ---------- Data IO with migration ----------
+</span><span class="k">def</span> <span class="nf">load_items_from_toml</span><span class="p">(</span><span class="n">db_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nf">parse_toml</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">shortcut</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span> 
+            <span class="k">continue</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="p">(</span><span class="n">ent</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">label</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">""</span><span class="p">).</span><span class="nf">strip</span><span class="p">()</span>
+        <span class="n">pathv</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">cmds</span>  <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">commands</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">cmds</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">cmds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cmds</span> <span class="o">=</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="n">c</span><span class="p">).</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cmds</span> <span class="k">if</span> <span class="nf">str</span><span class="p">(</span><span class="n">c</span><span class="p">).</span><span class="nf">strip</span><span class="p">()]</span>
+        <span class="n">items</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">label</span><span class="sh">"</span><span class="p">:</span> <span class="n">label</span><span class="p">,</span> <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="n">pathv</span><span class="p">,</span> <span class="sh">"</span><span class="s">command_list</span><span class="sh">"</span><span class="p">:</span> <span class="n">cmds</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">items</span>
+
+<span class="k">def</span> <span class="nf">load_items</span><span class="p">(</span><span class="n">db_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="c1"># If TOML exists -&gt; load TOML
+</span>    <span class="k">if</span> <span class="n">db_path</span><span class="p">.</span><span class="n">suffix</span><span class="p">.</span><span class="nf">lower</span><span class="p">()</span> <span class="o">==</span> <span class="sh">"</span><span class="s">.toml</span><span class="sh">"</span> <span class="ow">and</span> <span class="n">db_path</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="nf">load_items_from_toml</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+    <span class="c1"># If TOML missing but legacy JSON exists -&gt; migrate
+</span>    <span class="k">if</span> <span class="n">db_path</span><span class="p">.</span><span class="n">suffix</span><span class="p">.</span><span class="nf">lower</span><span class="p">()</span> <span class="o">==</span> <span class="sh">"</span><span class="s">.toml</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">legacy_json</span> <span class="o">=</span> <span class="n">db_path</span><span class="p">.</span><span class="nf">with_suffix</span><span class="p">(</span><span class="sh">"</span><span class="s">.json</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">legacy_json</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">legacy_json</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="n">items</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                        <span class="sh">"</span><span class="s">label</span><span class="sh">"</span><span class="p">:</span> <span class="n">item</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">label</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">).</span><span class="nf">strip</span><span class="p">(),</span>
+                        <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="n">item</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">),</span>
+                        <span class="sh">"</span><span class="s">command_list</span><span class="sh">"</span><span class="p">:</span> <span class="n">item</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">command_list</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]</span>
+                    <span class="p">})</span>
+                <span class="c1"># Write TOML immediately
+</span>                <span class="nf">dump_toml</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">db_path</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">items</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+    <span class="c1"># Fallback empty
+</span>    <span class="k">return</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">save_items_to_toml</span><span class="p">(</span><span class="n">db_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+    <span class="nf">dump_toml</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">db_path</span><span class="p">)</span>
+
+<span class="c1"># ---------- Rendering ----------
+</span><span class="k">def</span> <span class="nf">ellipsize</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">maxlen</span><span class="p">:</span> <span class="k">return</span> <span class="n">s</span>
+    <span class="k">if</span> <span class="n">maxlen</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="n">s</span><span class="p">[:</span><span class="n">maxlen</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">[:</span><span class="n">maxlen</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="sh">"</span><span class="s">…</span><span class="sh">"</span>
+
+<span class="k">def</span> <span class="nf">render_list</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">styles</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="n">use_rich</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sh">"</span><span class="s">등록된 shortcut이 없습니다. (A로 추가, E로 편집)</span><span class="sh">"</span>
+        <span class="k">if</span> <span class="n">use_rich</span> <span class="ow">and</span> <span class="n">HAVE_RICH</span><span class="p">:</span>
+            <span class="n">console</span><span class="p">.</span><span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[bold yellow]</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s">[/bold yellow]</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">styles</span><span class="p">.</span><span class="n">index</span><span class="si">}{</span><span class="n">msg</span><span class="si">}{</span><span class="n">styles</span><span class="p">.</span><span class="n">reset</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">width</span> <span class="o">=</span> <span class="nf">term_width</span><span class="p">()</span>
+    <span class="n">w_idx</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">items</span><span class="p">))))</span>
+    <span class="n">remaining</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="p">(</span><span class="n">w_idx</span> <span class="o">+</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">w_label</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nf">int</span><span class="p">(</span><span class="n">remaining</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">))</span>
+    <span class="n">w_path</span>  <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nf">int</span><span class="p">(</span><span class="n">remaining</span> <span class="o">*</span> <span class="mf">0.35</span><span class="p">))</span>
+    <span class="n">w_cmds</span>  <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">remaining</span> <span class="o">-</span> <span class="n">w_label</span> <span class="o">-</span> <span class="n">w_path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">use_rich</span> <span class="ow">and</span> <span class="n">HAVE_RICH</span><span class="p">:</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="nc">Table</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">.</span><span class="n">SIMPLE</span><span class="p">,</span> <span class="n">show_lines</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">table</span><span class="p">.</span><span class="nf">add_column</span><span class="p">(</span><span class="sh">"</span><span class="s">#</span><span class="sh">"</span><span class="p">,</span> <span class="n">justify</span><span class="o">=</span><span class="sh">"</span><span class="s">right</span><span class="sh">"</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="sh">"</span><span class="s">bold yellow</span><span class="sh">"</span><span class="p">,</span> <span class="n">no_wrap</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">table</span><span class="p">.</span><span class="nf">add_column</span><span class="p">(</span><span class="sh">"</span><span class="s">Label</span><span class="sh">"</span><span class="p">,</span> <span class="n">overflow</span><span class="o">=</span><span class="sh">"</span><span class="s">fold</span><span class="sh">"</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="n">w_label</span><span class="p">)</span>
+        <span class="n">table</span><span class="p">.</span><span class="nf">add_column</span><span class="p">(</span><span class="sh">"</span><span class="s">Path</span><span class="sh">"</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="sh">"</span><span class="s">dim</span><span class="sh">"</span><span class="p">,</span> <span class="n">overflow</span><span class="o">=</span><span class="sh">"</span><span class="s">fold</span><span class="sh">"</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="n">w_path</span><span class="p">)</span>
+        <span class="n">table</span><span class="p">.</span><span class="nf">add_column</span><span class="p">(</span><span class="sh">"</span><span class="s">Commands</span><span class="sh">"</span><span class="p">,</span> <span class="n">overflow</span><span class="o">=</span><span class="sh">"</span><span class="s">fold</span><span class="sh">"</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="n">w_cmds</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">it</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">it</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">label</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">(no label)</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">(no label)</span><span class="sh">"</span>
+            <span class="n">path</span>  <span class="o">=</span> <span class="n">it</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">(no cd)</span><span class="sh">"</span>
+            <span class="n">cmds</span>  <span class="o">=</span> <span class="sh">"</span><span class="s">; </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">command_list</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]))</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">(no commands)</span><span class="sh">"</span>
+            <span class="n">table</span><span class="p">.</span><span class="nf">add_row</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">label</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cmds</span><span class="p">)</span>
+        <span class="n">console</span><span class="p">.</span><span class="nf">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">#</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Label</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Path</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Commands</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">it</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="nf">ellipsize</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">label</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">(no label)</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">(no label)</span><span class="sh">"</span><span class="p">,</span> <span class="n">w_label</span><span class="p">)</span>
+            <span class="n">path</span>  <span class="o">=</span> <span class="nf">ellipsize</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">(no cd)</span><span class="sh">"</span><span class="p">,</span> <span class="n">w_path</span><span class="p">)</span>
+            <span class="n">cmds</span>  <span class="o">=</span> <span class="nf">ellipsize</span><span class="p">(</span><span class="sh">"</span><span class="s">; </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">command_list</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]))</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">(no commands)</span><span class="sh">"</span><span class="p">,</span> <span class="n">w_cmds</span><span class="p">)</span>
+            <span class="n">rows</span><span class="p">.</span><span class="nf">append</span><span class="p">([</span><span class="nf">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">label</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cmds</span><span class="p">])</span>
+
+        <span class="n">widths</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nf">max</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">headers</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nf">max</span><span class="p">((</span><span class="nf">len</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+            <span class="nf">max</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">headers</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nf">max</span><span class="p">((</span><span class="nf">len</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+            <span class="nf">max</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">headers</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="nf">max</span><span class="p">((</span><span class="nf">len</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+            <span class="nf">max</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">headers</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="nf">max</span><span class="p">((</span><span class="nf">len</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+        <span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">sep</span><span class="p">():</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span> <span class="o">+</span> <span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="sh">"</span><span class="s">-</span><span class="sh">"</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">widths</span><span class="p">)</span> <span class="o">+</span> <span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">row_print</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">is_header</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">vals</span><span class="p">):</span>
+                <span class="n">txt</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s"> </span><span class="si">{</span><span class="n">v</span><span class="p">.</span><span class="nf">ljust</span><span class="p">(</span><span class="n">widths</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="si">}</span><span class="s"> </span><span class="sh">"</span>
+                <span class="n">out</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="sh">"</span><span class="s">|</span><span class="sh">"</span> <span class="o">+</span> <span class="sh">"</span><span class="s">|</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">+</span> <span class="sh">"</span><span class="s">|</span><span class="sh">"</span>
+            <span class="k">if</span> <span class="n">is_header</span> <span class="ow">and</span> <span class="n">styles</span><span class="p">.</span><span class="n">on</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">styles</span><span class="p">.</span><span class="n">header</span><span class="si">}{</span><span class="n">line</span><span class="si">}{</span><span class="n">styles</span><span class="p">.</span><span class="n">reset</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="nf">sep</span><span class="p">();</span> <span class="nf">row_print</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">is_header</span><span class="o">=</span><span class="bp">True</span><span class="p">);</span> <span class="nf">sep</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+            <span class="nf">row_print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="nf">sep</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">info_line</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">styles</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">HAVE_RICH</span> <span class="ow">and</span> <span class="n">console</span><span class="p">:</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">bold green</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">warn</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">bold red</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">note</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">bold cyan</span><span class="sh">"</span><span class="p">}.</span><span class="nf">get</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">console</span><span class="p">.</span><span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[</span><span class="si">{</span><span class="n">style</span><span class="si">}</span><span class="s">]</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s">[/</span><span class="si">{</span><span class="n">style</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span> <span class="k">if</span> <span class="n">style</span> <span class="k">else</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">styles</span><span class="p">.</span><span class="n">ok</span> <span class="k">if</span> <span class="n">kind</span><span class="o">==</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span> <span class="k">else</span> <span class="n">styles</span><span class="p">.</span><span class="n">warn</span> <span class="k">if</span> <span class="n">kind</span><span class="o">==</span><span class="sh">"</span><span class="s">warn</span><span class="sh">"</span> <span class="k">else</span> <span class="n">styles</span><span class="p">.</span><span class="n">header</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">color</span><span class="si">}{</span><span class="n">msg</span><span class="si">}{</span><span class="n">styles</span><span class="p">.</span><span class="n">reset</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># ---------- Editor ----------
+</span><span class="k">def</span> <span class="nf">choose_editor</span><span class="p">():</span>
+    <span class="n">ed</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">VISUAL</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">EDITOR</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">""</span>
+    <span class="k">if</span> <span class="n">ed</span><span class="p">.</span><span class="nf">strip</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">ed</span>
+    <span class="c1"># fallbacks
+</span>    <span class="k">for</span> <span class="n">cand</span> <span class="ow">in</span> <span class="p">[</span><span class="sh">"</span><span class="s">vi</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">nano</span><span class="sh">"</span><span class="p">]:</span>
+        <span class="kn">from</span> <span class="n">shutil</span> <span class="kn">import</span> <span class="n">which</span>
+        <span class="k">if</span> <span class="nf">which</span><span class="p">(</span><span class="n">cand</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">cand</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">vi</span><span class="sh">"</span>
+
+<span class="k">def</span> <span class="nf">open_in_editor</span><span class="p">(</span><span class="n">db_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">styles</span><span class="p">:</span> <span class="n">S</span><span class="p">):</span>
+    <span class="c1"># Ensure file exists with current content (and comments)
+</span>    <span class="k">if</span> <span class="ow">not</span> <span class="n">db_path</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+        <span class="nf">dump_toml</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">db_path</span><span class="p">)</span>
+    <span class="n">bak</span> <span class="o">=</span> <span class="n">db_path</span><span class="p">.</span><span class="nf">with_suffix</span><span class="p">(</span><span class="n">db_path</span><span class="p">.</span><span class="n">suffix</span> <span class="o">+</span> <span class="sh">"</span><span class="s">.bak</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">db_path</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="n">shutil</span><span class="p">.</span><span class="nf">copy2</span><span class="p">(</span><span class="n">db_path</span><span class="p">,</span> <span class="n">bak</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">editor</span> <span class="o">=</span> <span class="nf">choose_editor</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">subprocess</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="n">shlex</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">editor</span><span class="si">}</span><span class="s"> </span><span class="si">{</span><span class="n">shlex</span><span class="p">.</span><span class="nf">quote</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">db_path</span><span class="p">))</span><span class="si">}</span><span class="sh">"</span><span class="p">),</span> <span class="n">check</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nf">info_line</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">에디터 실행 실패: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">warn</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="c1"># Validate edited TOML
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Just parse; if ok we keep it. If parser missing -&gt; warn but keep.
+</span>        <span class="k">if</span> <span class="n">_TOML</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="nf">info_line</span><span class="p">(</span><span class="sh">"</span><span class="s">TOML parser가 없어 변경 사항을 검증하지 못했습니다. (Python 3.11+ 또는 `pip install tomli` 권장)</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">warn</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="nf">load_items_from_toml</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>  <span class="c1"># raise if invalid format/types handled in parse
+</span>        <span class="nf">info_line</span><span class="p">(</span><span class="sh">"</span><span class="s">저장 완료.</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nf">info_line</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">파싱 실패로 변경을 되돌립니다: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">warn</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">bak</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+                <span class="n">shutil</span><span class="p">.</span><span class="nf">copy2</span><span class="p">(</span><span class="n">bak</span><span class="p">,</span> <span class="n">db_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="nf">info_line</span><span class="p">(</span><span class="sh">"</span><span class="s">백업 복원 실패. 파일을 수동으로 확인하세요.</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">warn</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># ---------- Interactive ops ----------
+</span><span class="k">def</span> <span class="nf">do_add</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">styles</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="n">use_rich</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">HAVE_RICH</span> <span class="ow">and</span> <span class="n">console</span> <span class="ow">and</span> <span class="n">use_rich</span><span class="p">:</span>
+        <span class="n">console</span><span class="p">.</span><span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[bold cyan]</span><span class="se">\n</span><span class="s">--- Add Shortcut ---[/bold cyan]</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">--- Add Shortcut ---</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">"</span><span class="s">Label: </span><span class="sh">"</span><span class="p">).</span><span class="nf">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="nf">info_line</span><span class="p">(</span><span class="sh">"</span><span class="s">Label은 비어 있을 수 없습니다.</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">warn</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">PWD</span><span class="sh">"</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">())</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Path 입력: Enter=현재 경로, </span><span class="sh">'</span><span class="s">-</span><span class="sh">'</span><span class="s">=cd 하지 않음(키 생략), 그 외 직접 입력</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">raw_path</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Path [</span><span class="si">{</span><span class="n">cwd</span><span class="si">}</span><span class="s">]: </span><span class="sh">"</span><span class="p">).</span><span class="nf">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">raw_path</span> <span class="o">==</span> <span class="sh">""</span><span class="p">:</span>
+        <span class="n">pathv</span> <span class="o">=</span> <span class="n">cwd</span>
+    <span class="k">elif</span> <span class="n">raw_path</span> <span class="o">==</span> <span class="sh">"</span><span class="s">-</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">pathv</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pathv</span> <span class="o">=</span> <span class="n">raw_path</span>
+
+    <span class="n">raw_cmds</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">"</span><span class="s">Command list (</span><span class="sh">'</span><span class="s">;</span><span class="sh">'</span><span class="s">로 구분, 비우면 없음): </span><span class="sh">"</span><span class="p">).</span><span class="nf">strip</span><span class="p">()</span>
+    <span class="n">command_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">raw_cmds</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">;</span><span class="sh">"</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span><span class="p">.</span><span class="nf">strip</span><span class="p">()]</span> <span class="k">if</span> <span class="n">raw_cmds</span> <span class="k">else</span> <span class="p">[]</span>
+
+    <span class="n">items</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">label</span><span class="sh">"</span><span class="p">:</span> <span class="n">label</span><span class="p">,</span> <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="n">pathv</span><span class="p">,</span> <span class="sh">"</span><span class="s">command_list</span><span class="sh">"</span><span class="p">:</span> <span class="n">command_list</span><span class="p">})</span>
+    <span class="nf">info_line</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">추가됨: </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">items</span>
+
+<span class="k">def</span> <span class="nf">write_tcsh</span><span class="p">(</span><span class="n">out_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">pathv</span><span class="p">,</span> <span class="n">command_list</span><span class="p">):</span>
+    <span class="n">out_path</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">out_path</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s">#!/bin/tcsh</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s"># Auto-generated by today.py</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pathv</span><span class="p">:</span>
+            <span class="n">qpath</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">pathv</span><span class="p">).</span><span class="nf">replace</span><span class="p">(</span><span class="sh">'"'</span><span class="p">,</span> <span class="sa">r</span><span class="sh">'</span><span class="s">\"</span><span class="sh">'</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">if ( -d </span><span class="sh">"</span><span class="si">{</span><span class="n">qpath</span><span class="si">}</span><span class="sh">"</span><span class="s"> ) cd </span><span class="sh">"</span><span class="si">{</span><span class="n">qpath</span><span class="si">}</span><span class="sh">"</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">command_list</span><span class="p">:</span>
+            <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">cmd</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">chmod</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="mo">0o700</span><span class="p">)</span>
+
+<span class="c1"># ---------- Main ----------
+</span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">ap</span> <span class="o">=</span> <span class="n">argparse</span><span class="p">.</span><span class="nc">ArgumentParser</span><span class="p">()</span>
+    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--db</span><span class="sh">"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Path to shortcuts.toml (or legacy .json)</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--out</span><span class="sh">"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Path to write the tcsh command file</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--no-color</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Disable colored/pretty output</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">ap</span><span class="p">.</span><span class="nf">parse_args</span><span class="p">()</span>
+
+    <span class="n">db_path</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">expanduser</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">db</span><span class="p">))</span>
+    <span class="n">out_path</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">expanduser</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">out</span><span class="p">))</span>
+
+    <span class="n">use_rich</span> <span class="o">=</span> <span class="n">HAVE_RICH</span> <span class="ow">and</span> <span class="nf">ansi_enabled</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">no_color</span><span class="p">)</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nc">S</span><span class="p">(</span><span class="nf">ansi_enabled</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">no_color</span><span class="p">))</span>
+
+    <span class="n">items</span> <span class="o">=</span> <span class="nf">load_items</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+
+    <span class="c1"># UI
+</span>    <span class="k">if</span> <span class="n">HAVE_RICH</span> <span class="ow">and</span> <span class="n">use_rich</span><span class="p">:</span>
+        <span class="n">console</span><span class="p">.</span><span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[bold cyan]== Shortcuts ==[/bold cyan]</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">styles</span><span class="p">.</span><span class="n">header</span><span class="si">}</span><span class="s">== Shortcuts ==</span><span class="si">{</span><span class="n">styles</span><span class="p">.</span><span class="n">reset</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">render_list</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="n">use_rich</span><span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">선택: 번호=실행, A=추가, E=편집(에디터), Q=종료</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">choice</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">"</span><span class="s">&gt; </span><span class="sh">"</span><span class="p">).</span><span class="nf">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">choice</span><span class="p">.</span><span class="nf">lower</span><span class="p">()</span> <span class="o">==</span> <span class="sh">"</span><span class="s">q</span><span class="sh">"</span> <span class="ow">or</span> <span class="n">choice</span> <span class="o">==</span> <span class="sh">""</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">choice</span><span class="p">.</span><span class="nf">lower</span><span class="p">()</span> <span class="o">==</span> <span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="nf">do_add</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="n">use_rich</span><span class="p">)</span>
+        <span class="nf">save_items_to_toml</span><span class="p">(</span><span class="n">db_path</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">choice</span><span class="p">.</span><span class="nf">lower</span><span class="p">()</span> <span class="o">==</span> <span class="sh">"</span><span class="s">e</span><span class="sh">"</span><span class="p">:</span>
+        <span class="nf">open_in_editor</span><span class="p">(</span><span class="n">db_path</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">styles</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">choice</span><span class="p">.</span><span class="nf">isdigit</span><span class="p">():</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+            <span class="n">picked</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="nf">write_tcsh</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="n">picked</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">),</span> <span class="n">picked</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">command_list</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="nf">info_line</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">실행 준비: </span><span class="si">{</span><span class="n">picked</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">label</span><span class="sh">'</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nf">info_line</span><span class="p">(</span><span class="sh">"</span><span class="s">잘못된 번호입니다.</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">warn</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nf">info_line</span><span class="p">(</span><span class="sh">"</span><span class="s">알 수 없는 입력입니다.</span><span class="sh">"</span><span class="p">,</span> <span class="n">styles</span><span class="p">,</span> <span class="sh">"</span><span class="s">warn</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="요약-step-by-step">요약 (step-by-step)</h3>
+
+<ul>
+  <li>
+    <p>포맷: <strong>TOML</strong> 로 변경 → 사람이 읽고 수정하기 쉬움(주석 가능, 배열 직관적).</p>
+  </li>
+  <li>
+    <p>메뉴: <code class="language-plaintext highlighter-rouge">D</code> 제거, <strong><code class="language-plaintext highlighter-rouge">E</code>로 에디터 열어</strong> 편집/삭제.</p>
+  </li>
+  <li>
+    <p>안정성: 저장 전/후 <strong>백업 &amp; 파싱 검증</strong>, 실패 시 <strong>자동 복원</strong>.</p>
+  </li>
+  <li>
+    <p>호환: 기존 <code class="language-plaintext highlighter-rouge">shortcuts.json</code> 있으면 처음 읽을 때 <strong>자동 TOML로 마이그레이션</strong>.</p>
+  </li>
+</ul>
+
+<p>원하시면 <strong>라벨 바로 실행</strong>(<code class="language-plaintext highlighter-rouge">today label</code>)이나, <strong>검색 필터</strong> , <strong>멀티프로필</strong>(<code class="language-plaintext highlighter-rouge">~/.config/today/*.toml</code>)도 붙여 드릴게요.</p>
+
         
       </section>
 
@@ -1048,7 +1537,7 @@ endif
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-29T14:23:46+09:00">2025-08-29</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-29T16:18:01+09:00">2025-08-29</time></p>
 
       </footer>
 
@@ -1102,7 +1591,7 @@ endif
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-29T14:23:50+09:00">2025-08-29</time>
+        <time datetime="2025-08-29T16:18:04+09:00">2025-08-29</time>
       </span>
     
 
