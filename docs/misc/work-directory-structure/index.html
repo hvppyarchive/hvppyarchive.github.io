@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-08-28T18:16:41+09:00">
+  <meta property="article:published_time" content="2025-08-29T20:13:15+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="작업 폴더 구성 추천">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-08-28T18:16:41+09:00">
+    <meta itemprop="datePublished" content="2025-08-29T20:13:15+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-28T18:16:41+09:00">2025-08-28</time>
+        <time datetime="2025-08-29T20:13:15+09:00">2025-08-29</time>
       </span>
     
 
@@ -9940,6 +9940,638 @@ awk 코드에 <code class="language-plaintext highlighter-rouge">!</code>가 들
 
 <p>원하면, 기존 tcsh-only 버전을 <strong>문자열 안전하게</strong> 고친 <code class="language-plaintext highlighter-rouge">_jlist</code>/<code class="language-plaintext highlighter-rouge">_jget</code> alias 전체를 만들어서 드릴게.</p>
 
+<p class="chat--user">
+
+오케이 일단 작업 폴더 구성으로 다시 돌아가자. 00_README.txt 로 구성할려고 해 01_Inbox 최종 구조 다시 정리해줘.
+
+</p>
+
+<p>좋아! <strong><code class="language-plaintext highlighter-rouge">00_README.txt</code> + <code class="language-plaintext highlighter-rouge">01_Inbox</code></strong> 기준으로 최종 구조를 다시 정리했어.<br />
+(좌측은 <strong>폴더/파일명(영문)</strong> , <code class="language-plaintext highlighter-rouge">-</code> 오른쪽은 <strong>설명(한글)</strong>. 하위 예시 포함)</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Work/                                           - 1인 개발용 작업 루트
+├─ 00_README.txt                                - 전체 폴더 규칙/운영 요약(하단 템플릿 참고)
+├─ 01_Inbox/                                    - 수작업 임시함(스크린샷/메모/임시 파일)
+├─ 05_Downloads/                                - 다운로드 착륙지(정리 전 임시)
+│  ├─ _inbox/                                   - 브라우저/툴 기본 저장 경로
+│  ├─ installers/                               - 설치 파일(.exe/.msi/.pkg/.dmg/.whl/.zip)
+│  ├─ datasets/                                 - 데이터셋 압축/CSV 임시(해제 전)
+│  ├─ manuals/                                  - 매뉴얼/가이드 PDF/HTML 임시
+│  ├─ assets/                                   - 폰트/아이콘/템플릿 등 임시
+│  └─ quarantine/                               - 의심 파일(검사 전 격리)
+├─ 10_Today/                                    - 오늘 작업 대시보드(콘솔 런처/단축)
+│  ├─ shortcuts.list                            - "라벨 | 경로 | 명령" 목록
+│  └─ wrappers/                                 - 실행 래퍼 스크립트(예: enter.csh)
+├─ 20_Projects/                                 - 툴(파이썬 패키지) 개발(코드 수명 중심)
+│  └─ PRJ-YYYY-NNN_name/                        - 예: PRJ-2025-001_sample_app
+│     ├─ src/&lt;package_name&gt;/                    - 패키지 소스
+│     ├─ tests/                                 - pytest
+│     ├─ scripts/                               - build/lint/test/run 스크립트
+│     ├─ examples/{data,scripts,docs}/          - 배포용 최소 실행 예제
+│     ├─ issues/BUG-YYYY-NNN/                   - 버그/개선 노트
+│     ├─ docs/                                  - 설계·ADR·가이드
+│     └─ pyproject.toml, README.md, .gitignore, .editorconfig
+├─ 22_Labs/                                     - 가벼운 실험/프로토(재현 불필요)
+│  └─ jupyter/                                  - 스크래치 노트북(예: regex_scratch.ipynb)
+├─ 25_Jobs/                                     - 산출 작업 단위(프로세스 수명 중심)
+│  ├─ _active/                                  - 진행 중 작업(최대 12개 유지)
+│  ├─ _templates/                               - 복제용 스캐폴드(JOB/BUG/SMOKE/LAB/EX/REL)
+│  ├─ JOB/2025/                                 - 일반 산출 작업
+│  ├─ BUG/2025/                                 - 배포 버그 재현/검증
+│  ├─ SMOKE/2025/                               - 새 툴 스모크/feasibility
+│  ├─ LAB/2025/                                 - 재현형 교육 실습(Job 형태)
+│  ├─ EX/2025/                                  - 배포 예제 패키징
+│  └─ REL/2025/                                 - 릴리스 준비/검증
+├─ 26_Datasets/                                 - 데이터셋 중앙 저장소(입력/출력 자산)
+│  ├─ registry/                                 - 카탈로그(색인: catalog.csv, README.md)
+│  ├─ datasets/&lt;name&gt;/vYYYY.MMDD/               - 입력 데이터셋(버전)
+│  │  ├─ raw/ interim/ processed/ samples/      - 원본/중간/정제/샘플
+│  │  ├─ docs/                                  - README, dataset_card.md
+│  │  ├─ manifest.yml                           - 출처/스키마/체크섬/라이선스
+│  │  └─ SHA256SUMS                             - 무결성 체크섬
+│  ├─ derived/&lt;artifact&gt;/vYYYY.MMDD/            - 재사용 가치 있는 출력물(승격본)
+│  │  ├─ data/ metrics/ docs/                   - 결과/지표/문서
+│  │  ├─ manifest.yml                           - 계보(lineage)/메타
+│  │  └─ SHA256SUMS
+│  └─ cache/                                    - 언제 지워도 되는 캐시
+├─ 30_Areas/                                    - 장기 운영 영역(지속 업무/정책)
+│  ├─ worklog/YYYY/YY-MM/DATE.md                - 일일/주간 5줄 로그
+│  ├─ environments/                             - 공통 환경 전략(파이썬/OS 정책)
+│  └─ knowledge_base/{tips,cheatsheets,howtos}/ - 축적 지식: 팁/치트시트/가이드
+├─ 32_SharedConfigs/                            - 공유/골든 설정(표준 ruff/pytest/VSCode 등)
+│  ├─ global/{vscode,ruff,pytest,pyinstaller,pyside6,jupyter}/
+│  └─ projects/&lt;project_slug&gt;/                  - 특정 프로젝트 기본설정
+├─ 40_Resources/                                - 참고 자료(교육/매뉴얼/스펙—설정 제외)
+│  ├─ edu/{courses,tutorials,papers/{to_read,reading_notes,summaries}}/
+│  ├─ manuals/&lt;vendor&gt;/&lt;product&gt;/&lt;version&gt;/     - 매뉴얼/가이드
+│  └─ reference/                                - 표준/스펙 문서 등 읽을거리
+├─ 50_Snippets/{sql,text,bash}/                 - 재사용 코드/원라이너/문구 조각
+├─ 60_Assets/                                   - 로고/폰트/템플릿 등 시각 자산
+│  └─ fonts/&lt;Family&gt;/vX.Y/{desktop,web,variable,license,specimen}/
+├─ 70_Exports/                                  - 여러 Job의 최종 전달본 모아보기(선택)
+├─ 75_Releases/                                 - 유저 배포 전용(버전드)
+│  └─ &lt;project_slug&gt;/
+│     ├─ vX.Y.Z/{installers,wheels,portable,docs,licenses,checksums,ReleaseNotes.md}
+│     └─ latest/                                - 최신 버전 포인터(심볼릭)
+├─ 80_Toolchains/                               - 고정 버전 빌드 도구(gcc/cmake/ninja…)
+│  ├─ gcc/{13.3.0, latest-&gt;13.3.0}/             - latest는 상대 심볼릭 링크
+│  ├─ cmake/{3.29.3, latest-&gt;3.29.3}/
+│  └─ ninja/{1.12.1, latest-&gt;1.12.1}/
+├─ 81_SDKs/                                     - 플랫폼 SDK/런타임(JDK/Qt/NDK/CUDA…)
+│  ├─ jdk/{21.0.2, latest-&gt;21.0.2}/
+│  └─ qt/{6.7.2-win-x64-msvc, latest-&gt;6.7.2-win-x64-msvc}/
+├─ 82_Tools/                                    - 개인·경량·포터블 유틸
+│  ├─ installers/&lt;tool&gt;/&lt;ver&gt;/                  - 설치 원본 정본 + SHA256SUMS, install_notes.md
+│  ├─ bin/                                      - 단일 실행 파일(PATH 포함)
+│  ├─ portable/&lt;tool&gt;-&lt;ver&gt;/                    - 압축 풀어 쓰는 포터블
+│  ├─ scripts/                                  - bootstrap/release/checksum 등
+│  └─ scratch/                                  - 임시 테스트(주기적 청소)
+├─ 83_Runtimes/                                 - 언어 런타임 모음(옵션: python/node/go/rust…)
+├─ 85_Environments/                             - 도커/콘다/venv/devcontainer “환경 캡슐”
+│  ├─ conda/environment.yml, venv/README.md
+│  ├─ docker/Dockerfile, compose.yml
+│  └─ devcontainer/base/{Dockerfile, devcontainer.json}
+├─ 90_PersonalConfigs/                          - 개인 설정(오버라이드/비공개)
+│  ├─ shell/{bash,zsh,tcsh,powershell}/         - 예: shell/tcsh/.tcshrc (홈에 심링크)
+│  ├─ editors/vscode/{settings.user.json,keybindings.user.json}
+│  ├─ git/.gitconfig.local
+│  ├─ python/{pip.conf,poetry.toml,pypirc}
+│  ├─ tools/                                    - 툴 개인 프리셋
+│  ├─ secrets/README.md                         - (실비밀은 두지 말 것)
+│  └─ .gitignore                                - *.local, secrets/*, *.pem 등 제외
+└─ 99_Archive/                                  - 완료 Project/Job/자료 장기 보관(읽기 전용)
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="00_readmetxt-템플릿짧게-복붙">00_README.txt 템플릿(짧게 복붙)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Work 폴더 운영 규칙(요약)
+1) 단일 정본 원칙:
+   - 코드: 20_Projects / 실행 작업: 25_Jobs / 데이터셋: 26_Datasets
+   - 링크/경로만 참조, 복사본 금지
+2) Today는 대시보드:
+   - 원본 이동 금지, shortcuts.list로만 실행
+3) 다운로드 정리:
+   - 05_Downloads/_inbox → installers/datasets/manuals/assets로 분류
+   - 설치 원본은 82_Tools/installers로 이동 + SHA256SUMS/notes
+4) 데이터 버전/무결성:
+   - vYYYY.MMDD, manifest.yml + SHA256SUMS 필수
+5) 설정 레이어:
+   - Project 로컬 → 90_PersonalConfigs(개인) → 32_SharedConfigs(global/projects)
+6) 보안:
+   - 비밀은 90_PersonalConfigs/secrets만, 코드에 하드코딩 금지
+7) 릴리스:
+   - 75_Releases/&lt;proj&gt;/vX.Y.Z + checksums/ReleaseNotes, latest 심링크
+8) 청소 루틴:
+   - 매일: 01_Inbox/05_Downloads 정리
+   - 주 1회: 25_Jobs/_active 슬림화, Today 정리
+   - 월 1회: 26_Datasets 카탈로그/무결성 점검
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="사용-시-주요-주의점핵심">사용 시 주요 주의점(핵심)</h2>
+
+<ul>
+  <li>
+    <p><strong>임시와 정본 분리</strong> : <code class="language-plaintext highlighter-rouge">01_Inbox/05_Downloads</code>는 임시, 정본은 각 전용 폴더.</p>
+  </li>
+  <li>
+    <p><strong>데이터 재현성</strong> : <code class="language-plaintext highlighter-rouge">26_Datasets</code>는 버전·메타(Manifest/Checksums)와 함께 관리.</p>
+  </li>
+  <li>
+    <p><strong>툴 스택 분리</strong> : 표준(80/81) ↔ 개인(82) ↔ 캡슐(85) 구분, <code class="language-plaintext highlighter-rouge">latest</code>는 상대 심볼릭.</p>
+  </li>
+  <li>
+    <p><strong>프로젝트 빌드 위치</strong> : 항상 <code class="language-plaintext highlighter-rouge">20_Projects/&lt;PRJ&gt;/build</code>(out-of-source).</p>
+  </li>
+  <li>
+    <p><strong>PATH/런처 관리</strong> : Today의 <code class="language-plaintext highlighter-rouge">shortcuts.list</code> +(선택) <code class="language-plaintext highlighter-rouge">jm</code> 러너로 빠른 점프/실행.</p>
+  </li>
+</ul>
+
+<p>원하면 이 구조를 <strong>실제 폴더/README/샘플 파일</strong> 까지 한 번에 생성하는 스크립트(bash/tcsh/PowerShell)도 만들어줄게.</p>
+
+<p class="chat--user">
+
+그런데 내가 일하다보면 “이건 어디에 어떤식으로 넣어야하지?” 궁금할 때가 있어. 그 때마다 여기에 물어보니 번거로우니, local LLM에 물으면서 일하고 싶어. local LLM (가칭 work directory manager)에 넣어줄 시스템 프롬프트 작성을 도와줘. local LLM은 GPT-OSS 120B 모델이야. 폴더 구조와 주의 사항 등등 local LLM system prompt에 넣어줄 프롬프트 작성을 부탁해.
+
+</p>
+
+<p>아래 블록을 <strong>그대로 local LLM의 System Prompt</strong> 로 넣어 주세요.<br />
+(폴더명은 영어, 설명/규칙은 한국어. 루트는 기본 <code class="language-plaintext highlighter-rouge">~/Work</code>로 가정합니다.)</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[SYSTEM PROMPT] Work Directory Manager (WDM)
+
+역할:
+- 당신은 “Work Directory Manager(WDM)”입니다. 사용자가 생성/수집한 모든 산출물·파일·설정·데이터를 아래의 표준 워크스페이스 트리에 따라 **어디에, 어떤 이름/버전으로, 어떤 절차로** 배치해야 하는지 즉답합니다.
+- 목표: (1) 정본 위치의 일관성, (2) 재현성/추적성(버전·메타·체크섬), (3) 임시와 정본의 분리, (4) 최소 마찰 워크플로.
+
+전제:
+- 작업 루트는 기본 `~/Work` (사용자가 다르게 말하면 그 경로를 루트로 사용).
+- 운영체제는 macOS/Linux/Windows를 혼용할 수 있음. 경로/명령 예시는 OS별로 제시.
+- 심볼릭 링크는 가능한 **상대경로**를 권장.
+
+폴더 트리(정의):
+- `00_README.txt` : 운영 규칙 요약 문서(반드시 최신화).
+- `01_Inbox/` : 수작업 스크랩/메모/스크린샷 임시함(정리 전).
+- `05_Downloads/` : 다운로드 착륙지(정리 전 임시).
+  - `_inbox/` : 브라우저/CLI 기본 저장 경로.
+  - `installers/` `datasets/` `manuals/` `assets/` `quarantine/`
+- `10_Today/` : 오늘 작업 대시보드(런처/단축/래퍼).
+  - `shortcuts.list` : `라벨 | 절대경로 | 명령들(옵션)` 형식.
+  - `wrappers/` : 실행 보조 스크립트(예: enter.csh).
+- `20_Projects/` : 툴/앱(파이썬 패키지 포함) **코드 정본**.
+  - `PRJ-YYYY-NNN_name/` (예: `PRJ-2025-001_sample_app`)
+  - `src/&lt;pkg&gt;/`, `tests/`, `scripts/`, `examples/`, `docs/`, `pyproject.toml` …
+- `22_Labs/` : 가벼운 실험/프로토(재현 불필요). 예: `jupyter/regex_scratch.ipynb`
+- `25_Jobs/` : 산출 작업(프로세스 수명 중심).
+  - `_active/`(진행 중 ≤12개), `_templates/`, `JOB/연도/`, `BUG/연도/`, `SMOKE/연도/`, `LAB/연도/`, `EX/연도/`, `REL/연도/`
+- `26_Datasets/` : 데이터셋 **정본**(입력/승격 출력).
+  - `registry/`(카탈로그), `datasets/&lt;name&gt;/vYYYY.MMDD/{raw,interim,processed,samples,docs,manifest.yml,SHA256SUMS}`
+  - `derived/&lt;artifact&gt;/vYYYY.MMDD/{data,metrics,docs,manifest.yml,SHA256SUMS}`
+  - `cache/`(언제든 삭제 가능)
+- `30_Areas/` : 장기 운영(정책/워크로그/공통 환경 전략).
+  - `knowledge_base/{tips,cheatsheets,howtos}/`(축적 지식)
+- `32_SharedConfigs/` : **공유/골든 설정**(팀 표준).
+  - `global/{vscode,ruff,pytest,pyinstaller,pyside6,jupyter}/`
+  - `projects/&lt;project_slug&gt;/`
+- `40_Resources/` : 참고 자료(교육/매뉴얼/스펙—설정 제외).
+  - `edu/`, `manuals/&lt;vendor&gt;/&lt;product&gt;/&lt;version&gt;/`, `reference/`
+- `50_Snippets/{sql,text,bash}/` : 재사용 코드/원라이너/문구 조각.
+- `60_Assets/` : 로고/폰트/템플릿 등 시각 자산.
+  - `fonts/&lt;Family&gt;/vX.Y/{desktop,web,variable,license,specimen}/`
+- `70_Exports/` : 여러 Job의 최종 전달본 모아보기(선택).
+- `75_Releases/&lt;project&gt;/vX.Y.Z/` : 유저 배포 전용(최신은 `latest` 심링크).
+  - `installers,wheels,portable,docs,licenses,checksums,ReleaseNotes.md`
+- `80_Toolchains/` : 고정 버전 빌드 도구(gcc/cmake/ninja…)
+  - `&lt;tool&gt;/&lt;version&gt;/` + `latest -&gt; &lt;version&gt;`(상대 심링크)
+- `81_SDKs/` : 플랫폼 SDK/런타임(JDK/Qt/NDK/CUDA…)
+  - `&lt;sdk&gt;/&lt;version&gt;/` + `latest -&gt; &lt;version(`
+- `82_Tools/` : 개인/경량/포터블 유틸
+  - `installers/&lt;tool&gt;/&lt;ver&gt;/`(SHA256SUMS, install_notes.md)
+  - `bin/`, `portable/&lt;tool&gt;-&lt;ver&gt;/`, `scripts/`, `scratch/`
+- `83_Runtimes/` : 언어 런타임 모음(옵션: python/node/go/rust…)
+- `85_Environments/` : docker/conda/venv/devcontainer **환경 캡슐**
+  - `conda/environment.yml`, `docker/Dockerfile`, `devcontainer/...`
+- `90_PersonalConfigs/` : **개인 설정/오버라이드/비공개**
+  - `shell/{bash,zsh,tcsh,powershell}/` (예: `shell/tcsh/.tcshrc` — 홈에 심링크)
+  - `editors/vscode/...`, `git/.gitconfig.local`, `python/pip.conf…`, `tools/`, `secrets/README.md`, `.gitignore`
+- `99_Archive/` : 완료 항목 장기 보관(읽기 전용)
+
+핵심 원칙:
+1) **단일 정본 원칙**: 코드 정본은 `20_Projects`, 실행·산출 흐름은 `25_Jobs`, 데이터 정본은 `26_Datasets`. 복사본 금지, 필요 시 링크/경로 참조.
+2) **임시↔정본 분리**: `01_Inbox`/`05_Downloads`는 착륙지. 정리 후 전용 위치로 이동.
+3) **재현성**: 데이터는 `vYYYY.MMDD` 버전, `manifest.yml` + `SHA256SUMS` 필수. 툴체인/SDK는 `latest` 상대 심링크.
+4) **보안**: 비밀/자격증명은 `90_PersonalConfigs/secrets/` 외 금지. 코드엔 환경변수로 주입.
+5) **빌드 위치**: 앱/라이브러리 컴파일은 항상 `20_Projects/&lt;PRJ&gt;/build`(out-of-source). 80/81/83은 “보관/참조”만.
+6) **PATH/런처**: 실행은 `10_Today/shortcuts.list` + 래퍼로. 현재 셸 상태를 바꿀 땐 `source` 사용.
+
+네이밍 규칙:
+- 프로젝트: `PRJ-YYYY-NNN_name`
+- 작업(Job): `JOB|BUG|SMOKE|LAB|EX|REL-YYYY-NNN_title`
+- 데이터셋 버전: `vYYYY.MMDD` (예: `v2025.0826`)
+- 파일: `YYYY-MM-DD_title_vNNN.ext` 권장
+- Toolchains/SDKs: `&lt;tool&gt;/&lt;version&gt;/` (portable 혼합 폴더에선 `tool-version/`)
+
+데이터셋 관리 규칙:
+- 입력: `26_Datasets/datasets/&lt;name&gt;/vYYYY.MMDD/{raw,interim,processed,samples,docs,manifest.yml,SHA256SUMS}`
+- 파생(승격): `26_Datasets/derived/&lt;artifact&gt;/vYYYY.MMDD/{data,metrics,docs,manifest.yml,SHA256SUMS}`
+- 캐시: `26_Datasets/cache/` (언제든 삭제)
+- `manifest.yml`(요약): name/kind/version/owner/created_at/source/schema/pii/license/files[].path/bytes/sha256, (derived면) lineage(inputs/code/job)/metrics
+- 체크섬: 버전 루트에 `SHA256SUMS` (형식: `&lt;sha256&gt;  &lt;상대경로&gt;`)
+
+툴/SDK 배치:
+- 설치 원본은 `82_Tools/installers/&lt;tool&gt;/&lt;ver&gt;/`에 보관 + `SHA256SUMS`, `install_notes.md`
+- 실제 사용 경로: `80_Toolchains/&lt;tool&gt;/&lt;ver&gt;/`, `81_SDKs/&lt;sdk&gt;/&lt;ver&gt;/` (필요 시 `latest` 심링크)
+- 개인·가변 유틸: `82_Tools/bin` 또는 `82_Tools/portable/&lt;tool&gt;-&lt;ver&gt;/`
+- 런타임 모음(옵션): `83_Runtimes/&lt;lang&gt;/&lt;ver&gt;/`
+- 캡슐 환경: `85_Environments/(docker|conda|venv|devcontainer)`
+
+릴리스:
+- `75_Releases/&lt;project&gt;/vX.Y.Z/` (checksums/, ReleaseNotes.md 포함)
+- `latest/`는 해당 버전을 가리키는 **상대 심링크**로 유지
+
+결정 절차(의사결정 트리):
+1) **항목 분류**(단 하나 선택):
+   - Code(소스/패키지) → 20_Projects
+   - Work unit(실행/분석/보고) → 25_Jobs
+   - Dataset(입력/출력/승격/캐시) → 26_Datasets
+   - Toolchain/SDK/Runtime/Tool → 80/81/82/83
+   - Config(공유/개인) → 32_SharedConfigs / 90_PersonalConfigs
+   - Manual/Spec/Edu/Reference → 40_Resources
+   - Asset(font/logo/template) → 60_Assets
+   - Snippet(짧은 코드/문구) → 50_Snippets
+   - Release artifact → 75_Releases
+   - Export(deliverables pool) → 70_Exports
+   - Temporary capture → 01_Inbox / 05_Downloads/_inbox
+2) **임시냐 정본이냐**: 다운로드/임시면 05로, 정본이면 전용 위치.
+3) **버전·메타 필요 여부**: 데이터셋/릴리스/설치원본은 버전·체크섬·메타 필수.
+4) **프로젝트 참조 규칙**: 대용량/공유 데이터는 프로젝트로 복사 금지, **경로 참조/링크**만.
+5) **공유 vs 개인 설정**: 팀 표준(32), 개인 오버라이드(90). 홈 설정은 90 정본→홈 심링크.
+6) **이동 방식**: 같은 FS면 `mv`, 다른 FS면 `rsync -a`(macOS는 `cp -pPR`/`ditto` 가능). `cp -rf` 지양.
+
+애매할 때의 기본값(질문 최소화):
+- “다운로드된 설치 파일” → `82_Tools/installers/&lt;tool&gt;/&lt;ver&gt;/` (분류 불가 시 `misc/`)
+- “데이터 압축/표” → `26_Datasets/_staging/YYYY-MM-DD/` 로 임시 수용 후 정식 네이밍/버전 부여
+- “문서(PDF/guide)” → `40_Resources/manuals/&lt;vendor&gt;/&lt;product&gt;/&lt;version&gt;/`
+- “폰트/브랜딩” → `60_Assets/fonts/&lt;Family&gt;/vX.Y/…`
+- “어디에도 안 맞음 + 일단 보관” → `01_Inbox` (주기 정리 권장)
+
+출력 형식(반드시 준수):
+1) **Recommended Path(s)**: 절대경로 1~2개 (필요 시 버전/폴더 생성 제안)
+2) **Why**: 2~4줄 근거(규칙 조항 번호/원칙 참조)
+3) **Ready-to-Run**: OS별 명령 세트
+   - macOS/Linux: `mkdir -p … &amp;&amp; mv … …` 또는 `rsync -a …`
+   - Windows: PowerShell `New-Item …; Move-Item …` 또는 `robocopy`
+   - (데이터셋이면) `manifest.yml`/`SHA256SUMS` 초기 템플릿 한 줄 포함
+4) **Follow-ups**(선택): `10_Today/shortcuts.list` 추가 라인, `latest` 심링크 명령, `.gitignore` 힌트 등
+5) **If Ambiguous**: 필요한 단 1~2개의 질문만 하고, 답 없으면 안전한 기본값 적용 선언
+
+예시 응답 1 — “CSV 데이터셋(입력) 파일”:
+- Recommended Path: `~/Work/26_Datasets/datasets/ad_events/v2025.0829/raw/`
+- Why: (원칙 3) 데이터 정본은 26에 버전/메타와 함께, (결정 3) 입력은 raw→processed 단계.
+- Ready-to-Run (macOS/Linux):
+</code></pre></div></div>
+
+<p>mkdir -p ~/Work/26_Datasets/datasets/ad_events/v2025.0829/raw<br />
+mv ~/Downloads/ad_2025_0829.csv ~/Work/26_Datasets/datasets/ad_events/v2025.0829/raw/<br />
+cd ~/Work/26_Datasets/datasets/ad_events/v2025.0829 &amp;&amp; : &gt; SHA256SUMS &amp;&amp; <br />
+find . -type f ! -name 'SHA256SUMS' ! -name '.*' -print0 | xargs -0 shasum -a 256 | sed 's# # #' » SHA256SUMS<br />
+printf '%s\n' "name: ad_events\nkind: dataset\nversion: v2025.0829\n…" &gt; manifest.yml</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- Follow-ups: 처리 후 `processed/` 생성, 소용량 `samples/` 작성 권장.
+
+예시 응답 2 — “gcc 13.3.0 포터블 툴체인”:
+- Recommended Path: `~/Work/80_Toolchains/gcc/13.3.0/` (+ `latest -&gt; 13.3.0`)
+- Why: (툴/SDK 배치) 표준 툴체인은 80에 버전별 폴더, latest 심링크.
+- Ready-to-Run:
+</code></pre></div></div>
+
+<p>mkdir -p ~/Work/80_Toolchains/gcc<br />
+tar -xf ~/Work/82_Tools/installers/gcc/13.3.0/gcc-13.3.0.tar.xz -C ~/Work/80_Toolchains/gcc/<br />
+mv ~/Work/80_Toolchains/gcc/gcc-13.3.0 ~/Work/80_Toolchains/gcc/13.3.0<br />
+(cd ~/Work/80_Toolchains/gcc &amp;&amp; ln -sfn 13.3.0 latest)</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- Follow-ups: PATH에 `.../gcc/latest/bin` 추가.
+
+예시 응답 3 — “개인 tcsh 설정 파일(.tcshrc)”:
+- Recommended Path: `~/Work/90_PersonalConfigs/shell/tcsh/.tcshrc` (홈엔 심링크)
+- Why: 개인 오버라이드는 90, 홈은 링크만.
+- Ready-to-Run (macOS/Linux):
+</code></pre></div></div>
+
+<p>mkdir -p ~/Work/90_PersonalConfigs/shell/tcsh<br />
+mv ~/.tcshrc ~/Work/90_PersonalConfigs/shell/tcsh/.tcshrc.bak 2&gt;/dev/null || true<br />
+cp -f ./my_tcshrc ~/Work/90_PersonalConfigs/shell/tcsh/.tcshrc<br />
+ln -snf ~/Work/90_PersonalConfigs/shell/tcsh/.tcshrc ~/.tcshrc</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>금지/주의:
+- 정본 중복 저장 금지(복사 대신 링크/경로 참조).
+- `cp -rf`로 대규모 트리 이동 금지(메타/링크 손상). 같은 FS는 `mv`, 다른 FS는 `rsync -a`/`cp -pPR`/`ditto`/`robocopy`.
+- 데이터셋·설치 원본은 **반드시** 체크섬(무결성) 기록.
+- 비밀/키/토큰은 코드/리포 내 보관 금지(항상 90/secrets + 환경변수).
+- 프로젝트 안에 대용량 데이터 복사 금지(링크/상대경로 참조).
+
+응답 톤/스타일:
+- 먼저 **추천 경로**를 선명히 제시(절대경로), 이어서 **짧은 근거**, 그 다음 **즉시 실행 가능한 명령**.
+- 질문은 꼭 필요할 때만(최대 2개). 답이 없으면 안전한 기본값으로 결정하고 그 사실을 명시.
+- 사용자가 다른 번호/배치를 원하면, 충돌 없고 재현성이 유지되는 대안으로 재매핑.
+
+이 프롬프트에 명시된 구조/규칙이 **최우선 사실**입니다. 사용자가 모호하게 지시하면, 위 “결정 절차”와 “기본값”에 따라 일관되게 판단하세요.
+</code></pre></div></div>
+
+<p>필요하면 이 system prompt에 <strong>회사 맞춤 네이밍 규칙</strong> , <strong>프로젝트 템플릿 스캐폴드</strong> , <strong>자동 스크립트 명령어 프리셋(bash/tcsh/PowerShell)</strong> 섹션도 덧붙여 줄게.</p>
+
+<p class="chat--user">
+
+좋아 그러면 마지막으로 사람이 읽을 00_README.md도 마크다운으로 정리 부탁해. 마크다운 code block 안에 써주고, 내부에 코드가 있을 경우 backticks 3개 대신 === 를 코드 앞 뒤에 붙여서 구분해줘. 마크다운 깨지니까
+
+</p>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># 00_README.md — Work Directory Operating Guide</span>
+<span class="gt">
+&gt; 이 문서는 1인 개발/분석 환경을 위한 **표준 작업 트리**, **운영 규칙**, **반복 절차**를 요약합니다.  </span>
+<span class="gt">&gt; 루트는 기본 `~/Work`(필요 시 다른 경로로 이식 가능).</span>
+<span class="p">
+---
+</span>
+<span class="gu">## 1) TL;DR (아주 짧게)</span>
+<span class="p">-</span> <span class="gs">**임시 → 정본 분리**</span>: <span class="sb">`01_Inbox`</span>, <span class="sb">`05_Downloads`</span>는 임시 착륙지. 정리 후 전용 위치로 이동.
+<span class="p">-</span> <span class="gs">**코드/작업/데이터 정본**</span>:  
+<span class="p">  -</span> 코드: <span class="sb">`20_Projects/&lt;PRJ&gt;`</span>  
+<span class="p">  -</span> 작업: <span class="sb">`25_Jobs/&lt;종류/연도/...&gt;`</span>  
+<span class="p">  -</span> 데이터: <span class="sb">`26_Datasets/.../vYYYY.MMDD`</span>
+<span class="p">-</span> <span class="gs">**재현성 필수**</span>: 데이터셋/릴리스/설치원본은 <span class="sb">`manifest.yml`</span> + <span class="sb">`SHA256SUMS`</span>.
+<span class="p">-</span> <span class="gs">**툴 스택 분리**</span>: 표준(80/81) ↔ 개인(82) ↔ 캡슐 환경(85).  
+  <span class="sb">`latest`</span>는 <span class="gs">**상대 심볼릭 링크**</span>로.
+<span class="p">-</span> <span class="gs">**빌드는 항상**</span> <span class="sb">`20_Projects/&lt;PRJ&gt;/build`</span> (out-of-source).
+<span class="p">-</span> <span class="gs">**런처**</span>: <span class="sb">`10_Today/shortcuts.list`</span> + (선택) <span class="sb">`jm`</span> 러너로 점프/실행.
+<span class="p">
+---
+</span>
+<span class="gu">## 2) 폴더 트리(요약)</span>
+
+===
+Work/
+├─ 00_README.md
+├─ 01_Inbox/                               - 수작업 스크랩/메모/스크린샷(임시)
+├─ 05_Downloads/                           - 다운로드 착륙지(임시)
+│  ├─ _inbox/                              - 브라우저/툴 기본 저장 경로
+│  ├─ installers/ datasets/ manuals/ assets/ quarantine/
+├─ 10_Today/                               - 오늘 대시보드(런처/단축/래퍼)
+│  ├─ shortcuts.list                        # "라벨 | 절대경로 | 명령(옵션)"
+│  └─ wrappers/                             # enter.csh 등
+├─ 20_Projects/                            - 툴/앱(파이썬 패키지) 코드 정본
+│  └─ PRJ-YYYY-NNN_name/
+│     ├─ src/<span class="nt">&lt;pkg&gt;</span>/  tests/  scripts/  examples/  docs/
+│     └─ pyproject.toml  README.md
+├─ 22_Labs/                                - 가벼운 실험/프로토(재현 불필요)
+├─ 25_Jobs/                                - 산출 작업(프로세스 수명 중심)
+│  ├─ _active/  _templates/
+│  ├─ JOB/2025/  BUG/2025/  SMOKE/2025/  LAB/2025/  EX/2025/  REL/2025/
+├─ 26_Datasets/                            - 데이터셋 정본
+│  ├─ registry/
+│  ├─ datasets/<span class="nt">&lt;name&gt;</span>/vYYYY.MMDD/{raw,interim,processed,samples,docs,manifest.yml,SHA256SUMS}
+│  ├─ derived/<span class="nt">&lt;artifact&gt;</span>/vYYYY.MMDD/{data,metrics,docs,manifest.yml,SHA256SUMS}
+│  └─ cache/
+├─ 30_Areas/                               - 장기 운영(정책/워크로그/지식)
+│  └─ knowledge_base/{tips,cheatsheets,howtos}/
+├─ 32_SharedConfigs/                       - 공유/골든 설정(팀 표준)
+│  ├─ global/{vscode,ruff,pytest,pyinstaller,pyside6,jupyter}/
+│  └─ projects/<span class="nt">&lt;project_slug&gt;</span>/
+├─ 40_Resources/                           - 참고 자료(교육/매뉴얼/스펙—설정 제외)
+│  ├─ edu/  manuals/<span class="nt">&lt;vendor&gt;</span>/<span class="nt">&lt;product&gt;</span>/<span class="nt">&lt;version&gt;</span>/  reference/
+├─ 50_Snippets/{sql,text,bash}/            - 재사용 코드/원라이너/문구 조각
+├─ 60_Assets/                              - 로고/폰트/템플릿 등
+│  └─ fonts/<span class="nt">&lt;Family&gt;</span>/vX.Y/{desktop,web,variable,license,specimen}/
+├─ 70_Exports/                             - 여러 Job의 전달본 모아보기(선택)
+├─ 75_Releases/<span class="nt">&lt;project&gt;</span>/vX.Y.Z/           - 유저 배포(ReleaseNotes/체크섬 포함)
+│  └─ latest -&gt; vX.Y.Z                     # 상대 심볼릭
+├─ 80_Toolchains/                          - 고정 버전 빌드 도구(gcc/cmake/ninja…)
+│  ├─ gcc/{13.3.0, latest-&gt;13.3.0}/
+│  ├─ cmake/{3.29.3, latest-&gt;3.29.3}/
+│  └─ ninja/{1.12.1, latest-&gt;1.12.1}/
+├─ 81_SDKs/                                - 플랫폼 SDK/런타임(JDK/Qt/NDK/CUDA…)
+│  ├─ jdk/{21.0.2, latest-&gt;21.0.2}/
+│  └─ qt/{6.7.2-win-x64-msvc, latest-&gt;6.7.2-win-x64-msvc}/
+├─ 82_Tools/                               - 개인·경량·포터블 유틸
+│  ├─ installers/<span class="nt">&lt;tool&gt;</span>/<span class="nt">&lt;ver&gt;</span>/ (SHA256SUMS, install_notes.md)
+│  ├─ bin/  portable/<span class="nt">&lt;tool&gt;</span>-<span class="nt">&lt;ver&gt;</span>/  scripts/  scratch/
+├─ 83_Runtimes/                            - 언어 런타임 모음(옵션)
+├─ 85_Environments/                        - docker/conda/venv/devcontainer
+│  ├─ conda/environment.yml  docker/Dockerfile  devcontainer/...
+├─ 90_PersonalConfigs/                     - 개인 설정/오버라이드/비공개
+│  ├─ shell/{bash,zsh,tcsh,powershell}/  editors/vscode/  git/  python/  tools/  secrets/
+<span class="gu">└─ 99_Archive/                             - 완료 항목 장기 보관(읽기 전용)
+===
+</span><span class="p">
+---
+</span>
+<span class="gu">## 3) 네이밍 &amp; 버전 규칙</span>
+<span class="p">-</span> <span class="gs">**프로젝트**</span>: <span class="sb">`PRJ-YYYY-NNN_slug`</span> (예: <span class="sb">`PRJ-2025-001_sample_app`</span>)
+<span class="p">-</span> <span class="gs">**작업(Job)**</span>: <span class="sb">`JOB|BUG|SMOKE|LAB|EX|REL-YYYY-NNN_title`</span>
+<span class="p">-</span> <span class="gs">**데이터셋 버전**</span>: <span class="sb">`vYYYY.MMDD`</span> (예: <span class="sb">`v2025.0829`</span>)
+<span class="p">-</span> <span class="gs">**portable 폴더**</span>(혼합): <span class="sb">`tool-version`</span> (예: <span class="sb">`gcc-13.3.0-linux-x64`</span>)
+<span class="p">-</span> <span class="gs">**파일**</span>: <span class="sb">`YYYY-MM-DD_title_vNNN.ext`</span> 권장
+<span class="p">
+---
+</span>
+<span class="gu">## 4) 운영 원칙 (필수)</span>
+1) <span class="gs">**단일 정본 원칙**</span>  
+<span class="p">   -</span> 코드: <span class="sb">`20_Projects`</span>, 작업: <span class="sb">`25_Jobs`</span>, 데이터: <span class="sb">`26_Datasets`</span>  
+<span class="p">   -</span> 복사본 금지, 필요 시 링크/경로 참조.
+2) <span class="gs">**임시 ↔ 정본 분리**</span>  
+<span class="p">   -</span> <span class="sb">`01_Inbox/05_Downloads/_inbox`</span>는 임시. 정리 후 전용 위치로 이동.
+3) <span class="gs">**재현성**</span>  
+<span class="p">   -</span> 데이터/릴리스/설치원본: <span class="sb">`manifest.yml`</span> + <span class="sb">`SHA256SUMS`</span> 필수.  
+<span class="p">   -</span> Toolchains/SDKs는 <span class="sb">`latest`</span> 상대 심링크.
+4) <span class="gs">**보안**</span>  
+<span class="p">   -</span> 비밀/키는 <span class="sb">`90_PersonalConfigs/secrets/`</span>만(레포 금지). 환경변수로 주입.
+5) <span class="gs">**빌드 위치**</span>  
+<span class="p">   -</span> 항상 <span class="sb">`20_Projects/&lt;PRJ&gt;/build`</span> (out-of-source). 80/81/83은 “보관/참조”만.
+6) <span class="gs">**이동 규칙**</span>  
+<span class="p">   -</span> 같은 파일시스템: <span class="sb">`mv`</span> (빠르고 안전)  
+<span class="p">   -</span> 다른 파일시스템: <span class="sb">`rsync -a`</span> 또는 macOS <span class="sb">`cp -pPR`</span>/<span class="sb">`ditto`</span>, Windows <span class="sb">`robocopy`</span>  
+<span class="p">   -</span> <span class="sb">`cp -rf`</span> 지양(메타/링크 파손 위험).
+<span class="p">
+---
+</span>
+<span class="gu">## 5) 반복 루틴</span>
+<span class="p">-</span> <span class="gs">**매일**</span>: <span class="sb">`05_Downloads/_inbox`</span> → installers/datasets/manuals/assets로 분류.  
+<span class="p">-</span> <span class="gs">**주 1회**</span>: <span class="sb">`25_Jobs/_active`</span> 슬림화, <span class="sb">`10_Today`</span> 단축 정비.  
+<span class="p">-</span> <span class="gs">**월 1회**</span>: <span class="sb">`26_Datasets`</span> 카탈로그 갱신/무결성 점검.
+<span class="p">
+---
+</span>
+<span class="gu">## 6) Today 런처 사용</span>
+<span class="p">-</span> <span class="sb">`10_Today/shortcuts.list`</span> 포맷:
+
+===
+<span class="gh"># label | abs path | commands (optional; ';'로 연결)</span>
+My App (venv) | /Users/me/Work/20_Projects/PRJ-2025-001_app | source .venv/bin/activate.csh; ./scripts/run.sh
+<span class="gu">Just Go       | /Users/me/Work/26_Datasets/datasets/ad_events/v2025.0829/processed |
+===
+</span><span class="p">
+-</span> (선택) <span class="sb">`jm`</span> 러너: 번호 선택/등록 → <span class="gs">**현재 셸에서 cd + 실행 + 환경 유지**</span>.
+<span class="p">
+---
+</span>
+<span class="gu">## 7) 데이터셋: `manifest.yml` &amp; `SHA256SUMS`</span>
+
+<span class="gs">**템플릿(입력 데이터셋)**</span>
+
+===
+name: <span class="nt">&lt;dataset_name&gt;</span>
+kind: dataset
+version: vYYYY.MMDD
+created_at: 2025-08-29T00:00:00+09:00
+owner: you@company.com
+source:
+  type: <span class="nt">&lt;external</span><span class="err">|</span><span class="na">internal</span><span class="err">|</span><span class="na">manual</span><span class="nt">&gt;</span>
+  detail: "<span class="nt">&lt;설명</span><span class="err">/</span><span class="na">링크</span><span class="nt">&gt;</span>"
+schema:
+  format: <span class="nt">&lt;parquet</span><span class="err">|</span><span class="na">csv</span><span class="err">|</span><span class="na">json</span><span class="err">|</span><span class="na">image</span><span class="err">|...</span><span class="nt">&gt;</span>
+  rows: <span class="nt">&lt;int</span> <span class="na">or</span> <span class="na">unknown</span><span class="nt">&gt;</span>
+  columns:
+<span class="p">    -</span> {name: <span class="nt">&lt;col1&gt;</span>, type: <span class="nt">&lt;type&gt;</span>}
+pii_level: <span class="nt">&lt;none</span><span class="err">|</span><span class="na">low</span><span class="err">|</span><span class="na">medium</span><span class="err">|</span><span class="na">high</span><span class="nt">&gt;</span>
+license: <span class="nt">&lt;internal</span><span class="err">|...</span><span class="nt">&gt;</span>
+files:
+<span class="p">  -</span> {path: <span class="nt">&lt;relative</span><span class="err">/</span><span class="na">file</span><span class="nt">&gt;</span>, bytes: <span class="nt">&lt;int&gt;</span>, sha256: "<span class="nt">&lt;optional&gt;</span>"}
+<span class="gu">notes: "&lt;전처리/주의사항&gt;"
+===
+</span>
+<span class="gs">**파생(derived) 추가 필드**</span>
+
+===
+kind: derived
+lineage:
+  inputs:
+<span class="p">    -</span> {name: <span class="nt">&lt;dataset_a&gt;</span>, version: vYYYY.MMDD, path: "../../../datasets/<span class="nt">&lt;dataset_a&gt;</span>/vYYYY.MMDD/processed"}
+  code: {repo: "<span class="nt">&lt;PRJ-...&gt;</span>", commit: "<span class="nt">&lt;hash</span> <span class="na">or</span> <span class="na">tag</span><span class="nt">&gt;</span>"}
+  job:  {id: "JOB-YYYY-NNN_title"}
+metrics:
+  records_after_filters: <span class="nt">&lt;int&gt;</span>
+  sanity_checks:
+<span class="gu">    - "rule: pass/fail"
+===
+</span>
+<span class="gs">**체크섬 생성**</span>
+<span class="p">
+-</span> macOS/Linux:
+
+===
+cd <span class="nt">&lt;버전</span> <span class="na">루트</span><span class="nt">&gt;</span>
+: &gt; SHA256SUMS
+find . -type f ! -name 'SHA256SUMS' ! -name '.<span class="err">*</span>' -print0 <span class="err">\</span>
+| xargs -0 shasum -a 256 | sed 's#  #  #' &gt;&gt; SHA256SUMS
+<span class="gu"># 검증: awk '{print $2}' SHA256SUMS | xargs -I{} shasum -a 256 "{}"
+===
+</span><span class="p">
+-</span> Windows PowerShell:
+
+===
+$root = "<span class="nt">&lt;버전</span> <span class="na">루트</span><span class="nt">&gt;</span>"
+Set-Location $root
+Remove-Item -Force SHA256SUMS -ErrorAction SilentlyContinue
+Get-ChildItem -Recurse -File -Force | Where-Object {
+  $_.Name -ne 'SHA256SUMS' -and -not $_.Name.StartsWith('.')
+} | ForEach-Object {
+  $h=(Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower()
+  $rel=$_.FullName.Substring($root.Length+1).Replace('<span class="se">\'</span>,'/')
+  "$h  $rel"
+<span class="gu">} | Set-Content -NoNewline SHA256SUMS
+===
+</span><span class="p">
+---
+</span>
+<span class="gu">## 8) Toolchains/SDKs 배치 &amp; `latest` 링크</span>
+
+<span class="gs">**설치 원본 보관**</span>: <span class="sb">`82_Tools/installers/&lt;tool&gt;/&lt;ver&gt;/`</span> (+ <span class="sb">`SHA256SUMS`</span>, <span class="sb">`install_notes.md`</span>)  
+<span class="gs">**배치 경로**</span>:  
+<span class="p">-</span> 툴체인: <span class="sb">`80_Toolchains/&lt;tool&gt;/&lt;version&gt;/`</span>  
+<span class="p">-</span> SDK: <span class="sb">`81_SDKs/&lt;sdk&gt;/&lt;version&gt;/`</span>  
+<span class="p">-</span> 개인 유틸: <span class="sb">`82_Tools/bin`</span> 또는 <span class="sb">`82_Tools/portable/&lt;tool&gt;-&lt;ver&gt;/`</span>
+
+<span class="gs">**심볼릭 링크**</span>
+<span class="p">
+-</span> macOS/Linux:
+
+===
+cd ~/Work/80_Toolchains/gcc
+<span class="gu">ln -sfn 13.3.0 latest    # 상대 링크 권장
+===
+</span><span class="p">
+-</span> Windows (관리자 CMD):
+
+===
+cd %USERPROFILE%<span class="se">\W</span>ork<span class="se">\8</span>0_Toolchains<span class="se">\g</span>cc
+rmdir latest 2&gt;nul
+<span class="gu">mklink /D latest 13.3.0
+===
+</span>
+<span class="gs">**PATH 예시**</span>
+
+===
+<span class="gh"># bash/zsh</span>
+export PATH="$HOME/Work/82_Tools/bin:$HOME/Work/80_Toolchains/gcc/latest/bin:$PATH"
+
+<span class="gh"># tcsh</span>
+set path = ( $HOME/Work/82_Tools/bin $HOME/Work/80_Toolchains/gcc/latest/bin $path )
+
+<span class="gh"># PowerShell</span>
+<span class="gu">$env:Path = "$HOME\Work\82_Tools\bin;$HOME\Work\80_Toolchains\gcc\latest\bin;" + $env:Path
+===
+</span><span class="p">
+---
+</span>
+<span class="gu">## 9) 이동/복사 규칙(안전)</span>
+<span class="p">-</span> <span class="gs">**같은 파일시스템**</span>: <span class="sb">`mv`</span> (메타데이터/링크 보존, 원자적 rename)
+<span class="p">-</span> <span class="gs">**다른 파일시스템**</span>: <span class="sb">`rsync -a`</span>  
+<span class="p">  -</span> macOS 대안: <span class="sb">`cp -pPR`</span> 또는 <span class="sb">`ditto`</span>  
+<span class="p">  -</span> Windows: <span class="sb">`robocopy /MIR /COPY:DATSO /DCOPY:DAT /SL`</span>
+<span class="p">-</span> <span class="gs">**주의**</span>: <span class="sb">`cp -rf`</span> 지양(심볼릭을 따라가 복제/메타 손상 위험)
+<span class="p">
+---
+</span>
+<span class="gu">## 10) 보안 &amp; 비밀</span>
+<span class="p">-</span> 비밀/키/토큰/인증서는 <span class="sb">`90_PersonalConfigs/secrets/`</span>에만.  
+<span class="p">-</span> 레포/문서/노트북에 직접 저장 금지. 환경변수나 파일 경로로 주입.
+<span class="p">
+---
+</span>
+<span class="gu">## 11) 흔한 FAQ</span>
+<span class="p">-</span> <span class="gs">**폰트는 어디?**</span> → <span class="sb">`60_Assets/fonts/&lt;Family&gt;/vX.Y/{desktop,web,...}`</span> (라이선스 동봉)  
+<span class="p">-</span> <span class="gs">**릴리스 산출물은?**</span> → <span class="sb">`75_Releases/&lt;project&gt;/vX.Y.Z/`</span> (+ checksums/ReleaseNotes, <span class="sb">`latest`</span> 링크)  
+<span class="p">-</span> <span class="gs">**교육 실험/프로토?**</span> → 단발성: <span class="sb">`22_Labs/`</span>, 재현·배포 가치 있으면 <span class="sb">`25_Jobs/LAB/…`</span> 승격  
+<span class="p">-</span> <span class="gs">**데이터셋 초기 투입?**</span> → 정식 이름/버전 미정이면 <span class="sb">`26_Datasets/_staging/YYYY-MM-DD/`</span>
+<span class="p">
+---
+</span>
+<span class="gu">## 12) 부록: 빠른 스캐폴드</span>
+
+<span class="gs">**새 프로젝트(PRJ) 뼈대**</span>
+
+===
+mkdir -p ~/Work/20_Projects/PRJ-2025-001_sample_app/{src/sample_app,tests,scripts,examples,docs}
+<span class="gu">printf '%s\n' "[tool.black]" &gt; ~/Work/20_Projects/PRJ-2025-001_sample_app/pyproject.toml
+===
+</span>
+<span class="gs">**새 데이터셋 버전**</span>
+
+===
+base=~/Work/26_Datasets/datasets/ad_events/v2025.0829
+mkdir -p $base/{raw,interim,processed,samples,docs}
+<span class="gu">printf '%s\n' "name: ad_events\nkind: dataset\nversion: v2025.0829" &gt; $base/manifest.yml
+===
+</span>
+<span class="gs">**Today 단축 추가 예시**</span>
+
+===
+<span class="gu">echo "My App | $HOME/Work/20_Projects/PRJ-2025-001_sample_app | source .venv/bin/activate.csh; ./scripts/run.sh" &gt;&gt; ~/Work/10_Today/shortcuts.list
+===
+</span><span class="p">
+---
+</span>
+<span class="ge">_이 문서는 실제 운영 중 배운 내용을 수시로 업데이트하세요. (변경 시 상단 날짜 갱신 권장)_</span>
+</code></pre></div></div>
+
         
       </section>
 
@@ -9965,7 +10597,7 @@ awk 코드에 <code class="language-plaintext highlighter-rouge">!</code>가 들
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-28T18:16:41+09:00">2025-08-28</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-29T20:13:15+09:00">2025-08-29</time></p>
 
       </footer>
 
@@ -9974,10 +10606,10 @@ awk 코드에 <code class="language-plaintext highlighter-rouge">!</code>가 들
       
   <nav class="pagination">
     
-      <a href="/llm/mini-llm-script/" class="pagination--pager" title="Mini LLM 스크립트 예시">Previous</a>
+      <a href="/utils/utils-today/" class="pagination--pager" title="Today 업무 보조 툴">Previous</a>
     
     
-      <a href="/linux/tcsh-run-check/" class="pagination--pager" title="tcsh 스크립트 실행 및 위치 파악">Next</a>
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
     
   </nav>
 
@@ -10019,7 +10651,7 @@ awk 코드에 <code class="language-plaintext highlighter-rouge">!</code>가 들
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-29T16:18:04+09:00">2025-08-29</time>
+        <time datetime="2025-08-29T20:13:20+09:00">2025-08-29</time>
       </span>
     
 
@@ -10118,46 +10750,6 @@ awk 코드에 <code class="language-plaintext highlighter-rouge">!</code>가 들
 
     
       
-      
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/llm/mini-llm-script/" rel="permalink">Mini LLM 스크립트 예시
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <!-- hvppyarchive: remove date icon
-        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
-        -->
-        
-        <time datetime="2025-08-27T10:12:37+09:00">2025-08-27</time>
-      </span>
-    
-
-    
-
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">
-
-</p>
-  </article>
-</div>
-
-    
   </div>
 </div>
 
