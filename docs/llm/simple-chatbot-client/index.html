@@ -10,7 +10,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>LLM Chatbot Client Plan - ARCHIVE</title>
+<!-- begin _includes/seo.html --><title>Simple LLM Chatbot Client - ARCHIVE</title>
 <meta name="description" content="">
 
 
@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="ARCHIVE">
-<meta property="og:title" content="LLM Chatbot Client Plan">
+<meta property="og:title" content="Simple LLM Chatbot Client">
 <meta property="og:url" content="https://hvppyarchive.github.io/llm/simple-chatbot-client/">
 
 
@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-08-21T19:11:25+09:00">
+  <meta property="article:published_time" content="2025-09-01T11:52:46+09:00">
 
 
 
@@ -150,16 +150,16 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="LLM Chatbot Client Plan">
+    <meta itemprop="headline" content="Simple LLM Chatbot Client">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-08-21T19:11:25+09:00">
+    <meta itemprop="datePublished" content="2025-09-01T11:52:46+09:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
           <h1 id="page-title" class="page__title" itemprop="headline">
-            <a href="https://hvppyarchive.github.io/llm/simple-chatbot-client/" itemprop="url">LLM Chatbot Client Plan
+            <a href="https://hvppyarchive.github.io/llm/simple-chatbot-client/" itemprop="url">Simple LLM Chatbot Client
 </a>
           </h1>
           
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-21T19:11:25+09:00">2025-08-21</time>
+        <time datetime="2025-09-01T11:52:46+09:00">2025-09-01</time>
       </span>
     
 
@@ -1814,6 +1814,1038 @@ def closeEvent(self, event: QCloseEvent):
 <p>if <strong>name</strong> == "<strong>main</strong>":
     main()</p>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(No change needed to `llm_client.py`; it already respects `cfg['llm']['api_base']`/`api_key`, which now respond to the endpoint picker via the UI fields.)
+
+* * *
+
+Validation (quick checklist)
+
+  * Markdown rendering: ✅ One-pass HTML with `markdown` \+ `codehilite`; styled via `ui.markdown_css`; verified in `QTextBrowser`.
+
+  * Multi-endpoint: ✅ `llm.endpoints[]` \+ `llm.default_endpoint` in config; endpoint picker + YAML “Manage…” dialog; per-chat endpoint remembered; **Save as My Defaults** updates user config.
+
+  * Backward compatibility: ✅ If no endpoints are defined, the fields still work (you can add endpoints later).
+
+  * Linux/shared-disk deploy: ✅ No new external services; `requirements.txt` adds `Pygments` only. Existing `install.sh`/`run.sh` remain valid.
+
+If you want a table-driven “Manage Endpoints” dialog (add/remove rows without YAML), I can swap the YAML editor for a grid UI next.
+
+&lt;p class="chat--user" markdown="1"&gt;
+
+1\. python package structure which could be installed using pip 2\. rename the project(program) name to "onechat"
+
+&lt;/p&gt;
+
+Step-by-step (high level)
+
+  1. Rename everything to the `onechat` namespace and switch paths to `~/.config/onechat` and `~/.local/share/onechat`.
+
+  2. Package the app as a pip-installable module using `pyproject.toml` with a `onechat` console entry point.
+
+  3. Load admin defaults from `/etc/onechat/config.yaml` or `$ONECHAT_CONFIG_DIR/config.yaml`, with packaged `defaults.yaml` as a fallback; users override in `~/.config/onechat/config.yaml`.
+
+  4. Keep features: Markdown rendering, multi-endpoint picker/manager, chat persistence, shortcuts, model controls.
+
+  5. Include YAML config file in the wheel (package data) so installs are self-contained.
+
+Below is the complete, ready-to-build package.
+
+# Project layout
+</code></pre></div></div>
+<p>css</p>
+
+<p>onechat/
+  pyproject.toml
+  MANIFEST.in
+  README.md
+  src/
+    onechat/
+      <strong>init</strong>.py
+      <strong>main</strong>.py
+      main.py
+      config_manager.py
+      storage.py
+      llm_client.py
+      ui_helpers.py
+      config/
+        defaults.yaml</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># `pyproject.toml`
+</code></pre></div></div>
+<p>toml</p>
+
+<p>[build-system]
+requires = ["setuptools&gt;=68", "wheel"]
+build-backend = "setuptools.build_meta"</p>
+
+<p>[project]
+name = "onechat"
+version = "0.1.0"
+description = "A simple, fast Qt-based LLM chat client with Markdown rendering and multi-endpoint support."
+readme = "README.md"
+requires-python = "&gt;=3.9"
+license = {text = "MIT"}
+authors = [{ name = "Your Team" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+  "Environment :: X11 Applications :: Qt"
+]
+dependencies = [
+  "PySide6&gt;=6.6",
+  "requests&gt;=2.31",
+  "PyYAML&gt;=6.0.1",
+  "markdown&gt;=3.5",
+  "Pygments&gt;=2.17",
+]</p>
+
+<p>[project.scripts]
+onechat = "onechat.main:main"</p>
+
+<p>[tool.setuptools.packages.find]
+where = ["src"]</p>
+
+<p>[tool.setuptools.package-data]
+onechat = ["config/*.yaml"]</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># `MANIFEST.in`
+</code></pre></div></div>
+<p>text</p>
+
+<p>include README.md
+recursive-include src/onechat/config *.yaml</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># `README.md`
+</code></pre></div></div>
+<p>markdown</p>
+
+<h1 id="onechat">onechat</h1>
+
+<p>Qt (PySide6) LLM chat client. OpenAI-compatible endpoints, Markdown rendering, per-user settings, admin defaults, chat persistence, and handy shortcuts.</p>
+
+<h2 id="install">Install</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># From a shared folder or VCS checkout:</span>
+pip <span class="nb">install</span> <span class="nb">.</span>
+<span class="c"># or</span>
+pipx <span class="nb">install</span> <span class="nb">.</span>
+
+</code></pre></div></div>
+<p>Run:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash
+
+onechat
+# or
+python -m onechat
+
+</code></pre></div></div>
+<h2 id="admin-defaults">Admin defaults</h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">/etc/onechat/config.yaml</code>, or set <code class="language-plaintext highlighter-rouge">ONECHAT_CONFIG_DIR=/shared/conf</code> (must contain <code class="language-plaintext highlighter-rouge">config.yaml</code>).</p>
+  </li>
+  <li>
+    <p>Packaged fallback: <code class="language-plaintext highlighter-rouge">defaults.yaml</code> bundled with <code class="language-plaintext highlighter-rouge">onechat</code>.</p>
+  </li>
+</ul>
+
+<h2 id="user-overrides-written-when-you-click-save-as-my-defaults">User overrides (written when you click "Save as My Defaults")</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">~/.config/onechat/config.yaml</code></li>
+</ul>
+
+<h2 id="data">Data</h2>
+
+<ul>
+  <li>
+    <p>Chats stored at <code class="language-plaintext highlighter-rouge">~/.local/share/onechat/chats/*.json</code>.</p>
+  </li>
+  <li>
+    <p>Export current chat to Markdown via toolbar or Ctrl+S.</p>
+  </li>
+</ul>
+
+<h2 id="shortcuts">Shortcuts</h2>
+
+<ul>
+  <li>
+    <p>Ctrl+Enter: Send • Shift+Enter: New line • Ctrl+N: New chat</p>
+  </li>
+  <li>
+    <p>Delete: Delete chat • Ctrl+S: Export • Ctrl+L: Focus input</p>
+  </li>
+  <li>
+    <p>Ctrl+, : Save settings • Ctrl+H: Hide/Show (tray toggles too)</p>
+  </li>
+</ul>
+
+<h2 id="endpoints">Endpoints</h2>
+
+<p>Configure multiple endpoints (name, api_base, api_key, verify_tls) and select per chat. “Manage…” opens a YAML editor. Works with Ollama (<code class="language-plaintext highlighter-rouge">http://localhost:11434/v1</code>), OpenAI-compatible services, etc.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>makefile
+
+# `src/onechat/__init__.py`
+```python
+__all__ = ["main"]
+__version__ = "0.1.0"
+
+</code></pre></div></div>
+<h1 id="srconechat__main__py"><code class="language-plaintext highlighter-rouge">src/onechat/__main__.py</code></h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python
+
+from .main import main
+
+if __name__ == "__main__":
+    main()
+
+</code></pre></div></div>
+<h1 id="srconechatconfigdefaultsyaml"><code class="language-plaintext highlighter-rouge">src/onechat/config/defaults.yaml</code></h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaml
+
+app:
+  data_dir: "~/.local/share/onechat"
+  chat_dir_name: "chats"
+  window:
+    width: 1100
+    height: 720
+
+llm:
+  # Multi-endpoint support
+  endpoints:
+    - name: "Local Ollama"
+      api_base: "http://localhost:11434/v1"
+      api_key: ""
+      verify_tls: true
+    - name: "OpenAI"
+      api_base: "https://api.openai.com"
+      api_key: ""
+      verify_tls: true
+  default_endpoint: "Local Ollama"
+
+  # Default model params
+  model: "llama3.1"
+  temperature: 0.7
+  top_p: 0.95
+  max_tokens: 512
+  timeout_sec: 120
+  verify_tls: true
+
+ui:
+  font_family: ""
+  font_size: 11
+  enable_tray: true
+  markdown_css: |
+    body { font-family: sans-serif; font-size: 13px; }
+    code, pre { font-family: "DejaVu Sans Mono", monospace; }
+    pre { background: #f5f5f5; padding: 8px; border-radius: 6px; overflow: auto; }
+    code { background: #f1f1f1; padding: 2px 4px; border-radius: 4px; }
+    .msg-user { background: #e8f0fe; padding: 8px 10px; border-radius: 10px; margin: 10px 0; }
+    .msg-assistant { background: #f7f7f7; padding: 8px 10px; border-radius: 10px; margin: 10px 0; }
+
+</code></pre></div></div>
+<h1 id="srconechatconfig_managerpy"><code class="language-plaintext highlighter-rouge">src/onechat/config_manager.py</code></h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python
+
+import os
+import copy
+from pathlib import Path
+import yaml
+from importlib.resources import files
+
+def deep_merge_dict(a: dict, b: dict) -&gt; dict:
+    """Deep merge dict b into a (a has lower precedence). Returns a new dict."""
+    result = copy.deepcopy(a)
+    for k, v in b.items():
+        if isinstance(v, dict) and isinstance(result.get(k), dict):
+            result[k] = deep_merge_dict(result[k], v)
+        else:
+            result[k] = copy.deepcopy(v)
+    return result
+
+class ConfigManager:
+    """
+    Load admin defaults + user overrides, write only user overrides.
+
+    Admin defaults search order:
+      1) $ONECHAT_CONFIG_DIR/config.yaml
+      2) /etc/onechat/config.yaml
+      3) packaged defaults: onechat/config/defaults.yaml
+
+    User overrides (writeable):
+      ~/.config/onechat/config.yaml
+    """
+    def __init__(self):
+        self.user_config_dir = Path(os.path.expanduser("~/.config/onechat"))
+        self.user_config_path = self.user_config_dir / "config.yaml"
+        self.defaults = {}
+        self.user = {}
+        self.effective = {}
+
+    def _load_yaml_path(self, path: Path) -&gt; dict:
+        if path.exists():
+            with open(path, "r", encoding="utf-8") as f:
+                return yaml.safe_load(f) or {}
+        return {}
+
+    def _load_packaged_defaults(self) -&gt; dict:
+        try:
+            p = files("onechat").joinpath("config/defaults.yaml")
+            with p.open("r", encoding="utf-8") as f:
+                return yaml.safe_load(f) or {}
+        except Exception:
+            return {}
+
+    def load(self):
+        env_dir = os.environ.get("ONECHAT_CONFIG_DIR")
+        merged = {}
+        if env_dir:
+            merged = deep_merge_dict(merged, self._load_yaml_path(Path(env_dir) / "config.yaml"))
+        merged = deep_merge_dict(merged, self._load_yaml_path(Path("/etc/onechat/config.yaml")))
+        merged = deep_merge_dict(merged, self._load_packaged_defaults())
+
+        self.defaults = merged
+        self.user = self._load_yaml_path(self.user_config_path)
+        self.effective = deep_merge_dict(self.defaults, self.user)
+        return self.effective
+
+    def save_user_overrides(self, patch: dict):
+        """Persist only user overrides."""
+        def _merge_in_place(dst: dict, src: dict):
+            for k, v in src.items():
+                if isinstance(v, dict) and isinstance(dst.get(k), dict):
+                    _merge_in_place(dst[k], v)
+                else:
+                    dst[k] = copy.deepcopy(v)
+
+        _merge_in_place(self.user, patch)
+        self.user_config_dir.mkdir(parents=True, exist_ok=True)
+        with open(self.user_config_path, "w", encoding="utf-8") as f:
+            yaml.safe_dump(self.user, f, sort_keys=False)
+
+    def get(self, path: str, default=None):
+        """Get from effective using dotted path e.g. 'llm.model'."""
+        parts = path.split(".")
+        cur = self.effective
+        for p in parts:
+            if not isinstance(cur, dict):
+                return default
+            cur = cur.get(p, default)
+        return cur
+
+</code></pre></div></div>
+<h1 id="srconechatstoragepy"><code class="language-plaintext highlighter-rouge">src/onechat/storage.py</code></h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python
+
+import json
+import time
+from pathlib import Path
+from dataclasses import dataclass, asdict
+from typing import List, Dict, Any, Optional
+
+@dataclass
+class Message:
+    role: str       # "user" or "assistant" or "system"
+    content: str
+    ts: float
+
+@dataclass
+class Chat:
+    chat_id: str
+    title: str
+    created_ts: float
+    updated_ts: float
+    model: str
+    params: Dict[str, Any]
+    messages: List[Message]
+
+class ChatStorage:
+    """Manage chat files under ~/.local/share/onechat/chats/ as JSON."""
+
+    def __init__(self, base_data_dir: Path, chat_dir_name: str = "chats"):
+        self.base_dir = Path(base_data_dir).expanduser()
+        self.chat_dir = self.base_dir / chat_dir_name
+        self.chat_dir.mkdir(parents=True, exist_ok=True)
+
+    def _chat_path(self, chat_id: str) -&gt; Path:
+        return self.chat_dir / f"{chat_id}.json"
+
+    def list_chats(self) -&gt; List[Chat]:
+        chats = []
+        for p in sorted(self.chat_dir.glob("*.json")):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    raw = json.load(f)
+                chats.append(self._chat_from_raw(raw))
+            except Exception:
+                continue
+        chats.sort(key=lambda c: c.updated_ts, reverse=True)
+        return chats
+
+    def save_chat(self, chat: Chat):
+        raw = asdict(chat)
+        raw["messages"] = [asdict(m) for m in chat.messages]
+        with open(self._chat_path(chat.chat_id), "w", encoding="utf-8") as f:
+            json.dump(raw, f, ensure_ascii=False, indent=2)
+
+    def load_chat(self, chat_id: str) -&gt; Optional[Chat]:
+        p = self._chat_path(chat_id)
+        if not p.exists():
+            return None
+        with open(p, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+        return self._chat_from_raw(raw)
+
+    def delete_chat(self, chat_id: str):
+        p = self._chat_path(chat_id)
+        if p.exists():
+            p.unlink()
+
+    def export_chat_markdown(self, chat: Chat, out_path: Path):
+        lines = [f"# {chat.title}", ""]
+        for m in chat.messages:
+            who = "You" if m.role == "user" else "Assistant"
+            lines.append(f"**{who}:**")
+            lines.append("")
+            lines.append(m.content)
+            lines.append("")
+        out_path = Path(out_path)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
+
+    def _chat_from_raw(self, raw: Dict[str, Any]) -&gt; Chat:
+        msgs = [Message(**m) for m in raw.get("messages", [])]
+        return Chat(
+            chat_id=raw["chat_id"],
+            title=raw.get("title", "Untitled"),
+            created_ts=raw.get("created_ts", time.time()),
+            updated_ts=raw.get("updated_ts", time.time()),
+            model=raw.get("model", ""),
+            params=raw.get("params", {}),
+            messages=msgs,
+        )
+
+</code></pre></div></div>
+<h1 id="srconechatllm_clientpy"><code class="language-plaintext highlighter-rouge">src/onechat/llm_client.py</code></h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python
+
+import json
+import requests
+from typing import List, Dict, Any
+
+class LLMClient:
+    """
+    Minimal OpenAI-compatible client for /v1/chat/completions.
+    Uses cfg['llm']['api_base'] and cfg['llm']['api_key'] at call time.
+    """
+
+    def __init__(self, cfg: dict):
+        self.cfg = cfg
+
+    def update_config(self, cfg: dict):
+        self.cfg = cfg
+
+    def chat_completion(self, messages: List[Dict[str, str]], params: Dict[str, Any]) -&gt; str:
+        api_base = (self.cfg["llm"]["api_base"] or "").rstrip("/")
+        url = f"{api_base}/v1/chat/completions"
+        headers = {"Content-Type": "application/json"}
+        api_key = self.cfg["llm"].get("api_key", "")
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
+
+        payload = {
+            "model": params.get("model") or self.cfg["llm"]["model"],
+            "messages": messages,
+            "temperature": float(params.get("temperature", self.cfg["llm"]["temperature"])),
+            "top_p": float(params.get("top_p", self.cfg["llm"]["top_p"])),
+            "max_tokens": int(params.get("max_tokens", self.cfg["llm"]["max_tokens"])),
+            "stream": False,
+        }
+
+        timeout = int(self.cfg["llm"].get("timeout_sec", 120))
+        verify_tls = bool(self.cfg["llm"].get("verify_tls", True))
+
+        r = requests.post(url, headers=headers, data=json.dumps(payload),
+                          timeout=timeout, verify=verify_tls)
+        r.raise_for_status()
+        data = r.json()
+        return data["choices"][0]["message"]["content"]
+
+</code></pre></div></div>
+<h1 id="srconechatui_helperspy"><code class="language-plaintext highlighter-rouge">src/onechat/ui_helpers.py</code></h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python
+
+import time
+from typing import List
+from markdown import markdown
+
+def now_ts() -&gt; float:
+    return time.time()
+
+def md_to_html(md_text: str) -&gt; str:
+    """Convert Markdown to HTML fragment (no wrappers)."""
+    return markdown(
+        md_text,
+        extensions=["fenced_code", "tables", "codehilite", "sane_lists"],
+    )
+
+def messages_to_html(messages: List[dict], css: str) -&gt; str:
+    """Render the whole conversation into a single HTML document."""
+    parts = [
+        "&lt;html&gt;&lt;head&gt;&lt;meta charset='utf-8'&gt;",
+        f"&lt;style&gt;{css}&lt;/style&gt;",
+        "&lt;/head&gt;&lt;body&gt;",
+    ]
+    for m in messages:
+        klass = "msg-user" if m["role"] == "user" else "msg-assistant"
+        parts.append(f'&lt;div class="{klass}"&gt;')
+        parts.append(md_to_html(m["content"]))
+        parts.append("&lt;/div&gt;")
+    parts.append("&lt;/body&gt;&lt;/html&gt;")
+    return "\n".join(parts)
+
+</code></pre></div></div>
+<h1 id="srconechatmainpy"><code class="language-plaintext highlighter-rouge">src/onechat/main.py</code></h1>
+<p>```
+python</p>
+
+<p>import sys
+import uuid
+import traceback
+from pathlib import Path</p>
+
+<p>import yaml</p>
+
+<p>from PySide6.QtCore import Qt, QThreadPool, QRunnable, Signal, QObject, QSize
+from PySide6.QtGui import QAction, QIcon, QKeySequence, QCloseEvent
+from PySide6.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTextEdit,
+    QPushButton, QListWidget, QListWidgetItem, QLabel, QFileDialog, QSplitter,
+    QFormLayout, QLineEdit, QSpinBox, QDoubleSpinBox, QDockWidget,
+    QMessageBox, QTextBrowser, QToolBar, QSystemTrayIcon, QMenu,
+    QInputDialog, QStyle, QPlainTextEdit, QDialog, QDialogButtonBox, QComboBox
+)</p>
+
+<p>from .config_manager import ConfigManager
+from .storage import ChatStorage, Chat, Message
+from .llm_client import LLMClient
+from .ui_helpers import now_ts, messages_to_html</p>
+
+<p>APP_NAME = "onechat"</p>
+
+<h1 id="--worker-infra---1">—————- Worker infra —————-</h1>
+
+<p>class WorkerSignals(QObject):
+    success = Signal(str)
+    error = Signal(str)</p>
+
+<p>class LLMWorker(QRunnable):
+    def <strong>init</strong>(self, client: LLMClient, messages_payload, params):
+        super().<strong>init</strong>()
+        self.client = client
+        self.messages_payload = messages_payload
+        self.params = params
+        self.signals = WorkerSignals()</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def run(self):
+    try:
+        reply = self.client.chat_completion(self.messages_payload, self.params)
+        self.signals.success.emit(reply)
+    except Exception as e:
+        tb = traceback.format_exc()
+        self.signals.error.emit(f"{e}\n{tb}")
+</code></pre></div></div>
+
+<h1 id="--endpoints-dialog---1">—————- Endpoints dialog —————-</h1>
+
+<p>class EndpointsDialog(QDialog):
+    """Simple YAML editor for endpoints list."""
+    def <strong>init</strong>(self, parent, endpoints: list):
+        super().<strong>init</strong>(parent)
+        self.setWindowTitle("Manage Endpoints")
+        self.resize(600, 420)
+        layout = QVBoxLayout(self)
+        self.edit = QPlainTextEdit(self)
+        self.edit.setPlainText(yaml.safe_dump(endpoints or [], sort_keys=False))
+        layout.addWidget(QLabel("Edit YAML list of endpoints (name, api_base, api_key, verify_tls):"))
+        layout.addWidget(self.edit)
+        btns = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel, parent=self)
+        btns.accepted.connect(self.accept)
+        btns.rejected.connect(self.reject)
+        layout.addWidget(btns)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def get_endpoints(self):
+    try:
+        data = yaml.safe_load(self.edit.toPlainText()) or []
+        assert isinstance(data, list)
+        for ep in data:
+            if not isinstance(ep, dict) or "name" not in ep or "api_base" not in ep:
+                raise ValueError("Each endpoint must have 'name' and 'api_base'.")
+        return data
+    except Exception as e:
+        QMessageBox.critical(self, "Invalid YAML", str(e))
+        return None
+</code></pre></div></div>
+
+<h1 id="--main-window---1">—————- Main Window —————-</h1>
+
+<p>class MainWindow(QMainWindow):
+    def <strong>init</strong>(self):
+        super().<strong>init</strong>()
+        self.setWindowTitle("onechat")
+        # Config
+        self.cfg_mgr = ConfigManager()
+        self.cfg = self.cfg_mgr.load()</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    # Storage
+    data_dir = Path(self.cfg.get("app", {}).get("data_dir", "~/.local/share/onechat")).expanduser()
+    chat_dir_name = self.cfg.get("app", {}).get("chat_dir_name", "chats")
+    self.storage = ChatStorage(data_dir, chat_dir_name)
+
+    # LLM client
+    self.client = LLMClient(self.cfg)
+
+    # State
+    self.thread_pool = QThreadPool.globalInstance()
+    self.current_chat: Chat | None = None
+    self.markdown_css = self.cfg.get("ui", {}).get("markdown_css", "")
+    self.endpoints_by_name = {}  # name -&gt; dict
+
+    self._build_ui()
+    self._refresh_endpoints()
+    self._load_chat_list()
+    self._apply_initial_window_size()
+    self._setup_tray()
+
+# -------- UI construction -------- #
+
+def _build_ui(self):
+    splitter = QSplitter()
+    splitter.setChildrenCollapsible(False)
+
+    # Left: chat list + controls
+    left = QWidget()
+    left_layout = QVBoxLayout(left)
+    self.chat_list = QListWidget()
+    left_layout.addWidget(QLabel("Conversations"))
+    left_layout.addWidget(self.chat_list)
+
+    btn_row = QHBoxLayout()
+    self.btn_new = QPushButton("New")
+    self.btn_rename = QPushButton("Rename")
+    self.btn_delete = QPushButton("Delete")
+    btn_row.addWidget(self.btn_new)
+    btn_row.addWidget(self.btn_rename)
+    btn_row.addWidget(self.btn_delete)
+    left_layout.addLayout(btn_row)
+
+    # Right: conversation + input
+    right = QWidget()
+    right_layout = QVBoxLayout(right)
+
+    self.view = QTextBrowser()
+    self.view.setOpenExternalLinks(True)
+    right_layout.addWidget(self.view, 1)
+
+    input_row = QHBoxLayout()
+    self.input = QTextEdit()
+    self.input.setPlaceholderText("Type your message… (Shift+Enter for newline, Ctrl+Enter to send)")
+    self.input.setAcceptRichText(False)
+    input_row.addWidget(self.input, 1)
+    self.btn_send = QPushButton("Send")
+    self.btn_send.setDefault(True)
+    input_row.addWidget(self.btn_send)
+    right_layout.addLayout(input_row)
+
+    splitter.addWidget(left)
+    splitter.addWidget(right)
+    splitter.setStretchFactor(1, 3)
+    self.setCentralWidget(splitter)
+
+    # Dock: model params &amp; endpoint
+    dock = QDockWidget("Model &amp; Endpoint", self)
+    dock.setAllowedAreas(Qt.RightDockWidgetArea | Qt.LeftDockWidgetArea)
+    params_widget = QWidget()
+    form = QFormLayout(params_widget)
+
+    # Endpoint picker
+    ep_row = QHBoxLayout()
+    self.cmb_endpoint = QComboBox()
+    self.btn_manage_ep = QPushButton("Manage…")
+    ep_row.addWidget(self.cmb_endpoint, 1)
+    ep_row.addWidget(self.btn_manage_ep)
+    form.addRow(QLabel("Endpoint"), ep_row)
+
+    self.edt_api_base = QLineEdit(self.cfg.get("llm", {}).get("api_base", ""))
+    self.edt_api_key = QLineEdit(self.cfg.get("llm", {}).get("api_key", ""))
+    self.edt_api_key.setEchoMode(QLineEdit.Password)
+    self.edt_model = QLineEdit(self.cfg.get("llm", {}).get("model", ""))
+
+    self.spin_temp = QDoubleSpinBox()
+    self.spin_temp.setRange(0.0, 2.0)
+    self.spin_temp.setSingleStep(0.1)
+    self.spin_temp.setValue(float(self.cfg.get("llm", {}).get("temperature", 0.7)))
+
+    self.spin_top_p = QDoubleSpinBox()
+    self.spin_top_p.setRange(0.0, 1.0)
+    self.spin_top_p.setSingleStep(0.05)
+    self.spin_top_p.setValue(float(self.cfg.get("llm", {}).get("top_p", 0.95)))
+
+    self.spin_max_toks = QSpinBox()
+    self.spin_max_toks.setRange(16, 32768)
+    self.spin_max_toks.setValue(int(self.cfg.get("llm", {}).get("max_tokens", 512)))
+
+    form.addRow(QLabel("API Base"), self.edt_api_base)
+    form.addRow(QLabel("API Key"), self.edt_api_key)
+    form.addRow(QLabel("Model"), self.edt_model)
+    form.addRow(QLabel("Temperature"), self.spin_temp)
+    form.addRow(QLabel("Top-p"), self.spin_top_p)
+    form.addRow(QLabel("Max tokens"), self.spin_max_toks)
+
+    btns = QHBoxLayout()
+    self.btn_save_settings = QPushButton("Save as My Defaults")
+    self.btn_apply = QPushButton("Apply Now")
+    btns.addWidget(self.btn_apply)
+    btns.addWidget(self.btn_save_settings)
+    form.addRow(btns)
+
+    params_widget.setLayout(form)
+    dock.setWidget(params_widget)
+    self.addDockWidget(Qt.RightDockWidgetArea, dock)
+
+    # Toolbar &amp; actions
+    tb = QToolBar("Main")
+    tb.setIconSize(QSize(16, 16))
+    self.addToolBar(tb)
+
+    act_new = QAction("New Chat", self)
+    act_new.setShortcut(QKeySequence("Ctrl+N"))
+    act_send = QAction("Send", self)
+    act_send.setShortcut(QKeySequence("Ctrl+Return"))
+    act_export = QAction("Export Markdown…", self)
+    act_export.setShortcut(QKeySequence("Ctrl+S"))
+    act_delete = QAction("Delete Chat", self)
+    act_delete.setShortcut(QKeySequence(Qt.Key_Delete))
+    act_focus = QAction("Focus Input", self)
+    act_focus.setShortcut(QKeySequence("Ctrl+L"))
+    act_settings = QAction("Save Settings", self)
+    act_settings.setShortcut(QKeySequence("Ctrl+,"))
+    act_hide = QAction("Hide/Show", self)
+    act_hide.setShortcut(QKeySequence("Ctrl+H"))
+
+    for a in (act_new, act_send, act_export, act_delete, act_focus, act_settings, act_hide):
+        tb.addAction(a)
+
+    # Connect signals
+    self.btn_new.clicked.connect(self._new_chat)
+    self.btn_rename.clicked.connect(self._rename_chat)
+    self.btn_delete.clicked.connect(self._delete_chat)
+    self.chat_list.itemDoubleClicked.connect(lambda _: self._open_selected_chat())
+    self.chat_list.itemSelectionChanged.connect(self._open_selected_chat)
+
+    self.btn_send.clicked.connect(self._send)
+    act_send.triggered.connect(self._send)
+    act_new.triggered.connect(self._new_chat)
+    act_export.triggered.connect(self._export_chat_md)
+    act_delete.triggered.connect(self._delete_chat)
+    act_focus.triggered.connect(lambda: self.input.setFocus())
+    act_settings.triggered.connect(self._save_settings_clicked)
+    act_hide.triggered.connect(self._toggle_hide)
+
+    self.btn_apply.clicked.connect(self._apply_now)
+    self.btn_save_settings.clicked.connect(self._save_settings_clicked)
+
+    # Endpoint handlers
+    self.cmb_endpoint.currentTextChanged.connect(self._on_endpoint_changed)
+    self.btn_manage_ep.clicked.connect(self._manage_endpoints)
+
+    self.statusBar().showMessage("Ready")
+
+def _apply_initial_window_size(self):
+    w = int(self.cfg.get("app", {}).get("window", {}).get("width", 1100))
+    h = int(self.cfg.get("app", {}).get("window", {}).get("height", 720))
+    self.resize(w, h)
+
+def _setup_tray(self):
+    if not self.cfg.get("ui", {}).get("enable_tray", True):
+        return
+    self.tray = QSystemTrayIcon(self)
+    self.tray.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
+    menu = QMenu()
+    act_show = QAction("Show", self)
+    act_quit = QAction("Quit", self)
+    act_show.triggered.connect(self._show_from_tray)
+    act_quit.triggered.connect(QApplication.instance().quit)
+    menu.addAction(act_show)
+    menu.addAction(act_quit)
+    self.tray.setContextMenu(menu)
+    self.tray.activated.connect(lambda reason: self._show_from_tray() if reason == QSystemTrayIcon.Trigger else None)
+    self.tray.show()
+    QApplication.instance().setQuitOnLastWindowClosed(False)
+
+# -------- Endpoints helpers -------- #
+
+def _refresh_endpoints(self):
+    eps = self.cfg.get("llm", {}).get("endpoints", []) or []
+    self.endpoints_by_name = {ep["name"]: ep for ep in eps if isinstance(ep, dict) and "name" in ep and "api_base" in ep}
+    cur_name = self.cmb_endpoint.currentText() if hasattr(self, "cmb_endpoint") else None
+
+    self.cmb_endpoint.blockSignals(True)
+    self.cmb_endpoint.clear()
+    for name in self.endpoints_by_name.keys():
+        self.cmb_endpoint.addItem(name)
+    self.cmb_endpoint.blockSignals(False)
+
+    default_name = self.cfg.get("llm", {}).get("default_endpoint")
+    to_select = cur_name or default_name or (next(iter(self.endpoints_by_name), ""))
+    if to_select:
+        self.cmb_endpoint.setCurrentText(to_select)
+        self._on_endpoint_changed(to_select)
+
+def _on_endpoint_changed(self, name: str):
+    ep = self.endpoints_by_name.get(name, {})
+    self.edt_api_base.setText(ep.get("api_base", self.edt_api_base.text()))
+    self.edt_api_key.setText(ep.get("api_key", self.edt_api_key.text()))
+
+def _manage_endpoints(self):
+    dialog = EndpointsDialog(self, list(self.endpoints_by_name.values()))
+    if dialog.exec() == QDialog.Accepted:
+        new_eps = dialog.get_endpoints()
+        if new_eps is None:
+            return
+        self.cfg_mgr.save_user_overrides({"llm": {"endpoints": new_eps}})
+        self.cfg = self.cfg_mgr.load()
+        self._refresh_endpoints()
+        self.statusBar().showMessage("Endpoints saved")
+
+# -------- Chat list ops -------- #
+
+def _load_chat_list(self):
+    self.chat_list.clear()
+    for chat in self.storage.list_chats():
+        item = QListWidgetItem(chat.title)
+        item.setData(Qt.UserRole, chat.chat_id)
+        self.chat_list.addItem(item)
+    if self.chat_list.count() == 0:
+        self._new_chat()
+    else:
+        self.chat_list.setCurrentRow(0)
+
+def _new_chat(self):
+    chat_id = uuid.uuid4().hex[:12]
+    params = {
+        "endpoint": self.cmb_endpoint.currentText() or self.cfg.get("llm", {}).get("default_endpoint", ""),
+        "model": self.edt_model.text() or self.cfg.get("llm", {}).get("model", ""),
+        "temperature": self.spin_temp.value(),
+        "top_p": self.spin_top_p.value(),
+        "max_tokens": self.spin_max_toks.value(),
+    }
+    chat = Chat(
+        chat_id=chat_id,
+        title="New Chat",
+        created_ts=now_ts(),
+        updated_ts=now_ts(),
+        model=params["model"],
+        params=params,
+        messages=[]
+    )
+    self.storage.save_chat(chat)
+    self._load_chat_list()
+    for i in range(self.chat_list.count()):
+        if self.chat_list.item(i).data(Qt.UserRole) == chat_id:
+            self.chat_list.setCurrentRow(i)
+            break
+
+def _open_selected_chat(self):
+    item = self.chat_list.currentItem()
+    if not item:
+        return
+    chat_id = item.data(Qt.UserRole)
+    chat = self.storage.load_chat(chat_id)
+    if not chat:
+        return
+    self.current_chat = chat
+    ep_name = self.current_chat.params.get("endpoint") or self.cfg.get("llm", {}).get("default_endpoint", "")
+    if ep_name and self.cmb_endpoint.findText(ep_name) != -1:
+        self.cmb_endpoint.setCurrentText(ep_name)
+    self._render_chat()
+
+def _rename_chat(self):
+    item = self.chat_list.currentItem()
+    if not item or not self.current_chat:
+        return
+    new_title, ok = QInputDialog.getText(self, "Rename", "Chat title:", text=self.current_chat.title)
+    if ok and new_title.strip():
+        self.current_chat.title = new_title.strip()
+        self.current_chat.updated_ts = now_ts()
+        self.storage.save_chat(self.current_chat)
+        item.setText(self.current_chat.title)
+
+def _delete_chat(self):
+    item = self.chat_list.currentItem()
+    if not item:
+        return
+    chat_id = item.data(Qt.UserRole)
+    if QMessageBox.question(self, "Delete", "Delete this chat?") == QMessageBox.Yes:
+        self.storage.delete_chat(chat_id)
+        self._load_chat_list()
+
+def _export_chat_md(self):
+    if not self.current_chat:
+        return
+    out, _ = QFileDialog.getSaveFileName(self, "Export Markdown", f"{self.current_chat.title}.md", "Markdown (*.md)")
+    if not out:
+        return
+    self.storage.export_chat_markdown(self.current_chat, Path(out))
+    self.statusBar().showMessage("Exported")
+
+# -------- Rendering -------- #
+
+def _render_chat(self):
+    if not self.current_chat:
+        return
+    p = self.current_chat.params
+    self.edt_model.setText(str(p.get("model", "")))
+    self.spin_temp.setValue(float(p.get("temperature", self.spin_temp.value())))
+    self.spin_top_p.setValue(float(p.get("top_p", self.spin_top_p.value())))
+    self.spin_max_toks.setValue(int(p.get("max_tokens", self.spin_max_toks.value())))
+
+    msgs = [dict(role=m.role, content=m.content, ts=m.ts) for m in self.current_chat.messages]
+    html = messages_to_html(msgs, self.markdown_css)
+    self.view.setHtml(html)
+    self.view.moveCursor(self.view.textCursor().End)
+
+# -------- Sending -------- #
+
+def _send(self):
+    text = self.input.toPlainText().strip()
+    if not text or not self.current_chat:
+        return
+    self.current_chat.messages.append(Message(role="user", content=text, ts=now_ts()))
+    if self.current_chat.title == "New Chat" and text:
+        self.current_chat.title = (text[:48] + "…") if len(text) &gt; 48 else text
+        item = self.chat_list.currentItem()
+        if item:
+            item.setText(self.current_chat.title)
+
+    self.current_chat.params["endpoint"] = self.cmb_endpoint.currentText()
+    self.current_chat.updated_ts = now_ts()
+    self.storage.save_chat(self.current_chat)
+    self.input.clear()
+    self._render_chat()
+    self.statusBar().showMessage("Sending…")
+
+    runtime_cfg = dict(self.cfg)
+    runtime_cfg.setdefault("llm", {})
+    runtime_cfg["llm"]["api_base"] = self.edt_api_base.text().strip() or runtime_cfg["llm"].get("api_base", "")
+    runtime_cfg["llm"]["api_key"] = self.edt_api_key.text()
+    self.client.update_config(runtime_cfg)
+
+    params = {
+        "model": self.edt_model.text().strip(),
+        "temperature": self.spin_temp.value(),
+        "top_p": self.spin_top_p.value(),
+        "max_tokens": self.spin_max_toks.value(),
+    }
+    messages_payload = [{"role": m.role, "content": m.content} for m in self.current_chat.messages]
+
+    worker = LLMWorker(self.client, messages_payload, params)
+    worker.signals.success.connect(self._on_llm_success)
+    worker.signals.error.connect(self._on_llm_error)
+    self.thread_pool.start(worker)
+
+def _on_llm_success(self, reply: str):
+    if not self.current_chat:
+        return
+    self.current_chat.messages.append(Message(role="assistant", content=reply, ts=now_ts()))
+    self.current_chat.updated_ts = now_ts()
+    self.storage.save_chat(self.current_chat)
+    self._render_chat()
+    self.statusBar().showMessage("Reply received")
+
+def _on_llm_error(self, err: str):
+    QMessageBox.critical(self, "LLM Error", err)
+    self.statusBar().showMessage("Error")
+
+# -------- Settings -------- #
+
+def _apply_now(self):
+    if not self.current_chat:
+        return
+    self.current_chat.params.update({
+        "endpoint": self.cmb_endpoint.currentText(),
+        "model": self.edt_model.text().strip(),
+        "temperature": self.spin_temp.value(),
+        "top_p": self.spin_top_p.value(),
+        "max_tokens": self.spin_max_toks.value(),
+    })
+    self.current_chat.model = self.current_chat.params["model"]
+    self.storage.save_chat(self.current_chat)
+    self.statusBar().showMessage("Applied to current chat")
+
+def _save_settings_clicked(self):
+    selected = self.cmb_endpoint.currentText()
+    endpoints = self.cfg.get("llm", {}).get("endpoints", []) or []
+    new_endpoints = []
+    for ep in endpoints:
+        if ep.get("name") == selected:
+            ep = dict(ep)
+            ep["api_base"] = self.edt_api_base.text().strip()
+            ep["api_key"] = self.edt_api_key.text()
+        new_endpoints.append(ep)
+
+    patch = {
+        "llm": {
+            "endpoints": new_endpoints,
+            "default_endpoint": selected or self.cfg.get("llm", {}).get("default_endpoint", ""),
+            "model": self.edt_model.text().strip(),
+            "temperature": float(self.spin_temp.value()),
+            "top_p": float(self.spin_top_p.value()),
+            "max_tokens": int(self.spin_max_toks.value()),
+        }
+    }
+    self.cfg_mgr.save_user_overrides(patch)
+    self.cfg = self.cfg_mgr.load()
+    self._refresh_endpoints()
+    self.client.update_config(self.cfg)
+    self.statusBar().showMessage("Saved to ~/.config/onechat/config.yaml")
+
+# -------- Tray / Hide -------- #
+
+def _toggle_hide(self):
+    if self.isVisible():
+        self.hide()
+    else:
+        self.showNormal()
+        self.raise_()
+        self.activateWindow()
+
+def _show_from_tray(self):
+    self.showNormal()
+    self.raise_()
+    self.activateWindow()
+
+def closeEvent(self, event: QCloseEvent):
+    if getattr(self, "tray", None):
+        event.ignore()
+        self.hide()
+        self.tray.showMessage("onechat", "Still running in the tray. Quit from tray menu.", QSystemTrayIcon.Information, 2000)
+    else:
+        super().closeEvent(event)
+</code></pre></div></div>
+
+<h1 id="--entry---1">—————- Entry —————-</h1>
+
+<p>def main():
+    app = QApplication(sys.argv)
+    app.setApplicationDisplayName(APP_NAME)
+    win = MainWindow()
+    win.show()
+    sys.exit(app.exec())</p>
+
         
       </section>
 
@@ -1839,7 +2871,7 @@ def closeEvent(self, event: QCloseEvent):
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-08-21T19:11:25+09:00">2025-08-21</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-09-01T11:52:46+09:00">2025-09-01</time></p>
 
       </footer>
 
@@ -1848,10 +2880,10 @@ def closeEvent(self, event: QCloseEvent):
       
   <nav class="pagination">
     
-      <a href="/python/python-textbuffer/" class="pagination--pager" title="Python TextBuffer 구현">Previous</a>
+      <a href="/misc/work-directory-structure/" class="pagination--pager" title="작업 폴더 구성 추천">Previous</a>
     
     
-      <a href="/linux/gvim-font-settings/" class="pagination--pager" title="gvim 폰트 설정">Next</a>
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
     
   </nav>
 
@@ -1893,7 +2925,7 @@ def closeEvent(self, event: QCloseEvent):
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-08-29T20:13:20+09:00">2025-08-29</time>
+        <time datetime="2025-09-01T11:52:51+09:00">2025-09-01</time>
       </span>
     
 
