@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-09-01T18:41:34+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-09-01T18:41:34+09:00</published><updated>2025-09-01T18:41:34+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-09-03T12:31:56+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-09-03T12:31:56+09:00</published><updated>2025-09-03T12:31:56+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,268 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">작업 폴더 구성 추천</title><link href="https://hvppyarchive.github.io/misc/work-directory-structure/" rel="alternate" type="text/html" title="작업 폴더 구성 추천" /><published>2025-09-01T18:41:28+09:00</published><updated>2025-09-01T18:41:28+09:00</updated><id>https://hvppyarchive.github.io/misc/work-directory-structure</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/work-directory-structure/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">tcsh 메시지 색 지정</title><link href="https://hvppyarchive.github.io/linux/tcsh-term-color/" rel="alternate" type="text/html" title="tcsh 메시지 색 지정" /><published>2025-09-03T12:31:52+09:00</published><updated>2025-09-03T12:31:52+09:00</updated><id>https://hvppyarchive.github.io/linux/tcsh-term-color</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/tcsh-term-color/"><![CDATA[<p class="chat--user">
+
+tcsh에서 메시지 출력할 때 color 지정하는 방법 총 정리해줘.
+
+</p>
+
+<p>좋아요! tcsh에서 “메시지 출력할 때 색을 지정하는” 방법을 가장 안정적이고 휴대성 있게 정리해드릴게요. (터미널이 색을 지원해야 합니다. 보통 <code class="language-plaintext highlighter-rouge">TERM=xterm-256color</code>면 OK)</p>
+
+<h1 id="1-기본-원리-ansi-sgr-코드">1) 기본 원리 (ANSI SGR 코드)</h1>
+
+<ul>
+  <li>
+    <p>색/스타일은 <strong>ESC[<code class="language-plaintext highlighter-rouge">[</code>] + 코드 + <code class="language-plaintext highlighter-rouge">m</code></strong> 으로 켭니다. 끝나면 <strong><code class="language-plaintext highlighter-rouge">ESC[0m</code></strong> 로 리셋.</p>
+  </li>
+  <li>
+    <p>예: 빨강 글자 → <code class="language-plaintext highlighter-rouge">ESC[31m</code>, 굵게 → <code class="language-plaintext highlighter-rouge">ESC[1m</code>, 밑줄 → <code class="language-plaintext highlighter-rouge">ESC[4m</code></p>
+  </li>
+  <li>
+    <p>여러 개를 동시에: <code class="language-plaintext highlighter-rouge">ESC[1;31m</code> (굵게+빨강)</p>
+  </li>
+</ul>
+
+<h2 id="자주-쓰는-코드">자주 쓰는 코드</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>의미</th>
+      <th>코드</th>
+      <th>의미</th>
+      <th>코드</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>리셋</td>
+      <td>0</td>
+      <td>굵게</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>밑줄</td>
+      <td>4</td>
+      <td>반전</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>전경색(기본)</td>
+      <td>30~37</td>
+      <td>배경색(기본)</td>
+      <td>40~47</td>
+    </tr>
+    <tr>
+      <td>전경색(밝게)</td>
+      <td>90~97</td>
+      <td>배경색(밝게)</td>
+      <td>100~107</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>8색 번호: 30/40=검정, 31/41=빨강, 32/42=초록, 33/43=노랑, 34/44=파랑, 35/45=마젠타, 36/46=시안, 37/47=흰색</li>
+</ul>
+
+<h1 id="2-tcsh에서-출력하는-실전-방법-3가지">2) tcsh에서 출력하는 “실전” 방법 3가지</h1>
+
+<h2 id="a-printf-사용-가장-권장">A. <code class="language-plaintext highlighter-rouge">printf</code> 사용 (가장 권장)</h2>
+
+<p>tcsh 내장 <code class="language-plaintext highlighter-rouge">echo</code>는 백슬래시 해석이 들쭉날쭉합니다. <strong>외부<code class="language-plaintext highlighter-rouge">printf</code></strong> 가 가장 이식성이 좋아요.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+# 빨강으로 "ERROR" 출력
+/bin/printf '\033[31m%s\033[0m\n' "ERROR"
+
+# 굵고 노란 경고
+/bin/printf '\033[1;33m%s\033[0m\n' "WARNING: Low disk space"
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">\033</code> = ESC</p>
+  </li>
+  <li>
+    <p>가독성을 위해 항상 끝에 <code class="language-plaintext highlighter-rouge">\033[0m</code>(리셋) 붙이세요.</p>
+  </li>
+</ul>
+
+<h2 id="b-tput-사용-터미널-능력-dbterminfo-기반">B. <code class="language-plaintext highlighter-rouge">tput</code> 사용 (터미널 능력 DB(terminfo) 기반)</h2>
+
+<p>터미널마다 맞는 코드로 변환해 주므로 <strong>휴대성 최고</strong> 입니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+# 색/리셋 시퀀스를 변수에 담기 (명령치환은 백틱 `)
+set c_red   = "`tput setaf 1`"   # 전경 빨강
+set c_green = "`tput setaf 2`"
+set c_yel   = "`tput setaf 3`"
+set c_reset = "`tput sgr0`"
+
+# 출력 (printf 권장)
+printf "%s%s%s\n" "$c_red" "ERROR" "$c_reset"
+
+# echo -n로도 가능
+echo -n "$c_yel"; echo "building..."; echo -n "$c_reset"
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">setaf N</code> 전경색, <code class="language-plaintext highlighter-rouge">setab N</code> 배경색 (<code class="language-plaintext highlighter-rouge">N=0~7</code>)</p>
+  </li>
+  <li>
+    <p>리셋은 <code class="language-plaintext highlighter-rouge">sgr0</code></p>
+  </li>
+</ul>
+
+<h2 id="c-binecho--e-권장-x-환경-의존">C. <code class="language-plaintext highlighter-rouge">/bin/echo -e</code> (권장 X, 환경 의존)</h2>
+
+<p>/bin/echo가 <code class="language-plaintext highlighter-rouge">-e</code>를 지원하는 환경에서만 동작합니다. 기대치 못 미칠 수 있음.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+/bin/echo -e "\033[34mblue text\033[0m"
+</code></pre></div></div>
+
+<p>가능하면 A 또는 B를 쓰세요.</p>
+
+<h1 id="3-256색--truecolor24비트도-가능">3) 256색 &amp; TrueColor(24비트)도 가능</h1>
+
+<p>터미널이 지원하면 더 풍부한 색을 쓸 수 있어요.</p>
+
+<h2 id="256색">256색</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+# 전경 256색: 38;5;&lt;n&gt;   (n=0~255)
+# 배경 256색: 48;5;&lt;n&gt;
+/bin/printf '\033[38;5;202m%s\033[0m\n' "Tangerine"
+/bin/printf '\033[48;5;24m\033[97m%s\033[0m\n' "White on deep blue bg"
+</code></pre></div></div>
+
+<h2 id="truecolor24비트">TrueColor(24비트)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+# 전경: 38;2;R;G;B   배경: 48;2;R;G;B
+/bin/printf '\033[38;2;255;105;180m%s\033[0m\n' "Hot Pink"
+/bin/printf '\033[48;2;30;30;30m\033[38;2;200;200;200m%s\033[0m\n' "Grey on dark bg"
+</code></pre></div></div>
+
+<h1 id="4-매번-치기-귀찮다면-alias로-컬러-echo-만들기">4) 매번 치기 귀찮다면: alias로 “컬러 echo” 만들기</h1>
+
+<h3 id="고정색-단축키">고정색 단축키</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+# 인자 전체(\!*)를 빨강으로
+alias red    '/bin/printf "\033[31m%s\033[0m\n" \!*'
+alias green  '/bin/printf "\033[32m%s\033[0m\n" \!*'
+alias yellow '/bin/printf "\033[33m%s\033[0m\n" \!*'
+alias blue   '/bin/printf "\033[34m%s\033[0m\n" \!*'
+alias bold   '/bin/printf "\033[1m%s\033[0m\n" \!*'
+
+# 사용 예
+red "ERROR: something went wrong"
+bold "=== build start ==="
+</code></pre></div></div>
+
+<h3 id="임의-코드--메시지두-인자--범용-함수형">임의 코드 + 메시지(두 인자) → 범용 함수형</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+# 첫 인자: SGR 코드(예: 1;31), 나머지: 메시지
+alias cecho  '/bin/printf "\033[%sm%s\033[0m\n" \!:1 \!:2*'
+
+# 사용 예
+cecho 1;31 "FATAL"
+cecho 4;36 "Underlined Cyan"
+</code></pre></div></div>
+
+<h3 id="tput-기반-alias-환경-휴대성-">tput 기반 alias (환경 휴대성 ↑)</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+alias rmsg 'set c="`tput setaf 1`"; set z="`tput sgr0`"; /bin/printf "%s%s%s\n" "$c" \!* "$z"'
+rmsg "RED via terminfo"
+</code></pre></div></div>
+
+<h1 id="5-스크립트-안에서-쓰기-tcsh-shebang">5) 스크립트 안에서 쓰기 (tcsh shebang)</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+#!/bin/tcsh
+
+set RED   = '\033[31m'
+set BOLD  = '\033[1m'
+set RESET = '\033[0m'
+
+# \033 같은 백슬래시는 printf의 %b로 해석시키거나 리터럴로 써야 합니다.
+# 가장 간단: 리터럴 시퀀스를 따옴표에 넣고 printf로 출력.
+# (tcsh의 echo는 이스케이프 해석이 들쭉날쭉)
+printf "%b%s%b\n" "$BOLD$RED" "Building..." "$RESET"
+</code></pre></div></div>
+
+<blockquote>
+  <p>참고: 변수에 <code class="language-plaintext highlighter-rouge">\033</code>를 넣었을 때는 <strong>printf의<code class="language-plaintext highlighter-rouge">%b</code></strong> 형식을 쓰면 백슬래시 이스케이프가 해석됩니다. 단순 <code class="language-plaintext highlighter-rouge">echo</code>는 기대대로 동작하지 않을 수 있습니다.</p>
+</blockquote>
+
+<h1 id="6-자주-쓰는-레시피-모음">6) 자주 쓰는 레시피 모음</h1>
+
+<ul>
+  <li>빨강 에러 한 줄:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+    
+/bin/printf '\033[31mERROR:\033[0m %s\n' "file not found"
+</code></pre></div>    </div>
+  </li>
+  <li>성공(초록) + 굵게:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+    
+/bin/printf '\033[1;32m%s\033[0m\n' "OK"
+</code></pre></div>    </div>
+  </li>
+  <li>상태 표시(노랑) → 작업 → 리셋:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+    
+/bin/printf '\033[33m%s\033[0m\n' "building..."
+</code></pre></div>    </div>
+  </li>
+  <li>256색 팔레트 테스트:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+    
+@ i = 0
+while ( $i &lt; 256 )
+  /bin/printf '\033[38;5;%dm%3d ' $i $i
+  @ i++
+  if ( $i % 16 == 0 ) echo ""
+end
+/bin/printf '\033[0m'
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="7-프롬프트는-별도-규칙참고">7) 프롬프트는 별도 규칙(참고)</h1>
+
+<p>메시지 출력과 달리 <strong>프롬프트</strong>(<code class="language-plaintext highlighter-rouge">set prompt</code>)에 색을 넣을 땐 <strong><code class="language-plaintext highlighter-rouge">%{ … %}</code></strong> 로 <em>넓이 계산 제외</em> 구간을 감싸야 줄바꿈/커서 어긋남이 없습니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcsh
+
+# 예) 굵은 파랑 사용자명 + 흰색 디렉터리
+set prompt = "%{\033[1;34m%}%n%{\033[0m%}:%{\033[97m%}%~%{\033[0m%}%# "
+</code></pre></div></div>
+
+<h1 id="8-팁--함정">8) 팁 &amp; 함정</h1>
+
+<ul>
+  <li>
+    <p><strong>리셋(<code class="language-plaintext highlighter-rouge">\033[0m</code>)을 꼭 붙이기</strong>: 다음 출력에 색이 번지지 않게.</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">/bin/printf</code> 선호</strong>: <code class="language-plaintext highlighter-rouge">echo -e</code>는 환경마다 동작 달라 “총정리” 관점에선 비권장.</p>
+  </li>
+  <li>
+    <p><strong>터미널 지원 여부</strong> : 24비트 혹은 256색은 터미널 옵션(예: iTerm2, Windows Terminal)과 <code class="language-plaintext highlighter-rouge">TERM</code> 설정에 좌우됩니다. 일반적으로 <code class="language-plaintext highlighter-rouge">xterm-256color</code> 권장.</p>
+  </li>
+  <li>
+    <p><strong>스크립트 이식성</strong> : 너무 특정 터미널에 의존하는 색은 제한적으로.</p>
+  </li>
+</ul>
+
+<p>필요하시면, 원클릭용 <strong>컬러 alias 번들</strong>(.tcshrc에 붙여넣기)도 깔끔하게 만들어 드릴게요.</p>]]></content><author><name>hvppyarchive</name></author><category term="linux" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">작업 폴더 구성 추천</title><link href="https://hvppyarchive.github.io/misc/work-directory-structure/" rel="alternate" type="text/html" title="작업 폴더 구성 추천" /><published>2025-09-01T18:41:28+09:00</published><updated>2025-09-01T18:41:28+09:00</updated><id>https://hvppyarchive.github.io/misc/work-directory-structure</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/work-directory-structure/"><![CDATA[<p class="chat--user">
 
 회사에서 작업 폴더 구성을 도와줘. 뭔가 작업 폴더를 꾸미는 것에 대한 일반적인 추천 같은게 있을까?
 
@@ -47740,371 +48001,4 @@ Open installers box  | 80_Tools/installers        | <span class="nb">ls</span> <
   </li>
 </ul>
 
-<p>원하면 네 환경(운영체제/셸)에 맞춰 스윕 스크립트를 <strong>05 기준으로 고정한 최종본</strong> 을 깔끔히 묶어서 드릴게.</p>]]></content><author><name>hvppyarchive</name></author><category term="misc" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">gvim 폰트 설정</title><link href="https://hvppyarchive.github.io/linux/gvim-font-settings/" rel="alternate" type="text/html" title="gvim 폰트 설정" /><published>2025-08-26T18:12:41+09:00</published><updated>2025-08-26T18:12:41+09:00</updated><id>https://hvppyarchive.github.io/linux/gvim-font-settings</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/gvim-font-settings/"><![CDATA[<p class="chat--user">
-
-gvim에서 글자 높이 간격 조절 못하나
-
-</p>
-
-<p>가능해요! gVim(그래픽 Vim)에서는 <strong><code class="language-plaintext highlighter-rouge">'linespace'</code> 옵션</strong>으로 줄 간격(글자 높이 사이 여백)을 조절합니다.</p>
-
-<h3 id="바로-써보기-일시적으로">바로 써보기 (일시적으로)</h3>
-
-<p>명령줄 창에서:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:set <span class="nv">linespace</span><span class="o">=</span>4      <span class="s2">" 줄 사이에 4픽셀 여유
-:set linespace=0      "</span> 기본값<span class="o">(</span>여유 없음<span class="o">)</span>
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p>값은 “픽셀” 단위예요. 숫자가 클수록 줄 간격이 넓어집니다.</p>
-  </li>
-  <li>
-    <p>일부 환경에선 음수도 되지만(줄을 더 촘촘히), 글자 잘림이 생길 수 있어 보통 <strong>0 이상</strong> 을 권장합니다.</p>
-  </li>
-</ul>
-
-<h3 id="항상-적용하기-gvimrc">항상 적용하기 (gvimrc)</h3>
-
-<p>GUI에서만 적용하려면 gVim 전용 설정 파일에 넣는 게 깔끔해요.</p>
-
-<ul>
-  <li>
-    <p><strong>Windows:</strong> <code class="language-plaintext highlighter-rouge">_gvimrc</code></p>
-  </li>
-  <li>
-    <p><strong>macOS/Linux:</strong> <code class="language-plaintext highlighter-rouge">~/.gvimrc</code></p>
-  </li>
-</ul>
-
-<p>예시:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
-
-" ~/.gvimrc
-set linespace=3
-</code></pre></div></div>
-
-<h3 id="참고팁">참고/팁</h3>
-
-<ul>
-  <li>
-    <p><strong>터미널 Vim</strong>(콘솔에서 돌리는 Vim)은 <code class="language-plaintext highlighter-rouge">linespace</code>가 없어요. 그땐 터미널 앱 자체의 “line spacing/line height” 설정을 조절해야 합니다.</p>
-  </li>
-  <li>줄 간격이 너무 빽빽하거나 헐렁하면 <strong>폰트 크기</strong> 도 같이 조절해 보세요:
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
-    
-" 예) Windows
-set guifont=Consolas:h14
-" 예) macOS
-set guifont=Menlo:h14
-</code></pre></div>    </div>
-  </li>
-  <li>도움말: <code class="language-plaintext highlighter-rouge">:help 'linespace'</code></li>
-</ul>
-
-<p>원하시는 느낌(조금만 넓게: 2<del>3, 더 넓게: 4</del> 6)을 몇 값 시도해 보시고 가장 편한 숫자로 정착하시면 됩니다.</p>
-
-<p class="chat--user">
-
-한글 폰트가 별로라서 읽기 힘든건가. sudo 권한 없이 redhat 8.x에 폰트 설치해서 gvim에 사용하고 싶어
-
-</p>
-
-<p>가능하죠! <code class="language-plaintext highlighter-rouge">sudo</code> 없이도 <strong>개인 사용자 영역</strong> 에 폰트를 넣고 gVim에서 바로 쓸 수 있어요.<br />
-아래 순서 그대로 따라오세요 (RHEL 8.x 기준).</p>
-
-<h1 id="1-내-폰트-폴더-준비">1) 내 폰트 폴더 준비</h1>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> ~/.local/share/fonts      <span class="c"># 표준 위치 (권장)</span>
-<span class="c"># (구형 환경 호환용) ~/.fonts 도 인식되지만, RHEL 8이라면 위 경로를 쓰세요.</span>
-</code></pre></div></div>
-
-<h1 id="2-폰트-파일-복사">2) 폰트 파일 복사</h1>
-
-<p>다운로드한 <code class="language-plaintext highlighter-rouge">.ttf</code>/<code class="language-plaintext highlighter-rouge">.otf</code> 파일을 위 폴더로 옮깁니다.<br />
-(예: D2Coding, NanumGothicCoding 같은 한글 모노스페이스 폰트가 gVim에 잘 맞습니다.)</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cp</span> ~/Downloads/D2Coding<span class="k">*</span>.ttf ~/.local/share/fonts/
-</code></pre></div></div>
-
-<h1 id="3-폰트-캐시-갱신-sudo-불필요">3) 폰트 캐시 갱신 (sudo 불필요)</h1>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fc-cache <span class="nt">-f</span> <span class="nt">-v</span> ~/.local/share/fonts
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p>정상이라면 새로 스캔된 폰트 목록이 주르륵 출력돼요.</p>
-  </li>
-  <li>
-    <p>확인용:</p>
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fc-list | <span class="nb">grep</span> <span class="nt">-i</span> d2coding
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h1 id="4-gvim에서-폰트-적용">4) gVim에서 폰트 적용</h1>
-
-<h2 id="a-일시-적용">(a) 일시 적용</h2>
-
-<p>gVim 명령줄(<code class="language-plaintext highlighter-rouge">:</code>)에서:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
-
-:set guifont=D2Coding\ 12
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p>공백은 <code class="language-plaintext highlighter-rouge">\</code>로 이스케이프합니다. (<code class="language-plaintext highlighter-rouge">D2Coding 12</code> → <code class="language-plaintext highlighter-rouge">D2Coding\ 12</code>)</p>
-  </li>
-  <li>
-    <p>다른 예:</p>
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
-    
-:set guifont=NanumGothic\ Coding\ 13
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h2 id="b-항상-적용-권장">(b) 항상 적용 (권장)</h2>
-
-<p><code class="language-plaintext highlighter-rouge">~/.gvimrc</code>에 추가:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
-
-" 기본 인코딩과 폰트
-set encoding=utf-8
-set guifont=D2Coding\ 12
-
-" 줄 간격이 답답하면 조금 늘리기
-set linespace=3
-</code></pre></div></div>
-
-<ul>
-  <li>폰트 후보를 콤마로 여러 개 적어 <strong>첫 번째로 사용 가능한</strong> 폰트를 쓰게 할 수도 있어요:
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
-    
-set guifont=D2Coding\ 12,NanumGothic\ Coding\ 13,DejaVu\ Sans\ Mono\ 12
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h1 id="5-선택-렌더링-품질-개선">5) (선택) 렌더링 품질 개선</h1>
-
-<p>개인 설정으로 안티앨리어싱/힌팅을 켜면 가독성이 더 좋아집니다.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> ~/.config/fontconfig/conf.d
-<span class="nb">cat</span> <span class="o">&gt;</span> ~/.config/fontconfig/conf.d/99-user-rendering.conf <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">EOF</span><span class="sh">'
-&lt;?xml version="1.0"?&gt;
-&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
-&lt;fontconfig&gt;
-  &lt;match target="font"&gt;
-    &lt;edit name="antialias" mode="assign"&gt;&lt;bool&gt;true&lt;/bool&gt;&lt;/edit&gt;
-    &lt;edit name="hinting"   mode="assign"&gt;&lt;bool&gt;true&lt;/bool&gt;&lt;/edit&gt;
-    &lt;edit name="hintstyle" mode="assign"&gt;&lt;const&gt;hintslight&lt;/const&gt;&lt;/edit&gt;
-    &lt;edit name="rgba"      mode="assign"&gt;&lt;const&gt;rgb&lt;/const&gt;&lt;/edit&gt;
-    &lt;edit name="lcdfilter" mode="assign"&gt;&lt;const&gt;lcddefault&lt;/const&gt;&lt;/edit&gt;
-  &lt;/match&gt;
-&lt;/fontconfig&gt;
-</span><span class="no">EOF
-</span>fc-cache <span class="nt">-f</span> <span class="nt">-v</span>
-</code></pre></div></div>
-
-<h1 id="6-문제-해결-팁">6) 문제 해결 팁</h1>
-
-<ul>
-  <li>
-    <p><strong>gVim 재시작</strong> 후에도 폰트가 안 바뀌면 <code class="language-plaintext highlighter-rouge">:echo &amp;guifont</code>로 적용값 확인.</p>
-  </li>
-  <li>
-    <p>폰트 이름은 <code class="language-plaintext highlighter-rouge">fc-list | cut -d: -f2 | sort -u | less</code>로 실제 등록명을 확인하세요.</p>
-  </li>
-  <li>
-    <p>일부 개발 폰트(예: JetBrains Mono, Cascadia Code)는 <strong>한글 글리프가 부족</strong> 할 수 있어요.<br />
-한글 포함 모노스페이스(예: <strong>D2Coding</strong> , <strong>NanumGothic Coding</strong>)을 우선 사용하세요.</p>
-  </li>
-  <li>
-    <p>터미널용 Vim은 <code class="language-plaintext highlighter-rouge">guifont</code>/<code class="language-plaintext highlighter-rouge">linespace</code>가 적용되지 않으니 <strong>gVim(GUI)</strong>에서만 테스트하세요.</p>
-  </li>
-</ul>
-
-<p>원하시면 쓰시는 폰트 후보를 알려주시면, gVim에 맞게 정확한 <code class="language-plaintext highlighter-rouge">guifont</code> 문자열까지 딱 맞춰 드릴게요!</p>
-
-<p class="chat--user">
-
-회사에서 써도 괜찮은 좋은 폰트 추천해줘
-
-</p>
-
-<p>좋아요—<strong>회사(상업)에서도 안심하고 쓸 수 있는 한글 친화 폰트</strong> 만 골라 드릴게요. 전부 <strong>SIL Open Font License(OFL 1.1)</strong> 등으로 기업 사용에 제약이 없고, RHEL 8에서도 <code class="language-plaintext highlighter-rouge">~/.local/share/fonts</code>에 넣어 바로 쓸 수 있습니다.</p>
-
-<h1 id="어떻게-골랐나-짧게">어떻게 골랐나 (짧게)</h1>
-
-<ul>
-  <li>
-    <p><strong>기업 사용 OK 라이선스(OFL 1.1 등)</strong></p>
-  </li>
-  <li>
-    <p><strong>한글 글리프 품질/범위</strong>(개발용은 모노스페이스 우선)</p>
-  </li>
-  <li>
-    <p><strong>가독성 &amp; 유지 보수</strong>(업데이트/배포 경로 확실)</p>
-  </li>
-</ul>
-
-<h1 id="개발용-모노스페이스-gvim에-딱">개발용 (모노스페이스, gVim에 딱)</h1>
-
-<ol>
-  <li>
-    <p><strong>D2Coding</strong> – 개발자용 한글 고정폭, 리가처 버전도 있음<br />
-라이선스: <strong>SIL OFL 1.1</strong>. 네이버 배포. <a href="https://github.com/naver/d2codingfont/wiki/Open-Font-License?utm_source=chatgpt.com">GitHub+1</a></p>
-
-    <ul>
-      <li>gVim: <code class="language-plaintext highlighter-rouge">:set guifont=D2Coding\ 12</code></li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>NanumGothic Coding</strong> – 화면 힌팅 좋아 가독성 안정적<br />
-라이선스: <strong>OFL 1.1(오픈소스)</strong>. <a href="https://fonts.adobe.com/fonts/nanum-gothic-coding?utm_source=chatgpt.com">Adobe Fonts</a><a href="https://www.fontsquirrel.com/license/nanumgothic?utm_source=chatgpt.com">Font Squirrel</a></p>
-
-    <ul>
-      <li>gVim: <code class="language-plaintext highlighter-rouge">:set guifont=NanumGothic\ Coding\ 12</code></li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Noto Sans Mono CJK KR</strong> – 구글/어도비 합작 CJK 고정폭, 범용성 최고<br />
-라이선스: <strong>OFL 1.1</strong> , CJK 전각/한글 폭 맞춤에 강점. <a href="https://fontinfo.opensuse.org/fonts/NotoSansMonoCJKKRBold.html?utm_source=chatgpt.com">fontinfo.opensuse.org</a><a href="https://notofonts.github.io/noto-docs/specimen/NotoSansMonoCJKsc/?utm_source=chatgpt.com">notofonts.github.io</a><a href="https://github.com/notofonts/noto-cjk?utm_source=chatgpt.com">GitHub</a></p>
-
-    <ul>
-      <li>gVim: <code class="language-plaintext highlighter-rouge">:set guifont=Noto\ Sans\ Mono\ CJK\ KR\ 12</code></li>
-    </ul>
-  </li>
-</ol>
-
-<blockquote>
-  <p>추천 세트(충돌 대비 폴백):<br />
- <code class="language-plaintext highlighter-rouge">:set guifont=D2Coding\ 12,Noto\ Sans\ Mono\ CJK\ KR\ 12,NanumGothic\ Coding\ 12</code></p>
-</blockquote>
-
-<h1 id="ui문서용-비고정폭-터미널-밖프레젠테이션-등">UI·문서용 (비고정폭, 터미널 밖/프레젠테이션 등)</h1>
-
-<ul>
-  <li>
-    <p><strong>Pretendard</strong> – 한국어 UI에 많이 쓰이는 산세리프, 가중치 폭넓음<br />
-오픈소스 라이선스 표기(상업 사용 가능). <a href="https://fonts.adobe.com/fonts/pretendard?utm_source=chatgpt.com">Adobe Fonts</a></p>
-  </li>
-  <li>
-    <p><strong>SUIT</strong> – UI 본문 최적화 한국어 산세리프, 가벼운 톤<br />
-라이선스: <strong>OFL 1.1</strong>. <a href="https://github.com/sun-typeface/SUIT?utm_source=chatgpt.com">GitHub</a></p>
-  </li>
-  <li>
-    <p><strong>Noto Sans CJK KR</strong> – 글로벌 프로덕트에서 검증된 범용 한글 산세리프<br />
-오픈소스 라이선스 표기(상업 사용 가능). <a href="https://fonts.adobe.com/fonts/noto-sans-cjk-kr?utm_source=chatgpt.com">Adobe Fonts</a><a href="https://github.com/adobe-fonts/source-han-sans?utm_source=chatgpt.com">GitHub</a></p>
-  </li>
-</ul>
-
-<h1 id="참고-라틴-전용-개발-폰트와의-병용">(참고) 라틴 전용 개발 폰트와의 병용</h1>
-
-<ul>
-  <li><strong>JetBrains Mono</strong> , <strong>Cascadia Code</strong> 는 라이선스상 기업 사용 OK(OFL 1.1)이지만 <strong>한글 글리프는 제한적</strong> 이라 보통 위 CJK 폰트와 <strong>폴백</strong> 으로 같이 씁니다. <a href="https://www.jetbrains.com/lp/mono/?utm_source=chatgpt.com">JetBrains</a><a href="https://fonts.google.com/specimen/JetBrains%2BMono?utm_source=chatgpt.com">Google Fonts</a><a href="https://learn.microsoft.com/en-us/windows/terminal/cascadia-code?utm_source=chatgpt.com">Microsoft Learn</a></li>
-</ul>
-
-<h1 id="gvim에-바로-적용하는-예">gVim에 바로 적용하는 예</h1>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim
-
-" ~/.gvimrc
-set encoding=utf-8
-" 개발용 모노스페이스 + 폴백
-set guifont=D2Coding\ 12,Noto\ Sans\ Mono\ CJK\ KR\ 12,NanumGothic\ Coding\ 12
-" 줄 간격 조금만 넓게
-set linespace=2
-</code></pre></div></div>
-
-<h1 id="빠른-설치-요약-sudo-없이">빠른 설치 요약 (sudo 없이)</h1>
-
-<ol>
-  <li>
-    <p>폰트 복사: <code class="language-plaintext highlighter-rouge">~/.local/share/fonts/</code></p>
-  </li>
-  <li>
-    <p>캐시 갱신: <code class="language-plaintext highlighter-rouge">fc-cache -f -v ~/.local/share/fonts</code></p>
-  </li>
-  <li>
-    <p>gVim에서 <code class="language-plaintext highlighter-rouge">:set guifont=...</code>으로 테스트</p>
-  </li>
-</ol>
-
-<p>원하시면 <strong>화면 스샷(샘플 코드·한글 문장) 기준으로 2~3개</strong> 더 좁혀 드릴게요. 회사 모니터 환경(해상도/스케일) 알려주시면 줄 간격(<code class="language-plaintext highlighter-rouge">linespace</code>) 권장값도 같이 맞춰 드립니다!</p>
-
-<p class="chat--user">
-
-~/.config/fontconfig/conf.d/99-user-rendering.conf 이 파일은 어떤 application에서 적용되는 설정이야?
-
-</p>
-
-<p>짧게 말하면:<br />
-<code class="language-plaintext highlighter-rouge">~/.config/fontconfig/conf.d/99-user-rendering.conf</code>는 <strong>Fontconfig</strong> 를 쓰는 모든 리눅스 앱에 “사용자 단위”로 적용되는 설정이에요. 그래서 <strong>gVim(GTK 빌드)</strong> , 브라우저(Firefox/Chrome), 터미널 에뮬레이터(GNOME Terminal/Kitty 등), VS Code, LibreOffice, 대부분의 Qt/GTK 앱들이 전부 영향을 받아요.</p>
-
-<p>아래 순서로 이해하면 편합니다.</p>
-
-<h1 id="1-무엇에-적용되나">1) 무엇에 적용되나?</h1>
-
-<ul>
-  <li>
-    <p><strong>적용됨 (Fontconfig 사용하는 앱)</strong></p>
-
-    <ul>
-      <li>
-        <p>gVim(보통 GTK3 빌드 → Pango/Cairo/Fontconfig 경유)</p>
-      </li>
-      <li>
-        <p>대부분의 <strong>GTK/Qt</strong> 앱, <strong>Electron</strong> /Chromium 계열, <strong>Firefox</strong> , <strong>LibreOffice</strong> , <strong>Java(OpenJDK) AWT/Swing</strong> 등</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>적용 안 됨 (Fontconfig 안 쓰는 경우)</strong></p>
-
-    <ul>
-      <li>
-        <p><strong>순수 콘솔 TTY</strong>(Ctrl+Alt+F3 같은 가상콘솔): 커널 비트맵 폰트라 Fontconfig 경로를 안 탑니다.</p>
-      </li>
-      <li>
-        <p>일부 특수/옛날 앱(자체 렌더러·정적 링크 등), 컨테이너/샌드박스에서 <strong>호스트의 Fontconfig를 안 읽는</strong> 경우(예: 일부 Flatpak/Snap 빌드).</p>
-      </li>
-      <li>
-        <p><strong>터미널 안의 Vim(콘솔 Vim)</strong> 텍스트는 터미널 에뮬레이터가 그리므로 Vim 자체엔 적용 안 되고, <strong>터미널 에뮬레이터</strong> 가 Fontconfig 설정을 반영합니다.</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h1 id="2-gvim에선-어떻게">2) gVim에선 어떻게?</h1>
-
-<ul>
-  <li>
-    <p>RHEL 8의 gVim이 <strong>GTK 빌드</strong> 면 이 파일의 안티앨리어싱/힌팅/서브픽셀 설정이 <strong>그대로 반영</strong> 됩니다.</p>
-  </li>
-  <li>확인:
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gvim <span class="nt">--version</span> | <span class="nb">grep</span> <span class="nt">-i</span> gtk     <span class="c"># +GTK3 같은 표시가 보이면 GTK 빌드</span>
-</code></pre></div>    </div>
-  </li>
-  <li>콘솔 Vim은 <code class="language-plaintext highlighter-rouge">guifont</code>, Fontconfig 렌더링과 무관합니다(터미널 앱이 폰트를 렌더링).</li>
-</ul>
-
-<h1 id="3-우선순위적용-타이밍">3) 우선순위/적용 타이밍</h1>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">~/.config/fontconfig/conf.d/</code>는 <strong>사용자 전용</strong> 오버레이 경로이며, 파일명 앞 숫자가 <strong>적용 순서</strong> 를 결정합니다. <code class="language-plaintext highlighter-rouge">99-...</code>면 보통 가장 늦게 적용되어 <strong>덮어쓰기</strong> 에 유리합니다.</p>
-  </li>
-  <li>
-    <p><strong>폰트 추가/삭제</strong> 가 아닐 땐 <code class="language-plaintext highlighter-rouge">fc-cache</code>는 보통 필요 없습니다(설정만 바꾼 경우). 앱을 <strong>재시작</strong> 하면 반영됩니다.</p>
-  </li>
-</ul>
-
-<h1 id="4-제대로-적용됐는지-빠르게-검증">4) 제대로 적용됐는지 빠르게 검증</h1>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 현재 사용자 설정까지 반영된 최종 매칭/렌더링 옵션 보기</span>
-fc-match <span class="nt">-v</span> <span class="s2">"D2Coding:style=Regular:size=12"</span> | egrep <span class="s1">'antialias|hinting|hintstyle|rgba|lcdfilter'</span>
-</code></pre></div></div>
-
-<p>여기 출력이 <code class="language-plaintext highlighter-rouge">99-user-rendering.conf</code>의 값과 일치하면, Fontconfig를 쓰는 앱들은 동일하게 그 설정을 따릅니다.</p>
-
-<hr />
-
-<p>원하시면 사용 중인 앱(예: 터미널/브라우저/에디터)별로 <strong>필요한 최소 설정 스니펫</strong> 과 함께, 충돌 가능성이 있는 <strong>데스크톱 글꼴 설정(GNOME/Plasma)</strong>과의 정리 방법도 적어 드릴게요.</p>]]></content><author><name>hvppyarchive</name></author><category term="linux" /><summary type="html"><![CDATA[]]></summary></entry></feed>
+<p>원하면 네 환경(운영체제/셸)에 맞춰 스윕 스크립트를 <strong>05 기준으로 고정한 최종본</strong> 을 깔끔히 묶어서 드릴게.</p>]]></content><author><name>hvppyarchive</name></author><category term="misc" /><summary type="html"><![CDATA[]]></summary></entry></feed>
