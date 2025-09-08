@@ -1,0 +1,869 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>PySide6 웹 브라우저 만들기 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="PySide6 웹 브라우저 만들기">
+<meta property="og:url" content="https://hvppyarchive.github.io/python/pyside6-browser/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-09-08T11:39:22+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/python/pyside6-browser/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="PySide6 웹 브라우저 만들기">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-09-08T11:39:22+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/python/pyside6-browser/" itemprop="url">PySide6 웹 브라우저 만들기
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-09-08T11:39:22+09:00">2025-09-08</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+PySide6 기반으로 가장 간단한 기능만 있는 가벼운 웹 브라우저를 만들고 싶어. 주요 기능은 앞/뒤 이동, 탭 관리, 주소창, 새 탭으로 열기(Ctrl 클릭 시), 탭 간 이동 단축키 등등 기초적인 기능만 있으면 돼.
+
+</p>
+
+<p>좋아! PySide6(Qt WebEngine)로 “가장 기본 기능만” 갖춘 가벼운 탭형 웹 브라우저 예제를 한 파일로 깔끔하게 준비했어.<br />
+아래 스크립트 하나로 다음이 동작해:</p>
+
+<ul>
+  <li>
+    <p>뒤로/앞으로, 새로고침/정지, 홈, 주소창</p>
+  </li>
+  <li>
+    <p>탭 열기/닫기/이동(드래그 가능)</p>
+  </li>
+  <li>
+    <p><strong>Ctrl+클릭 시 링크를 새 탭으로 열기</strong></p>
+  </li>
+  <li>
+    <p>단축키:</p>
+
+    <ul>
+      <li>
+        <p>새 탭 <code class="language-plaintext highlighter-rouge">Ctrl+T</code>, 탭 닫기 <code class="language-plaintext highlighter-rouge">Ctrl+W</code></p>
+      </li>
+      <li>
+        <p>탭 순환 <code class="language-plaintext highlighter-rouge">Ctrl+Tab</code> / <code class="language-plaintext highlighter-rouge">Ctrl+Shift+Tab</code></p>
+      </li>
+      <li>
+        <p>탭 번호로 이동 <code class="language-plaintext highlighter-rouge">Ctrl+1..8</code>, 마지막 탭 <code class="language-plaintext highlighter-rouge">Ctrl+9</code></p>
+      </li>
+      <li>
+        <p>주소창 포커스 <code class="language-plaintext highlighter-rouge">Ctrl+L</code></p>
+      </li>
+      <li>
+        <p>뒤로/앞으로 <code class="language-plaintext highlighter-rouge">Alt+←/→</code></p>
+      </li>
+      <li>
+        <p>새로고침 <code class="language-plaintext highlighter-rouge">Ctrl+R</code> 또는 <code class="language-plaintext highlighter-rouge">F5</code></p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="설치">설치</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>PySide6
+</code></pre></div></div>
+
+<blockquote>
+  <p>참고: PySide6에는 Qt WebEngine이 포함되어 있어요(일부 리눅스에선 <code class="language-plaintext highlighter-rouge">qtwebengine</code> 관련 시스템 패키지가 필요할 수 있음).</p>
+</blockquote>
+
+<hr />
+
+<h1 id="실행">실행</h1>
+
+<p>아래 코드를 <code class="language-plaintext highlighter-rouge">mini_browser.py</code>로 저장 후:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python mini_browser.py
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="코드-단일-파일">코드 (단일 파일)</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+# mini_browser.py
+</span><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">re</span>
+<span class="kn">from</span> <span class="n">urllib.parse</span> <span class="kn">import</span> <span class="n">quote</span>
+
+<span class="kn">from</span> <span class="n">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QUrl</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">Slot</span>
+<span class="kn">from</span> <span class="n">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QKeySequence</span><span class="p">,</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QCloseEvent</span><span class="p">,</span> <span class="n">QGuiApplication</span>
+<span class="kn">from</span> <span class="n">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QApplication</span><span class="p">,</span> <span class="n">QMainWindow</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span>
+    <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QStyle</span><span class="p">,</span> <span class="n">QShortcut</span><span class="p">,</span> <span class="n">QMessageBox</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="n">PySide6.QtWebEngineWidgets</span> <span class="kn">import</span> <span class="n">QWebEngineView</span><span class="p">,</span> <span class="n">QWebEnginePage</span>
+
+<span class="n">DEFAULT_HOME</span> <span class="o">=</span> <span class="sh">"</span><span class="s">https://duckduckgo.com/</span><span class="sh">"</span>
+<span class="n">DEFAULT_SEARCH</span> <span class="o">=</span> <span class="sh">"</span><span class="s">https://duckduckgo.com/?q=</span><span class="sh">"</span>
+
+<span class="k">def</span> <span class="nf">is_probably_url</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">re</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">^[a-zA-Z]+://</span><span class="sh">"</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="c1"># domain-like without scheme (no spaces, has a dot)
+</span>    <span class="nf">return </span><span class="p">(</span><span class="sh">"</span><span class="s"> </span><span class="sh">"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">t</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">BrowserPage</span><span class="p">(</span><span class="n">QWebEnginePage</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">링크 Ctrl+클릭을 가로채 새 탭으로 열기 위해 페이지를 살짝 커스터마이즈.</span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">on_open_new_tab</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_on_open_new_tab</span> <span class="o">=</span> <span class="n">on_open_new_tab</span>
+
+    <span class="k">def</span> <span class="nf">acceptNavigationRequest</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">,</span> <span class="n">nav_type</span><span class="p">:</span> <span class="n">QWebEnginePage</span><span class="p">.</span><span class="n">NavigationType</span><span class="p">,</span> <span class="n">isMainFrame</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nav_type</span> <span class="o">==</span> <span class="n">QWebEnginePage</span><span class="p">.</span><span class="n">NavigationTypeLinkClicked</span><span class="p">:</span>
+            <span class="n">mods</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">.</span><span class="nf">keyboardModifiers</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mods</span> <span class="o">&amp;</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ControlModifier</span><span class="p">:</span>
+                <span class="c1"># Ctrl+클릭: 새 탭으로 열고 현재 탭은 그대로 유지
+</span>                <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_on_open_new_tab</span><span class="p">:</span>
+                    <span class="n">self</span><span class="p">.</span><span class="nf">_on_open_new_tab</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">switch_to</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">False</span>  <span class="c1"># 현재 뷰에선 네비게이션 취소
+</span>        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">acceptNavigationRequest</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">nav_type</span><span class="p">,</span> <span class="n">isMainFrame</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">BrowserView</span><span class="p">(</span><span class="n">QWebEngineView</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">target=_blank 또는 window.open()을 탭으로 열도록 createWindow 오버라이드.</span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">main_window</span><span class="p">:</span> <span class="sh">"</span><span class="s">MainWindow</span><span class="sh">"</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">main_window</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_mw</span> <span class="o">=</span> <span class="n">main_window</span>
+
+    <span class="k">def</span> <span class="nf">createWindow</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">_type</span><span class="p">):</span>
+        <span class="c1"># 새 탭을 만들고 그 탭의 QWebEngineView를 반환
+</span>        <span class="n">view</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_mw</span><span class="p">.</span><span class="nf">_create_tab_view</span><span class="p">(</span><span class="n">switch_to</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">view</span>
+
+<span class="k">class</span> <span class="nc">BrowserTab</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">탭 하나 = QWebEngineView 하나(툴바는 메인 윈도우 공용).</span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">main_window</span><span class="p">:</span> <span class="sh">"</span><span class="s">MainWindow</span><span class="sh">"</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">main_window</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="nc">BrowserView</span><span class="p">(</span><span class="n">main_window</span><span class="p">)</span>
+        <span class="c1"># 커스텀 페이지 부착 (Ctrl+클릭 새 탭용)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setPage</span><span class="p">(</span><span class="nc">BrowserPage</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span> <span class="n">on_open_new_tab</span><span class="o">=</span><span class="n">main_window</span><span class="p">.</span><span class="n">open_in_new_tab</span><span class="p">))</span>
+
+        <span class="n">lay</span> <span class="o">=</span> <span class="nc">QVBoxLayout</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="p">.</span><span class="nf">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MainWindow</span><span class="p">(</span><span class="n">QMainWindow</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">setWindowTitle</span><span class="p">(</span><span class="sh">"</span><span class="s">Mini Browser (PySide6)</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">resize</span><span class="p">(</span><span class="mi">1100</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+
+        <span class="c1"># 탭 위젯
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span> <span class="o">=</span> <span class="nc">QTabWidget</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setTabsClosable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setMovable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="n">currentChanged</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_on_current_tab_changed</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="n">tabCloseRequested</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_close_tab_by_index</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">setCentralWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">)</span>
+
+        <span class="c1"># 툴바 + 주소창
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">_build_toolbar</span><span class="p">()</span>
+
+        <span class="c1"># 단축키
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">_setup_shortcuts</span><span class="p">()</span>
+
+        <span class="c1"># 시작 탭
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">new_tab</span><span class="p">(</span><span class="nc">QUrl</span><span class="p">(</span><span class="n">DEFAULT_HOME</span><span class="p">),</span> <span class="n">switch_to</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># ---------- UI 구성 ----------
+</span>
+    <span class="k">def</span> <span class="nf">_build_toolbar</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="nc">QToolBar</span><span class="p">(</span><span class="sh">"</span><span class="s">Navigation</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">tb</span><span class="p">.</span><span class="nf">setMovable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">addToolBar</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+
+        <span class="n">style</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">style</span><span class="p">()</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">act_back</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_ArrowBack</span><span class="p">),</span> <span class="sh">"</span><span class="s">뒤로</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_back</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">back</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_forward</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_ArrowForward</span><span class="p">),</span> <span class="sh">"</span><span class="s">앞으로</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_forward</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">forward</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_reload</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_BrowserReload</span><span class="p">),</span> <span class="sh">"</span><span class="s">새로고침</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_reload</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">reload</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_stop</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_BrowserStop</span><span class="p">),</span> <span class="sh">"</span><span class="s">정지</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_stop</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">stop</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_home</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_DirHomeIcon</span><span class="p">),</span> <span class="sh">"</span><span class="s">홈</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_home</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">navigate_to</span><span class="p">(</span><span class="nc">QUrl</span><span class="p">(</span><span class="n">DEFAULT_HOME</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">act_back</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">act_forward</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">act_reload</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">act_stop</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">act_home</span><span class="p">):</span>
+            <span class="n">tb</span><span class="p">.</span><span class="nf">addAction</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span> <span class="o">=</span> <span class="nc">QLineEdit</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">setPlaceholderText</span><span class="p">(</span><span class="sh">"</span><span class="s">주소 또는 검색어 입력…</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="n">returnPressed</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_on_return_pressed</span><span class="p">)</span>
+        <span class="n">tb</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_setup_shortcuts</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="c1"># 주소창 포커스
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+L</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">setFocus</span><span class="p">(),</span> <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">selectAll</span><span class="p">()))</span>
+        <span class="c1"># 새 탭 / 닫기
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+T</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">new_tab</span><span class="p">())</span>
+        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+W</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_close_tab_by_index</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentIndex</span><span class="p">()))</span>
+        <span class="c1"># 탭 순환
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+Tab</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_next_tab</span><span class="p">)</span>
+        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+Shift+Tab</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_prev_tab</span><span class="p">)</span>
+        <span class="c1"># 뒤/앞
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Alt+Left</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">back</span><span class="p">())</span>
+        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Alt+Right</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">forward</span><span class="p">())</span>
+        <span class="c1"># 새로고침
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+R</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">reload</span><span class="p">())</span>
+        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">F5</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">reload</span><span class="p">())</span>
+        <span class="c1"># 번호로 탭 전환
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Ctrl+</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="sh">"</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
+                <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span> <span class="n">idx</span><span class="o">=</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_goto_tab</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>
+
+    <span class="c1"># ---------- 탭 관리 ----------
+</span>
+    <span class="k">def</span> <span class="nf">_create_tab_view</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">switch_to</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QWebEngineView</span><span class="p">:</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="nc">BrowserTab</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="sh">"</span><span class="s">New Tab</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">switch_to</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">tab</span><span class="p">.</span><span class="n">view</span>
+        <span class="c1"># 시그널 연결: 타이틀/URL 변경 시 탭 제목/주소창 갱신
+</span>        <span class="n">view</span><span class="p">.</span><span class="n">titleChanged</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">view</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_update_tab_title</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">title</span><span class="p">))</span>
+        <span class="n">view</span><span class="p">.</span><span class="n">urlChanged</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">url</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">view</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_maybe_update_urlbar</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">url</span><span class="p">))</span>
+        <span class="c1"># 초기 네비게이션 버튼 상태 갱신
+</span>        <span class="n">view</span><span class="p">.</span><span class="n">loadFinished</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_ok</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">view</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="n">view</span><span class="p">.</span><span class="nf">history</span><span class="p">().</span><span class="n">changed</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="o">=</span><span class="n">view</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">view</span>
+
+    <span class="k">def</span> <span class="nf">new_tab</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">switch_to</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_create_tab_view</span><span class="p">(</span><span class="n">switch_to</span><span class="o">=</span><span class="n">switch_to</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="nc">QUrl</span><span class="p">(</span><span class="n">DEFAULT_HOME</span><span class="p">)</span>
+        <span class="n">view</span><span class="p">.</span><span class="nf">setUrl</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_close_tab_by_index</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># 마지막 탭을 닫으려 하면 새 빈 탭을 열어 일관성 유지
+</span>            <span class="n">self</span><span class="p">.</span><span class="nf">new_tab</span><span class="p">(</span><span class="nc">QUrl</span><span class="p">(</span><span class="n">DEFAULT_HOME</span><span class="p">),</span> <span class="n">switch_to</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">removeTab</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">removeTab</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_current_tab_changed</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_maybe_update_urlbar</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="nf">url</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_tab_title</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="n">QWebEngineView</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># 해당 view가 포함된 탭의 제목을 갱신
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()):</span>
+            <span class="n">tab</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">widget</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="n">BrowserTab</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tab</span><span class="p">.</span><span class="n">view</span> <span class="ow">is</span> <span class="n">view</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setTabText</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">title</span> <span class="k">if</span> <span class="n">title</span> <span class="k">else</span> <span class="sh">"</span><span class="s">New Tab</span><span class="sh">"</span><span class="p">)</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setTabToolTip</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span> <span class="nf">_maybe_update_urlbar</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="n">QWebEngineView</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">):</span>
+        <span class="c1"># 현재 탭일 때만 주소창 동기화
+</span>        <span class="n">current</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">BrowserTab</span><span class="p">)</span> <span class="ow">and</span> <span class="n">current</span><span class="p">.</span><span class="n">view</span> <span class="ow">is</span> <span class="n">view</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">blockSignals</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">toString</span><span class="p">())</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">blockSignals</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="n">QWebEngineView</span><span class="p">):</span>
+        <span class="n">hist</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="nf">history</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_back</span><span class="p">.</span><span class="nf">setEnabled</span><span class="p">(</span><span class="n">hist</span><span class="p">.</span><span class="nf">canGoBack</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_forward</span><span class="p">.</span><span class="nf">setEnabled</span><span class="p">(</span><span class="n">hist</span><span class="p">.</span><span class="nf">canGoForward</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_current_view</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QWebEngineView</span><span class="p">:</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentWidget</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">tab</span><span class="p">.</span><span class="n">view</span> <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="n">BrowserTab</span><span class="p">)</span> <span class="k">else</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_next_tab</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">((</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentIndex</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_prev_tab</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">((</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentIndex</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_goto_tab</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">():</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+    <span class="c1"># ---------- 내비게이션 ----------
+</span>
+    <span class="k">def</span> <span class="nf">_on_return_pressed</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nf">is_probably_url</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+            <span class="n">qurl</span> <span class="o">=</span> <span class="n">QUrl</span><span class="p">.</span><span class="nf">fromUserInput</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">qurl</span> <span class="o">=</span> <span class="nc">QUrl</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">DEFAULT_SEARCH</span><span class="si">}{</span><span class="nf">quote</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">navigate_to</span><span class="p">(</span><span class="n">qurl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">navigate_to</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span><span class="p">:</span>
+            <span class="n">v</span><span class="p">.</span><span class="nf">setUrl</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c1"># Ctrl+클릭 새 탭용 콜백
+</span>    <span class="k">def</span> <span class="nf">open_in_new_tab</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">,</span> <span class="n">switch_to</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">new_tab</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">switch_to</span><span class="o">=</span><span class="n">switch_to</span><span class="p">)</span>
+
+    <span class="c1"># 창 닫힘 확인(선택 사항)
+</span>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">QCloseEvent</span><span class="p">):</span>
+        <span class="n">e</span><span class="p">.</span><span class="nf">accept</span><span class="p">()</span>  <span class="c1"># 필요 시 확인 대화상자 추가 가능
+</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="nc">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="c1"># 하이 DPI 환경에서 폰트/스케일 자동 조정
+</span>    <span class="n">QGuiApplication</span><span class="p">.</span><span class="nf">setHighDpiScaleFactorRoundingPolicy</span><span class="p">(</span>
+        <span class="n">Qt</span><span class="p">.</span><span class="n">HighDpiScaleFactorRoundingPolicy</span><span class="p">.</span><span class="n">PassThrough</span>
+    <span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="nc">MainWindow</span><span class="p">()</span>
+    <span class="n">w</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="n">app</span><span class="p">.</span><span class="nf">exec</span><span class="p">())</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="작동-원리-짧고-단계적으로">작동 원리 (짧고 단계적으로)</h1>
+
+<ol>
+  <li>
+    <p><strong>QMainWindow + QTabWidget</strong><br />
+중앙에 <code class="language-plaintext highlighter-rouge">QTabWidget</code>을 두고 각 탭은 <code class="language-plaintext highlighter-rouge">BrowserTab</code>(= <code class="language-plaintext highlighter-rouge">QWebEngineView</code>) 하나로 구성.</p>
+  </li>
+  <li>
+    <p><strong>툴바/주소창</strong><br />
+뒤·앞·새로고침·정지·홈 액션과 <code class="language-plaintext highlighter-rouge">QLineEdit</code>(주소창)을 하나의 툴바에 배치.<br />
+주소창 Enter → URL 판별(스킴/도메인) → 아니면 검색어로 DuckDuckGo 검색.</p>
+  </li>
+  <li>
+    <p><strong>탭 생성/제거/이동</strong><br />
+<code class="language-plaintext highlighter-rouge">new_tab()</code>이 새 탭을 만들고 URL을 로드. 탭은 닫기 버튼으로 제거, 드래그로 순서 변경.</p>
+  </li>
+  <li>
+    <p><strong>target=_blank &amp; Ctrl+클릭</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">BrowserView.createWindow()</code>를 오버라이드해서 <code class="language-plaintext highlighter-rouge">target="_blank"</code>/<code class="language-plaintext highlighter-rouge">window.open()</code>은 항상 <strong>새 탭</strong> 으로.</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">BrowserPage.acceptNavigationRequest()</code>에서 <strong>링크 클릭 시</strong> <code class="language-plaintext highlighter-rouge">QApplication.keyboardModifiers()</code>로 <code class="language-plaintext highlighter-rouge">Ctrl</code> 감지 → <strong>새 탭으로 열기</strong> 후 기존 탭 네비게이션은 취소.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>주소/제목 동기화</strong><br />
+<code class="language-plaintext highlighter-rouge">urlChanged</code>/<code class="language-plaintext highlighter-rouge">titleChanged</code> 시그널을 탭과 주소창에 반영. 현재 탭 변경 시에도 동기화.</p>
+  </li>
+  <li>
+    <p><strong>단축키</strong><br />
+표준 브라우저처럼 <code class="language-plaintext highlighter-rouge">Ctrl+T/W/L</code>, <code class="language-plaintext highlighter-rouge">Ctrl+Tab/Shift+Tab</code>, <code class="language-plaintext highlighter-rouge">Ctrl+1..9</code>, <code class="language-plaintext highlighter-rouge">Alt+←/→</code>, <code class="language-plaintext highlighter-rouge">Ctrl+R</code>/<code class="language-plaintext highlighter-rouge">F5</code>를 연결.</p>
+  </li>
+</ol>
+
+<hr />
+
+<p>원하는 최소 기능만 담았고, 파일 하나로 바로 돌릴 수 있게 했어.<br />
+추가로 원하면 다음도 금방 붙일 수 있어:</p>
+
+<ul>
+  <li>
+    <p>다운로드 매니저/저장 위치 지정</p>
+  </li>
+  <li>
+    <p>간단한 히스토리/즐겨찾기 저장</p>
+  </li>
+  <li>
+    <p>프라이빗 모드(임시 프로필)</p>
+  </li>
+  <li>
+    <p>다크 모드/아이콘 교체</p>
+  </li>
+</ul>
+
+<p>필요한 추가 기능 있으면 바로 얹어서 만들어 줄게!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#python" class="page__taxonomy-item p-category" rel="tag">python</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-09-08T11:39:22+09:00">2025-09-08</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/linux/redhat-langgraph-installation/" class="pagination--pager" title="LangChain LangGraph 설치">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-09-08T11:39:27+09:00">2025-09-08</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/linux/redhat-langgraph-installation/" rel="permalink">LangChain LangGraph 설치
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-09-03T12:34:30+09:00">2025-09-03</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/linux/tcsh-term-color/" rel="permalink">tcsh 메시지 색 지정
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-09-03T12:31:52+09:00">2025-09-03</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/work-directory-structure/" rel="permalink">작업 폴더 구성 추천
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-09-01T18:41:28+09:00">2025-09-01</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

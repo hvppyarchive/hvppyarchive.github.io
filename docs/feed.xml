@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-09-03T12:34:35+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-09-03T12:34:35+09:00</published><updated>2025-09-03T12:34:35+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-09-08T11:39:27+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-09-08T11:39:27+09:00</published><updated>2025-09-08T11:39:27+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,388 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">LangChain LangGraph 설치</title><link href="https://hvppyarchive.github.io/linux/redhat-langgraph-installation/" rel="alternate" type="text/html" title="LangChain LangGraph 설치" /><published>2025-09-03T12:34:30+09:00</published><updated>2025-09-03T12:34:30+09:00</updated><id>https://hvppyarchive.github.io/linux/redhat-langgraph-installation</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/redhat-langgraph-installation/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">PySide6 웹 브라우저 만들기</title><link href="https://hvppyarchive.github.io/python/pyside6-browser/" rel="alternate" type="text/html" title="PySide6 웹 브라우저 만들기" /><published>2025-09-08T11:39:22+09:00</published><updated>2025-09-08T11:39:22+09:00</updated><id>https://hvppyarchive.github.io/python/pyside6-browser</id><content type="html" xml:base="https://hvppyarchive.github.io/python/pyside6-browser/"><![CDATA[<p class="chat--user">
+
+PySide6 기반으로 가장 간단한 기능만 있는 가벼운 웹 브라우저를 만들고 싶어. 주요 기능은 앞/뒤 이동, 탭 관리, 주소창, 새 탭으로 열기(Ctrl 클릭 시), 탭 간 이동 단축키 등등 기초적인 기능만 있으면 돼.
+
+</p>
+
+<p>좋아! PySide6(Qt WebEngine)로 “가장 기본 기능만” 갖춘 가벼운 탭형 웹 브라우저 예제를 한 파일로 깔끔하게 준비했어.<br />
+아래 스크립트 하나로 다음이 동작해:</p>
+
+<ul>
+  <li>
+    <p>뒤로/앞으로, 새로고침/정지, 홈, 주소창</p>
+  </li>
+  <li>
+    <p>탭 열기/닫기/이동(드래그 가능)</p>
+  </li>
+  <li>
+    <p><strong>Ctrl+클릭 시 링크를 새 탭으로 열기</strong></p>
+  </li>
+  <li>
+    <p>단축키:</p>
+
+    <ul>
+      <li>
+        <p>새 탭 <code class="language-plaintext highlighter-rouge">Ctrl+T</code>, 탭 닫기 <code class="language-plaintext highlighter-rouge">Ctrl+W</code></p>
+      </li>
+      <li>
+        <p>탭 순환 <code class="language-plaintext highlighter-rouge">Ctrl+Tab</code> / <code class="language-plaintext highlighter-rouge">Ctrl+Shift+Tab</code></p>
+      </li>
+      <li>
+        <p>탭 번호로 이동 <code class="language-plaintext highlighter-rouge">Ctrl+1..8</code>, 마지막 탭 <code class="language-plaintext highlighter-rouge">Ctrl+9</code></p>
+      </li>
+      <li>
+        <p>주소창 포커스 <code class="language-plaintext highlighter-rouge">Ctrl+L</code></p>
+      </li>
+      <li>
+        <p>뒤로/앞으로 <code class="language-plaintext highlighter-rouge">Alt+←/→</code></p>
+      </li>
+      <li>
+        <p>새로고침 <code class="language-plaintext highlighter-rouge">Ctrl+R</code> 또는 <code class="language-plaintext highlighter-rouge">F5</code></p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="설치">설치</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>PySide6
+</code></pre></div></div>
+
+<blockquote>
+  <p>참고: PySide6에는 Qt WebEngine이 포함되어 있어요(일부 리눅스에선 <code class="language-plaintext highlighter-rouge">qtwebengine</code> 관련 시스템 패키지가 필요할 수 있음).</p>
+</blockquote>
+
+<hr />
+
+<h1 id="실행">실행</h1>
+
+<p>아래 코드를 <code class="language-plaintext highlighter-rouge">mini_browser.py</code>로 저장 후:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python mini_browser.py
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="코드-단일-파일">코드 (단일 파일)</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+# mini_browser.py
+</span><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">re</span>
+<span class="kn">from</span> <span class="n">urllib.parse</span> <span class="kn">import</span> <span class="n">quote</span>
+
+<span class="kn">from</span> <span class="n">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QUrl</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">Slot</span>
+<span class="kn">from</span> <span class="n">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QKeySequence</span><span class="p">,</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QCloseEvent</span><span class="p">,</span> <span class="n">QGuiApplication</span>
+<span class="kn">from</span> <span class="n">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QApplication</span><span class="p">,</span> <span class="n">QMainWindow</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span>
+    <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QStyle</span><span class="p">,</span> <span class="n">QShortcut</span><span class="p">,</span> <span class="n">QMessageBox</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="n">PySide6.QtWebEngineWidgets</span> <span class="kn">import</span> <span class="n">QWebEngineView</span><span class="p">,</span> <span class="n">QWebEnginePage</span>
+
+<span class="n">DEFAULT_HOME</span> <span class="o">=</span> <span class="sh">"</span><span class="s">https://duckduckgo.com/</span><span class="sh">"</span>
+<span class="n">DEFAULT_SEARCH</span> <span class="o">=</span> <span class="sh">"</span><span class="s">https://duckduckgo.com/?q=</span><span class="sh">"</span>
+
+<span class="k">def</span> <span class="nf">is_probably_url</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">re</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">^[a-zA-Z]+://</span><span class="sh">"</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="c1"># domain-like without scheme (no spaces, has a dot)
+</span>    <span class="nf">return </span><span class="p">(</span><span class="sh">"</span><span class="s"> </span><span class="sh">"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">t</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">BrowserPage</span><span class="p">(</span><span class="n">QWebEnginePage</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">링크 Ctrl+클릭을 가로채 새 탭으로 열기 위해 페이지를 살짝 커스터마이즈.</span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">on_open_new_tab</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_on_open_new_tab</span> <span class="o">=</span> <span class="n">on_open_new_tab</span>
+
+    <span class="k">def</span> <span class="nf">acceptNavigationRequest</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">,</span> <span class="n">nav_type</span><span class="p">:</span> <span class="n">QWebEnginePage</span><span class="p">.</span><span class="n">NavigationType</span><span class="p">,</span> <span class="n">isMainFrame</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nav_type</span> <span class="o">==</span> <span class="n">QWebEnginePage</span><span class="p">.</span><span class="n">NavigationTypeLinkClicked</span><span class="p">:</span>
+            <span class="n">mods</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">.</span><span class="nf">keyboardModifiers</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mods</span> <span class="o">&amp;</span> <span class="n">Qt</span><span class="p">.</span><span class="n">ControlModifier</span><span class="p">:</span>
+                <span class="c1"># Ctrl+클릭: 새 탭으로 열고 현재 탭은 그대로 유지
+</span>                <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_on_open_new_tab</span><span class="p">:</span>
+                    <span class="n">self</span><span class="p">.</span><span class="nf">_on_open_new_tab</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">switch_to</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">False</span>  <span class="c1"># 현재 뷰에선 네비게이션 취소
+</span>        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">acceptNavigationRequest</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">nav_type</span><span class="p">,</span> <span class="n">isMainFrame</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">BrowserView</span><span class="p">(</span><span class="n">QWebEngineView</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">target=_blank 또는 window.open()을 탭으로 열도록 createWindow 오버라이드.</span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">main_window</span><span class="p">:</span> <span class="sh">"</span><span class="s">MainWindow</span><span class="sh">"</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">main_window</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_mw</span> <span class="o">=</span> <span class="n">main_window</span>
+
+    <span class="k">def</span> <span class="nf">createWindow</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">_type</span><span class="p">):</span>
+        <span class="c1"># 새 탭을 만들고 그 탭의 QWebEngineView를 반환
+</span>        <span class="n">view</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_mw</span><span class="p">.</span><span class="nf">_create_tab_view</span><span class="p">(</span><span class="n">switch_to</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">view</span>
+
+<span class="k">class</span> <span class="nc">BrowserTab</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">탭 하나 = QWebEngineView 하나(툴바는 메인 윈도우 공용).</span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">main_window</span><span class="p">:</span> <span class="sh">"</span><span class="s">MainWindow</span><span class="sh">"</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">main_window</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="nc">BrowserView</span><span class="p">(</span><span class="n">main_window</span><span class="p">)</span>
+        <span class="c1"># 커스텀 페이지 부착 (Ctrl+클릭 새 탭용)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setPage</span><span class="p">(</span><span class="nc">BrowserPage</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">,</span> <span class="n">on_open_new_tab</span><span class="o">=</span><span class="n">main_window</span><span class="p">.</span><span class="n">open_in_new_tab</span><span class="p">))</span>
+
+        <span class="n">lay</span> <span class="o">=</span> <span class="nc">QVBoxLayout</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="p">.</span><span class="nf">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MainWindow</span><span class="p">(</span><span class="n">QMainWindow</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">setWindowTitle</span><span class="p">(</span><span class="sh">"</span><span class="s">Mini Browser (PySide6)</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">resize</span><span class="p">(</span><span class="mi">1100</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+
+        <span class="c1"># 탭 위젯
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span> <span class="o">=</span> <span class="nc">QTabWidget</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setTabsClosable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setMovable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="n">currentChanged</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_on_current_tab_changed</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="n">tabCloseRequested</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_close_tab_by_index</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">setCentralWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">)</span>
+
+        <span class="c1"># 툴바 + 주소창
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">_build_toolbar</span><span class="p">()</span>
+
+        <span class="c1"># 단축키
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">_setup_shortcuts</span><span class="p">()</span>
+
+        <span class="c1"># 시작 탭
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">new_tab</span><span class="p">(</span><span class="nc">QUrl</span><span class="p">(</span><span class="n">DEFAULT_HOME</span><span class="p">),</span> <span class="n">switch_to</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># ---------- UI 구성 ----------
+</span>
+    <span class="k">def</span> <span class="nf">_build_toolbar</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="nc">QToolBar</span><span class="p">(</span><span class="sh">"</span><span class="s">Navigation</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">tb</span><span class="p">.</span><span class="nf">setMovable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">addToolBar</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+
+        <span class="n">style</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">style</span><span class="p">()</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">act_back</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_ArrowBack</span><span class="p">),</span> <span class="sh">"</span><span class="s">뒤로</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_back</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">back</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_forward</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_ArrowForward</span><span class="p">),</span> <span class="sh">"</span><span class="s">앞으로</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_forward</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">forward</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_reload</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_BrowserReload</span><span class="p">),</span> <span class="sh">"</span><span class="s">새로고침</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_reload</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">reload</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_stop</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_BrowserStop</span><span class="p">),</span> <span class="sh">"</span><span class="s">정지</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_stop</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">stop</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_home</span> <span class="o">=</span> <span class="nc">QAction</span><span class="p">(</span><span class="n">style</span><span class="p">.</span><span class="nf">standardIcon</span><span class="p">(</span><span class="n">QStyle</span><span class="p">.</span><span class="n">SP_DirHomeIcon</span><span class="p">),</span> <span class="sh">"</span><span class="s">홈</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_home</span><span class="p">.</span><span class="n">triggered</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">navigate_to</span><span class="p">(</span><span class="nc">QUrl</span><span class="p">(</span><span class="n">DEFAULT_HOME</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">act_back</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">act_forward</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">act_reload</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">act_stop</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">act_home</span><span class="p">):</span>
+            <span class="n">tb</span><span class="p">.</span><span class="nf">addAction</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span> <span class="o">=</span> <span class="nc">QLineEdit</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">setPlaceholderText</span><span class="p">(</span><span class="sh">"</span><span class="s">주소 또는 검색어 입력…</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="n">returnPressed</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_on_return_pressed</span><span class="p">)</span>
+        <span class="n">tb</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_setup_shortcuts</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="c1"># 주소창 포커스
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+L</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">setFocus</span><span class="p">(),</span> <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">selectAll</span><span class="p">()))</span>
+        <span class="c1"># 새 탭 / 닫기
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+T</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">new_tab</span><span class="p">())</span>
+        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+W</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_close_tab_by_index</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentIndex</span><span class="p">()))</span>
+        <span class="c1"># 탭 순환
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+Tab</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_next_tab</span><span class="p">)</span>
+        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+Shift+Tab</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_prev_tab</span><span class="p">)</span>
+        <span class="c1"># 뒤/앞
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Alt+Left</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">back</span><span class="p">())</span>
+        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Alt+Right</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">forward</span><span class="p">())</span>
+        <span class="c1"># 새로고침
+</span>        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">Ctrl+R</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">reload</span><span class="p">())</span>
+        <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="sh">"</span><span class="s">F5</span><span class="sh">"</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">().</span><span class="nf">reload</span><span class="p">())</span>
+        <span class="c1"># 번호로 탭 전환
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Ctrl+</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="sh">"</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
+                <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nc">QShortcut</span><span class="p">(</span><span class="nc">QKeySequence</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">self</span><span class="p">,</span> <span class="n">activated</span><span class="o">=</span><span class="k">lambda</span> <span class="n">idx</span><span class="o">=</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_goto_tab</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>
+
+    <span class="c1"># ---------- 탭 관리 ----------
+</span>
+    <span class="k">def</span> <span class="nf">_create_tab_view</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">switch_to</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QWebEngineView</span><span class="p">:</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="nc">BrowserTab</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="sh">"</span><span class="s">New Tab</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">switch_to</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">tab</span><span class="p">.</span><span class="n">view</span>
+        <span class="c1"># 시그널 연결: 타이틀/URL 변경 시 탭 제목/주소창 갱신
+</span>        <span class="n">view</span><span class="p">.</span><span class="n">titleChanged</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">title</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">view</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_update_tab_title</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">title</span><span class="p">))</span>
+        <span class="n">view</span><span class="p">.</span><span class="n">urlChanged</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">url</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">view</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_maybe_update_urlbar</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">url</span><span class="p">))</span>
+        <span class="c1"># 초기 네비게이션 버튼 상태 갱신
+</span>        <span class="n">view</span><span class="p">.</span><span class="n">loadFinished</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_ok</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">view</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="n">view</span><span class="p">.</span><span class="nf">history</span><span class="p">().</span><span class="n">changed</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="o">=</span><span class="n">view</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">view</span>
+
+    <span class="k">def</span> <span class="nf">new_tab</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">switch_to</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_create_tab_view</span><span class="p">(</span><span class="n">switch_to</span><span class="o">=</span><span class="n">switch_to</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="nc">QUrl</span><span class="p">(</span><span class="n">DEFAULT_HOME</span><span class="p">)</span>
+        <span class="n">view</span><span class="p">.</span><span class="nf">setUrl</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_close_tab_by_index</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># 마지막 탭을 닫으려 하면 새 빈 탭을 열어 일관성 유지
+</span>            <span class="n">self</span><span class="p">.</span><span class="nf">new_tab</span><span class="p">(</span><span class="nc">QUrl</span><span class="p">(</span><span class="n">DEFAULT_HOME</span><span class="p">),</span> <span class="n">switch_to</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">removeTab</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">removeTab</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_current_tab_changed</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_maybe_update_urlbar</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="nf">url</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_tab_title</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="n">QWebEngineView</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># 해당 view가 포함된 탭의 제목을 갱신
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()):</span>
+            <span class="n">tab</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">widget</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="n">BrowserTab</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tab</span><span class="p">.</span><span class="n">view</span> <span class="ow">is</span> <span class="n">view</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setTabText</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">title</span> <span class="k">if</span> <span class="n">title</span> <span class="k">else</span> <span class="sh">"</span><span class="s">New Tab</span><span class="sh">"</span><span class="p">)</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setTabToolTip</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span> <span class="nf">_maybe_update_urlbar</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="n">QWebEngineView</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">):</span>
+        <span class="c1"># 현재 탭일 때만 주소창 동기화
+</span>        <span class="n">current</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentWidget</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">BrowserTab</span><span class="p">)</span> <span class="ow">and</span> <span class="n">current</span><span class="p">.</span><span class="n">view</span> <span class="ow">is</span> <span class="n">view</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">blockSignals</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">toString</span><span class="p">())</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">blockSignals</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_nav_buttons</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="n">QWebEngineView</span><span class="p">):</span>
+        <span class="n">hist</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="nf">history</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_back</span><span class="p">.</span><span class="nf">setEnabled</span><span class="p">(</span><span class="n">hist</span><span class="p">.</span><span class="nf">canGoBack</span><span class="p">())</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">act_forward</span><span class="p">.</span><span class="nf">setEnabled</span><span class="p">(</span><span class="n">hist</span><span class="p">.</span><span class="nf">canGoForward</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_current_view</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QWebEngineView</span><span class="p">:</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentWidget</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">tab</span><span class="p">.</span><span class="n">view</span> <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="n">BrowserTab</span><span class="p">)</span> <span class="k">else</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_next_tab</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">((</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentIndex</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_prev_tab</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">((</span><span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">currentIndex</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_goto_tab</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">count</span><span class="p">():</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">tabs</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+    <span class="c1"># ---------- 내비게이션 ----------
+</span>
+    <span class="k">def</span> <span class="nf">_on_return_pressed</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">urlbar</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nf">is_probably_url</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+            <span class="n">qurl</span> <span class="o">=</span> <span class="n">QUrl</span><span class="p">.</span><span class="nf">fromUserInput</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">qurl</span> <span class="o">=</span> <span class="nc">QUrl</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">DEFAULT_SEARCH</span><span class="si">}{</span><span class="nf">quote</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">navigate_to</span><span class="p">(</span><span class="n">qurl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">navigate_to</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_current_view</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span><span class="p">:</span>
+            <span class="n">v</span><span class="p">.</span><span class="nf">setUrl</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c1"># Ctrl+클릭 새 탭용 콜백
+</span>    <span class="k">def</span> <span class="nf">open_in_new_tab</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">,</span> <span class="n">switch_to</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">new_tab</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">switch_to</span><span class="o">=</span><span class="n">switch_to</span><span class="p">)</span>
+
+    <span class="c1"># 창 닫힘 확인(선택 사항)
+</span>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">QCloseEvent</span><span class="p">):</span>
+        <span class="n">e</span><span class="p">.</span><span class="nf">accept</span><span class="p">()</span>  <span class="c1"># 필요 시 확인 대화상자 추가 가능
+</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="nc">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="c1"># 하이 DPI 환경에서 폰트/스케일 자동 조정
+</span>    <span class="n">QGuiApplication</span><span class="p">.</span><span class="nf">setHighDpiScaleFactorRoundingPolicy</span><span class="p">(</span>
+        <span class="n">Qt</span><span class="p">.</span><span class="n">HighDpiScaleFactorRoundingPolicy</span><span class="p">.</span><span class="n">PassThrough</span>
+    <span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="nc">MainWindow</span><span class="p">()</span>
+    <span class="n">w</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="n">app</span><span class="p">.</span><span class="nf">exec</span><span class="p">())</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="작동-원리-짧고-단계적으로">작동 원리 (짧고 단계적으로)</h1>
+
+<ol>
+  <li>
+    <p><strong>QMainWindow + QTabWidget</strong><br />
+중앙에 <code class="language-plaintext highlighter-rouge">QTabWidget</code>을 두고 각 탭은 <code class="language-plaintext highlighter-rouge">BrowserTab</code>(= <code class="language-plaintext highlighter-rouge">QWebEngineView</code>) 하나로 구성.</p>
+  </li>
+  <li>
+    <p><strong>툴바/주소창</strong><br />
+뒤·앞·새로고침·정지·홈 액션과 <code class="language-plaintext highlighter-rouge">QLineEdit</code>(주소창)을 하나의 툴바에 배치.<br />
+주소창 Enter → URL 판별(스킴/도메인) → 아니면 검색어로 DuckDuckGo 검색.</p>
+  </li>
+  <li>
+    <p><strong>탭 생성/제거/이동</strong><br />
+<code class="language-plaintext highlighter-rouge">new_tab()</code>이 새 탭을 만들고 URL을 로드. 탭은 닫기 버튼으로 제거, 드래그로 순서 변경.</p>
+  </li>
+  <li>
+    <p><strong>target=_blank &amp; Ctrl+클릭</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">BrowserView.createWindow()</code>를 오버라이드해서 <code class="language-plaintext highlighter-rouge">target="_blank"</code>/<code class="language-plaintext highlighter-rouge">window.open()</code>은 항상 <strong>새 탭</strong> 으로.</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">BrowserPage.acceptNavigationRequest()</code>에서 <strong>링크 클릭 시</strong> <code class="language-plaintext highlighter-rouge">QApplication.keyboardModifiers()</code>로 <code class="language-plaintext highlighter-rouge">Ctrl</code> 감지 → <strong>새 탭으로 열기</strong> 후 기존 탭 네비게이션은 취소.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>주소/제목 동기화</strong><br />
+<code class="language-plaintext highlighter-rouge">urlChanged</code>/<code class="language-plaintext highlighter-rouge">titleChanged</code> 시그널을 탭과 주소창에 반영. 현재 탭 변경 시에도 동기화.</p>
+  </li>
+  <li>
+    <p><strong>단축키</strong><br />
+표준 브라우저처럼 <code class="language-plaintext highlighter-rouge">Ctrl+T/W/L</code>, <code class="language-plaintext highlighter-rouge">Ctrl+Tab/Shift+Tab</code>, <code class="language-plaintext highlighter-rouge">Ctrl+1..9</code>, <code class="language-plaintext highlighter-rouge">Alt+←/→</code>, <code class="language-plaintext highlighter-rouge">Ctrl+R</code>/<code class="language-plaintext highlighter-rouge">F5</code>를 연결.</p>
+  </li>
+</ol>
+
+<hr />
+
+<p>원하는 최소 기능만 담았고, 파일 하나로 바로 돌릴 수 있게 했어.<br />
+추가로 원하면 다음도 금방 붙일 수 있어:</p>
+
+<ul>
+  <li>
+    <p>다운로드 매니저/저장 위치 지정</p>
+  </li>
+  <li>
+    <p>간단한 히스토리/즐겨찾기 저장</p>
+  </li>
+  <li>
+    <p>프라이빗 모드(임시 프로필)</p>
+  </li>
+  <li>
+    <p>다크 모드/아이콘 교체</p>
+  </li>
+</ul>
+
+<p>필요한 추가 기능 있으면 바로 얹어서 만들어 줄게!</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">LangChain LangGraph 설치</title><link href="https://hvppyarchive.github.io/linux/redhat-langgraph-installation/" rel="alternate" type="text/html" title="LangChain LangGraph 설치" /><published>2025-09-03T12:34:30+09:00</published><updated>2025-09-03T12:34:30+09:00</updated><id>https://hvppyarchive.github.io/linux/redhat-langgraph-installation</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/redhat-langgraph-installation/"><![CDATA[<p class="chat--user">
 
 langchain &amp; langgraph(+langgraph studio) 설치하는 방법 알려줘. 환경 OS: redhat 8.x 특이 사항: - sudo 권한 없음 - offline 환경 (windows나 docker에서 파일 받아 전송은 가능) - 단, pip와 npm은 방화벽을 뚫어놔서 가능함
 
@@ -38829,2532 +39210,4 @@ awk 코드에 <code class="language-plaintext highlighter-rouge">!</code>가 들
   </li>
 </ul>
 
-<p>원하면, 기존 tcsh-only 버전을 <strong>문자열 안전하게</strong> 고친 <code class="language-plaintext highlighter-rouge">_jlist</code>/<code class="language-plaintext highlighter-rouge">_jget</code> alias 전체를 만들어서 드릴게.</p>]]></content><author><name>hvppyarchive</name></author><category term="misc" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Mini LLM 스크립트 예시</title><link href="https://hvppyarchive.github.io/llm/mini-llm-script/" rel="alternate" type="text/html" title="Mini LLM 스크립트 예시" /><published>2025-08-27T10:12:37+09:00</published><updated>2025-08-27T10:12:37+09:00</updated><id>https://hvppyarchive.github.io/llm/mini-llm-script</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/mini-llm-script/"><![CDATA[<p class="chat--user">
-
-Developer: # 목적 - 셀 환경에서 실행 가능한, 간단하고 유용한 LLM 스크립트(예: one-liner 또는 짧은 커맨드)를 작성하려고 합니다. - LLM에게 간단한 질문을 던지는 방식으로 활용하고자 합니다. # 요청 사항 - 우수한 예시로 어떤 LLM 스크립트들이 있는지 궁금합니다. - 셀 환경에서 손쉽게 실행 가능하며, 실제 실무에 도움이 되는 스크립트 사용 예시를 알려주세요. # 예시(예상) - 예: 번역, 요약, 코드 설명 등 - 예: 특정 파일 내 주요 내용 요약 스크립트, 자동 코드 문서화 등 시작 전, 다음과 같은 체크리스트(3-7개)를 간결하게 작성하세요. 구현 세부 내용이 아닌 개념 단계로 구성합니다. 스크립트나 코드 예시가 포함된다면, 다음을 명확히 하세요: (1) 전제 가정 명시, (2) 재현 가능한 예시 또는 테스트 케이스 포함, (3) 일관된 스타일 적용. 각 스크립트 예시에는 목적 및 입력/출력 설명을 간단히 덧붙이세요.
-
-</p>
-
-<p>아래 내용은 “셀에서 바로 쓰는, 짧고 유용한 LLM 스크립트”에 초점을 맞춰 정리했습니다. (요청하신 대로, 단계별로 사고하고 구성했어요—다만 내부 추론 전개 대신 실행 가능한 절차로 분해해 드립니다.)</p>
-
-<h1 id="시작-전-체크리스트-개념">시작 전 체크리스트 (개념)</h1>
-
-<ol>
-  <li>
-    <p><strong>목적 고정</strong> : 요약/번역/설명/생성 등 각 스크립트의 1문장 목표를 먼저 정하세요.</p>
-  </li>
-  <li>
-    <p><strong>입력 경계</strong> : 표준입력/파일/<code class="language-plaintext highlighter-rouge">git diff</code> 등 입력 경로를 명확히 하고, 길면 잘라서 보내세요(예: <code class="language-plaintext highlighter-rouge">head -c 12000</code>).</p>
-  </li>
-  <li>
-    <p><strong>출력 약속</strong> : 결과 형식을 미리 정하세요(한글/불릿/JSON 등) → 파이프라인에서 <code class="language-plaintext highlighter-rouge">jq</code>, <code class="language-plaintext highlighter-rouge">sed</code>, <code class="language-plaintext highlighter-rouge">awk</code>로 후처리.</p>
-  </li>
-  <li>
-    <p><strong>일관 프롬프트</strong> : 톤/언어/길이/포맷을 프롬프트 초반에 고정(“한국어, 핵심만, 5줄 불릿” 등).</p>
-  </li>
-  <li>
-    <p><strong>재현성</strong> : 예시는 <strong>가정(백엔드/모델/키)</strong>를 먼저 밝히고, <strong>테스트 케이스</strong> 를 포함합니다.</p>
-  </li>
-  <li>
-    <p><strong>보안/비용</strong> : 키는 환경변수로, 대용량은 로컬 요약→핵심만 업로드, 민감 데이터는 로컬 모델(Ollama) 고려.</p>
-  </li>
-  <li>
-    <p><strong>장애 대비</strong> : 실패 시 재시도/타임아웃/최대 토큰/온도값(=랜덤성) 같은 기본 파라미터를 명시.</p>
-  </li>
-</ol>
-
-<hr />
-
-<h2 id="전제공통">전제(공통)</h2>
-
-<ul>
-  <li>
-    <p><strong>OpenAI API 사용 시</strong> : <code class="language-plaintext highlighter-rouge">export OPENAI_API_KEY=...</code> 와 <code class="language-plaintext highlighter-rouge">export OPENAI_MODEL=gpt-5</code> (계정에서 사용 가능한 최신 모델로 지정). 엔드포인트는 <strong>Responses API</strong> <code class="language-plaintext highlighter-rouge">/v1/responses</code> 입니다. <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼+3</a></p>
-  </li>
-  <li>
-    <p><strong>로컬 대안(Ollama)</strong> : <code class="language-plaintext highlighter-rouge">ollama</code> 설치 후 <code class="language-plaintext highlighter-rouge">ollama run &lt;모델&gt;</code> 또는 REST <code class="language-plaintext highlighter-rouge">POST :11434/api/generate</code>. 예: <code class="language-plaintext highlighter-rouge">codellama</code>, <code class="language-plaintext highlighter-rouge">mistral:instruct</code>, <code class="language-plaintext highlighter-rouge">llama2:chat</code>. <a href="https://ollama.com/library/codellama?utm_source=chatgpt.com">Ollama+4</a></p>
-  </li>
-</ul>
-
-<blockquote>
-  <p>아래 모든 스크립트는 <strong>OpenAI 버전(curl)</strong> 과 <strong>Ollama 버전</strong> 을 나란히 제공합니다.<br />
- <code class="language-plaintext highlighter-rouge">jq</code>로 결과를 뽑을 땐 신/구 응답 포맷 호환을 위해 <code class="language-plaintext highlighter-rouge">output_text</code> → <code class="language-plaintext highlighter-rouge">choices[0].message.content</code> 순서로 폴백합니다.</p>
-</blockquote>
-
-<hr />
-
-<h1 id="1-단문-질의응답ad-hoc-qa">1) 단문 질의응답(Ad-hoc Q&amp;A)</h1>
-
-<p><strong>목적</strong> : 빠른 질문→짧은 답.<br />
-<strong>입력/출력</strong> : <code class="language-plaintext highlighter-rouge">echo "질문"</code> → 한글 5문장 이내 답.<br />
-<strong>가정</strong> : 작은 프롬프트(수백~수천 자).<br />
-<strong>테스트</strong> : “PostgreSQL 인덱스가 동작하는 핵심 원리를 5문장으로.”</p>
-
-<p><strong>OpenAI</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s1">'한국어로 간결히. PostgreSQL 인덱스 핵심 원리를 5문장으로 요약해줘.'</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> https://api.openai.com/v1/responses <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$OPENAI_API_KEY</span><span class="s2">"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> @- | jq <span class="nt">-r</span> <span class="s1">'.output_text // .choices[0].message.content'</span>
-</code></pre></div></div>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s1">'한국어로 간결히. PostgreSQL 인덱스 핵심 원리를 5문장으로 요약해줘.'</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{"model":"codellama:7b-instruct","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-r</span> <span class="s1">'.response'</span>
-</code></pre></div></div>
-
-<p>(Responses API 개요/예시는 공식 문서 참고. <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼+1</a>)</p>
-
-<hr />
-
-<h1 id="2-번역one-liner-번역-파이프">2) 번역(one-liner 번역 파이프)</h1>
-
-<p><strong>목적</strong> : 영어↔한국어 문단 번역.<br />
-<strong>입력/출력</strong> : 파일/표준입력 → 원문 보존 없이 번역문만.<br />
-<strong>가정</strong> : 짧은 텍스트(긴 경우 1만~2만 바이트로 잘라 전송).<br />
-<strong>테스트</strong> : 아래 <code class="language-plaintext highlighter-rouge">sample_en.txt</code> 생성 후 실행.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&gt;</span> sample_en.txt <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">TXT</span><span class="sh">'
-PostgreSQL uses B-tree indexes by default. They keep keys sorted and enable fast lookups.
-</span><span class="no">TXT
-</span><span class="nb">head</span> <span class="nt">-c</span> 12000 sample_en.txt | <span class="nb">sed</span> <span class="s1">'1s/^/다음 영어를 한국어로 자연스럽게 번역: \n/'</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> https://api.openai.com/v1/responses <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$OPENAI_API_KEY</span><span class="s2">"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> @- | jq <span class="nt">-r</span> <span class="s1">'.output_text // .choices[0].message.content'</span>
-</code></pre></div></div>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">head</span> <span class="nt">-c</span> 12000 sample_en.txt | <span class="nb">sed</span> <span class="s1">'1s/^/다음 영어를 한국어로 자연스럽게 번역: \n/'</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{"model":"mistral:instruct","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-r</span> <span class="s1">'.response'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h1 id="3-파일-요약불릿-7줄">3) 파일 요약(불릿 7줄)</h1>
-
-<p><strong>목적</strong> : 긴 텍스트 요약(회의록/리포트).<br />
-<strong>입력/출력</strong> : 텍스트 파일 → 7불릿 핵심 포인트.<br />
-<strong>가정</strong> : 문서가 길면 <strong>부분 요약→최종 요약</strong>(map-reduce).<br />
-<strong>테스트</strong> : <code class="language-plaintext highlighter-rouge">notes.txt</code> 생성.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&gt;</span> notes.txt <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">TXT</span><span class="sh">'
-We discussed migration steps, risks (downtime), and rollout plan with canary deployments...
-</span><span class="no">TXT
-</span><span class="nb">head</span> <span class="nt">-c</span> 12000 notes.txt | <span class="nb">sed</span> <span class="s1">'1s/^/[지침] 한국어, 불릿 7개, 명사형 간결 요약.\n[본문]\n/'</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> https://api.openai.com/v1/responses <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$OPENAI_API_KEY</span><span class="s2">"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> @- | jq <span class="nt">-r</span> <span class="s1">'.output_text // .choices[0].message.content'</span>
-</code></pre></div></div>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">head</span> <span class="nt">-c</span> 12000 notes.txt | <span class="nb">sed</span> <span class="s1">'1s/^/[지침] 한국어, 불릿 7개, 명사형 간결 요약.\n[본문]\n/'</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{"model":"llama2:chat","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-r</span> <span class="s1">'.response'</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p>대용량/비텍스트(PDF 등)는 파일 업로드+참조 방식도 있습니다(Responses API + Files). <a href="https://platform.openai.com/docs/guides/pdf-files?utm_source=chatgpt.com">OpenAI 플랫폼</a></p>
-</blockquote>
-
-<hr />
-
-<h1 id="4-코드-설명--개선-제안">4) 코드 설명 + 개선 제안</h1>
-
-<p><strong>목적</strong> : 코드 스니펫 해설 + 리팩터링 팁.<br />
-<strong>입력/출력</strong> : <code class="language-plaintext highlighter-rouge">example.py</code> → “설명/복잡도/리팩터링” 3섹션.<br />
-<strong>가정</strong> : 짧은 함수 단위.<br />
-<strong>테스트</strong> : 파일 생성.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&gt;</span> example.py <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">PY</span><span class="sh">'
-def fib(n):
-    if n &lt;= 1: return n
-    return fib(n-1)+fib(n-2)
-</span><span class="no">PY
-</span><span class="o">{</span>
-  <span class="nb">echo</span> <span class="s2">"[지침] 한국어, 3섹션(설명/복잡도/리팩터링)."</span><span class="p">;</span> 
-  <span class="nb">echo</span> <span class="s2">"[코드]"</span><span class="p">;</span> <span class="nb">cat </span>example.py<span class="p">;</span>
-<span class="o">}</span> | curl <span class="nt">-s</span> https://api.openai.com/v1/responses <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$OPENAI_API_KEY</span><span class="s2">"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> @- | jq <span class="nt">-r</span> <span class="s1">'.output_text // .choices[0].message.content'</span>
-</code></pre></div></div>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span>
-  <span class="nb">echo</span> <span class="s2">"[지침] 한국어, 3섹션(설명/복잡도/리팩터링)."</span><span class="p">;</span> 
-  <span class="nb">echo</span> <span class="s2">"[코드]"</span><span class="p">;</span> <span class="nb">cat </span>example.py<span class="p">;</span>
-<span class="o">}</span> | curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{"model":"codellama:7b-instruct","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-r</span> <span class="s1">'.response'</span>
-</code></pre></div></div>
-
-<p>(Code Llama 계열 사용 예시와 프롬프트 팁 참고. <a href="https://ollama.com/library/codellama?utm_source=chatgpt.com">Ollama+1</a>)</p>
-
-<hr />
-
-<h1 id="5-git-diff--컨벤셔널-커밋-메시지">5) <code class="language-plaintext highlighter-rouge">git diff</code> → 컨벤셔널 커밋 메시지</h1>
-
-<p><strong>목적</strong> : 변경점에서 커밋 메시지 자동 생성.<br />
-<strong>입력/출력</strong> : <code class="language-plaintext highlighter-rouge">git diff</code> → <code class="language-plaintext highlighter-rouge">feat/fix/docs</code> 형식 1~3줄.<br />
-<strong>가정</strong> : 워킹 디렉토리에 git 저장소.<br />
-<strong>테스트</strong> : 임의 수정 후 실행.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff | <span class="nb">sed</span> <span class="s1">'1s/^/[지침] 한국어, Conventional Commits 스타일, 제목 72자 이내, 본문 1-2줄.\n[diff]\n/'</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> https://api.openai.com/v1/responses <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$OPENAI_API_KEY</span><span class="s2">"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> @- | jq <span class="nt">-r</span> <span class="s1">'.output_text // .choices[0].message.content'</span>
-</code></pre></div></div>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff | <span class="nb">sed</span> <span class="s1">'1s/^/[지침] 한국어, Conventional Commits 스타일, 제목 72자 이내, 본문 1-2줄.\n[diff]\n/'</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{"model":"mistral:instruct","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-r</span> <span class="s1">'.response'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h1 id="6-특정-파일에서-할-일-자동-추출">6) 특정 파일에서 “할 일” 자동 추출</h1>
-
-<p><strong>목적</strong> : 문서/노트에서 TODO/액션아이템만 수집.<br />
-<strong>입력/출력</strong> : 텍스트 → <code class="language-plaintext highlighter-rouge">- [ ]</code> Markdown 체크리스트.<br />
-<strong>가정</strong> : 한국어 문서.<br />
-<strong>테스트</strong> : <code class="language-plaintext highlighter-rouge">meeting.md</code> 생성.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&gt;</span> meeting.md <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">MD</span><span class="sh">'
-- 마이그레이션 일정 확정 필요
-- 위험 항목 점검(롤백 플랜 작성)
-</span><span class="no">MD
-</span><span class="o">{</span> <span class="nb">echo</span> <span class="s2">"[지침] 한국어, 문서에서 TODO를 '- [ ]' 목록으로만 추출."</span><span class="p">;</span> <span class="nb">cat </span>meeting.md<span class="p">;</span> <span class="o">}</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> https://api.openai.com/v1/responses <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$OPENAI_API_KEY</span><span class="s2">"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> @- | jq <span class="nt">-r</span> <span class="s1">'.output_text // .choices[0].message.content'</span>
-</code></pre></div></div>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span> <span class="nb">echo</span> <span class="s2">"[지침] 한국어, 문서에서 TODO를 '- [ ]' 목록으로만 추출."</span><span class="p">;</span> <span class="nb">cat </span>meeting.md<span class="p">;</span> <span class="o">}</span> | <span class="se">\</span>
-curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{"model":"llama2:chat","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-r</span> <span class="s1">'.response'</span>
-</code></pre></div></div>
-
-<hr />
-
-<h1 id="7-문서-질의응답rag-lite-단일-파일">7) “문서 질의응답”(RAG-lite: 단일 파일)</h1>
-
-<p><strong>목적</strong> : 로컬 문서 내용에 대한 질의응답.<br />
-<strong>입력/출력</strong> : 파일+질문 → 근거 포함 답변(줄번호/문장).<br />
-<strong>가정</strong> : 1개 파일, 짧은 컨텍스트.<br />
-<strong>테스트</strong> : <code class="language-plaintext highlighter-rouge">policy.txt</code> 생성.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&gt;</span> policy.txt <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">TXT</span><span class="sh">'
-SLA: critical fixes within 24 hours. Minor issues within 7 days.
-</span><span class="no">TXT
-</span><span class="o">{</span>
-  <span class="nb">echo</span> <span class="s2">"[지침] 한국어, policy.txt 인용하여 답변, 근거 문장 인용 포함."</span><span class="p">;</span>
-  <span class="nb">echo</span> <span class="s2">"[파일]"</span><span class="p">;</span> <span class="nb">cat </span>policy.txt<span class="p">;</span>
-  <span class="nb">echo</span> <span class="s2">"[질문] Minor 이슈 대응시간은?"</span><span class="p">;</span>
-<span class="o">}</span> | curl <span class="nt">-s</span> https://api.openai.com/v1/responses <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$OPENAI_API_KEY</span><span class="s2">"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> @- | jq <span class="nt">-r</span> <span class="s1">'.output_text // .choices[0].message.content'</span>
-</code></pre></div></div>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span>
-  <span class="nb">echo</span> <span class="s2">"[지침] 한국어, policy.txt 인용하여 답변, 근거 문장 인용 포함."</span><span class="p">;</span>
-  <span class="nb">echo</span> <span class="s2">"[파일]"</span><span class="p">;</span> <span class="nb">cat </span>policy.txt<span class="p">;</span>
-  <span class="nb">echo</span> <span class="s2">"[질문] Minor 이슈 대응시간은?"</span><span class="p">;</span>
-<span class="o">}</span> | curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{"model":"mistral:instruct","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-r</span> <span class="s1">'.response'</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p>더 본격적인 툴 사용/웹검색 도구 연동은 Responses API의 “도구 사용” 가이드를 참고하세요. <a href="https://platform.openai.com/docs/guides/tools?utm_source=chatgpt.com">OpenAI 플랫폼</a></p>
-</blockquote>
-
-<hr />
-
-<h1 id="8-설명-주석docstring-자동화파이썬-예">8) “설명 주석/Docstring 자동화”(파이썬 예)</h1>
-
-<p><strong>목적</strong> : 함수에 한국어 Docstring 부여.<br />
-<strong>입력/출력</strong> : <code class="language-plaintext highlighter-rouge">*.py</code> → 패치 제안(“+++” 구문 포함).<br />
-<strong>가정</strong> : 한 파일 단위.<br />
-<strong>테스트</strong> : <code class="language-plaintext highlighter-rouge">utils.py</code> 생성.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&gt;</span> utils.py <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">PY</span><span class="sh">'
-def slugify(s):
-    return s.lower().replace(' ','-')
-</span><span class="no">PY
-</span><span class="o">{</span>
-  <span class="nb">echo</span> <span class="s2">"[지침] 한국어, PEP257 스타일 Docstring 삽입용 unified diff 출력."</span><span class="p">;</span>
-  <span class="nb">echo</span> <span class="s2">"[파일]"</span><span class="p">;</span> <span class="nb">cat </span>utils.py<span class="p">;</span>
-<span class="o">}</span> | curl <span class="nt">-s</span> https://api.openai.com/v1/responses <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$OPENAI_API_KEY</span><span class="s2">"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  <span class="nt">-d</span> @- | jq <span class="nt">-r</span> <span class="s1">'.output_text // .choices[0].message.content'</span> | <span class="nb">tee </span>doc.patch
-</code></pre></div></div>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span>
-  <span class="nb">echo</span> <span class="s2">"[지침] 한국어, PEP257 스타일 Docstring 삽입용 unified diff 출력."</span><span class="p">;</span>
-  <span class="nb">echo</span> <span class="s2">"[파일]"</span><span class="p">;</span> <span class="nb">cat </span>utils.py<span class="p">;</span>
-<span class="o">}</span> | curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{"model":"codellama:7b-instruct","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-r</span> <span class="s1">'.response'</span> | <span class="nb">tee </span>doc.patch
-</code></pre></div></div>
-
-<hr />
-
-<h1 id="9-텍스트--json-분류-간단-보장-jq-검증">9) “텍스트 → JSON 분류” (간단 보장, <code class="language-plaintext highlighter-rouge">jq</code> 검증)</h1>
-
-<p><strong>목적</strong> : 임의 문장을 카테고리/긴급도 등으로 JSON 라벨링.<br />
-<strong>입력/출력</strong> : 텍스트 → <code class="language-plaintext highlighter-rouge">{"category":"...","priority":"..."}</code><br />
-<strong>가정</strong> : 엄격 JSON이 필요하면 <strong>Structured Outputs</strong> 로 JSON Schema를 적용(아래 주석 링크).<br />
-<strong>테스트</strong> : 3줄 입력.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&gt;</span> inbox.txt <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">TXT</span><span class="sh">'
-DB 연결 오류가 자주 발생함
-문서 오탈자 수정 요청
-신규 대시보드 제안
-</span><span class="no">TXT
-
-</span><span class="k">while </span><span class="nv">IFS</span><span class="o">=</span> <span class="nb">read</span> <span class="nt">-r</span> line<span class="p">;</span> <span class="k">do
-  </span><span class="nb">printf</span> <span class="s1">'다음 문장을 JSON으로 분류해. {"category":("bug"|"docs"|"feature"),"priority":("high"|"low")}\n문장: %s\n'</span> <span class="s2">"</span><span class="nv">$line</span><span class="s2">"</span> | <span class="se">\</span>
-  curl <span class="nt">-s</span> https://api.openai.com/v1/responses <span class="se">\</span>
-    <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$OPENAI_API_KEY</span><span class="s2">"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-    <span class="nt">-d</span> @- | jq <span class="nt">-re</span> <span class="s1">'.output_text // .choices[0].message.content | fromjson'</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"⚠️ JSON 실패: </span><span class="nv">$line</span><span class="s2">"</span>
-<span class="k">done</span> &lt; inbox.txt
-</code></pre></div></div>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while </span><span class="nv">IFS</span><span class="o">=</span> <span class="nb">read</span> <span class="nt">-r</span> line<span class="p">;</span> <span class="k">do
-  </span><span class="nb">printf</span> <span class="s1">'다음 문장을 JSON으로 분류해. {"category":("bug"|"docs"|"feature"),"priority":("high"|"low")}\n문장: %s\n'</span> <span class="s2">"</span><span class="nv">$line</span><span class="s2">"</span> | <span class="se">\</span>
-  curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-    <span class="nt">-d</span> <span class="s1">'{"model":"mistral:instruct","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-re</span> <span class="s1">'.response | fromjson'</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"⚠️ JSON 실패: </span><span class="nv">$line</span><span class="s2">"</span>
-<span class="k">done</span> &lt; inbox.txt
-</code></pre></div></div>
-
-<blockquote>
-  <p><strong>강한 JSON 보장</strong> 이 필요하면 Responses API의 <strong>Structured Outputs</strong>(JSON Schema 강제)을 사용하세요. <a href="https://platform.openai.com/docs/guides/structured-outputs?utm_source=chatgpt.com">OpenAI 플랫폼</a></p>
-</blockquote>
-
-<hr />
-
-<h1 id="10-테스트케이스-요약-보고서코드블록만-모으기">10) “테스트케이스 요약 보고서”(코드블록만 모으기)</h1>
-
-<p><strong>목적</strong> : 로그/리포트에서 코드블록만 추출→핵심 요약.<br />
-<strong>입력/출력</strong> : md/로그 → 실패 사례 위주 요약(불릿 5개).<br />
-<strong>가정</strong> : 마크다운 로그.<br />
-<strong>테스트</strong> : <code class="language-plaintext highlighter-rouge">report.md</code> 생성.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> <span class="o">&gt;</span> report.md <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">MD</span><span class="sh">'
-### Case A
-</span></code></pre></div></div>
-<p>FAIL: timeout</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>### Case B
-</code></pre></div></div>
-<p>bash</p>
-
-<p>OK</p>
-
-<pre><code class="language-MD">{  
-echo "[지침] 한국어, 코드블록만 스캔→실패/원인/재현 단계를 불릿 5개로.";  
-echo "[본문]"; cat report.md;  
-} | curl -s https://api.openai.com/v1/responses   
--H "Authorization: Bearer $OPENAI_API_KEY" -H "Content-Type: application/json"   
--d @- | jq -r '.output_text // .choices[0].message.content'
-</code></pre>
-<p>bash</p>
-
-<p><strong>Ollama</strong></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">{</span>
-  <span class="nb">echo</span> <span class="s2">"[지침] 한국어, 코드블록만 스캔→실패/원인/재현 단계를 불릿 5개로."</span><span class="p">;</span>
-  <span class="nb">echo</span> <span class="s2">"[본문]"</span><span class="p">;</span> <span class="nb">cat </span>report.md<span class="p">;</span>
-<span class="o">}</span> | curl <span class="nt">-s</span> http://localhost:11434/api/generate <span class="se">\</span>
-  <span class="nt">-d</span> <span class="s1">'{"model":"llama2:chat","prompt": "'</span><span class="s2">"</span><span class="si">$(</span><span class="nb">cat</span> -<span class="si">)</span><span class="s2">"</span><span class="s1">'"}'</span> | jq <span class="nt">-r</span> <span class="s1">'.response'</span>
-
-</code></pre></div></div>
-<hr />
-
-<h2 id="스타일운영-팁">스타일·운영 팁</h2>
-
-<ul>
-  <li>
-    <p><strong>프롬프트 상단 고정</strong> : <code class="language-plaintext highlighter-rouge">[지침] 언어/톤/형식</code> → <code class="language-plaintext highlighter-rouge">[본문]</code> → <code class="language-plaintext highlighter-rouge">[질문]</code> 순서로 일관.</p>
-  </li>
-  <li>
-    <p><strong>온도/토큰</strong> : 일관성 필요 시 온도 낮추기(모델 옵션: OpenAI <code class="language-plaintext highlighter-rouge">temperature</code>, Ollama <code class="language-plaintext highlighter-rouge">options.temperature</code>).</p>
-  </li>
-  <li>
-    <p><strong>길이 제어</strong> : “최대 N줄/각 줄 M자” 등 명령을 프롬프트 첫 줄에 넣기.</p>
-  </li>
-  <li>
-    <p><strong>리트라이</strong> : <code class="language-plaintext highlighter-rouge">curl --max-time 60 || sleep 2 &amp;&amp; 재시도</code> 같은 간단한 재시도 루틴.</p>
-  </li>
-  <li>
-    <p><strong>도구/웹 검색 연동</strong> : Responses API의 <strong>도구 사용</strong>(웹검색 등)으로 확장 가능. <a href="https://platform.openai.com/docs/guides/tools?utm_source=chatgpt.com">OpenAI 플랫폼+1</a></p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="참고공식-문서">참고(공식 문서)</h2>
-
-<ul>
-  <li>
-    <p><strong>OpenAI Responses API</strong> : 엔드포인트/예시/모델 사용법. <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼+3</a></p>
-  </li>
-  <li>
-    <p><strong>파일 입력(업로드 후 참조)</strong> : 대용량 문서 처리. <a href="https://platform.openai.com/docs/guides/pdf-files?utm_source=chatgpt.com">OpenAI 플랫폼</a></p>
-  </li>
-  <li>
-    <p><strong>Structured Outputs(JSON Schema 강제)</strong> : 신뢰 가능한 JSON. <a href="https://platform.openai.com/docs/guides/structured-outputs?utm_source=chatgpt.com">OpenAI 플랫폼</a></p>
-  </li>
-  <li>
-    <p><strong>Ollama 사용법/모델 라이브러리</strong> : CLI·REST, CodeLlama/Mistral/Llama2 예시. <a href="https://ollama.com/library/codellama?utm_source=chatgpt.com">Ollama+3</a></p>
-  </li>
-  <li>
-    <p><strong>Ollama Windows 프리뷰</strong>(환경 참고). <a href="https://ollama.com/blog/windows-preview?utm_source=chatgpt.com">Ollama</a></p>
-  </li>
-</ul>
-
-<hr />
-
-<p>필요하시면 위 스크립트를 <strong>하나의<code class="language-plaintext highlighter-rouge">ai.sh</code> 유틸</strong>(백엔드 스위치: OpenAI↔Ollama)로 묶어서 드릴게요. 원하는 작업군(번역/요약/코드/커밋 등) 중심으로 더 다듬어 최적화해드립니다.</p>
-
-<p class="chat--user">
-
-python script 하나로 만들어줘. 몇 가지 잘 쓸만한 system prompt를 준비해놓고 예를 들어 script_name translate "안녕?" 이런 식으로 쓸 수 있게
-
-</p>
-
-<p>좋아요! “한 파일짜리 파이썬 CLI”로 정리해 드릴게요. 아래는 바로 저장·실행 가능한 스크립트와 함께, (1) 전제 가정, (2) 재현 가능한 사용 예제(테스트), (3) 일관된 스타일(서브커맨드+프리셋)까지 갖춘 형태입니다.<br />
-요청하신 “<code class="language-plaintext highlighter-rouge">script_name translate "안녕?"</code>” 스타일 그대로 됩니다.</p>
-
-<hr />
-
-<h2 id="시작-전-체크리스트개념">시작 전 체크리스트(개념)</h2>
-
-<ul>
-  <li>
-    <p><strong>목적 고정</strong> : <code class="language-plaintext highlighter-rouge">translate</code>, <code class="language-plaintext highlighter-rouge">summarize</code>, <code class="language-plaintext highlighter-rouge">explain</code>, <code class="language-plaintext highlighter-rouge">commit</code>, <code class="language-plaintext highlighter-rouge">todo</code>, <code class="language-plaintext highlighter-rouge">docstring</code>, <code class="language-plaintext highlighter-rouge">classify</code> 처럼 태스크 단일 목적.</p>
-  </li>
-  <li>
-    <p><strong>입력 경계</strong> : <code class="language-plaintext highlighter-rouge">--text</code>, <code class="language-plaintext highlighter-rouge">--file</code>, 또는 표준입력(없으면 에러). 너무 길면 스스로 잘림 없음(원하면 <code class="language-plaintext highlighter-rouge">head -c</code> 등으로 전처리).</p>
-  </li>
-  <li>
-    <p><strong>출력 약속</strong> : 텍스트 기본, <code class="language-plaintext highlighter-rouge">classify</code>는 <strong>JSON</strong> 보장(가능 시 스키마 강제).</p>
-  </li>
-  <li>
-    <p><strong>백엔드 선택</strong> : <code class="language-plaintext highlighter-rouge">--backend openai|ollama</code>(기본=openai). 모델은 <code class="language-plaintext highlighter-rouge">--model</code>로 오버라이드.</p>
-  </li>
-  <li>
-    <p><strong>보안/재현</strong> : 키는 환경변수(OPENAI_API_KEY). Ollama는 로컬 11434 API 사용.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="전제가정">전제(가정)</h2>
-
-<ul>
-  <li>
-    <p><strong>OpenAI</strong> : 환경변수 <code class="language-plaintext highlighter-rouge">OPENAI_API_KEY</code> 필요. Python SDK 없이 <strong>HTTP /v1/responses</strong> 호출 사용(문서 기준 최신 기본 엔드포인트). <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼+1</a><a href="https://github.com/openai/openai-python?utm_source=chatgpt.com">GitHub</a></p>
-  </li>
-  <li>
-    <p><strong>Ollama</strong> : 로컬에서 <code class="language-plaintext highlighter-rouge">ollama serve</code> 동작, 기본 호스트 <code class="language-plaintext highlighter-rouge">http://localhost:11434</code>. <code class="language-plaintext highlighter-rouge">/api/chat</code> 및 <code class="language-plaintext highlighter-rouge">/api/generate</code> 사용(분류 시 JSON 강제 위해 <code class="language-plaintext highlighter-rouge">format:"json"</code> 활용). <a href="https://ollama.readthedocs.io/en/api/?utm_source=chatgpt.com">Ollama</a><a href="https://github.com/ollama/ollama?utm_source=chatgpt.com">GitHub</a></p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="파일-ai_clipy">파일: <code class="language-plaintext highlighter-rouge">ai_cli.py</code></h2>
-
-<p>아래를 그대로 저장하세요.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-ai_cli.py — 단일 파이썬 스크립트로 여러 LLM 유틸 제공
-- 서브커맨드: translate, summarize, explain, commit, todo, docstring, classify
-- 백엔드: OpenAI Responses API(기본) 또는 Ollama 로컬 API
-- 일관된 프롬프트 포맷: [system preset] + 사용자 입력
-"""
-
-import os, sys, json, argparse, subprocess, textwrap
-from typing import Optional, Dict, Any
-try:
-    import requests
-except Exception as e:
-    print("requests 라이브러리가 필요합니다. `pip install requests` 후 다시 실행하세요.", file=sys.stderr)
-    sys.exit(2)
-
-# -----------------------------
-# System prompt presets
-# -----------------------------
-PRESETS = {
-    "translate": lambda to="en": (
-        f"역할: 고품질 번역기\n"
-        f"규칙:\n"
-        f"- 목표 언어: {to}\n"
-        f"- 의미와 뉘앙스를 보존하고, 자연스럽게 의역\n"
-        f"- 출력은 번역문만(주석/설명 금지)\n"
-    ),
-    "summarize": (
-        "역할: 전문 요약가\n"
-        "규칙:\n"
-        "- 한국어 출력, 불릿 7개 이내, 명사형 간결체\n"
-        "- 핵심 주장/근거/위험/다음 액션 우선\n"
-    ),
-    "explain": (
-        "역할: 코드 리뷰어\n"
-        "규칙:\n"
-        "- 한국어로 3섹션 출력: [설명] [복잡도] [리팩터링]\n"
-        "- 핵심 로직, 시간/공간 복잡도, 구체적 개선안 포함\n"
-    ),
-    "commit": (
-        "역할: Conventional Commits 작성기\n"
-        "규칙:\n"
-        "- 한국어, 제목 72자 이내, 한 줄 요약 + 1~2줄 본문\n"
-        "- 타입은 feat/fix/docs/refactor/test/chore 중 선택\n"
-        "- 변경 의도와 영향 범위를 간결히\n"
-        "- 출력은 커밋 메시지 본문만\n"
-    ),
-    "todo": (
-        "역할: TODO 추출기\n"
-        "규칙:\n"
-        "- 한국어, 입력 문서에서 실행 가능한 액션만 추려서 '- [ ] ' 체크리스트로만 출력\n"
-    ),
-    "docstring": (
-        "역할: 파이썬 Docstring 작성기\n"
-        "규칙:\n"
-        "- 한국어 PEP257 스타일\n"
-        "- 수정 제안은 unified diff 패치 형식으로 출력(+++ 파일명 포함)\n"
-    ),
-    "classify": (
-        "역할: 간단 이슈 분류기\n"
-        "규칙:\n"
-        "- 입력 한 줄을 카테고리와 우선순위로 JSON 출력\n"
-        "- category ∈ {\"bug\",\"docs\",\"feature\"}, priority ∈ {\"high\",\"low\"}\n"
-        "- 출력은 하나의 순수 JSON 객체만\n"
-    ),
-}
-
-# JSON Schema for classify (OpenAI Structured Outputs 용)
-CLASSIFY_JSON_SCHEMA = {
-    "name": "classification",
-    "strict": True,
-    "schema": {
-        "type": "object",
-        "properties": {
-            "category": {"type": "string", "enum": ["bug", "docs", "feature"]},
-            "priority": {"type": "string", "enum": ["high", "low"]},
-        },
-        "required": ["category", "priority"],
-        "additionalProperties": False,
-    },
-}
-
-# -----------------------------
-# I/O helpers
-# -----------------------------
-def read_input_text(args) -&gt; str:
-    if args.text:
-        return args.text
-    if args.file:
-        with open(args.file, "r", encoding="utf-8") as f:
-            return f.read()
-    if not sys.stdin.isatty():
-        return sys.stdin.read()
-    print("입력이 없습니다. --text, --file 또는 표준입력으로 내용을 전달하세요.", file=sys.stderr)
-    sys.exit(1)
-
-def maybe_git_diff(staged: bool) -&gt; str:
-    cmd = ["git", "diff", "--staged"] if staged else ["git", "diff"]
-    try:
-        out = subprocess.check_output(cmd, encoding="utf-8", stderr=subprocess.STDOUT)
-        if not out.strip():
-            print("git diff 결과가 비어 있습니다. 변경사항을 확인하세요.", file=sys.stderr)
-            sys.exit(1)
-        return out
-    except subprocess.CalledProcessError as e:
-        print("git diff 실행 실패:", e.output, file=sys.stderr)
-        sys.exit(1)
-
-# -----------------------------
-# Backends
-# -----------------------------
-def call_openai(system_text: str, user_text: str, model: str, *, json_schema: Optional[Dict[str, Any]] = None) -&gt; str:
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        print("환경변수 OPENAI_API_KEY 가 필요합니다.", file=sys.stderr)
-        sys.exit(2)
-
-    url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1/responses")
-    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-
-    payload: Dict[str, Any] = {
-        "model": model,
-        "instructions": system_text,
-        "input": user_text,
-    }
-    if json_schema:
-        payload["response_format"] = {
-            "type": "json_schema",
-            "json_schema": json_schema,
-        }
-
-    resp = requests.post(url, headers=headers, data=json.dumps(payload), timeout=120)
-    if resp.status_code != 200:
-        print(f"[OpenAI] HTTP {resp.status_code}: {resp.text}", file=sys.stderr)
-        sys.exit(3)
-    data = resp.json()
-    # Responses API는 output_text에 전체 텍스트가 평탄화되어 제공됨
-    text = data.get("output_text")
-    if not text:
-        # 호환용(혹시 구조가 바뀐 경우)
-        try:
-            text = data["choices"][0]["message"]["content"]
-            if isinstance(text, list):  # 멀티파트 대비
-                text = "".join(part.get("text", "") for part in text if isinstance(part, dict))
-        except Exception:
-            text = json.dumps(data, ensure_ascii=False)
-    return text
-
-def call_ollama_chat(system_text: str, user_text: str, model: str) -&gt; str:
-    host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
-    url = f"{host}/api/chat"
-    payload = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system_text},
-            {"role": "user", "content": user_text},
-        ],
-        "stream": False,
-    }
-    resp = requests.post(url, data=json.dumps(payload), timeout=120)
-    if resp.status_code != 200:
-        print(f"[Ollama chat] HTTP {resp.status_code}: {resp.text}", file=sys.stderr)
-        sys.exit(3)
-    data = resp.json()
-    # Ollama chat 응답 형태: {"message":{"content": "..."}}
-    try:
-        return data["message"]["content"]
-    except Exception:
-        # generate 형식 등 다양성 대비
-        return data.get("response", json.dumps(data, ensure_ascii=False))
-
-def call_ollama_generate(prompt_text: str, model: str, *, json_mode: bool = False) -&gt; str:
-    host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
-    url = f"{host}/api/generate"
-    payload = {
-        "model": model,
-        "prompt": prompt_text,
-        "stream": False,
-    }
-    if json_mode:
-        payload["format"] = "json"
-    resp = requests.post(url, data=json.dumps(payload), timeout=120)
-    if resp.status_code != 200:
-        print(f"[Ollama gen] HTTP {resp.status_code}: {resp.text}", file=sys.stderr)
-        sys.exit(3)
-    data = resp.json()
-    return data.get("response", json.dumps(data, ensure_ascii=False))
-
-# -----------------------------
-# Router
-# -----------------------------
-def run_task(args):
-    backend = args.backend
-    model = args.model
-
-    def run(system_text: str, user_text: str, *, json_schema: Optional[Dict[str, Any]] = None, force_json=False) -&gt; str:
-        if backend == "openai":
-            return call_openai(system_text, user_text, model, json_schema=json_schema)
-        # Ollama: JSON 보장이 필요하면 generate + json_mode 사용
-        if force_json:
-            prompt = f"{system_text.strip()}\n\n[입력]\n{user_text.strip()}\n"
-            return call_ollama_generate(prompt, model, json_mode=True)
-        return call_ollama_chat(system_text, user_text, model)
-
-    # translate
-    if args.command == "translate":
-        to_lang = args.to
-        sys_prompt = PRESETS["translate"](to=to_lang)
-        text = read_input_text(args)
-        print(run(sys_prompt, text).strip())
-        return
-
-    # summarize
-    if args.command == "summarize":
-        sys_prompt = PRESETS["summarize"]
-        text = read_input_text(args)
-        print(run(sys_prompt, text).strip())
-        return
-
-    # explain (code)
-    if args.command == "explain":
-        sys_prompt = PRESETS["explain"]
-        text = read_input_text(args)
-        print(run(sys_prompt, text).strip())
-        return
-
-    # commit (from text or git diff)
-    if args.command == "commit":
-        sys_prompt = PRESETS["commit"]
-        if args.git or args.staged:
-            text = maybe_git_diff(staged=args.staged)
-        else:
-            text = read_input_text(args)
-        user_msg = f"[변경점]\n{text}"
-        print(run(sys_prompt, user_msg).strip())
-        return
-
-    # todo extraction
-    if args.command == "todo":
-        sys_prompt = PRESETS["todo"]
-        text = read_input_text(args)
-        print(run(sys_prompt, text).strip())
-        return
-
-    # docstring (unified diff patch)
-    if args.command == "docstring":
-        sys_prompt = PRESETS["docstring"]
-        text = read_input_text(args)
-        user_msg = f"[파일]\n{text}"
-        print(run(sys_prompt, user_msg).strip())
-        return
-
-    # classify -&gt; strict JSON
-    if args.command == "classify":
-        sys_prompt = PRESETS["classify"]
-        # 한 줄만 분류(여러 줄은 쉘에서 while read 루프 권장)
-        text = read_input_text(args).strip()
-        if backend == "openai":
-            out = run(sys_prompt, text, json_schema=CLASSIFY_JSON_SCHEMA)
-        else:
-            # Ollama: JSON 강제는 generate/format=json 사용
-            prompt = textwrap.dedent(f"""
-            {sys_prompt}
-            출력은 JSON 한 객체만. 예: category
-            문장: {text}
-            """).strip()
-            out = call_ollama_generate(prompt, model, json_mode=True)
-        # pretty print or raw
-        try:
-            obj = json.loads(out)
-            print(json.dumps(obj, ensure_ascii=False))
-        except Exception:
-            # 혹시 순수 JSON이 아니면 원본 출력
-            print(out.strip())
-        return
-
-    # unknown
-    print("지원하지 않는 커맨드입니다.", file=sys.stderr)
-    sys.exit(1)
-
-# -----------------------------
-# CLI
-# -----------------------------
-def build_parser():
-    p = argparse.ArgumentParser(description="LLM one-file CLI (OpenAI / Ollama)")
-    p.add_argument("--backend", choices=["openai", "ollama"], default=os.environ.get("AI_BACKEND", "openai"),
-                   help="백엔드 선택 (기본: openai)")
-    p.add_argument("--model", default=os.environ.get("AI_MODEL", None),
-                   help="사용할 모델명 (OpenAI 예: gpt-4o-mini, Ollama 예: llama3.2)")
-    sub = p.add_subparsers(dest="command", required=True)
-
-    def common(sp):
-        sp.add_argument("--text", help="직접 입력 텍스트")
-        sp.add_argument("--file", help="입력 파일 경로")
-
-    sp = sub.add_parser("translate", help="번역")
-    common(sp)
-    sp.add_argument("--to", default="en", help="목표 언어 코드(기본=en)")
-
-    sp = sub.add_parser("summarize", help="요약(불릿 7)")
-    common(sp)
-
-    sp = sub.add_parser("explain", help="코드 설명+개선")
-    common(sp)
-
-    sp = sub.add_parser("commit", help="Conventional Commits 생성")
-    common(sp)
-    sp.add_argument("--git", action="store_true", help="git diff 사용")
-    sp.add_argument("--staged", action="store_true", help="git diff --staged 사용")
-
-    sp = sub.add_parser("todo", help="문서에서 TODO 추출")
-    common(sp)
-
-    sp = sub.add_parser("docstring", help="파이썬 파일에 대한 Docstring 패치 제안")
-    common(sp)
-
-    sp = sub.add_parser("classify", help="문장을 JSON으로 라벨링(category/priority)")
-    common(sp)
-
-    return p
-
-def main():
-    parser = build_parser()
-    args = parser.parse_args()
-
-    # 기본 모델 값 보정
-    if not args.model:
-        args.model = "gpt-4o-mini" if args.backend == "openai" else "llama3.2"
-
-    run_task(args)
-
-if __name__ == "__main__":
-    main()
-
-</code></pre></div></div>
-<hr />
-
-<h2 id="사용-예시재현-가능한-테스트">사용 예시(재현 가능한 테스트)</h2>
-
-<blockquote>
-  <p>아래 명령은 Mac/Linux 기준. Windows는 <code class="language-plaintext highlighter-rouge">python</code> 대신 <code class="language-plaintext highlighter-rouge">py</code> 또는 <code class="language-plaintext highlighter-rouge">python.exe</code> 사용하세요.</p>
-</blockquote>
-
-<ol>
-  <li>설치 &amp; 실행 준비
-```
-bash</li>
-</ol>
-
-<p>pip install requests
-export OPENAI_API_KEY="sk-…"           # OpenAI 백엔드 쓸 때만</p>
-<h1 id="ollama-사용-시-ollama-serve--모델-준비-ollama-pull-llama32">(Ollama 사용 시) ollama serve &amp; 모델 준비: ollama pull llama3.2</h1>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  2. 번역 (요청 예시와 동일)
-</code></pre></div></div>
-<p>bash</p>
-
-<p>python ai_cli.py translate –text "안녕?" –to en</p>
-<h1 id="또는-파일stdin">또는 파일/STDIN:</h1>
-<p>echo "PostgreSQL 인덱스는…" | python ai_cli.py translate –to en</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  3. 요약
-</code></pre></div></div>
-<p>bash</p>
-
-<p>python ai_cli.py summarize –text "회의에서 마이그레이션 일정과 위험…"</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  4. 코드 설명
-</code></pre></div></div>
-<p>bash</p>
-
-<p>cat &gt; example.py «'PY'
-def fib(n):
-    if n &lt;= 1: return n
-    return fib(n-1)+fib(n-2)
-PY
-python ai_cli.py explain –file example.py</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  5. 커밋 메시지(로컬 변경에서)
-</code></pre></div></div>
-<p>bash</p>
-
-<h1 id="워킹-디렉토리에서">워킹 디렉토리에서</h1>
-<p>python ai_cli.py commit –git              # git diff 사용
-python ai_cli.py commit –staged           # git diff –staged 사용</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  6. TODO 추출
-</code></pre></div></div>
-<p>bash</p>
-
-<p>python ai_cli.py todo –text "위험 항목 점검 및 롤백 플랜 작성 필요"</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  7. 분류(JSON 보장)
-</code></pre></div></div>
-<p>bash</p>
-
-<p>python ai_cli.py classify –text "DB 연결 오류가 자주 발생함"</p>
-<h1 id="출력-예-categorybugpriorityhigh">출력 예: {"category":"bug","priority":"high"}</h1>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  8. Docstring 패치 제안
-</code></pre></div></div>
-<p>bash</p>
-
-<p>python ai_cli.py docstring –file example.py</p>
-<h1 id="unified-diff-형태로-나옵니다수동-패치-or-git-apply-가능">unified diff 형태로 나옵니다(수동 패치 or git apply 가능).</h1>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * *
-
-## 입출력 요약(서브커맨드별)
-
-  * `translate`: 입력=임의 텍스트 → 출력=목표 언어 번역문 1개.
-
-  * `summarize`: 입력=문서 텍스트 → 출력=불릿 ≤7개 핵심 요약(한글).
-
-  * `explain`: 입력=코드 → 출력=[설명][복잡도][리팩터링] 3섹션.
-
-  * `commit`: 입력=git diff/텍스트 → 출력=Conventional Commits 메시지 본문.
-
-  * `todo`: 입력=문서 → 출력=Markdown 체크리스트(`- [ ] ...`).
-
-  * `docstring`: 입력=파이썬 파일 → 출력=unified diff 패치.
-
-  * `classify`: 입력=한 줄 문장 → 출력=JSON `{category, priority}` (OpenAI는 **구조적 출력** 사용, Ollama는 `format:"json"`). [OpenAI 플랫폼](https://platform.openai.com/docs/guides/structured-outputs?utm_source=chatgpt.com)[Ollama](https://ollama.readthedocs.io/en/api/?utm_source=chatgpt.com)
-
-* * *
-
-## 구현 메모(일관된 스타일)
-
-  * 프롬프트는 **시스템 프리셋 + 사용자 입력** 규격화.
-
-  * OpenAI는 **Responses API** 를 사용해 `instructions + input` 형태로 호출. [GitHub](https://github.com/openai/openai-python?utm_source=chatgpt.com)[OpenAI 플랫폼](https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com)
-
-  * `classify`는 OpenAI에서 **Structured Outputs(JSON Schema)** 를 사용하도록 `response_format`을 설정. [OpenAI 플랫폼](https://platform.openai.com/docs/guides/structured-outputs?utm_source=chatgpt.com)[OpenAI](https://openai.com/index/introducing-structured-outputs-in-the-api/?utm_source=chatgpt.com)
-
-  * Ollama는 일반 태스크는 `/api/chat`, JSON 강제 태스크는 `/api/generate + format:"json"` 사용. [Ollama](https://ollama.readthedocs.io/en/api/?utm_source=chatgpt.com)
-
-* * *
-
-## 참고
-
-  * **OpenAI Responses API** 개요/빠른 시작: [OpenAI 플랫폼+1](https://platform.openai.com/docs/quickstart?utm_source=chatgpt.com)
-
-  * **OpenAI Python 라이브러리 README(Responses 예시)** : [GitHub](https://github.com/openai/openai-python)
-
-  * **Structured Outputs(JSON 스키마 강제)** : [OpenAI 플랫폼](https://platform.openai.com/docs/guides/structured-outputs?utm_source=chatgpt.com)[OpenAI](https://openai.com/index/introducing-structured-outputs-in-the-api/?utm_source=chatgpt.com)
-
-  * **Ollama API(chat/generate, JSON 모드)** : [Ollama](https://ollama.readthedocs.io/en/api/?utm_source=chatgpt.com)[GitHub](https://github.com/ollama/ollama?utm_source=chatgpt.com)
-
-필요하시면 `--stream` 옵션, 배치 처리(파일 한 줄씩 분류), 프리셋 추가(예: `ragfile`, `rewrite`, `polish`)도 확장해 드릴게요.
-
-&lt;p class="chat--user" markdown="1"&gt;
-
-1\. 이 스크립트 이름을 10개 정도 작명해줘. (개인적인 의견으로는 간단한 ai라는 느낌이 들면 좋을 듯) 2\. 이걸 python project화 할거야. sturcture와 folder 구조, 각 파일을 작성해줘. 3\. 그리고 새로운 subcommand를 좀 쉽게 확장성 있게 등록할 수 있게 구조를 작성해줘. 새로운 subcommand를 추가하는 방법 예시도 추가해줘. 4\. ENPOINT 주소도 내가 등록할 수 있도록 해줘.
-
-&lt;/p&gt;
-
-좋아요—원하신 “간단한 ai 느낌”의 이름 제안부터, **프로젝트 구조/파일 전체** , **확장 가능한 서브커맨드 구조** , **엔드포인트(ENDPOINT) 설정 방식** 까지 한 번에 정리합니다.  
-(요청하신 대로 단계별로 생각을 드러내며, 전제·재현 예시·일관 스타일을 포함합니다.)
-
-* * *
-
-# 0) 한눈에 계획 (step-by-step)
-
-  1. **이름 후보 10개** 를 먼저 정리
-
-  2. **Python 패키지 구조** 를 제시(콘솔 엔트리포인트 포함)
-
-  3. **확장성 핵심** : `CommandRegistry` \+ `commands/` 자동 로드 + **entry points 플러그인** 지원
-
-  4. **ENDPOINT 설정** : CLI 옵션, 환경변수, YAML 설정 파일(우선순위: CLI &gt; ENV &gt; YAML 기본값)
-
-  5. **재현 예시** : 설치·실행 커맨드, 새 서브커맨드 추가 예시 포함
-
-* * *
-
-# 1) 스크립트/프로젝트 이름 제안 (10)
-
-간단·가벼운 “ai 느낌” 위주로 골랐어요.
-
-  1. `simpleai`
-
-  2. `nan.ai` (`nanai` 명령)
-
-  3. `aikit`
-
-  4. `mini-ai` (`miniai`)
-
-  5. `ai-do`
-
-  6. `aihand`
-
-  7. `snackai`
-
-  8. `clai` (command-line-ai)
-
-  9. `aiplay`
-
-  10. `tinyai`
-
-&gt; 아래 예시는 패키지명을 **`simpleai`** , 콘솔 명령을 **`simpleai`**로 가정합니다. (원하시면 다른 이름으로 일괄 치환 가능)
-
-* * *
-
-# 2) 프로젝트 구조 &amp; 전체 파일
-
-## 디렉토리 구조
-</code></pre></div></div>
-<p>graphql</p>
-
-<p>simpleai/
-├─ simpleai/
-│  ├─ <strong>init</strong>.py
-│  ├─ cli.py                 # 콘솔 엔트리포인트
-│  ├─ config.py              # CLI/ENV/YAML 설정 로더
-│  ├─ presets.py             # system prompts 프리셋
-│  ├─ registry.py            # CommandRegistry &amp; 자동 로드/플러그인
-│  ├─ utils.py               # 공통 I/O 유틸(입력읽기, git diff 등)
-│  ├─ backends/
-│  │  ├─ <strong>init</strong>.py
-│  │  ├─ openai_backend.py   # OpenAI Responses API 호출
-│  │  └─ ollama_backend.py   # Ollama chat/generate 호출
-│  └─ commands/
-│     ├─ <strong>init</strong>.py         # 모듈 자동등록 트리거
-│     ├─ translate.py
-│     ├─ summarize.py
-│     ├─ explain.py
-│     ├─ commit.py
-│     ├─ todo.py
-│     ├─ docstring.py
-│     └─ classify.py
-├─ examples/
-│  ├─ example.py
-│  ├─ notes.txt
-│  └─ policy.txt
-├─ tests/
-│  └─ test_smoke.py
-├─ pyproject.toml
-├─ README.md
-└─ .env.example</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; 의존성: `requests` (가벼움 유지), 표준 `argparse`. YAML 읽기는 선택(Optional)—없으면 ENV/CLI만으로 동작.
-
-* * *
-
-## 파일: `simpleai/__init__.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p><strong>all</strong> = ["cli"]
-<strong>version</strong> = "0.1.0"</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/presets.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>def preset_translate(to="en") -&gt; str:
-    return (
-        "역할: 고품질 번역기\n"
-        f"- 목표 언어: {to}\n"
-        "- 의미/뉘앙스 보존, 자연스러운 의역\n"
-        "- 출력은 번역문만(주석 금지)\n"
-    )</p>
-
-<p>PRESETS = {
-    "summarize": (
-        "역할: 전문 요약가\n"
-        "- 한국어 출력, 불릿 최대 7개, 명사형 간결체\n"
-        "- 핵심 주장/근거/위험/다음 액션 우선\n"
-    ),
-    "explain": (
-        "역할: 코드 리뷰어\n"
-        "- 한국어 3섹션: [설명] [복잡도] [리팩터링]\n"
-        "- 핵심 로직, 시간/공간 복잡도, 개선안\n"
-    ),
-    "commit": (
-        "역할: Conventional Commits 작성기\n"
-        "- 한국어, 제목 72자 이내 + 1~2줄 본문\n"
-        "- feat/fix/docs/refactor/test/chore 중 선택\n"
-        "- 출력은 메시지 본문만\n"
-    ),
-    "todo": (
-        "역할: TODO 추출기\n"
-        "- 입력에서 실행 가능한 액션만 '- [ ] ' 체크리스트로 출력\n"
-    ),
-    "docstring": (
-        "역할: 파이썬 Docstring 작성기\n"
-        "- 한국어 PEP257 스타일\n"
-        "- unified diff 패치 형식(+++ 파일명 포함)\n"
-    ),
-    "classify": (
-        "역할: 간단 이슈 분류기\n"
-        "- 입력 한 줄 → JSON {category, priority}\n"
-        '- category ∈ {"bug","docs","feature"}, priority ∈ {"high","low"}\n'
-        "- 출력은 순수 JSON 한 객체만\n"
-    ),
-}</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/config.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import os, json, pathlib
-from dataclasses import dataclass
-from typing import Optional</p>
-
-<p>try:
-    import yaml  # optional
-except Exception:
-    yaml = None</p>
-
-<p>DEFAULT_CONFIG_PATHS = [
-    "~/.simpleai/config.yaml",
-    "./.simpleai/config.yaml",
-]</p>
-
-<p>@dataclass
-class OpenAIConfig:
-    api_key: Optional[str] = None
-    base_url: str = "https://api.openai.com/v1"
-    responses_path: str = "/responses"
-    model: str = "gpt-4o-mini"</p>
-
-<p>@dataclass
-class OllamaConfig:
-    host: str = "http://localhost:11434"  # ex) http://127.0.0.1:11434
-    chat_path: str = "/api/chat"
-    generate_path: str = "/api/generate"
-    model: str = "llama3.2"</p>
-
-<p>@dataclass
-class AppConfig:
-    backend: str = "openai"  # or "ollama"
-    openai: OpenAIConfig = OpenAIConfig()
-    ollama: OllamaConfig = OllamaConfig()</p>
-
-<p>def _load_yaml_dict() -&gt; dict:
-    data = {}
-    for p in DEFAULT_CONFIG_PATHS:
-        path = pathlib.Path(os.path.expanduser(p))
-        if path.exists() and path.is_file():
-            if yaml is None:
-                continue
-            with path.open("r", encoding="utf-8") as f:
-                y = yaml.safe_load(f) or {}
-                data.update(y)
-    return data</p>
-
-<p>def load_config(cli_args) -&gt; AppConfig:
-    # base from YAML
-    y = _load_yaml_dict()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cfg = AppConfig(
-    backend = getattr(cli_args, "backend", None) or os.getenv("SIMPLEAI_BACKEND", y.get("defaults", {}).get("backend", "openai")),
-    openai = OpenAIConfig(
-        api_key = os.getenv("OPENAI_API_KEY", y.get("openai", {}).get("api_key")),
-        base_url = getattr(cli_args, "openai_base_url", None) or os.getenv("SIMPLEAI_OPENAI_BASE_URL", y.get("openai", {}).get("base_url", "https://api.openai.com/v1")),
-        responses_path = getattr(cli_args, "openai_responses_path", None) or os.getenv("SIMPLEAI_OPENAI_RESPONSES_PATH", y.get("openai", {}).get("responses_path", "/responses")),
-        model = getattr(cli_args, "model", None) or os.getenv("OPENAI_MODEL", y.get("openai", {}).get("model", "gpt-4o-mini")),
-    ),
-    ollama = OllamaConfig(
-        host = getattr(cli_args, "ollama_host", None) or os.getenv("SIMPLEAI_OLLAMA_HOST", y.get("ollama", {}).get("host", "http://localhost:11434")),
-        chat_path = os.getenv("SIMPLEAI_OLLAMA_CHAT_PATH", y.get("ollama", {}).get("chat_path", "/api/chat")),
-        generate_path = os.getenv("SIMPLEAI_OLLAMA_GENERATE_PATH", y.get("ollama", {}).get("generate_path", "/api/generate")),
-        model = getattr(cli_args, "model", None) or os.getenv("OLLAMA_MODEL", y.get("ollama", {}).get("model", "llama3.2")),
-    ),
-)
-return cfg
-</code></pre></div></div>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/utils.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import sys, subprocess</p>
-
-<p>def read_input_text(args) -&gt; str:
-    if getattr(args, "text", None):
-        return args.text
-    if getattr(args, "file", None):
-        with open(args.file, "r", encoding="utf-8") as f:
-            return f.read()
-    if not sys.stdin.isatty():
-        return sys.stdin.read()
-    raise SystemExit("입력이 없습니다. –text, –file 또는 표준입력으로 내용을 전달하세요.")</p>
-
-<p>def git_diff(staged: bool=False) -&gt; str:
-    cmd = ["git", "diff", "–staged"] if staged else ["git", "diff"]
-    out = subprocess.check_output(cmd, encoding="utf-8", stderr=subprocess.STDOUT)
-    if not out.strip():
-        raise SystemExit("git diff 결과가 비어 있습니다.")
-    return out</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/backends/openai_backend.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import json, requests</p>
-
-<p>def call_openai(instructions: str, user_text: str, *, base_url: str, responses_path: str,
-                api_key: str, model: str, response_format: dict | None = None) -&gt; str:
-    if not api_key:
-        raise SystemExit("환경변수 OPENAI_API_KEY 또는 설정 파일이 필요합니다.")</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>url = base_url.rstrip("/") + responses_path
-headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-payload = {"model": model, "instructions": instructions, "input": user_text}
-if response_format:
-    payload["response_format"] = response_format
-
-resp = requests.post(url, headers=headers, data=json.dumps(payload), timeout=120)
-if resp.status_code != 200:
-    raise SystemExit(f"[OpenAI] HTTP {resp.status_code}: {resp.text}")
-
-data = resp.json()
-text = data.get("output_text")
-if not text:
-    # 호환용
-    try:
-        c = data["choices"][0]["message"]["content"]
-        text = "".join(p.get("text","") for p in c if isinstance(p, dict)) if isinstance(c, list) else c
-    except Exception:
-        text = json.dumps(data, ensure_ascii=False)
-return text.strip()
-</code></pre></div></div>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/backends/ollama_backend.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import json, requests</p>
-
-<p>def _post(url, payload):
-    r = requests.post(url, data=json.dumps(payload), timeout=120)
-    if r.status_code != 200:
-        raise SystemExit(f"[Ollama] HTTP {r.status_code}: {r.text}")
-    return r.json()</p>
-
-<p>def chat(instructions: str, user_text: str, *, host: str, chat_path: str, model: str) -&gt; str:
-    url = host.rstrip("/") + chat_path
-    payload = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": instructions},
-            {"role": "user", "content": user_text},
-        ],
-        "stream": False,
-    }
-    data = _post(url, payload)
-    return (data.get("message", {}) or {}).get("content") or data.get("response","")</p>
-
-<p>def generate(prompt: str, *, host: str, generate_path: str, model: str, json_mode: bool=False) -&gt; str:
-    url = host.rstrip("/") + generate_path
-    payload = {"model": model, "prompt": prompt, "stream": False}
-    if json_mode:
-        payload["format"] = "json"
-    data = _post(url, payload)
-    return data.get("response","")</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/registry.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse, importlib, pkgutil
-from typing import Callable, Dict, List, Optional
-from importlib import metadata</p>
-
-<p>Handler = Callable[[argparse.Namespace, "AppDeps"], None]
-Adder = Callable[[argparse._SubParsersAction], argparse.ArgumentParser]</p>
-
-<p>class CommandRegistry:
-    def <strong>init</strong>(self):
-        self._commands: Dict[str, Dict[str, object]] = {}</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def register(self, name: str, add_arguments: Adder, handler: Handler):
-    if name in self._commands:
-        raise ValueError(f"duplicate command: {name}")
-    self._commands[name] = {"add_arguments": add_arguments, "handler": handler}
-
-def build_subparsers(self, sub: argparse._SubParsersAction):
-    for name, spec in self._commands.items():
-        sp = spec["add_arguments"](sub)
-        sp.set_defaults(_handler=spec["handler"])
-
-def names(self) -&gt; List[str]:
-    return sorted(self._commands.keys())
-</code></pre></div></div>
-
-<p>def autoload_builtin_commands(registry: CommandRegistry):
-    # simpleai.commands.* 모듈 자동 import → 각 모듈에서 register(registry)
-    import simpleai.commands as pkg
-    for mod in pkgutil.iter_modules(pkg.<strong>path</strong>, pkg.<strong>name</strong> + "."):
-        importlib.import_module(mod.name)</p>
-
-<p>def autoload_plugin_entrypoints(registry: CommandRegistry):
-    # 외부 패키지가 entry_points <code class="language-plaintext highlighter-rouge">simpleai.commands</code>에 등록한 register 함수를 호출
-    try:
-        eps = metadata.entry_points()
-        group = eps.select(group="simpleai.commands")
-    except Exception:
-        group = []
-    for ep in group:
-        # ep.name 은 커맨드명(권장), ep.load() → callable(register)
-        register_fn = ep.load()
-        register_fn(registry)</p>
-
-<h1 id="의존성-컨테이너-백엔드프리셋설정-접근">의존성 컨테이너 (백엔드/프리셋/설정 접근)</h1>
-<p>class AppDeps:
-    def <strong>init</strong>(self, cfg, openai, ollama, presets):
-        self.cfg = cfg
-        self.openai = openai
-        self.ollama = ollama
-        self.presets = presets</p>
-
-<p>REGISTRY = CommandRegistry()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/commands/__init__.py`
-</code></pre></div></div>
-<p>python</p>
-
-<h1 id="각-모듈에서-import-시-simpleairegistryregistryregister-호출">각 모듈에서 import 시 simpleai.registry.REGISTRY.register(…) 호출</h1>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/commands/translate.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from simpleai.registry import REGISTRY, AppDeps
-from simpleai.utils import read_input_text
-from simpleai.presets import preset_translate</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("translate", help="번역")
-    sp.add_argument("–text")
-    sp.add_argument("–file")
-    sp.add_argument("–to", default="en", help="목표 언어 코드(기본=en)")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = preset_translate(to=args.to)
-    text = read_input_text(args)
-    if deps.cfg.backend == "openai":
-        out = deps.openai(
-            instructions=sys_prompt, user_text=text,
-            base_url=deps.cfg.openai.base_url,
-            responses_path=deps.cfg.openai.responses_path,
-            api_key=deps.cfg.openai.api_key,
-            model=deps.cfg.openai.model,
-        )
-    else:
-        out = deps.ollama.chat(
-            instructions=sys_prompt, user_text=text,
-            host=deps.cfg.ollama.host, chat_path=deps.cfg.ollama.chat_path,
-            model=deps.cfg.ollama.model,
-        )
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("translate", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/commands/summarize.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from simpleai.registry import REGISTRY, AppDeps
-from simpleai.utils import read_input_text
-from simpleai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("summarize", help="요약(불릿 7)")
-    sp.add_argument("–text")
-    sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["summarize"]
-    text = read_input_text(args)
-    if deps.cfg.backend == "openai":
-        out = deps.openai(
-            instructions=sys_prompt, user_text=text,
-            base_url=deps.cfg.openai.base_url,
-            responses_path=deps.cfg.openai.responses_path,
-            api_key=deps.cfg.openai.api_key,
-            model=deps.cfg.openai.model,
-        )
-    else:
-        out = deps.ollama.chat(
-            instructions=sys_prompt, user_text=text,
-            host=deps.cfg.ollama.host, chat_path=deps.cfg.ollama.chat_path,
-            model=deps.cfg.ollama.model,
-        )
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("summarize", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/commands/explain.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from simpleai.registry import REGISTRY, AppDeps
-from simpleai.utils import read_input_text
-from simpleai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("explain", help="코드 설명+개선")
-    sp.add_argument("–text")
-    sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["explain"]
-    text = read_input_text(args)
-    if deps.cfg.backend == "openai":
-        out = deps.openai(
-            instructions=sys_prompt, user_text=text,
-            base_url=deps.cfg.openai.base_url,
-            responses_path=deps.cfg.openai.responses_path,
-            api_key=deps.cfg.openai.api_key,
-            model=deps.cfg.openai.model,
-        )
-    else:
-        out = deps.ollama.chat(
-            instructions=sys_prompt, user_text=text,
-            host=deps.cfg.ollama.host, chat_path=deps.cfg.ollama.chat_path,
-            model=deps.cfg.ollama.model,
-        )
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("explain", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/commands/commit.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from simpleai.registry import REGISTRY, AppDeps
-from simpleai.utils import read_input_text, git_diff
-from simpleai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("commit", help="Conventional Commits 생성")
-    sp.add_argument("–text")
-    sp.add_argument("–file")
-    sp.add_argument("–git", action="store_true")
-    sp.add_argument("–staged", action="store_true")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["commit"]
-    if args.git or args.staged:
-        text = git_diff(staged=args.staged)
-    else:
-        text = read_input_text(args)
-    user_msg = f"[변경점]\n{text}"
-    if deps.cfg.backend == "openai":
-        out = deps.openai(
-            instructions=sys_prompt, user_text=user_msg,
-            base_url=deps.cfg.openai.base_url,
-            responses_path=deps.cfg.openai.responses_path,
-            api_key=deps.cfg.openai.api_key,
-            model=deps.cfg.openai.model,
-        )
-    else:
-        out = deps.ollama.chat(
-            instructions=sys_prompt, user_text=user_msg,
-            host=deps.cfg.ollama.host, chat_path=deps.cfg.ollama.chat_path,
-            model=deps.cfg.ollama.model,
-        )
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("commit", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/commands/todo.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from simpleai.registry import REGISTRY, AppDeps
-from simpleai.utils import read_input_text
-from simpleai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("todo", help="문서에서 TODO 추출")
-    sp.add_argument("–text")
-    sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["todo"]
-    text = read_input_text(args)
-    if deps.cfg.backend == "openai":
-        out = deps.openai(
-            instructions=sys_prompt, user_text=text,
-            base_url=deps.cfg.openai.base_url,
-            responses_path=deps.cfg.openai.responses_path,
-            api_key=deps.cfg.openai.api_key,
-            model=deps.cfg.openai.model,
-        )
-    else:
-        out = deps.ollama.chat(
-            instructions=sys_prompt, user_text=text,
-            host=deps.cfg.ollama.host, chat_path=deps.cfg.ollama.chat_path,
-            model=deps.cfg.ollama.model,
-        )
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("todo", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/commands/docstring.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from simpleai.registry import REGISTRY, AppDeps
-from simpleai.utils import read_input_text
-from simpleai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("docstring", help="파이썬 파일 Docstring 패치 제안")
-    sp.add_argument("–text")
-    sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["docstring"]
-    text = read_input_text(args)
-    user_msg = f"[파일]\n{text}"
-    if deps.cfg.backend == "openai":
-        out = deps.openai(
-            instructions=sys_prompt, user_text=user_msg,
-            base_url=deps.cfg.openai.base_url,
-            responses_path=deps.cfg.openai.responses_path,
-            api_key=deps.cfg.openai.api_key,
-            model=deps.cfg.openai.model,
-        )
-    else:
-        out = deps.ollama.chat(
-            instructions=sys_prompt, user_text=user_msg,
-            host=deps.cfg.ollama.host, chat_path=deps.cfg.ollama.chat_path,
-            model=deps.cfg.ollama.model,
-        )
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("docstring", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/commands/classify.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse, json, textwrap
-from simpleai.registry import REGISTRY, AppDeps
-from simpleai.utils import read_input_text
-from simpleai.presets import PRESETS</p>
-
-<p>CLASSIFY_SCHEMA = {
-    "name": "classification",
-    "strict": True,
-    "schema": {
-        "type": "object",
-        "properties": {
-            "category": {"type": "string", "enum": ["bug","docs","feature"]},
-            "priority": {"type": "string", "enum": ["high","low"]},
-        },
-        "required": ["category","priority"],
-        "additionalProperties": False,
-    },
-}</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("classify", help="문장을 JSON으로 라벨링")
-    sp.add_argument("–text")
-    sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["classify"]
-    text = read_input_text(args).strip()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if deps.cfg.backend == "openai":
-    out = deps.openai(
-        instructions=sys_prompt, user_text=text,
-        base_url=deps.cfg.openai.base_url,
-        responses_path=deps.cfg.openai.responses_path,
-        api_key=deps.cfg.openai.api_key,
-        model=deps.cfg.openai.model,
-        response_format={"type":"json_schema","json_schema":CLASSIFY_SCHEMA},
-    )
-    raw = out
-else:
-    prompt = textwrap.dedent(f"""
-    {sys_prompt}
-    출력은 JSON 한 객체만. 예: category
-    문장: {text}
-    """).strip()
-    raw = deps.ollama.generate(
-        prompt, host=deps.cfg.ollama.host, generate_path=deps.cfg.ollama.generate_path,
-        model=deps.cfg.ollama.model, json_mode=True
-    )
-
-try:
-    obj = json.loads(raw)
-    print(json.dumps(obj, ensure_ascii=False))
-except Exception:
-    print(raw)
-</code></pre></div></div>
-
-<p>def register(registry=REGISTRY):
-    registry.register("classify", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `simpleai/cli.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>#!/usr/bin/env python3
-import argparse
-from simpleai.registry import REGISTRY, autoload_builtin_commands, autoload_plugin_entrypoints, AppDeps
-from simpleai.config import load_config
-from simpleai.backends import openai_backend, ollama_backend
-from simpleai import presets as presets_mod</p>
-
-<p>def build_parser():
-    p = argparse.ArgumentParser(prog="simpleai", description="Simple AI CLI")
-    p.add_argument("–backend", choices=["openai","ollama"], help="백엔드 선택")
-    p.add_argument("–model", help="모델명(백엔드별 기본값 존재)")
-    # ENDPOINT 설정(요청사항 4)
-    p.add_argument("–openai-base-url", help="OpenAI base URL (기본: https://api.openai.com/v1)")
-    p.add_argument("–openai-responses-path", help="OpenAI responses path (기본: /responses)")
-    p.add_argument("–ollama-host", help="Ollama host (기본: http://localhost:11434)")
-    sub = p.add_subparsers(dest="command", required=True)
-    return p, sub</p>
-
-<p>def main():
-    # 1) 파서/서브파서 생성
-    parser, sub = build_parser()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 2) 커맨드 자동 로드(내장 + 외부 플러그인)
-autoload_builtin_commands(REGISTRY)
-autoload_plugin_entrypoints(REGISTRY)
-REGISTRY.build_subparsers(sub)
-
-# 3) 파싱 및 설정 로드(ENDPOINT 포함)
-args = parser.parse_args()
-cfg = load_config(args)
-
-# 4) 의존 주입
-deps = AppDeps(
-    cfg=cfg,
-    openai=openai_backend.call_openai,
-    ollama=type("OllamaAPI", (), {
-        "chat": ollama_backend.chat,
-        "generate": ollama_backend.generate
-    })(),
-    presets=presets_mod
-)
-
-# 5) 실행
-if not hasattr(args, "_handler"):
-    parser.print_help(); return
-args._handler(args, deps)
-</code></pre></div></div>
-
-<p>if <strong>name</strong> == "<strong>main</strong>":
-    main()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `pyproject.toml`
-</code></pre></div></div>
-<p>toml</p>
-
-<p>[project]
-name = "simpleai"
-version = "0.1.0"
-description = "Simple, extensible AI CLI (OpenAI/Ollama)"
-authors = [{name="you"}]
-readme = "README.md"
-requires-python = "&gt;=3.9"
-dependencies = ["requests"]</p>
-
-<p>[project.scripts]
-simpleai = "simpleai.cli:main"</p>
-
-<h1 id="외부-플러그인도-가능-다른-패키지에서-아래-그룹으로-entry-point-등록">외부 플러그인도 가능: 다른 패키지에서 아래 그룹으로 entry point 등록</h1>
-<p>[project.entry-points."simpleai.commands"]</p>
-<h1 id="예-외부패키지에서-rewrite--mypluginrewriteregister">예) 외부패키지에서: rewrite = "myplugin.rewrite:register"</h1>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 파일: `README.md` (요약)
-</code></pre></div></div>
-<p>md</p>
-
-<h1 id="simpleai">simpleai</h1>
-<p>단일 CLI로 번역/요약/설명/커밋/TODO/Docstring/분류를 수행합니다.</p>
-
-<h2 id="설치">설치</h2>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install -e .
-</code></pre></div></div>
-<p>scss</p>
-
-<h2 id="설정endpoint">설정(ENDPOINT)</h2>
-<ul>
-  <li>CLI가 최우선, 없으면 ENV, 없으면 YAML(옵션)</li>
-</ul>
-
-<p>ENV 예시:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export OPENAI_API_KEY=sk-...  
-export SIMPLEAI_BACKEND=openai  
-export SIMPLEAI_OPENAI_BASE_URL=https://api.openai.com/v1  
-export SIMPLEAI_OPENAI_RESPONSES_PATH=/responses  
-export SIMPLEAI_OLLAMA_HOST=http://localhost:11434
-</code></pre></div></div>
-<p>yaml</p>
-
-<p>YAML 예시: <code class="language-plaintext highlighter-rouge">~/.simpleai/config.yaml</code></p>
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">defaults</span><span class="pi">:</span>
-  <span class="na">backend</span><span class="pi">:</span> <span class="s">openai</span>
-<span class="na">openai</span><span class="pi">:</span>
-  <span class="na">base_url</span><span class="pi">:</span> <span class="s">https://api.openai.com/v1</span>
-  <span class="na">responses_path</span><span class="pi">:</span> <span class="s">/responses</span>
-  <span class="na">model</span><span class="pi">:</span> <span class="s">gpt-4o-mini</span>
-<span class="na">ollama</span><span class="pi">:</span>
-  <span class="na">host</span><span class="pi">:</span> <span class="s">http://localhost:11434</span>
-  <span class="na">chat_path</span><span class="pi">:</span> <span class="s">/api/chat</span>
-  <span class="na">generate_path</span><span class="pi">:</span> <span class="s">/api/generate</span>
-  <span class="na">model</span><span class="pi">:</span> <span class="s">llama3.2</span>
-
-</code></pre></div></div>
-<h2 id="사용-예시">사용 예시</h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vbnet
-
-simpleai translate --to en --text "안녕?"
-echo "회의 노트..." | simpleai summarize
-simpleai commit --git
-simpleai classify --text "DB 연결 오류 발생"
-
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>makefile
-
-## 파일: `.env.example`
-```env
-OPENAI_API_KEY=sk-xxx
-SIMPLEAI_BACKEND=openai
-SIMPLEAI_OPENAI_BASE_URL=https://api.openai.com/v1
-SIMPLEAI_OPENAI_RESPONSES_PATH=/responses
-SIMPLEAI_OLLAMA_HOST=http://localhost:11434
-
-</code></pre></div></div>
-<h2 id="파일-examplesexamplepy">파일: <code class="language-plaintext highlighter-rouge">examples/example.py</code></h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python
-
-def fib(n):
-    if n &lt;= 1: return n
-    return fib(n-1)+fib(n-2)
-
-</code></pre></div></div>
-<h2 id="파일-examplesnotestxt">파일: <code class="language-plaintext highlighter-rouge">examples/notes.txt</code></h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>csharp
-
-We discussed migration steps, risks (downtime), and rollout plan with canary deployments...
-
-</code></pre></div></div>
-<h2 id="파일-examplespolicytxt">파일: <code class="language-plaintext highlighter-rouge">examples/policy.txt</code></h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sql
-
-SLA: critical fixes within 24 hours. Minor issues within 7 days.
-
-</code></pre></div></div>
-<h2 id="파일-teststest_smokepy">파일: <code class="language-plaintext highlighter-rouge">tests/test_smoke.py</code></h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python
-
-import subprocess
-
-def test_cli_help():
-    out = subprocess.check_output(["python","-m","simpleai.cli","translate","-h"], text=True)
-    assert "번역" in out
-
-</code></pre></div></div>
-<hr />
-
-<h1 id="3-새로운-subcommand를-쉽게-추가하는-구조">3) “새로운 subcommand”를 쉽게 추가하는 구조</h1>
-
-<p>핵심은 <strong><code class="language-plaintext highlighter-rouge">registry.register(name, add_arguments, handler)</code></strong> 입니다.</p>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">commands/</code> 폴더에 <code class="language-plaintext highlighter-rouge">*.py</code> 추가 → 모듈 import 시 <code class="language-plaintext highlighter-rouge">register(REGISTRY)</code> 호출</p>
-  </li>
-  <li>
-    <p>외부 패키지에서도 <strong>entry points (<code class="language-plaintext highlighter-rouge">simpleai.commands</code>)</strong>로 등록 가능</p>
-  </li>
-</ul>
-
-<h2 id="예시-a-내부에-rewrite-추가-파일-simpleaicommandsrewritepy">예시 A: 내부에 <code class="language-plaintext highlighter-rouge">rewrite</code> 추가 (파일 <code class="language-plaintext highlighter-rouge">simpleai/commands/rewrite.py</code>)</h2>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python
-
-import argparse
-from simpleai.registry import REGISTRY, AppDeps
-from simpleai.utils import read_input_text
-
-SYS_PROMPT = (
-    "역할: 문장 다듬기 도우미\n"
-    "- 한국어를 더 자연스럽고 간결하게 재작성\n"
-    "- 의미 보존, 존칭 유지\n"
-    "- 출력은 재작성된 문장만\n"
-)
-
-def _add(sub):
-    sp = sub.add_parser("rewrite", help="문장 다듬기")
-    sp.add_argument("--text")
-    sp.add_argument("--file")
-    return sp
-
-def _handle(args: argparse.Namespace, deps: AppDeps):
-    text = read_input_text(args)
-    if deps.cfg.backend == "openai":
-        out = deps.openai(
-            instructions=SYS_PROMPT, user_text=text,
-            base_url=deps.cfg.openai.base_url,
-            responses_path=deps.cfg.openai.responses_path,
-            api_key=deps.cfg.openai.api_key,
-            model=deps.cfg.openai.model,
-        )
-    else:
-        out = deps.ollama.chat(
-            instructions=SYS_PROMPT, user_text=text,
-            host=deps.cfg.ollama.host, chat_path=deps.cfg.ollama.chat_path,
-            model=deps.cfg.ollama.model,
-        )
-    print(out)
-
-def register(registry=REGISTRY):
-    registry.register("rewrite", _add, _handle)
-
-register()
-
-</code></pre></div></div>
-<blockquote>
-  <p>설치 후: <code class="language-plaintext highlighter-rouge">simpleai rewrite --text "회의 일정 정리 부탁드립니다"</code></p>
-</blockquote>
-
-<h2 id="예시-b-외부-패키지-플러그인으로-추가">예시 B: 외부 패키지 플러그인으로 추가</h2>
-
-<ol>
-  <li>외부 패키지의 <code class="language-plaintext highlighter-rouge">pyproject.toml</code>:
-```
-toml</li>
-</ol>
-
-<p>[project.entry-points."simpleai.commands"]
-rewrite = "myplugin.rewrite:register"</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  2. `myplugin/rewrite.py`에 위와 동일한 `register(registry)` 구현
-
-  3. 사용: `pip install myplugin` → `simpleai rewrite ...` 자동 인식
-
-* * *
-
-# 4) ENDPOINT 주소를 내가 등록하는 방법
-
-**우선순위** : `CLI 옵션` &gt; `환경변수` &gt; `YAML 설정` &gt; **기본값**
-
-  * OpenAI
-
-    * CLI: `--openai-base-url`, `--openai-responses-path`, `--model`
-
-    * ENV: `SIMPLEAI_OPENAI_BASE_URL`, `SIMPLEAI_OPENAI_RESPONSES_PATH`, `OPENAI_MODEL`
-
-    * YAML: `openai.base_url`, `openai.responses_path`, `openai.model`
-
-  * Ollama
-
-    * CLI: `--ollama-host`, `--model`
-
-    * ENV: `SIMPLEAI_OLLAMA_HOST`, `OLLAMA_MODEL`, (경로 커스터마이즈) `SIMPLEAI_OLLAMA_CHAT_PATH`, `SIMPLEAI_OLLAMA_GENERATE_PATH`
-
-    * YAML: `ollama.host`, `ollama.chat_path`, `ollama.generate_path`, `ollama.model`
-
-**재현 가능한 설정 예시**
-</code></pre></div></div>
-<p>bash</p>
-
-<h1 id="openai를-사설-프록시로">OpenAI를 사설 프록시로</h1>
-<p>simpleai –backend openai –openai-base-url https://myproxy/v1 –openai-responses-path /responses translate –to en –text "안녕?"</p>
-
-<h1 id="ollama를-원격-호스트로">Ollama를 원격 호스트로</h1>
-<p>simpleai –backend ollama –ollama-host http://10.0.0.5:11434 summarize –file examples/notes.txt</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * *
-
-## 마무리 (요약)
-
-  * **이름 10개** 제공,
-
-  * **패키지 구조 + 전 파일** 제공(실행 가능),
-
-  * **서브커맨드 확장** : 내부 파일 추가 or **entry points 플러그인** ,
-
-  * **ENDPOINT 설정** : CLI·ENV·YAML로 손쉽게 오버라이드.
-
-원하시면 패키지명을 당신 선호안으로 바꿔서 전체 파일을 다시 리렌더링해 드릴게요.
-
-&lt;p class="chat--user" markdown="1"&gt;
-
-miniai로 할게. 사실 사내망 환경에서 사내 gpu서버의 endpoint를 무조건 사용할거야. 그래서 chatgpt 서버나 ollama 세팅은 필요없어. 일단 그냥 커스텀 openai compatible endpoint만 받으면 되고 각 세팅(endpoint 주소, 키, 모델명)은 환경 변수로부터 읽어오도록 다시 작성해줘.
-
-&lt;/p&gt;
-
-좋아요. 요청하신 대로 **사내 GPU 서버의 OpenAI-호환(“chat/completions”) 엔드포인트만** 쓰는 버전으로, **환경 변수에서 엔드포인트/키/모델** 을 읽고, **확장 가능한 서브커맨드 구조** 를 유지한 `miniai` 프로젝트를 제공합니다.  
-(간단한 단계 → 전체 코드 → 사용 예 → 서브커맨드 확장 예 순서예요.)
-
-* * *
-
-# 0) 한눈에(개념 단계)
-
-  1. **의존성 최소화** : `requests`만 사용.
-
-  2. **백엔드 단일화** : OpenAI-compatible **Chat Completions** 만 호출(`/v1/chat/completions`).
-
-  3. **환경 변수만** : `MINIAI_API_BASE`, `MINIAI_API_PATH`, `MINIAI_API_KEY`, `MINIAI_MODEL`(필수), `MINIAI_TEMPERATURE`, `MINIAI_TIMEOUT`, `MINIAI_EXTRA_HEADERS`(옵션).
-
-  4. **확장성** : `CommandRegistry` \+ `commands/` 자동 로딩 + (선택) entry points 플러그인.
-
-  5. **UX** : `miniai translate "안녕?"` 처럼 **포지셔널 인자** 지원(`--text/--file/STDIN`도 가능).
-
-* * *
-
-# 1) 환경 변수 (필수/옵션)
-</code></pre></div></div>
-<p>bash</p>
-
-<h1 id="필수">필수</h1>
-<p>export MINIAI_API_BASE="https://llm.company.local/v1"
-export MINIAI_API_KEY="sk-<strong>**</strong>**"
-export MINIAI_MODEL="my-internal-chat"</p>
-
-<h1 id="선택기본값-표시">선택(기본값 표시)</h1>
-<p>export MINIAI_API_PATH="/chat/completions"   # 기본: /chat/completions
-export MINIAI_TEMPERATURE="0.2"              # 기본: 0.2
-export MINIAI_TIMEOUT="120"                  # 초, 기본: 120</p>
-<h1 id="추가-헤더가-필요하면-json으로">추가 헤더가 필요하면 JSON으로</h1>
-<p>export MINIAI_EXTRA_HEADERS='{"X-Cluster":"a100","X-Project":"nlp"}'</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * *
-
-# 2) 프로젝트 구조
-</code></pre></div></div>
-<p>markdown</p>
-
-<p>miniai/
-├─ miniai/
-│  ├─ <strong>init</strong>.py
-│  ├─ cli.py
-│  ├─ registry.py
-│  ├─ presets.py
-│  ├─ utils.py
-│  ├─ backends/
-│  │  ├─ <strong>init</strong>.py
-│  │  └─ openai_compat.py
-│  └─ commands/
-│     ├─ <strong>init</strong>.py
-│     ├─ translate.py
-│     ├─ summarize.py
-│     ├─ explain.py
-│     ├─ commit.py
-│     ├─ todo.py
-│     ├─ docstring.py
-│     ├─ classify.py
-│     └─ rewrite.py          # 새 subcommand 예시
-├─ pyproject.toml
-├─ README.md
-└─ .env.example</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * *
-
-# 3) 전체 파일
-
-## `miniai/__init__.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p><strong>all</strong> = ["cli"]
-<strong>version</strong> = "0.1.0"</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/presets.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>def preset_translate(to="en") -&gt; str:
-    return (
-        "역할: 고품질 번역기\n"
-        f"- 목표 언어: {to}\n"
-        "- 의미/뉘앙스 보존, 자연스러운 의역\n"
-        "- 출력은 번역문만(주석 금지)\n"
-    )</p>
-
-<p>PRESETS = {
-    "summarize": (
-        "역할: 전문 요약가\n"
-        "- 한국어 출력, 불릿 최대 7개, 명사형 간결체\n"
-        "- 핵심 주장/근거/위험/다음 액션 우선\n"
-    ),
-    "explain": (
-        "역할: 코드 리뷰어\n"
-        "- 한국어 3섹션: [설명] [복잡도] [리팩터링]\n"
-        "- 핵심 로직, 시간/공간 복잡도, 개선안\n"
-    ),
-    "commit": (
-        "역할: Conventional Commits 작성기\n"
-        "- 한국어, 제목 72자 이내 + 1~2줄 본문\n"
-        "- feat/fix/docs/refactor/test/chore 중 선택\n"
-        "- 출력은 메시지 본문만\n"
-    ),
-    "todo": (
-        "역할: TODO 추출기\n"
-        "- 입력에서 실행 가능한 액션만 '- [ ] ' 체크리스트로 출력\n"
-    ),
-    "docstring": (
-        "역할: 파이썬 Docstring 작성기\n"
-        "- 한국어 PEP257 스타일\n"
-        "- unified diff 패치 형식(+++ 파일명 포함)\n"
-    ),
-    "classify": (
-        "역할: 간단 이슈 분류기\n"
-        "- 입력 한 줄 → JSON {category, priority}\n"
-        '- category ∈ {"bug","docs","feature"}, priority ∈ {"high","low"}\n'
-        "- 출력은 순수 JSON 한 객체만\n"
-    ),
-}</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/registry.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse, importlib, pkgutil
-from typing import Callable, Dict, List
-from importlib import metadata</p>
-
-<p>Handler = Callable[[argparse.Namespace, "AppDeps"], None]
-Adder = Callable[[argparse._SubParsersAction], argparse.ArgumentParser]</p>
-
-<p>class CommandRegistry:
-    def <strong>init</strong>(self):
-        self._commands: Dict[str, Dict[str, object]] = {}</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def register(self, name: str, add_arguments: Adder, handler: Handler):
-    if name in self._commands:
-        raise ValueError(f"duplicate command: {name}")
-    self._commands[name] = {"add_arguments": add_arguments, "handler": handler}
-
-def build_subparsers(self, sub: argparse._SubParsersAction):
-    for name, spec in self._commands.items():
-        sp = spec["add_arguments"](sub)
-        sp.set_defaults(_handler=spec["handler"])
-
-def names(self) -&gt; List[str]:
-    return sorted(self._commands.keys())
-</code></pre></div></div>
-
-<p>def autoload_builtin_commands(registry: CommandRegistry):
-    import miniai.commands as pkg
-    for mod in pkgutil.iter_modules(pkg.<strong>path</strong>, pkg.<strong>name</strong> + "."):
-        importlib.import_module(mod.name)</p>
-
-<p>def autoload_plugin_entrypoints(registry: CommandRegistry):
-    # 선택: 외부 패키지가 entry points로 등록한 커맨드 자동 로드
-    try:
-        eps = metadata.entry_points()
-        group = eps.select(group="miniai.commands")
-    except Exception:
-        group = []
-    for ep in group:
-        register_fn = ep.load()
-        register_fn(registry)</p>
-
-<p>class AppDeps:
-    def <strong>init</strong>(self, chat_call, presets):
-        self.chat_call = chat_call
-        self.presets = presets</p>
-
-<p>REGISTRY = CommandRegistry()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/utils.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import os, sys, json, subprocess</p>
-
-<p>def read_input_text(args) -&gt; str:
-    # 1) 포지셔널 인자  2) –text  3) –file  4) STDIN
-    if getattr(args, "pos_text", None):
-        return args.pos_text
-    if getattr(args, "text", None):
-        return args.text
-    if getattr(args, "file", None):
-        with open(args.file, "r", encoding="utf-8") as f:
-            return f.read()
-    if not sys.stdin.isatty():
-        return sys.stdin.read()
-    raise SystemExit("입력이 없습니다. "miniai <cmd> '텍스트'\" 또는 --text/--file/STDIN을 사용하세요.")</cmd></p>
-
-<p>def git_diff(staged: bool=False) -&gt; str:
-    cmd = ["git", "diff", "–staged"] if staged else ["git", "diff"]
-    out = subprocess.check_output(cmd, encoding="utf-8", stderr=subprocess.STDOUT)
-    if not out.strip():
-        raise SystemExit("git diff 결과가 비어 있습니다.")
-    return out</p>
-
-<p>def env_or_die(name: str) -&gt; str:
-    v = os.getenv(name)
-    if not v:
-        raise SystemExit(f"환경변수 {name} 가 필요합니다.")
-    return v</p>
-
-<p>def load_env_config():
-    base = env_or_die("MINIAI_API_BASE").rstrip("/")
-    path = os.getenv("MINIAI_API_PATH", "/chat/completions")
-    key  = env_or_die("MINIAI_API_KEY")
-    model= env_or_die("MINIAI_MODEL")
-    temp = float(os.getenv("MINIAI_TEMPERATURE", "0.2"))
-    timeout = int(os.getenv("MINIAI_TIMEOUT", "120"))
-    extra_headers = os.getenv("MINIAI_EXTRA_HEADERS")
-    headers = {}
-    if extra_headers:
-        try:
-            headers = json.loads(extra_headers)
-        except Exception:
-            raise SystemExit("MINIAI_EXTRA_HEADERS 값은 JSON 이어야 합니다.")
-    return {
-        "url": base + path,
-        "api_key": key,
-        "model": model,
-        "temperature": temp,
-        "timeout": timeout,
-        "extra_headers": headers,
-    }</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/backends/__init__.py`
-</code></pre></div></div>
-<p>python</p>
-
-<h1 id="placeholder">placeholder</h1>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/backends/openai_compat.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import json, requests</p>
-
-<p>def chat_completions(url: str, api_key: str, model: str, system_text: str, user_text: str,
-                     *, temperature: float = 0.2, timeout: int = 120,
-                     extra_headers: dict | None = None, json_object: bool = False) -&gt; str:
-    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-    if extra_headers:
-        headers.update(extra_headers)</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>payload = {
-    "model": model,
-    "messages": [
-        {"role": "system", "content": system_text},
-        {"role": "user", "content": user_text},
-    ],
-    "temperature": temperature,
-}
-# 일부 서버는 json_object 지원. (미지원이면 그냥 무시되거나 400)
-if json_object:
-    payload["response_format"] = {"type": "json_object"}
-
-r = requests.post(url, headers=headers, data=json.dumps(payload), timeout=timeout)
-if r.status_code != 200:
-    raise SystemExit(f"[miniai] HTTP {r.status_code}: {r.text}")
-
-data = r.json()
-# 표준: choices[0].message.content
-try:
-    return data["choices"][0]["message"]["content"]
-except Exception:
-    # 비표준 대응
-    return data.get("content") or data.get("text") or json.dumps(data, ensure_ascii=False)
-</code></pre></div></div>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/commands/__init__.py`
-</code></pre></div></div>
-<p>python</p>
-
-<h1 id="각-모듈이-import될-때-registry에-자신을-등록합니다">각 모듈이 import될 때 registry에 자신을 등록합니다.</h1>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>### 공통 패턴(각 커맨드가 이 패턴을 따릅니다)
-
-  * 포지셔널 인자 `pos_text` \+ `--text/--file`
-
-  * `deps.chat_call(...)`로 호출
-
-## `miniai/commands/translate.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from miniai.registry import REGISTRY, AppDeps
-from miniai.utils import read_input_text
-from miniai.presets import preset_translate</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("translate", help="번역")
-    sp.add_argument("pos_text", nargs="?", help="입력 텍스트(포지셔널)")
-    sp.add_argument("–text")
-    sp.add_argument("–file")
-    sp.add_argument("–to", default="en", help="목표 언어 코드(기본=en)")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = preset_translate(to=args.to)
-    text = read_input_text(args)
-    out = deps.chat_call(system_text=sys_prompt, user_text=text, json_object=False)
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("translate", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/commands/summarize.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from miniai.registry import REGISTRY, AppDeps
-from miniai.utils import read_input_text
-from miniai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("summarize", help="요약(불릿 7)")
-    sp.add_argument("pos_text", nargs="?")
-    sp.add_argument("–text"); sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["summarize"]
-    text = read_input_text(args)
-    out = deps.chat_call(system_text=sys_prompt, user_text=text, json_object=False)
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("summarize", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/commands/explain.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from miniai.registry import REGISTRY, AppDeps
-from miniai.utils import read_input_text
-from miniai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("explain", help="코드 설명+개선")
-    sp.add_argument("pos_text", nargs="?")
-    sp.add_argument("–text"); sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["explain"]
-    text = read_input_text(args)
-    out = deps.chat_call(system_text=sys_prompt, user_text=text, json_object=False)
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("explain", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/commands/commit.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from miniai.registry import REGISTRY, AppDeps
-from miniai.utils import read_input_text, git_diff
-from miniai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("commit", help="Conventional Commits 생성")
-    sp.add_argument("pos_text", nargs="?")
-    sp.add_argument("–text"); sp.add_argument("–file")
-    sp.add_argument("–git", action="store_true")
-    sp.add_argument("–staged", action="store_true")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["commit"]
-    if args.git or args.staged:
-        text = git_diff(staged=args.staged)
-    else:
-        text = read_input_text(args)
-    user_msg = f"[변경점]\n{text}"
-    out = deps.chat_call(system_text=sys_prompt, user_text=user_msg, json_object=False)
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("commit", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/commands/todo.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from miniai.registry import REGISTRY, AppDeps
-from miniai.utils import read_input_text
-from miniai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("todo", help="문서에서 TODO 추출")
-    sp.add_argument("pos_text", nargs="?")
-    sp.add_argument("–text"); sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["todo"]
-    text = read_input_text(args)
-    out = deps.chat_call(system_text=sys_prompt, user_text=text, json_object=False)
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("todo", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/commands/docstring.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from miniai.registry import REGISTRY, AppDeps
-from miniai.utils import read_input_text
-from miniai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("docstring", help="파이썬 파일 Docstring 패치 제안")
-    sp.add_argument("pos_text", nargs="?")
-    sp.add_argument("–text"); sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["docstring"]
-    text = read_input_text(args)
-    user_msg = f"[파일]\n{text}"
-    out = deps.chat_call(system_text=sys_prompt, user_text=user_msg, json_object=False)
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("docstring", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/commands/classify.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse, json, re
-from miniai.registry import REGISTRY, AppDeps
-from miniai.utils import read_input_text
-from miniai.presets import PRESETS</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("classify", help="문장을 JSON으로 라벨링(category/priority)")
-    sp.add_argument("pos_text", nargs="?")
-    sp.add_argument("–text"); sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    sys_prompt = PRESETS["classify"]
-    text = read_input_text(args).strip()
-    # json_object 모드 시도(미지원 서버도 있어 폴백 처리)
-    raw = deps.chat_call(system_text=sys_prompt, user_text=text, json_object=True)
-    try:
-        print(json.dumps(json.loads(raw), ensure_ascii=False))
-        return
-    except Exception:
-        # 응답 안에 JSON이 섞여 있으면 추출
-        m = re.search(r"{.*}", raw, re.S)
-        if m:
-            try:
-                print(json.dumps(json.loads(m.group(0)), ensure_ascii=False))
-                return
-            except Exception:
-                pass
-        print(raw)  # 최후 폴백
-        return</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("classify", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/commands/rewrite.py` (새 subcommand 예시)
-</code></pre></div></div>
-<p>python</p>
-
-<p>import argparse
-from miniai.registry import REGISTRY, AppDeps
-from miniai.utils import read_input_text</p>
-
-<p>SYS_PROMPT = (
-    "역할: 문장 다듬기 도우미\n"
-    "- 한국어를 더 자연스럽고 간결하게 재작성\n"
-    "- 의미 보존, 존칭 유지\n"
-    "- 출력은 재작성된 문장만\n"
-)</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("rewrite", help="문장 다듬기")
-    sp.add_argument("pos_text", nargs="?")
-    sp.add_argument("–text"); sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    text = read_input_text(args)
-    out = deps.chat_call(system_text=SYS_PROMPT, user_text=text, json_object=False)
-    print(out)</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("rewrite", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `miniai/cli.py`
-</code></pre></div></div>
-<p>python</p>
-
-<p>#!/usr/bin/env python3
-import argparse
-from miniai.registry import REGISTRY, autoload_builtin_commands, autoload_plugin_entrypoints, AppDeps
-from miniai.backends.openai_compat import chat_completions
-from miniai.utils import load_env_config
-from miniai import presets as presets_mod</p>
-
-<p>def build_parser():
-    p = argparse.ArgumentParser(prog="miniai", description="Minimal AI CLI (OpenAI-compatible only)")
-    sub = p.add_subparsers(dest="command", required=True)
-    return p, sub</p>
-
-<p>def main():
-    parser, sub = build_parser()
-    autoload_builtin_commands(REGISTRY)
-    autoload_plugin_entrypoints(REGISTRY)
-    REGISTRY.build_subparsers(sub)</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>args = parser.parse_args()
-env = load_env_config()
-
-def chat_call(system_text: str, user_text: str, json_object: bool=False) -&gt; str:
-    return chat_completions(
-        url=env["url"],
-        api_key=env["api_key"],
-        model=env["model"],
-        system_text=system_text,
-        user_text=user_text,
-        temperature=env["temperature"],
-        timeout=env["timeout"],
-        extra_headers=env["extra_headers"],
-        json_object=json_object,
-    )
-
-deps = AppDeps(chat_call=chat_call, presets=presets_mod)
-
-if not hasattr(args, "_handler"):
-    parser.print_help(); return
-args._handler(args, deps)
-</code></pre></div></div>
-
-<p>if <strong>name</strong> == "<strong>main</strong>":
-    main()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `pyproject.toml`
-</code></pre></div></div>
-<p>toml</p>
-
-<p>[project]
-name = "miniai"
-version = "0.1.0"
-description = "Minimal, extensible AI CLI for OpenAI-compatible endpoints"
-authors = [{name="you"}]
-readme = "README.md"
-requires-python = "&gt;=3.9"
-dependencies = ["requests"]</p>
-
-<p>[project.scripts]
-miniai = "miniai.cli:main"</p>
-
-<h1 id="선택-외부-패키지가-새-커맨드를-플러그인으로-배포할-때">선택: 외부 패키지가 새 커맨드를 플러그인으로 배포할 때</h1>
-<p>[project.entry-points."miniai.commands"]</p>
-<h1 id="예-외부-패키지에서-rewrite--mypluginrewriteregister">예) 외부 패키지에서: rewrite = "myplugin.rewrite:register"</h1>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `.env.example`
-</code></pre></div></div>
-<p>env</p>
-
-<h1 id="필수-1">필수</h1>
-<p>MINIAI_API_BASE=https://llm.company.local/v1
-MINIAI_API_KEY=sk-xxxxxxxx
-MINIAI_MODEL=my-internal-chat</p>
-
-<h1 id="선택">선택</h1>
-<p>MINIAI_API_PATH=/chat/completions
-MINIAI_TEMPERATURE=0.2
-MINIAI_TIMEOUT=120</p>
-<h1 id="json-문자열">JSON 문자열</h1>
-<p>MINIAI_EXTRA_HEADERS={"X-Cluster":"a100","X-Project":"nlp"}</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `README.md` (요약)
-</code></pre></div></div>
-<p>md</p>
-
-<h1 id="miniai">miniai</h1>
-<p>사내 OpenAI-호환 엔드포인트만 사용하는 경량 AI CLI.</p>
-
-<h2 id="설치-1">설치</h2>
-<p>pip install -e .</p>
-
-<h2 id="환경-변수">환경 변수</h2>
-<p>MINIAI_API_BASE, MINIAI_API_KEY, MINIAI_MODEL (필수)<br />
-기타: MINIAI_API_PATH=/chat/completions, MINIAI_TEMPERATURE=0.2, MINIAI_TIMEOUT=120, MINIAI_EXTRA_HEADERS='{"K":"V"}'</p>
-
-<h2 id="사용-예">사용 예</h2>
-<p>miniai translate "안녕?" –to en
-echo "회의 노트…" | miniai summarize
-miniai commit –git
-miniai classify "DB 연결 오류 발생"</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * *
-
-# 4) 새 서브커맨드 추가 방법(확장성)
-
-  * **내부 추가** : `miniai/commands/`에 `foo.py` 생성 → `register(REGISTRY)` 호출 → 자동 인식.
-
-  * **외부 플러그인** : 다른 패키지에서 `pyproject.toml`의 `[project.entry-points."miniai.commands"]`에 등록 → 설치 시 자동 로드.
-
-### 예: `foo` 커맨드(간단 생성기)
-</code></pre></div></div>
-<p>python</p>
-
-<h1 id="파일-miniaicommandsfoopy">파일: miniai/commands/foo.py</h1>
-<p>import argparse
-from miniai.registry import REGISTRY, AppDeps</p>
-
-<p>SYS = "역할: 짧은 한 줄 생성기\n- 한국어 한 줄만 출력"</p>
-
-<p>def _add(sub):
-    sp = sub.add_parser("foo", help="한 줄 생성")
-    sp.add_argument("pos_text", nargs="?", help="프롬프트")
-    sp.add_argument("–text"); sp.add_argument("–file")
-    return sp</p>
-
-<p>def _handle(args: argparse.Namespace, deps: AppDeps):
-    prompt = args.pos_text or args.text or "예시 문장"
-    print(deps.chat_call(system_text=SYS, user_text=prompt, json_object=False))</p>
-
-<p>def register(registry=REGISTRY):
-    registry.register("foo", _add, _handle)</p>
-
-<p>register()</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * *
-
-# 5) 빠른 테스트
-</code></pre></div></div>
-<p>bash</p>
-
-<p>pip install -e .</p>
-<h1 id="환경-변수-설정위-envexample-참고">환경 변수 설정(위 .env.example 참고)</h1>
-
-<p>miniai translate "안녕?" –to en
-miniai summarize "마이그레이션 일정과 위험…"
-cat my.py | miniai explain
-miniai commit –git</p>]]></content><author><name>hvppyarchive</name></author><category term="llm" /><summary type="html"><![CDATA[]]></summary></entry></feed>
+<p>원하면, 기존 tcsh-only 버전을 <strong>문자열 안전하게</strong> 고친 <code class="language-plaintext highlighter-rouge">_jlist</code>/<code class="language-plaintext highlighter-rouge">_jget</code> alias 전체를 만들어서 드릴게.</p>]]></content><author><name>hvppyarchive</name></author><category term="misc" /><summary type="html"><![CDATA[]]></summary></entry></feed>
