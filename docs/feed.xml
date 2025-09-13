@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-09-13T10:59:16+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-09-13T10:59:16+09:00</published><updated>2025-09-13T10:59:16+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-09-13T11:23:50+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-09-13T11:23:50+09:00</published><updated>2025-09-13T11:23:50+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">md 한영 병기 표기 렌더링</title><link href="https://hvppyarchive.github.io/markdown/markdown-multilanguage/" rel="alternate" type="text/html" title="md 한영 병기 표기 렌더링" /><published>2025-09-13T10:59:12+09:00</published><updated>2025-09-13T10:59:12+09:00</updated><id>https://hvppyarchive.github.io/markdown/markdown-multilanguage</id><content type="html" xml:base="https://hvppyarchive.github.io/markdown/markdown-multilanguage/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">md 한영 병기 표기 렌더링</title><link href="https://hvppyarchive.github.io/markdown/markdown-multilanguage/" rel="alternate" type="text/html" title="md 한영 병기 표기 렌더링" /><published>2025-09-13T11:23:46+09:00</published><updated>2025-09-13T11:23:46+09:00</updated><id>https://hvppyarchive.github.io/markdown/markdown-multilanguage</id><content type="html" xml:base="https://hvppyarchive.github.io/markdown/markdown-multilanguage/"><![CDATA[<p class="chat--user">
 
 mkdocs-material에서 md 파일 글에 대해 한/영 병기를 하고 싶어. 안녕하세요. Hello. Everyone. 이런 식으로 말이야. 이 때 영어는 좀 연하고 작게 표기하고 싶은데, 이걸 md에 어떤 마크를 추가해서 자동으로 그렇게 렌더링 해줬으면 좋겠어. 안녕하세요. <en>Hello. Everyone</en> 이런 식으로 말이야. 이건 내가 생각한 예시니까 더 좋은 방안이 있으면 추천해도 좋아.
 
@@ -1142,7 +1142,572 @@ pymdownx의 caret 처럼 간단히 가만의 <span class="en"> </span>을 추가
 
 <hr />
 
-<p>필요하면 <strong>구분자</strong> 를 <code class="language-plaintext highlighter-rouge">^^</code>나 <code class="language-plaintext highlighter-rouge">!!</code> 등으로 바꾼 버전도 바로 만들어 드릴게요. (옵션 한 줄만 바꾸면 됩니다)</p>]]></content><author><name>hvppyarchive</name></author><category term="markdown" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">PySide6 웹 브라우저 만들기</title><link href="https://hvppyarchive.github.io/python/pyside6-browser/" rel="alternate" type="text/html" title="PySide6 웹 브라우저 만들기" /><published>2025-09-08T11:39:22+09:00</published><updated>2025-09-08T11:39:22+09:00</updated><id>https://hvppyarchive.github.io/python/pyside6-browser</id><content type="html" xml:base="https://hvppyarchive.github.io/python/pyside6-browser/"><![CDATA[<p class="chat--user">
+<p>필요하면 <strong>구분자</strong> 를 <code class="language-plaintext highlighter-rouge">^^</code>나 <code class="language-plaintext highlighter-rouge">!!</code> 등으로 바꾼 버전도 바로 만들어 드릴게요. (옵션 한 줄만 바꾸면 됩니다)</p>
+
+<p class="chat--user">
+
+No module names 'en_span' 파일을 여기 넣는거 맞아?
+
+</p>
+
+<p>맞아요, 그 에러는 <strong>MkDocs가<code class="language-plaintext highlighter-rouge">en_span</code> 모듈을 import 못 해서</strong> 나는 거예요.<br />
+핵심은 <strong>파일 위치 + 실행 위치 + 파이썬 경로(PYTHONPATH)</strong> 입니다. 아래대로 차근차근 해보세요.</p>
+
+<hr />
+
+<h2 id="0-올바른-폴더-구조-가장-단순한-형태">0) 올바른 폴더 구조 (가장 단순한 형태)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgsql
+
+your-project/
+├─ mkdocs.yml
+├─ en_span.py          ← 여기!
+└─ docs/
+   ├─ index.md
+   └─ stylesheets/
+      └─ translation.css
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>중요:</strong> <code class="language-plaintext highlighter-rouge">en_span.py</code>는 <code class="language-plaintext highlighter-rouge">docs/</code> 안이 아니라 <strong><code class="language-plaintext highlighter-rouge">mkdocs.yml</code>과 같은 디렉터리(프로젝트 루트)</strong> 에 두세요.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="1-mkdocsyml-설정-1">1) <code class="language-plaintext highlighter-rouge">mkdocs.yml</code> 설정</h2>
+
+<p>가장 기본:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">markdown_extensions</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">en_span</span>
+</code></pre></div></div>
+
+<p>옵션을 쓰고 싶다면:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">markdown_extensions</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">en_span</span><span class="pi">:</span>
+      <span class="na">delim</span><span class="pi">:</span> <span class="s2">"</span><span class="s">%%"</span>
+      <span class="na">class</span><span class="pi">:</span> <span class="s2">"</span><span class="s">en"</span>
+      <span class="na">lang</span><span class="pi">:</span> <span class="s2">"</span><span class="s">en"</span>
+</code></pre></div></div>
+
+<p>또는 클래스 경로로도 가능:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">markdown_extensions</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s1">'</span><span class="s">en_span:EnSpanExtension'</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="2-올바른-실행-위치에서-서버-시작">2) 올바른 실행 위치에서 서버 시작</h2>
+
+<p>반드시 <strong>프로젝트 루트(=<code class="language-plaintext highlighter-rouge">mkdocs.yml</code>이 있는 위치)</strong> 로 이동해서 실행하세요.</p>
+
+<ul>
+  <li>macOS / Linux
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>your-project
+<span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nb">.</span> mkdocs serve
+</code></pre></div>    </div>
+  </li>
+  <li>Windows PowerShell
+    <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cd</span><span class="w"> </span><span class="nx">your-project</span><span class="w">
+</span><span class="nv">$</span><span class="nn">env</span><span class="p">:</span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">"."</span><span class="p">;</span><span class="w"> </span><span class="n">mkdocs</span><span class="w"> </span><span class="nx">serve</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+  <li>Windows CMD
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bat
+    
+cd your-project
+set PYTHONPATH=.
+mkdocs serve
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<blockquote>
+  <p>왜? MkDocs가 확장 모듈을 <strong>현재 파이썬 경로</strong> 에서 찾는데, 환경/실행 방법에 따라 현재 디렉터리가 경로에 안 잡힐 수 있습니다. <code class="language-plaintext highlighter-rouge">PYTHONPATH=.</code> 로 프로젝트 루트를 확실히 넣어주면 import 에러가 사라집니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="3-빠른-자가-점검-문제-계속되면-여기서-잡힙니다">3) 빠른 자가 점검 (문제 계속되면 여기서 잡힙니다)</h2>
+
+<ol>
+  <li>
+    <p><strong>파일명</strong> 이 정확히 <code class="language-plaintext highlighter-rouge">en_span.py</code> 인가요? (<code class="language-plaintext highlighter-rouge">en-span.py</code> ×)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">en_span.py</code> 안에 <strong><code class="language-plaintext highlighter-rouge">makeExtension(**kwargs)</code></strong> 함수가 존재하나요? (필수)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">mkdocs serve</code>를 <strong>프로젝트 루트</strong> 에서 실행했나요? (다른 폴더에서 실행 ×)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">mkdocs.yml</code>에 <code class="language-plaintext highlighter-rouge">markdown_extensions: - en_span</code> 이 들어갔나요? (오탈자 ×)</p>
+  </li>
+  <li>그래도 안 되면, <strong>완전한 모듈 경로</strong> 로 시도:
+```yaml
+markdown_extensions:
+    <ul>
+      <li>'en_span:EnSpanExtension'
+```</li>
+    </ul>
+  </li>
+  <li>여전히 안 되면, <strong>패키지 폴더로 감싸기</strong> :
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your-project/
+├─ mkdocs.yml
+├─ local_ext/
+│  ├─ __init__.py
+│  └─ en_span.py
+└─ docs/...
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>그리고 <code class="language-plaintext highlighter-rouge">mkdocs.yml</code>:
+     <code class="language-plaintext highlighter-rouge">yaml
+     markdown_extensions:
+       - local_ext.en_span
+    </code></p>
+
+<p>(이때도 <code class="language-plaintext highlighter-rouge">PYTHONPATH=.</code> 권장)</p>
+
+<hr />
+
+<h2 id="4-동작-확인용-최소-예제">4) 동작 확인용 최소 예제</h2>
+
+<p><strong><code class="language-plaintext highlighter-rouge">docs/index.md</code></strong></p>
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>안녕하세요. %%Hello. Everyone.%%
+</code></pre></div></div>
+
+<p><strong><code class="language-plaintext highlighter-rouge">en_span.py</code></strong> (핵심 부분만 재확인)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">re</span>
+<span class="kn">from</span> <span class="n">markdown.extensions</span> <span class="kn">import</span> <span class="n">Extension</span>
+<span class="kn">from</span> <span class="n">markdown.inlinepatterns</span> <span class="kn">import</span> <span class="n">InlineProcessor</span>
+<span class="kn">from</span> <span class="n">xml.etree</span> <span class="kn">import</span> <span class="n">ElementTree</span> <span class="k">as</span> <span class="n">etree</span>
+
+<span class="k">class</span> <span class="nc">EnSpanInline</span><span class="p">(</span><span class="n">InlineProcessor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">md</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">md</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">klass</span> <span class="o">=</span> <span class="n">klass</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">lang</span> <span class="o">=</span> <span class="n">lang</span>
+    <span class="k">def</span> <span class="nf">handleMatch</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">m</span><span class="p">.</span><span class="nf">group</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">replace</span><span class="p">(</span><span class="sa">r</span><span class="sh">'</span><span class="s">\%%</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">%%</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">el</span> <span class="o">=</span> <span class="n">etree</span><span class="p">.</span><span class="nc">Element</span><span class="p">(</span><span class="sh">"</span><span class="s">span</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">el</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="sh">"</span><span class="s">class</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">klass</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">lang</span><span class="p">:</span>
+            <span class="n">el</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="sh">"</span><span class="s">lang</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">lang</span><span class="p">)</span>
+        <span class="n">el</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="k">return</span> <span class="n">el</span><span class="p">,</span> <span class="n">m</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">m</span><span class="p">.</span><span class="nf">end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">EnSpanExtension</span><span class="p">(</span><span class="n">Extension</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">delim</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">%%</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Inline delimiter</span><span class="sh">"</span><span class="p">],</span>
+            <span class="sh">"</span><span class="s">class</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">CSS class</span><span class="sh">"</span><span class="p">],</span>
+            <span class="sh">"</span><span class="s">lang</span><span class="sh">"</span><span class="p">:</span>  <span class="p">[</span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">lang attribute</span><span class="sh">"</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">extendMarkdown</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">md</span><span class="p">):</span>
+        <span class="n">delim</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">getConfig</span><span class="p">(</span><span class="sh">"</span><span class="s">delim</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">rf</span><span class="sh">"</span><span class="s">(?&lt;!\\)</span><span class="si">{</span><span class="n">re</span><span class="p">.</span><span class="nf">escape</span><span class="p">(</span><span class="n">delim</span><span class="p">)</span><span class="si">}</span><span class="s">(.+?)(?&lt;!\\)</span><span class="si">{</span><span class="n">re</span><span class="p">.</span><span class="nf">escape</span><span class="p">(</span><span class="n">delim</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span>
+        <span class="n">md</span><span class="p">.</span><span class="n">inlinePatterns</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span>
+            <span class="nc">EnSpanInline</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">md</span><span class="p">,</span>
+                         <span class="n">klass</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">getConfig</span><span class="p">(</span><span class="sh">"</span><span class="s">class</span><span class="sh">"</span><span class="p">),</span>
+                         <span class="n">lang</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">getConfig</span><span class="p">(</span><span class="sh">"</span><span class="s">lang</span><span class="sh">"</span><span class="p">)),</span>
+            <span class="sh">"</span><span class="s">en-span</span><span class="sh">"</span><span class="p">,</span> <span class="mi">175</span>
+        <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">makeExtension</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nc">EnSpanExtension</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="5-그래도-같은-에러면">5) 그래도 같은 에러면?</h2>
+
+<ul>
+  <li>
+    <p>콘솔에서 한 번 직접 import 해보세요:</p>
+
+    <ul>
+      <li>macOS/Linux:
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>your-project
+<span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nb">.</span> python <span class="nt">-c</span> <span class="s2">"import en_span; print(en_span)"</span>
+</code></pre></div>        </div>
+      </li>
+      <li>Windows PowerShell:
+        <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cd</span><span class="w"> </span><span class="nx">your-project</span><span class="w">
+</span><span class="nv">$</span><span class="nn">env</span><span class="p">:</span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">"."</span><span class="p">;</span><span class="w"> </span><span class="n">python</span><span class="w"> </span><span class="nt">-c</span><span class="w"> </span><span class="s2">"import en_span; print(en_span)"</span><span class="w">
+</span></code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>이게 실패하면 <strong>경로 문제</strong> 가 확실합니다. 위 2)번(실행 위치)과 3)번(패키지 폴더) 방법으로 정리하면 해결됩니다.</p>
+
+<hr />
+
+<p>원하시면 지금 프로젝트 트리(대충 <code class="language-plaintext highlighter-rouge">tree</code> 결과나 스크린샷)와 <code class="language-plaintext highlighter-rouge">mkdocs.yml</code>의 해당 부분을 보내 주세요. 그대로 맞춰서 <strong>한 줄도 헷갈리지 않게</strong> 수정본 만들어 드릴게요.</p>
+
+<p class="chat--user">
+
+그냥 패키지 설치를 해버려야겠어. markdown_en_span 이라는 패키지로 만들어주고 src 폴더와 pyproject.toml을 여기에 포함시켜서 설치할 수 있게 해줘
+
+</p>
+
+<p>좋아—<strong>로컬에서 바로 설치 가능한 패키지</strong> 로 만들어 드릴게요.<br />
+패키지명은 요청하신 대로 <code class="language-plaintext highlighter-rouge">markdown_en_span</code>, <strong>src 레이아웃</strong> + <code class="language-plaintext highlighter-rouge">pyproject.toml</code> 포함입니다.</p>
+
+<hr />
+
+<h1 id="1-디렉터리-구조-만들기">1) 디렉터리 구조 만들기</h1>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">your-project</span><span class="o">/</span>
+<span class="err">├─</span> <span class="nt">pyproject</span><span class="nc">.toml</span>
+<span class="err">└─</span> <span class="nt">src</span><span class="o">/</span>
+   <span class="err">└─</span> <span class="nt">markdown_en_span</span><span class="o">/</span>
+      <span class="err">└─</span> <span class="nt">__init__</span><span class="nc">.py</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="2-pyprojecttoml">2) <code class="language-plaintext highlighter-rouge">pyproject.toml</code></h1>
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[build-system]</span>
+<span class="py">requires</span> <span class="p">=</span> <span class="py">["hatchling&gt;</span><span class="p">=</span><span class="mf">1.18</span><span class="s">"]</span><span class="err">
+</span><span class="py">build-backend</span> <span class="p">=</span> <span class="s">"hatchling.build"</span>
+
+<span class="nn">[project]</span>
+<span class="py">name</span> <span class="p">=</span> <span class="s">"markdown_en_span"</span>
+<span class="py">version</span> <span class="p">=</span> <span class="s">"0.1.0"</span>
+<span class="py">description</span> <span class="p">=</span> <span class="s">"Python-Markdown inline extension to wrap %%text%% as &lt;span class='en' lang='en'&gt;text&lt;/span&gt;."</span>
+<span class="py">readme</span> <span class="p">=</span> <span class="s">"README.md"</span>
+<span class="py">requires-python</span> <span class="p">=</span> <span class="py">"&gt;</span><span class="p">=</span><span class="mf">3.8</span><span class="s">"</span><span class="err">
+</span><span class="py">authors</span> <span class="p">=</span> <span class="py">[{name</span> <span class="p">=</span> <span class="s">"Your Name"</span><span class="err">}]</span>
+<span class="py">dependencies</span> <span class="p">=</span> <span class="py">["Markdown&gt;</span><span class="p">=</span><span class="mf">3.3</span><span class="s">"]</span><span class="err">
+</span>
+<span class="nn">[project.urls]</span>
+<span class="py">Homepage</span> <span class="p">=</span> <span class="s">"https://example.com/markdown_en_span"</span>
+
+<span class="c"># Python-Markdown이 이 확장을 'en_span' 이름으로 인식하게 하는 엔트리포인트</span>
+<span class="nn">[project.entry-points."markdown.extensions"]</span>
+<span class="py">en_span</span> <span class="p">=</span> <span class="s">"markdown_en_span:makeExtension"</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>포인트</p>
+
+  <ul>
+    <li>
+      <p><strong>엔트리포인트</strong> 덕분에 <code class="language-plaintext highlighter-rouge">mkdocs.yml</code>에서 <code class="language-plaintext highlighter-rouge">markdown_extensions: - en_span</code>처럼 <strong>짧은 이름</strong> 으로 쓸 수 있어요.</p>
+    </li>
+    <li>
+      <p>배포명(<code class="language-plaintext highlighter-rouge">name</code>)과 모듈명(폴더)은 둘 다 <code class="language-plaintext highlighter-rouge">markdown_en_span</code>로 통일.</p>
+    </li>
+  </ul>
+
+</blockquote>
+
+<hr />
+
+<h1 id="3-srcmarkdown_en_span__init__py">3) <code class="language-plaintext highlighter-rouge">src/markdown_en_span/__init__.py</code></h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">re</span>
+<span class="kn">from</span> <span class="n">markdown.extensions</span> <span class="kn">import</span> <span class="n">Extension</span>
+<span class="kn">from</span> <span class="n">markdown.inlinepatterns</span> <span class="kn">import</span> <span class="n">InlineProcessor</span>
+<span class="kn">from</span> <span class="n">xml.etree</span> <span class="kn">import</span> <span class="n">ElementTree</span> <span class="k">as</span> <span class="n">etree</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">EnSpanExtension</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">makeExtension</span><span class="sh">"</span><span class="p">]</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="sh">"</span><span class="s">0.1.0</span><span class="sh">"</span>
+
+<span class="k">class</span> <span class="nc">EnSpanInline</span><span class="p">(</span><span class="n">InlineProcessor</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    Wraps %%text%% (기본) → &lt;span class=</span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="s"> lang=</span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="s">&gt;text&lt;/span&gt;
+    - 구분자는 옵션으로 변경 가능 (예: ^^ 또는 !!)
+    - \%% 처럼 백슬래시로 이스케이프하면 리터럴 %% 출력
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">delim</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">md</span><span class="p">,</span> <span class="n">css_class</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="p">,</span> <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="p">):</span>
+        <span class="c1"># DOTALL 활성화: 필요 시 여러 줄도 매칭
+</span>        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">rf</span><span class="sh">"</span><span class="s">(?s)(?&lt;!\\)</span><span class="si">{</span><span class="n">re</span><span class="p">.</span><span class="nf">escape</span><span class="p">(</span><span class="n">delim</span><span class="p">)</span><span class="si">}</span><span class="s">(.+?)(?&lt;!\\)</span><span class="si">{</span><span class="n">re</span><span class="p">.</span><span class="nf">escape</span><span class="p">(</span><span class="n">delim</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">md</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">delim</span> <span class="o">=</span> <span class="n">delim</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">css_class</span> <span class="o">=</span> <span class="n">css_class</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">lang</span> <span class="o">=</span> <span class="n">lang</span>
+
+    <span class="k">def</span> <span class="nf">handleMatch</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># 본문 텍스트
+</span>        <span class="n">text</span> <span class="o">=</span> <span class="n">m</span><span class="p">.</span><span class="nf">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># \%% → %% (사용자가 리터럴 구분자를 넣고 싶을 때)
+</span>        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\\</span><span class="sh">"</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">delim</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">delim</span><span class="p">)</span>
+
+        <span class="n">el</span> <span class="o">=</span> <span class="n">etree</span><span class="p">.</span><span class="nc">Element</span><span class="p">(</span><span class="sh">"</span><span class="s">span</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">el</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="sh">"</span><span class="s">class</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">css_class</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">lang</span><span class="p">:</span>
+            <span class="n">el</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="sh">"</span><span class="s">lang</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">lang</span><span class="p">)</span>
+        <span class="n">el</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="k">return</span> <span class="n">el</span><span class="p">,</span> <span class="n">m</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">m</span><span class="p">.</span><span class="nf">end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">EnSpanExtension</span><span class="p">(</span><span class="n">Extension</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    확장 옵션:
+      - delim: 기본 </span><span class="sh">"</span><span class="s">%%</span><span class="sh">"</span><span class="s">
+      - class: 기본 </span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="s">
+      - lang:  기본 </span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="s"> (빈 문자열이면 lang 속성 생략)
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">delim</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">%%</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Inline delimiter, e.g. %%, ^^, !!</span><span class="sh">"</span><span class="p">],</span>
+            <span class="sh">"</span><span class="s">class</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">CSS class name to set on &lt;span&gt;</span><span class="sh">"</span><span class="p">],</span>
+            <span class="sh">"</span><span class="s">lang</span><span class="sh">"</span><span class="p">:</span>  <span class="p">[</span><span class="sh">"</span><span class="s">en</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">lang attribute value (</span><span class="sh">''</span><span class="s"> to disable)</span><span class="sh">"</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">extendMarkdown</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">md</span><span class="p">):</span>
+        <span class="n">delim</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">getConfig</span><span class="p">(</span><span class="sh">"</span><span class="s">delim</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">css_class</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">getConfig</span><span class="p">(</span><span class="sh">"</span><span class="s">class</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">lang</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">getConfig</span><span class="p">(</span><span class="sh">"</span><span class="s">lang</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">proc</span> <span class="o">=</span> <span class="nc">EnSpanInline</span><span class="p">(</span><span class="n">delim</span><span class="o">=</span><span class="n">delim</span><span class="p">,</span> <span class="n">md</span><span class="o">=</span><span class="n">md</span><span class="p">,</span> <span class="n">css_class</span><span class="o">=</span><span class="n">css_class</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="n">lang</span><span class="p">)</span>
+        <span class="c1"># emphasis(EMPHASIS=170)보다 약간 앞서도록 등록
+</span>        <span class="n">md</span><span class="p">.</span><span class="n">inlinePatterns</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="sh">"</span><span class="s">en-span</span><span class="sh">"</span><span class="p">,</span> <span class="mi">175</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">makeExtension</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nc">EnSpanExtension</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="4-설치-로컬">4) 설치 (로컬)</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 프로젝트 루트(= pyproject.toml 있는 곳)에서</span>
+pip <span class="nb">install</span> <span class="nt">-e</span> <span class="nb">.</span>
+<span class="c"># 또는</span>
+pip <span class="nb">install</span> <span class="nb">.</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">-e</code>는 개발 중 수정사항이 바로 반영되는 <strong>editable</strong> 설치.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="5-mkdocs-사용-예시">5) MkDocs 사용 예시</h1>
+
+<h2 id="mkdocsyml"><code class="language-plaintext highlighter-rouge">mkdocs.yml</code></h2>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">theme</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">material</span>
+
+<span class="na">markdown_extensions</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">en_span</span>            <span class="c1"># ← 방금 만든 확장 (엔트리포인트로 인식)</span>
+  <span class="c1"># - attr_list        # (선택) 다른 용도 필요 시</span>
+  <span class="c1"># - en_span:</span>
+  <span class="c1">#     delim: "^^"    # 구분자 바꾸고 싶을 때</span>
+  <span class="c1">#     class: "en"</span>
+  <span class="c1">#     lang: "en"</span>
+
+<span class="na">extra_css</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">stylesheets/translation.css</span>
+</code></pre></div></div>
+
+<h2 id="docsstylesheetstranslationcss"><code class="language-plaintext highlighter-rouge">docs/stylesheets/translation.css</code></h2>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.md-typeset</span> <span class="nc">.en</span> <span class="p">{</span>
+  <span class="nl">font-size</span><span class="p">:</span> <span class="m">0.85em</span><span class="p">;</span>
+  <span class="nl">opacity</span><span class="p">:</span> <span class="m">0.65</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="docsindexmd"><code class="language-plaintext highlighter-rouge">docs/index.md</code></h2>
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>안녕하세요. %%Hello. Everyone.%%
+</code></pre></div></div>
+
+<p>→ 렌더링:</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;p&gt;</span>안녕하세요. <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"en"</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>Hello. Everyone.<span class="nt">&lt;/span&gt;&lt;/p&gt;</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="6-팁--트러블슈팅">6) 팁 &amp; 트러블슈팅</h1>
+
+<ul>
+  <li><strong>구분자 바꾸기</strong> : <code class="language-plaintext highlighter-rouge">mkdocs.yml</code>에
+```yaml
+markdown_extensions:
+    <ul>
+      <li>en_span:
+  delim: "^^"
+  class: "en"
+  lang: "en"
+```</li>
+    </ul>
+  </li>
+</ul>
+
+<p>→ <code class="language-plaintext highlighter-rouge">안녕하세요. ^^Hello. Everyone.^^</code></p>
+
+<ul>
+  <li>
+    <p><strong>리터럴로<code class="language-plaintext highlighter-rouge">%%</code> 출력</strong>: <code class="language-plaintext highlighter-rouge">\%%</code> 처럼 이스케이프<br />
+예) <code class="language-plaintext highlighter-rouge">가격은 \%%20 할인</code> → 실제 문서에 <code class="language-plaintext highlighter-rouge">%%20</code> 출력</p>
+  </li>
+  <li><strong>확장 로딩 확인</strong> (MkDocs 외에 순수 파이썬에서)
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">markdown</span>
+<span class="n">html</span> <span class="o">=</span> <span class="n">markdown</span><span class="p">.</span><span class="nf">markdown</span><span class="p">(</span><span class="sh">"</span><span class="s">안녕 %%Hello%%</span><span class="sh">"</span><span class="p">,</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">en_span</span><span class="sh">"</span><span class="p">])</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>여전히 인식 안 되면</strong></p>
+
+    <ul>
+      <li>
+        <p>설치 경로 확인: <code class="language-plaintext highlighter-rouge">pip show markdown_en_span</code></p>
+      </li>
+      <li>
+        <p>가상환경 재시작 / MkDocs 재시작</p>
+      </li>
+      <li>
+        <p>Markdown 버전 확인: <code class="language-plaintext highlighter-rouge">python -c "import markdown, sys; print(markdown.__version__)"</code> (3.3 이상 권장)</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하면 <code class="language-plaintext highlighter-rouge">README.md</code>/<code class="language-plaintext highlighter-rouge">LICENSE</code> 골격도 추가해 드릴게요. 원하시는 구분자(예: <code class="language-plaintext highlighter-rouge">||</code>), 기본 클래스명 변경 등 커스터마이즈 버전도 바로 만들어 줄 수 있어요.</p>
+
+<p class="chat--user">
+
+mkdocs 루트 폴더 밑에 너가 만들어준 패키지를 위치 시킬거야. requirements.txt에 상대경로로 인스톨 추가할 수 있어?
+
+</p>
+
+<p>가능해! <strong>requirements.txt</strong> 에서 <strong>상대경로</strong> 로 로컬 패키지를 설치할 수 있어요.<br />
+요청하신 구조(패키지를 MkDocs 루트 바로 아래)에 맞춰 <strong>한 번에 되는</strong> 절차를 step-by-step으로 정리할게요.</p>
+
+<hr />
+
+<h1 id="0-폴더-구조예시">0) 폴더 구조(예시)</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>your-project/
+├─ mkdocs.yml
+├─ requirements.txt
+├─ markdown_en_span/           <span class="c"># ← 여기 폴더가 “패키지 루트”</span>
+│  ├─ pyproject.toml
+│  └─ src/
+│     └─ markdown_en_span/
+│        └─ __init__.py
+└─ docs/
+   └─ stylesheets/translation.css
+</code></pre></div></div>
+
+<blockquote>
+  <p>중요: <strong><code class="language-plaintext highlighter-rouge">pyproject.toml</code>이 들어있는 디렉터리</strong>(여기서는 <code class="language-plaintext highlighter-rouge">./markdown_en_span</code>)가 pip가 인식하는 “패키지 루트”예요.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="1-requirementstxt-작성">1) requirements.txt 작성</h1>
+
+<h2 id="a-개발-중-수정사항을-바로-반영하고-싶을-때-editable">(A) 개발 중 수정사항을 바로 반영하고 싶을 때 (editable)</h2>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># MkDocs(원하면 버전 고정)</span>
+mkdocs&gt;<span class="o">=</span>1.6
+mkdocs-material&gt;<span class="o">=</span>9.5
+
+<span class="c"># 로컬 확장 패키지(상대경로, editable 모드)</span>
+<span class="nt">-e</span> ./markdown_en_span
+</code></pre></div></div>
+
+<h2 id="b-고정-설치수정-즉시-반영-필요-없을-때">(B) 고정 설치(수정 즉시 반영 필요 없을 때)</h2>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdocs&gt;<span class="o">=</span>1.6
+mkdocs-material&gt;<span class="o">=</span>9.5
+
+./markdown_en_span
+</code></pre></div></div>
+
+<blockquote>
+  <p>두 경우 모두 <strong>상대경로는 requirements.txt 파일이 있는 위치 기준</strong> 으로 해석됩니다.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="2-설치">2) 설치</h1>
+
+<p>프로젝트 루트에서:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> pip <span class="nb">install</span> <span class="nt">-U</span> pip          <span class="c"># 권장: 최신 pip (PEP 660 editable 지원)</span>
+pip <span class="nb">install</span> <span class="nt">-r</span> requirements.txt
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>editable(-e)</strong> 설치가 제대로 되려면 pip가 <strong>PEP 660</strong> 을 지원해야 합니다(대부분 최신 pip OK).</p>
+</blockquote>
+
+<hr />
+
+<h1 id="3-mkdocsyml-설정">3) mkdocs.yml 설정</h1>
+
+<p>엔트리포인트를 등록해둔 상태라면(제가 준 <code class="language-plaintext highlighter-rouge">pyproject.toml</code> 기준) 아래처럼 간단히 사용 가능:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">theme</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">material</span>
+
+<span class="na">markdown_extensions</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">en_span</span>               <span class="c1"># ← 방금 설치한 확장</span>
+  <span class="c1"># - en_span:</span>
+  <span class="c1">#     delim: "^^"       # 구분자 바꾸고 싶으면 옵션으로</span>
+  <span class="c1">#     class: "en"</span>
+  <span class="c1">#     lang: "en"</span>
+
+<span class="na">extra_css</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">stylesheets/translation.css</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="4-사용-예시">4) 사용 예시</h1>
+
+<p><code class="language-plaintext highlighter-rouge">docs/index.md</code></p>
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>안녕하세요. %%Hello. Everyone.%%
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">docs/stylesheets/translation.css</code></p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.md-typeset</span> <span class="nc">.en</span> <span class="p">{</span>
+  <span class="nl">font-size</span><span class="p">:</span> <span class="m">0.85em</span><span class="p">;</span>
+  <span class="nl">opacity</span><span class="p">:</span> <span class="m">0.65</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="5-자주-생기는-이슈--체크리스트">5) 자주 생기는 이슈 &amp; 체크리스트</h1>
+
+<ul>
+  <li>
+    <p><strong>설치가 안 된다면</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">pip --version</code>으로 최신인지 확인(가능하면 21.3+).</p>
+      </li>
+      <li>
+        <p>프로젝트 루트에서 <code class="language-plaintext highlighter-rouge">pip install -r requirements.txt</code> 실행했는지 확인.</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">markdown_en_span/pyproject.toml</code> 파일이 실제로 존재하는지 확인.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>MkDocs가 확장을 못 찾는다면</strong></p>
+
+    <ul>
+      <li>
+        <p>설치 성공 여부: <code class="language-plaintext highlighter-rouge">pip show markdown_en_span</code></p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">mkdocs.yml</code>의 <code class="language-plaintext highlighter-rouge">markdown_extensions:</code>에 <code class="language-plaintext highlighter-rouge">en_span</code>이 들어있는지 확인.</p>
+      </li>
+      <li>
+        <p>서버 재시작: <code class="language-plaintext highlighter-rouge">mkdocs serve</code> 다시 실행.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<p>원하시면 제가 제공했던 <code class="language-plaintext highlighter-rouge">pyproject.toml</code>/<code class="language-plaintext highlighter-rouge">__init__.py</code> 샘플을 그대로 붙여드릴게요(파일 내용 다시 필요하면 말해줘!).</p>]]></content><author><name>hvppyarchive</name></author><category term="markdown" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">PySide6 웹 브라우저 만들기</title><link href="https://hvppyarchive.github.io/python/pyside6-browser/" rel="alternate" type="text/html" title="PySide6 웹 브라우저 만들기" /><published>2025-09-08T11:39:22+09:00</published><updated>2025-09-08T11:39:22+09:00</updated><id>https://hvppyarchive.github.io/python/pyside6-browser</id><content type="html" xml:base="https://hvppyarchive.github.io/python/pyside6-browser/"><![CDATA[<p class="chat--user">
 
 PySide6 기반으로 가장 간단한 기능만 있는 가벼운 웹 브라우저를 만들고 싶어. 주요 기능은 앞/뒤 이동, 탭 관리, 주소창, 새 탭으로 열기(Ctrl 클릭 시), 탭 간 이동 단축키 등등 기초적인 기능만 있으면 돼.
 
