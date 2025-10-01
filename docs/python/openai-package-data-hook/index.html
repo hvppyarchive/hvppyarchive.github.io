@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-10-01T09:41:51+09:00">
+  <meta property="article:published_time" content="2025-10-01T17:18:28+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="openai api Raw 데이터 확인 방법">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-10-01T09:41:51+09:00">
+    <meta itemprop="datePublished" content="2025-10-01T17:18:28+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-01T09:41:51+09:00">2025-10-01</time>
+        <time datetime="2025-10-01T17:18:28+09:00">2025-10-01</time>
       </span>
     
 
@@ -884,6 +884,164 @@ string에 데이터가 담기게 하고 싶어 요청을 보낼때 / 받을때 �
 
 <p>이 중 어떤 걸 먼저 드릴까요?</p>
 
+<p class="chat--user">
+
+response.aread()를 해야 읽을 수 있는거 아니야?
+
+</p>
+
+<p>좋은 지적입니다 — 상황에 따라 <strong><code class="language-plaintext highlighter-rouge">response.aread()</code>를 <code class="language-plaintext highlighter-rouge">await</code>해야만 바디를 읽을 수 있는 경우</strong>가 맞습니다. 요점만 먼저 정리하고, 바로 쓸 수 있는 코드 예제(비동기 훅에서 <code class="language-plaintext highlighter-rouge">await response.aread()</code> 사용)를 보여드릴게요.</p>
+
+<h1 id="핵심-요약">핵심 요약</h1>
+
+<ol>
+  <li>
+    <p><strong>동기(httpx.Client)</strong> : 훅에서 <code class="language-plaintext highlighter-rouge">response.content</code>를 읽으면 내부에서 내용을 가져와 캐시하므로 바로 읽을 수 있습니다.</p>
+  </li>
+  <li>
+    <p><strong>비동기(httpx.AsyncClient)</strong> : 훅이 <code class="language-plaintext highlighter-rouge">async def</code>이면 <code class="language-plaintext highlighter-rouge">await response.aread()</code>로 바디(바이트)를 가져와야 안전합니다. (<code class="language-plaintext highlighter-rouge">response.content</code>는 동기 속성이라 async 컨텍스트에선 권장되지 않음.)</p>
+  </li>
+  <li>
+    <p><strong>주의 — 스트리밍(SSE / chunked / streaming API)</strong> : <code class="language-plaintext highlighter-rouge">aread()</code>는 <strong>전체 바디를 한 번에</strong> 읽습니다. 만약 응답이 실시간 스트리밍(예: 서버-전송-이벤트)이라면 <code class="language-plaintext highlighter-rouge">aread()</code>로 전체를 읽어버리면 스트리밍 처리를 망칠 수 있습니다. 스트리밍은 <code class="language-plaintext highlighter-rouge">response.aiter_bytes()</code> / <code class="language-plaintext highlighter-rouge">response.aiter_text()</code>로 청크 단위로 처리하세요.</p>
+  </li>
+  <li>
+    <p>httpx는 한 번 읽은 바디를 캐시하므로 <code class="language-plaintext highlighter-rouge">aread()</code>로 읽은 뒤에도 <code class="language-plaintext highlighter-rouge">response.content</code>/<code class="language-plaintext highlighter-rouge">response.text</code>로 접근해도 됩니다(대부분의 경우).</p>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="바로-쓸-수-있는-비동기-훅-예제-await-responsearead-사용">바로 쓸 수 있는 비동기 훅 예제 (<code class="language-plaintext highlighter-rouge">await response.aread()</code> 사용)</h1>
+
+<p>아래는 이전 예제의 <code class="language-plaintext highlighter-rouge">response_hook</code>를 <code class="language-plaintext highlighter-rouge">await response.aread()</code> 로 안전하게 바꾼 코드입니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">httpx</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="k">def</span> <span class="nf">redact_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span><span class="p">.</span><span class="nf">lower</span><span class="p">()</span> <span class="o">==</span> <span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">api-key</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">k</span><span class="p">.</span><span class="nf">lower</span><span class="p">():</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">REDACTED</span><span class="sh">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">redact_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># 간단 마스킹 예시
+</span>    <span class="k">for</span> <span class="n">sensitive</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">apiKey</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">password</span><span class="sh">"</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="n">sensitive</span> <span class="o">+</span> <span class="sh">"</span><span class="s">=</span><span class="sh">"</span><span class="p">,</span> <span class="n">sensitive</span> <span class="o">+</span> <span class="sh">"</span><span class="s">=REDACTED</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">apiKey</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">password</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+                    <span class="n">obj</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">REDACTED</span><span class="sh">"</span>
+            <span class="k">return</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">captured</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">request_hook</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">httpx</span><span class="p">.</span><span class="n">Request</span><span class="p">):</span>
+        <span class="c1"># request.content는 이미 bytes일 가능성 높음
+</span>        <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">content</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">body_str</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">content</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="n">body_str</span> <span class="o">=</span> <span class="nf">repr</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">body_str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">&lt;no request.content available or streaming body&gt;</span><span class="sh">"</span>
+        <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">method</span><span class="sh">"</span><span class="p">:</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">url</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_headers</span><span class="p">(</span><span class="nf">dict</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">headers</span><span class="p">)),</span>
+            <span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_text</span><span class="p">(</span><span class="n">body_str</span><span class="p">),</span>
+        <span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">response_hook</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">httpx</span><span class="p">.</span><span class="n">Response</span><span class="p">):</span>
+        <span class="c1"># 스트리밍 응답인지 간단 체크 (Content-Type 또는 Transfer-Encoding 참고)
+</span>        <span class="n">ct</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content-type</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">te</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">transfer-encoding</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">is_streaming</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">text/event-stream</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">ct</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="sh">"</span><span class="s">chunked</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">te</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_streaming</span><span class="p">:</span>
+            <span class="c1"># 스트리밍은 전체 aread() 하지 않고 청크 단위로 처리해야 함
+</span>            <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">async</span> <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="p">.</span><span class="nf">aiter_bytes</span><span class="p">():</span>
+                <span class="n">chunks</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+            <span class="n">body_bytes</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 일반적인 비동기 응답: 전체 바디를 안전하게 읽음
+</span>            <span class="n">body_bytes</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="nf">aread</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">body_str</span> <span class="o">=</span> <span class="n">body_bytes</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">body_str</span> <span class="o">=</span> <span class="nf">repr</span><span class="p">(</span><span class="n">body_bytes</span><span class="p">)</span>
+
+        <span class="c1"># 예쁘게 JSON 포맷 시도
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parsed</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">body_str</span><span class="p">)</span>
+            <span class="n">body_str</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">status_code</span><span class="sh">"</span><span class="p">:</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_headers</span><span class="p">(</span><span class="nf">dict</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">)),</span>
+            <span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_text</span><span class="p">(</span><span class="n">body_str</span><span class="p">),</span>
+        <span class="p">}</span>
+
+    <span class="n">hooks</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">request_hook</span><span class="p">],</span> <span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">response_hook</span><span class="p">]}</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="p">.</span><span class="nc">AsyncClient</span><span class="p">(</span><span class="n">event_hooks</span><span class="o">=</span><span class="n">hooks</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">60.0</span><span class="p">)</span> <span class="k">as</span> <span class="n">async_http</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="nc">OpenAI</span><span class="p">(</span><span class="n">http_client</span><span class="o">=</span><span class="n">async_http</span><span class="p">)</span>
+        <span class="c1"># OpenAI 호출(비동기)
+</span>        <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">안녕하세요 (async aread 예제)</span><span class="sh">"</span><span class="p">}],</span>
+        <span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Captured request:</span><span class="sh">"</span><span class="p">,</span> <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">])</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Captured response:</span><span class="sh">"</span><span class="p">,</span> <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">][:</span><span class="mi">2000</span><span class="p">]</span> <span class="k">if</span> <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">]</span> <span class="k">else</span> <span class="sh">"</span><span class="s">&lt;none&gt;</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="추가-팁--주의">추가 팁 / 주의</h1>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">await response.aread()</code>는 <strong>응답이 이미 어느 정도 읽혀있지 않다면 전체 바디를 한 번에</strong> 읽어 캐시합니다. 대부분의 REST 호출(전체 바디가 작음)에는 이 방법이 편하고 안전합니다.</p>
+  </li>
+  <li>
+    <p><strong>스트리밍 API</strong>(SSE, OpenAI의 일부 스트리밍 인터페이스 등)는 <code class="language-plaintext highlighter-rouge">aread()</code>로 읽어버리면 스트림 소비로 인해 원래 의도한 스트리밍 처리(실시간 청크 수신)가 불가능해집니다. 그럴 땐 <code class="language-plaintext highlighter-rouge">aiter_bytes()</code>/<code class="language-plaintext highlighter-rouge">aiter_text()</code>로 청크를 순회하거나 SDK가 제공하는 스트리밍 콜백을 사용하세요.</p>
+  </li>
+  <li>
+    <p>httpx는 바디를 읽어 캐시에 보관하니, 훅에서 <code class="language-plaintext highlighter-rouge">aread()</code>로 읽어도 이후에 <code class="language-plaintext highlighter-rouge">response.text</code>/<code class="language-plaintext highlighter-rouge">response.json()</code>로 접근 가능하긴 합니다(일반적 동작).</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>원하시면 지금 바로:</p>
+
+<ul>
+  <li>
+    <p><strong>스트리밍(서버-전송-이벤트)</strong> 를 청크 단위로 안전하게 캡처해 <code class="language-plaintext highlighter-rouge">main()</code> 안의 문자열로 합치는 예제,</p>
+  </li>
+  <li>
+    <p>혹은 <strong>OpenAI SDK의 스트리밍(예:<code class="language-plaintext highlighter-rouge">stream=True</code>)</strong> 에 특화된 캡처 코드(청크마다 처리해서 단일 문자열로 결합)도 만들어 드릴게요. 어떤 걸 원하시나요?</p>
+  </li>
+</ul>
+
         
       </section>
 
@@ -909,7 +1067,7 @@ string에 데이터가 담기게 하고 싶어 요청을 보낼때 / 받을때 �
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-01T09:41:51+09:00">2025-10-01</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-01T17:18:28+09:00">2025-10-01</time></p>
 
       </footer>
 
@@ -963,7 +1121,7 @@ string에 데이터가 담기게 하고 싶어 요청을 보낼때 / 받을때 �
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-01T09:41:55+09:00">2025-10-01</time>
+        <time datetime="2025-10-01T17:18:32+09:00">2025-10-01</time>
       </span>
     
 
