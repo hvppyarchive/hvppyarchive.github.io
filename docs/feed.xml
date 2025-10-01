@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-01T17:18:32+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-01T17:18:32+09:00</published><updated>2025-10-01T17:18:32+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-01T18:39:00+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-01T18:39:00+09:00</published><updated>2025-10-01T18:39:00+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">openai api Raw 데이터 확인 방법</title><link href="https://hvppyarchive.github.io/python/openai-package-data-hook/" rel="alternate" type="text/html" title="openai api Raw 데이터 확인 방법" /><published>2025-10-01T17:18:28+09:00</published><updated>2025-10-01T17:18:28+09:00</updated><id>https://hvppyarchive.github.io/python/openai-package-data-hook</id><content type="html" xml:base="https://hvppyarchive.github.io/python/openai-package-data-hook/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">openai api Raw 데이터 확인 방법</title><link href="https://hvppyarchive.github.io/python/openai-package-data-hook/" rel="alternate" type="text/html" title="openai api Raw 데이터 확인 방법" /><published>2025-10-01T18:38:56+09:00</published><updated>2025-10-01T18:38:56+09:00</updated><id>https://hvppyarchive.github.io/python/openai-package-data-hook</id><content type="html" xml:base="https://hvppyarchive.github.io/python/openai-package-data-hook/"><![CDATA[<p class="chat--user">
 
 openai python package에서 내가 보내는 패킷을 가능한 raw 데이터 형태로 보고 싶어
 
@@ -979,7 +979,361 @@ response.aread()를 해야 읽을 수 있는거 아니야?
   <li>
     <p>혹은 <strong>OpenAI SDK의 스트리밍(예:<code class="language-plaintext highlighter-rouge">stream=True</code>)</strong> 에 특화된 캡처 코드(청크마다 처리해서 단일 문자열로 결합)도 만들어 드릴게요. 어떤 걸 원하시나요?</p>
   </li>
-</ul>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Pickle to JSON 변환</title><link href="https://hvppyarchive.github.io/python/pickle-to-json/" rel="alternate" type="text/html" title="Pickle to JSON 변환" /><published>2025-09-29T10:41:41+09:00</published><updated>2025-09-29T10:41:41+09:00</updated><id>https://hvppyarchive.github.io/python/pickle-to-json</id><content type="html" xml:base="https://hvppyarchive.github.io/python/pickle-to-json/"><![CDATA[<p class="chat--user">
+</ul>
+
+<p class="chat--user">
+
+1. request쪽 한글이 깨져보여. 그리고 여기도 aread로 바꿔줘. 2. body쪽 내용이 모두 하나의 string으로만 나와서 읽기가 힘들어. 그냥 nested json으로 보이는게 읽기 편할 것 같아.
+
+</p>
+
+<p>좋은 포인트 두 가지 정리해서 바로 반영했어요.</p>
+
+<ul>
+  <li>
+    <p><strong>(1) 요청(request) 쪽 한글 깨짐</strong> → <code class="language-plaintext highlighter-rouge">Content-Type</code>의 <code class="language-plaintext highlighter-rouge">charset</code>을 확인해 <strong>정확한 인코딩</strong> 으로 디코딩하고, 기본값은 <code class="language-plaintext highlighter-rouge">utf-8</code>로 처리합니다. (OpenAI SDK는 JSON 바디를 기본적으로 UTF-8로 보냅니다.)</p>
+  </li>
+  <li>
+    <p><strong>(2) body를 “한 줄짜리 문자열”이 아니라 “중첩 JSON(파이썬 dict)”</strong> 으로 저장 → 파싱이 되면 <code class="language-plaintext highlighter-rouge">dict/list</code>로 저장하고, 안 되면 텍스트 그대로 둡니다.</p>
+  </li>
+</ul>
+
+<p>또, <strong>응답(response)</strong> 은 비동기 환경에서 확실히 <code class="language-plaintext highlighter-rouge">await response.aread()</code>로 읽도록 바꿨습니다.<br />
+<strong>요청(request)</strong> 객체는 httpx에서 <code class="language-plaintext highlighter-rouge">aread()</code>가 없어서(응답에만 있음) 대신 <strong>바이트 바디를 정확한 인코딩으로 디코딩</strong> 하는 방식으로 처리합니다. (OpenAI SDK처럼 일반 JSON 요청이면 <code class="language-plaintext highlighter-rouge">request.content</code>에서 안전하게 읽힙니다. 진짜 “스트리밍 업로드”를 하신다면 별도 tee 래퍼가 필요합니다—아래에 간단 주석 있습니다.)</p>
+
+<hr />
+
+<h3 id="업데이트된-비동기-예제-전역-변수-없이-main-내부-보관-request-한글인코딩-개선-response는-aread-사용-body는-nested-json으로-저장">업데이트된 비동기 예제 (전역 변수 없이 <code class="language-plaintext highlighter-rouge">main()</code> 내부 보관, request 한글/인코딩 개선, response는 <code class="language-plaintext highlighter-rouge">aread()</code> 사용, body는 nested JSON으로 저장)</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">httpx</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="k">def</span> <span class="nf">pick_charset</span><span class="p">(</span><span class="n">content_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># e.g. "application/json; charset=utf-8"
+</span>    <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">;</span><span class="sh">"</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">lower</span><span class="p">().</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">charset=</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">p</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">=</span><span class="sh">"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="nf">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="n">default</span>
+    <span class="k">return</span> <span class="n">default</span>
+
+<span class="k">def</span> <span class="nf">try_parse_json</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">redact_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span><span class="p">.</span><span class="nf">lower</span><span class="p">()</span> <span class="o">==</span> <span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">api-key</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">k</span><span class="p">.</span><span class="nf">lower</span><span class="p">():</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">REDACTED</span><span class="sh">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">redact_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="c1"># dict/list를 재귀적으로 돌며 민감 키 마스킹
+</span>    <span class="n">SENSITIVE_KEYS</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">apiKey</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">password</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">REDACTED</span><span class="sh">"</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SENSITIVE_KEYS</span> <span class="k">else</span> <span class="nf">redact_obj</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">.</span><span class="nf">items</span><span class="p">()}</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nf">redact_obj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">obj</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">captured</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">request_hook</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">httpx</span><span class="p">.</span><span class="n">Request</span><span class="p">):</span>
+        <span class="c1"># 1) charset 결정
+</span>        <span class="n">req_ct</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content-type</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">req_charset</span> <span class="o">=</span> <span class="nf">pick_charset</span><span class="p">(</span><span class="n">req_ct</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="c1"># 2) 바디 바이트 → 텍스트
+</span>        <span class="c1">#    (OpenAI SDK의 JSON 호출이라면 request.content가 bytes로 채워져 있습니다)
+</span>        <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">content</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">body_text</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">content</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">req_charset</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="c1"># 혹시 모를 인코딩 이슈 대비: 마지막 fallback
+</span>                <span class="n">body_text</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">content</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 스트리밍 업로드(제너레이터/파일 스트림 등)인 경우 여기에 None이 들어옵니다.
+</span>            <span class="c1"># 그런 경우, 별도 "tee stream" 래퍼로 `request.stream`을 감싸서 전송되며 캡처해야 합니다.
+</span>            <span class="n">body_text</span> <span class="o">=</span> <span class="sh">"</span><span class="s">&lt;streaming or no request.content&gt;</span><span class="sh">"</span>
+
+        <span class="c1"># 3) nested JSON으로 저장(가능하면)
+</span>        <span class="n">body_obj</span> <span class="o">=</span> <span class="nf">try_parse_json</span><span class="p">(</span><span class="n">body_text</span><span class="p">)</span>
+        <span class="n">body_saved</span> <span class="o">=</span> <span class="nf">redact_obj</span><span class="p">(</span><span class="n">body_obj</span><span class="p">)</span> <span class="k">if</span> <span class="n">body_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">body_text</span>  <span class="c1"># dict/list면 마스킹, 아니면 원문
+</span>
+        <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">method</span><span class="sh">"</span><span class="p">:</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">url</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_headers</span><span class="p">(</span><span class="nf">dict</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">headers</span><span class="p">)),</span>
+            <span class="c1"># 문자열이 아니라, 가능하면 dict/list로 저장됩니다.
+</span>            <span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">:</span> <span class="n">body_saved</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">response_hook</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">httpx</span><span class="p">.</span><span class="n">Response</span><span class="p">):</span>
+        <span class="c1"># 1) 전체 바디를 비동기로 안전하게 읽음
+</span>        <span class="n">body_bytes</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="nf">aread</span><span class="p">()</span>
+
+        <span class="c1"># 2) charset 결정
+</span>        <span class="n">res_ct</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content-type</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">res_charset</span> <span class="o">=</span> <span class="nf">pick_charset</span><span class="p">(</span><span class="n">res_ct</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="c1"># 3) 바디 바이트 → 텍스트
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="n">body_text</span> <span class="o">=</span> <span class="n">body_bytes</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">res_charset</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">body_text</span> <span class="o">=</span> <span class="n">body_bytes</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="c1"># 4) nested JSON으로 저장(가능하면)
+</span>        <span class="n">body_obj</span> <span class="o">=</span> <span class="nf">try_parse_json</span><span class="p">(</span><span class="n">body_text</span><span class="p">)</span>
+        <span class="n">body_saved</span> <span class="o">=</span> <span class="nf">redact_obj</span><span class="p">(</span><span class="n">body_obj</span><span class="p">)</span> <span class="k">if</span> <span class="n">body_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">body_text</span>
+
+        <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">status_code</span><span class="sh">"</span><span class="p">:</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_headers</span><span class="p">(</span><span class="nf">dict</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">)),</span>
+            <span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">:</span> <span class="n">body_saved</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="n">hooks</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">request_hook</span><span class="p">],</span> <span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">response_hook</span><span class="p">]}</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="p">.</span><span class="nc">AsyncClient</span><span class="p">(</span><span class="n">event_hooks</span><span class="o">=</span><span class="n">hooks</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">60.0</span><span class="p">)</span> <span class="k">as</span> <span class="n">async_http</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="nc">OpenAI</span><span class="p">(</span><span class="n">http_client</span><span class="o">=</span><span class="n">async_http</span><span class="p">)</span>
+
+        <span class="c1"># 실제 호출(예: chat.completions)
+</span>        <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">한글이 제대로 보이는지 확인합니다 😊</span><span class="sh">"</span><span class="p">}],</span>
+        <span class="p">)</span>
+
+    <span class="c1"># 여기서 captured["request"]["body"], captured["response"]["body"]는
+</span>    <span class="c1"># 가능한 경우 "중첩 JSON(dict/list)"로 저장되어 있습니다.
+</span>    <span class="c1"># (JSON이 아니면 디코딩된 텍스트 문자열)
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">REQUEST (nested JSON or text):</span><span class="sh">"</span><span class="p">,</span> <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">])</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RESPONSE (nested JSON or text):</span><span class="sh">"</span><span class="p">,</span> <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">captured</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="스트리밍-업로드다운로드를-쓰는-특수-케이스">스트리밍 업로드/다운로드를 쓰는 특수 케이스</h3>
+
+<ul>
+  <li>
+    <p><strong>요청이 스트리밍 업로드</strong>(파일 제너레이터 등)면 <code class="language-plaintext highlighter-rouge">request.content</code>가 <code class="language-plaintext highlighter-rouge">None</code>일 수 있어요. 이때는 <code class="language-plaintext highlighter-rouge">request.stream</code>(비공개 구현일 수 있음)을 <strong>tee 래퍼</strong> 로 감싸서 전송되는 바이트를 옆에서 모아야 합니다. 필요하시면 tee 래퍼(비동기 제너레이터로 감싸서 bytes를 <code class="language-plaintext highlighter-rouge">yield</code>하면서 내부 버퍼에도 <code class="language-plaintext highlighter-rouge">append</code>) 코드를 만들어 드릴게요.</p>
+  </li>
+  <li>
+    <p><strong>응답이 스트리밍(SSE/청크)</strong> 이면 <code class="language-plaintext highlighter-rouge">await response.aread()</code>로 한 번에 읽지 말고, <code class="language-plaintext highlighter-rouge">async for chunk in response.aiter_bytes():</code> 식으로 <strong>청크를 누적</strong> 해 nested JSON으로 복원(가능시)하거나, 청크 리스트를 합쳐서 나중에 <code class="language-plaintext highlighter-rouge">json.loads()</code>를 시도하세요. 이것도 원하시면 바로 예제 드릴게요.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하신 경우:</p>
+
+<ul>
+  <li>
+    <p><strong>요청/응답 모두 “반드시 dict로만 보관”</strong>하도록 강제하는 버전</p>
+  </li>
+  <li>
+    <p><strong>특정 키만 남기고 나머지 마스킹</strong>(예: <code class="language-plaintext highlighter-rouge">messages</code>만 유지)</p>
+  </li>
+  <li>
+    <p><strong>스트리밍 업/다운로드 tee 래퍼</strong></p>
+  </li>
+</ul>
+
+<p>어떤 걸 더 원하세요?</p>
+
+<p class="chat--user">
+
+참고로 body_str을 json.load하고 dump 하니 한글이 제대로 보였었어.
+
+</p>
+
+<p>맞아요 — <strong><code class="language-plaintext highlighter-rouge">json.loads()</code> → <code class="language-plaintext highlighter-rouge">json.dumps()</code></strong> 를 거치면 한글이 “정상 글자”로 보이는 이유가 있습니다. 핵심만 정리하고, 바로 적용 가능한 패치도 드릴게요.</p>
+
+<h1 id="왜-load--dump-하면-한글이-제대로-보일까">왜 load → dump 하면 한글이 제대로 보일까?</h1>
+
+<ol>
+  <li>
+    <p><strong>요청/응답 바이트를 올바른 문자셋(대개 UTF-8)</strong> 으로 <code class="language-plaintext highlighter-rouge">str</code>로 디코딩해야 합니다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">json.loads()</code>로 파싱하면 <strong>파이썬 내부 객체(dict/list)</strong> 가 됩니다. 이 상태에서는 한글이 이미 유니코드로 올바르게 보존돼 있어요.</p>
+  </li>
+  <li>
+    <p>그런데 <code class="language-plaintext highlighter-rouge">json.dumps()</code>의 기본값은 <code class="language-plaintext highlighter-rouge">ensure_ascii=True</code>라서, <strong>비 ASCII 문자를<code class="language-plaintext highlighter-rouge">\uXXXX</code>로 이스케이프</strong>합니다.<br />
+→ 이러면 다시 “깨져 보이거나” <code class="language-plaintext highlighter-rouge">\uac00</code> 같은 코드값으로 보일 수 있죠.</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">ensure_ascii=False</code>로 <code class="language-plaintext highlighter-rouge">json.dumps(..., ensure_ascii=False, indent=2)</code></strong> 를 쓰면 한글이 그대로 출력됩니다(이스케이프 없이).</p>
+  </li>
+</ol>
+
+<blockquote>
+  <p>즉, “디코딩 → 파싱 → <code class="language-plaintext highlighter-rouge">ensure_ascii=False</code>로 직렬화” 순서가 중요합니다.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="바로-적용-1-nested-json-저장--2-보기-좋게-출력ensure_asciifalse">바로 적용: (1) nested JSON 저장 + (2) 보기 좋게 출력(ensure_ascii=False)</h1>
+
+<p>아래는 앞서 드린 비동기 훅 예제에서, <strong>nested JSON으로 저장</strong> 하고 <strong>볼 때는<code class="language-plaintext highlighter-rouge">ensure_ascii=False</code>로 덤프</strong>하도록 살짝 손 본 버전입니다. (응답은 <code class="language-plaintext highlighter-rouge">await response.aread()</code> 유지)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">httpx</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span> <span class="n">sys</span>
+
+<span class="k">def</span> <span class="nf">pick_charset</span><span class="p">(</span><span class="n">content_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">;</span><span class="sh">"</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">lower</span><span class="p">().</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">charset=</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">p</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">=</span><span class="sh">"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="nf">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="n">default</span>
+    <span class="k">return</span> <span class="n">default</span>
+
+<span class="k">def</span> <span class="nf">redact_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span><span class="p">.</span><span class="nf">lower</span><span class="p">()</span> <span class="o">==</span> <span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">api-key</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">k</span><span class="p">.</span><span class="nf">lower</span><span class="p">():</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">REDACTED</span><span class="sh">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">redact_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="n">SENSITIVE</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">apiKey</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">key</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">password</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">REDACTED</span><span class="sh">"</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SENSITIVE</span> <span class="k">else</span> <span class="nf">redact_obj</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">.</span><span class="nf">items</span><span class="p">()}</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nf">redact_obj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">obj</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># (선택) 터미널이 UTF-8이 아닐 수 있으므로 보정
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="nf">reconfigure</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">captured</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">request_hook</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">httpx</span><span class="p">.</span><span class="n">Request</span><span class="p">):</span>
+        <span class="n">req_ct</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content-type</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">charset</span> <span class="o">=</span> <span class="nf">pick_charset</span><span class="p">(</span><span class="n">req_ct</span><span class="p">,</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">request</span><span class="p">.</span><span class="n">content</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">body_text</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">content</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">charset</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">body_text</span> <span class="o">=</span> <span class="sh">"</span><span class="s">&lt;streaming or no request.content&gt;</span><span class="sh">"</span>
+
+        <span class="c1"># 가능하면 nested JSON(dict/list)로 저장
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="n">body_obj</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">body_text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">body_obj</span> <span class="o">=</span> <span class="n">body_text</span>  <span class="c1"># JSON이 아니면 원문 문자열
+</span>
+        <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">method</span><span class="sh">"</span><span class="p">:</span> <span class="n">request</span><span class="p">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">url</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_headers</span><span class="p">(</span><span class="nf">dict</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">headers</span><span class="p">)),</span>
+            <span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_obj</span><span class="p">(</span><span class="n">body_obj</span><span class="p">),</span>
+        <span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">response_hook</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">httpx</span><span class="p">.</span><span class="n">Response</span><span class="p">):</span>
+        <span class="n">body_bytes</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="nf">aread</span><span class="p">()</span>
+        <span class="n">res_ct</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content-type</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">charset</span> <span class="o">=</span> <span class="nf">pick_charset</span><span class="p">(</span><span class="n">res_ct</span><span class="p">,</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="n">body_text</span> <span class="o">=</span> <span class="n">body_bytes</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">charset</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">body_obj</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">body_text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">body_obj</span> <span class="o">=</span> <span class="n">body_text</span>
+
+        <span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">status_code</span><span class="sh">"</span><span class="p">:</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_headers</span><span class="p">(</span><span class="nf">dict</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">)),</span>
+            <span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">:</span> <span class="nf">redact_obj</span><span class="p">(</span><span class="n">body_obj</span><span class="p">),</span>
+        <span class="p">}</span>
+
+    <span class="n">hooks</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">request_hook</span><span class="p">],</span> <span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">response_hook</span><span class="p">]}</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="p">.</span><span class="nc">AsyncClient</span><span class="p">(</span><span class="n">event_hooks</span><span class="o">=</span><span class="n">hooks</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">60.0</span><span class="p">)</span> <span class="k">as</span> <span class="n">async_http</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="nc">OpenAI</span><span class="p">(</span><span class="n">http_client</span><span class="o">=</span><span class="n">async_http</span><span class="p">)</span>
+
+        <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">한글이 잘 보이는지 테스트합니다. 😄</span><span class="sh">"</span><span class="p">}],</span>
+        <span class="p">)</span>
+
+    <span class="c1"># === 보기 좋게 출력: ensure_ascii=False + indent ===
+</span>    <span class="k">def</span> <span class="nf">pretty</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== REQUEST ===</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">pretty</span><span class="p">(</span><span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">]))</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">=== RESPONSE ===</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">pretty</span><span class="p">(</span><span class="n">captured</span><span class="p">[</span><span class="sh">"</span><span class="s">response</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">body</span><span class="sh">"</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">captured</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="포인트">포인트</h3>
+
+<ul>
+  <li>
+    <p><strong>저장 단계</strong> : 가능하면 <code class="language-plaintext highlighter-rouge">dict/list</code> 형태로 <strong>그대로 저장</strong> 합니다(“한 줄 문자열” 대신 중첩 구조).</p>
+  </li>
+  <li>
+    <p><strong>출력/확인 단계</strong> : <code class="language-plaintext highlighter-rouge">json.dumps(..., ensure_ascii=False, indent=2)</code> 로 덤프하면 <strong>한글이 그대로</strong> 나오고 <strong>가독성</strong> 도 좋아집니다.</p>
+  </li>
+  <li>
+    <p><strong>콘솔 인코딩</strong> : Windows 등에서 콘솔 인코딩 문제로 깨질 수 있으니 <code class="language-plaintext highlighter-rouge">sys.stdout.reconfigure(encoding="utf-8")</code> 시도(실패해도 무시).</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="빠른-체크리스트-step-by-step">빠른 체크리스트 (step-by-step)</h1>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Content-Type</code>에서 <strong>charset 확인</strong> (없으면 UTF-8 가정).</p>
+  </li>
+  <li>
+    <p>바이트 → 문자열 <strong>디코딩</strong>.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">json.loads()</code>로 <strong>객체화</strong>(되면 dict/list로 저장).</p>
+  </li>
+  <li>
+    <p>출력할 때 <code class="language-plaintext highlighter-rouge">json.dumps(..., ensure_ascii=False, indent=2)</code> 사용.</p>
+  </li>
+  <li>
+    <p>콘솔 인코딩이 UTF-8인지 확인(필요 시 <code class="language-plaintext highlighter-rouge">PYTHONIOENCODING=UTF-8</code> 환경변수 또는 위 코드).</p>
+  </li>
+</ol>
+
+<p>원하시면 <strong>요청/응답에서 특정 키만 골라서 pretty-print</strong> 하도록 필터링까지 넣어드릴게요. 어떤 키들만 보이면 좋을까요?</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Pickle to JSON 변환</title><link href="https://hvppyarchive.github.io/python/pickle-to-json/" rel="alternate" type="text/html" title="Pickle to JSON 변환" /><published>2025-09-29T10:41:41+09:00</published><updated>2025-09-29T10:41:41+09:00</updated><id>https://hvppyarchive.github.io/python/pickle-to-json</id><content type="html" xml:base="https://hvppyarchive.github.io/python/pickle-to-json/"><![CDATA[<p class="chat--user">
 
 너는 파이썬 프로그래밍 전문가야. python pickle로 저장된 데이터가 있어. 이걸 읽어서 그 안의 모든 객체 tree를 json 형태로 뱉도록 하고 싶어. 이 때 pickle은 커스텀 클래스를 담고 있어. 이걸 해내기 위해서 어떻게 접근해야할까? 최대한 에러가 없이 동작하도록 고민해줘. Step by Step으로 생각해줘.
 
