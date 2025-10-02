@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-02T10:38:23+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-02T10:38:23+09:00</published><updated>2025-10-02T10:38:23+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-02T10:58:58+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-02T10:58:58+09:00</published><updated>2025-10-02T10:58:58+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">ComfyUI 설정 파일 개발</title><link href="https://hvppyarchive.github.io/comfyui/comfyui-custom-node-config/" rel="alternate" type="text/html" title="ComfyUI 설정 파일 개발" /><published>2025-10-02T10:38:17+09:00</published><updated>2025-10-02T10:38:17+09:00</updated><id>https://hvppyarchive.github.io/comfyui/comfyui-custom-node-config</id><content type="html" xml:base="https://hvppyarchive.github.io/comfyui/comfyui-custom-node-config/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">ComfyUI 설정 파일 개발</title><link href="https://hvppyarchive.github.io/comfyui/comfyui-custom-node-config/" rel="alternate" type="text/html" title="ComfyUI 설정 파일 개발" /><published>2025-10-02T10:58:54+09:00</published><updated>2025-10-02T10:58:54+09:00</updated><id>https://hvppyarchive.github.io/comfyui/comfyui-custom-node-config</id><content type="html" xml:base="https://hvppyarchive.github.io/comfyui/comfyui-custom-node-config/"><![CDATA[<p class="chat--user">
 
 ComfyUI Custom Node의 Config들을 저장 파일을 개발해줘. config 파일을 사람이 수정하기 쉬운 파일 형식으로 수정 해줘. 파일을 저장하지 않고 설정을 읽기만 하는 readonly 모드로 동작하면 돼. 여러 설정을 저장할거지만 주 용도는 LLM 엔드포인트 정보를 담을거야. 각 LLM Model 별로 (디스플레이용 모델명, 실제 모델명(request시), base url, api key)를 저장하면 돼. Config 정보에 관한 요청이 들어오면(e.g. api 날릴 때 등) 해당하는 값을 리턴하면 돼. 이 때 config 파일이 초기 read했을 때와 바뀌었을 수도 있어. 조금 반영이 늦더라도 1분 이내에는 변경된 값을 리턴해야해. 
 
@@ -1350,7 +1350,714 @@ ComfyUI Custom Node의 Config들을 저장 파일을 개발해줘. config 파일
 
 <hr />
 
-<p>필요하면, 기존 워크플로우 자동 변환 스크립트(YAML/JSON 경로 교체)도 만들어 드릴게요.</p>]]></content><author><name>hvppyarchive</name></author><category term="comfyui" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">openai api Raw 데이터 확인 방법</title><link href="https://hvppyarchive.github.io/python/openai-package-data-hook/" rel="alternate" type="text/html" title="openai api Raw 데이터 확인 방법" /><published>2025-10-01T18:38:56+09:00</published><updated>2025-10-01T18:38:56+09:00</updated><id>https://hvppyarchive.github.io/python/openai-package-data-hook</id><content type="html" xml:base="https://hvppyarchive.github.io/python/openai-package-data-hook/"><![CDATA[<p class="chat--user">
+<p>필요하면, 기존 워크플로우 자동 변환 스크립트(YAML/JSON 경로 교체)도 만들어 드릴게요.</p>
+
+<p class="chat--user">
+
+다른 노드 “파일들”에서 설정을 읽어야하는데 이건 어떻게 해? 싱글톤 인터페이스가 좀 어색해보여
+
+</p>
+
+<p>좋은 피드백! “여러 노드/파일에서 자연스럽게 읽는” 패턴으로 바꿔줄게요.<br />
+싱글톤 대신 <strong>경로별 Multiton 레지스트리 + 얇은 함수형 API</strong> 를 제공합니다.<br />
+즉, 어디서든 <code class="language-plaintext highlighter-rouge">from comfyui_config_reader.config import endpoint, get</code>만 임포트해 쓰면 됩니다.</p>
+
+<p>아래 세 파일만 추가/교체하면 끝!</p>
+
+<hr />
+
+<h1 id="1-구조">1) 구조</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ComfyUI/
+└─ custom_nodes/
+   └─ comfyui_config_reader/
+      ├─ __init__.py
+      ├─ config_core.py     <span class="c"># 핵심: ReadOnlyStore (경로별 캐시/자동 리로드)</span>
+      ├─ config.py          <span class="c"># 공용 API: endpoint()/get()/get_store()</span>
+      └─ config_nodes.py    <span class="c"># (옵션) 데모 노드들: Lookup/List/Get</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="2-핵심-스토어-경로별-multiton-아님--인스턴스형-thread-safe">2) 핵심 스토어 (경로별 Multiton 아님 — “인스턴스형”, thread-safe)</h1>
+
+<p><code class="language-plaintext highlighter-rouge">config_core.py</code></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="n">threading</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="c1"># Python 3.11+: tomllib / 이하: tomli
+</span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="n">tomllib</span>  <span class="c1"># type: ignore
+</span>    <span class="n">_TOML_LOADS</span> <span class="o">=</span> <span class="n">tomllib</span><span class="p">.</span><span class="n">loads</span>
+<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="n">tomli</span>  <span class="c1"># type: ignore
+</span>    <span class="n">_TOML_LOADS</span> <span class="o">=</span> <span class="n">tomli</span><span class="p">.</span><span class="n">loads</span>
+
+<span class="k">def</span> <span class="nf">_expand_env_vars</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="sh">""</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sh">"</span><span class="s">${</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="sh">"</span><span class="s">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">env_name</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">:</span><span class="n">j</span><span class="p">]</span>
+                    <span class="n">out</span> <span class="o">+=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">+=</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">+=</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nf">_expand_env_vars</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">.</span><span class="nf">items</span><span class="p">()}</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nf">_expand_env_vars</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">_norm</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">s</span><span class="p">).</span><span class="nf">strip</span><span class="p">().</span><span class="nf">lower</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">ReadOnlyStore</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    - TOML 읽기 전용 스토어
+    - mtime/TTL(5~60s) 기반 자동 재로드 → </span><span class="sh">'</span><span class="s">1분 내 반영</span><span class="sh">'</span><span class="s"> 보장
+    - 엔드포인트 인덱싱 + 임의 경로 접근
+    - 파일 쓰기 없음
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Lock</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_loaded_at</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_last_mtime</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_refresh_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># 기본 30s
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_raw</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_endpoint_index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 리로드마다 증가
+</span>
+    <span class="c1"># ---------- 내부 로딩 ----------
+</span>    <span class="k">def</span> <span class="nf">_read_text</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path</span><span class="p">,</span> <span class="sh">"</span><span class="s">rb</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_build_index_endpoints</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_endpoint_index</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">endpoints</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">ep_key</span><span class="p">,</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="n">eps</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="nf">_expand_env_vars</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="n">required</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nf">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">]).</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">required</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">{</span><span class="nf">str</span><span class="p">(</span><span class="n">ep_key</span><span class="p">),</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">)),</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">))}:</span>
+                <span class="k">if</span> <span class="n">c</span><span class="p">:</span>
+                    <span class="n">self</span><span class="p">.</span><span class="n">_endpoint_index</span><span class="p">[</span><span class="nf">_norm</span><span class="p">(</span><span class="n">c</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">]),</span>
+                        <span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">]),</span>
+                        <span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">]),</span>
+                        <span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">]),</span>
+                    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_reload_locked</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_read_text</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nf">_TOML_LOADS</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+        <span class="c1"># refresh_interval_seconds (5~60) + env override
+</span>        <span class="n">conf_val</span> <span class="o">=</span> <span class="nf">int</span><span class="p">((</span><span class="n">data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">settings</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">refresh_interval_seconds</span><span class="sh">"</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+        <span class="n">conf_val</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nf">min</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">conf_val</span><span class="p">))</span>
+        <span class="n">env_override</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">COMFY_CONFIG_REFRESH_SECONDS</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">env_override</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">conf_val</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nf">min</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="nf">int</span><span class="p">(</span><span class="n">env_override</span><span class="p">)))</span>
+            <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">_refresh_interval</span> <span class="o">=</span> <span class="n">conf_val</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_raw</span> <span class="o">=</span> <span class="nf">_expand_env_vars</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_build_index_endpoints</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_raw</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_loaded_at</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_last_mtime</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">getmtime</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_last_mtime</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_version</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_stale_or_changed</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mtime</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">getmtime</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="nf">return </span><span class="p">(</span><span class="n">mtime</span> <span class="o">!=</span> <span class="n">self</span><span class="p">.</span><span class="n">_last_mtime</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">_loaded_at</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">_refresh_interval</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_ensure_loaded</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_loaded_at</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="nf">_stale_or_changed</span><span class="p">():</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">_reload_locked</span><span class="p">()</span>
+
+    <span class="c1"># ---------- 퍼블릭 API ----------
+</span>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_ensure_loaded</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_version</span>
+
+    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">ENV 치환 후 전체 트리의 </span><span class="sh">'</span><span class="s">일관된 스냅샷</span><span class="sh">'</span><span class="s">을 반환(얕은 복사).</span><span class="sh">"""</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_ensure_loaded</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nf">dict</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_raw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">dotted_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_ensure_loaded</span><span class="p">()</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_raw</span>
+        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">dotted_path</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">cur</span><span class="p">:</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="p">[</span><span class="n">part</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">config path not found: </span><span class="si">{</span><span class="n">dotted_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cur</span>
+
+    <span class="k">def</span> <span class="nf">get_endpoint</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nf">str</span><span class="p">(</span><span class="n">key</span><span class="p">).</span><span class="nf">strip</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">KeyError</span><span class="p">(</span><span class="sh">"</span><span class="s">endpoint key is empty</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_ensure_loaded</span><span class="p">()</span>
+        <span class="n">hit</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_endpoint_index</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nf">_norm</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">hit</span><span class="p">:</span>
+            <span class="c1"># 갱신 지연 가능성 → 강제 리로드 1회 재시도
+</span>            <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_lock</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">_reload_locked</span><span class="p">()</span>
+                <span class="n">hit</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_endpoint_index</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nf">_norm</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">hit</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">endpoint not found: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hit</span>
+
+    <span class="k">def</span> <span class="nf">list_endpoints</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_ensure_loaded</span><span class="p">()</span>
+        <span class="n">out</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">_endpoint_index</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="n">dn</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">]</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">dn</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">],</span>
+                <span class="c1"># api_key는 미노출
+</span>            <span class="p">}</span>
+        <span class="k">return</span> <span class="n">out</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="3-공용-api-어디서든-임포트해-쓰는-함수형-인터페이스">3) 공용 API (어디서든 임포트해 쓰는 “함수형” 인터페이스)</h1>
+
+<p><code class="language-plaintext highlighter-rouge">config.py</code></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="n">.config_core</span> <span class="kn">import</span> <span class="n">ReadOnlyStore</span>
+
+<span class="c1"># 경로별 Multiton 레지스트리
+</span><span class="n">_REGISTRY</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ReadOnlyStore</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">def</span> <span class="nf">_default_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">COMFY_CONFIG_PATH</span><span class="sh">"</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="sh">"</span><span class="s">config.toml</span><span class="sh">"</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">get_store</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReadOnlyStore</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    - 경로별로 ReadOnlyStore 인스턴스를 재사용(멀티톤)
+    - 명시 path 없으면 COMFY_CONFIG_PATH 또는 패키지 기본 config.toml
+    </span><span class="sh">"""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="n">path</span> <span class="ow">or</span> <span class="nf">_default_path</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_REGISTRY</span><span class="p">:</span>
+        <span class="n">_REGISTRY</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="nc">ReadOnlyStore</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_REGISTRY</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+
+<span class="c1"># ---- 얇은 함수형 헬퍼들 (권장) ----
+</span><span class="k">def</span> <span class="nf">endpoint</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">엔드포인트 dict 반환: display_name, request_name, base_url, api_key</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="nf">get_store</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="nf">get_endpoint</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">endpoints</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+    <span class="sh">"""</span><span class="s">엔드포인트 목록(JSON용)</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="nf">get_store</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="nf">list_endpoints</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">dotted_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">임의 설정값 반환: </span><span class="sh">'</span><span class="s">section.sub.key</span><span class="sh">'"""</span>
+    <span class="k">return</span> <span class="nf">get_store</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="nf">get_value</span><span class="p">(</span><span class="n">dotted_path</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">전체 트리 스냅샷</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="nf">get_store</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="nf">snapshot</span><span class="p">()</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>포인트: <strong>다른 노드 파일</strong> 에서는 <code class="language-plaintext highlighter-rouge">config.endpoint()</code>, <code class="language-plaintext highlighter-rouge">config.get()</code> 같은 <strong>함수형 API만</strong> 쓰면 됩니다.<br />
+ 내부적으로는 경로별 인스턴스를 재사용하지만, 노드 코드에서는 싱글톤에 의존하지 않습니다.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="4-옵션-데모-노드--기존-노드를-이-api로-얇게-래핑">4) (옵션) 데모 노드 — 기존 노드를 이 API로 얇게 래핑</h1>
+
+<p><code class="language-plaintext highlighter-rouge">config_nodes.py</code></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">.config</span> <span class="kn">import</span> <span class="n">endpoint</span> <span class="k">as</span> <span class="n">_endpoint</span><span class="p">,</span> <span class="n">endpoints</span> <span class="k">as</span> <span class="n">_endpoints</span><span class="p">,</span> <span class="n">get</span> <span class="k">as</span> <span class="n">_get</span>
+<span class="kn">import</span> <span class="n">json</span>
+
+<span class="k">class</span> <span class="nc">ConfigEndpointLookup</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">INPUT_TYPES</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">key</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">multiline</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">}),</span>
+                             <span class="sh">"</span><span class="s">config_path</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">multiline</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">})}}</span>
+    <span class="n">RETURN_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">RETURN_NAMES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">FUNCTION</span> <span class="o">=</span> <span class="sh">"</span><span class="s">lookup</span><span class="sh">"</span>
+    <span class="n">CATEGORY</span> <span class="o">=</span> <span class="sh">"</span><span class="s">Config/Endpoints (ReadOnly)</span><span class="sh">"</span>
+
+    <span class="k">def</span> <span class="nf">lookup</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">config_path</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="n">ep</span> <span class="o">=</span> <span class="nf">_endpoint</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+        <span class="nf">return </span><span class="p">(</span><span class="n">ep</span><span class="p">[</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">],</span> <span class="n">ep</span><span class="p">[</span><span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">],</span> <span class="n">ep</span><span class="p">[</span><span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">],</span> <span class="n">ep</span><span class="p">[</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">])</span>
+
+<span class="k">class</span> <span class="nc">ConfigListEndpoints</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">INPUT_TYPES</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">config_path</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">multiline</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">})}}</span>
+    <span class="n">RETURN_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,)</span>
+    <span class="n">RETURN_NAMES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">endpoints_json</span><span class="sh">"</span><span class="p">,)</span>
+    <span class="n">FUNCTION</span> <span class="o">=</span> <span class="sh">"</span><span class="s">list_endpoints</span><span class="sh">"</span>
+    <span class="n">CATEGORY</span> <span class="o">=</span> <span class="sh">"</span><span class="s">Config/Endpoints (ReadOnly)</span><span class="sh">"</span>
+
+    <span class="k">def</span> <span class="nf">list_endpoints</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">config_path</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nf">_endpoints</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+        <span class="nf">return </span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),)</span>
+
+<span class="k">class</span> <span class="nc">ConfigGetValue</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">INPUT_TYPES</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">multiline</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">}),</span>
+                             <span class="sh">"</span><span class="s">config_path</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">multiline</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">})}}</span>
+    <span class="n">RETURN_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,)</span>
+    <span class="n">RETURN_NAMES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">value</span><span class="sh">"</span><span class="p">,)</span>
+    <span class="n">FUNCTION</span> <span class="o">=</span> <span class="sh">"</span><span class="s">get_value</span><span class="sh">"</span>
+    <span class="n">CATEGORY</span> <span class="o">=</span> <span class="sh">"</span><span class="s">Config/General (ReadOnly)</span><span class="sh">"</span>
+
+    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">config_path</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="nf">_get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">))</span> <span class="ow">or</span> <span class="n">val</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="nf">return </span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">val</span><span class="p">),)</span>
+        <span class="nf">return </span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),)</span>
+
+<span class="n">NODE_CLASS_MAPPINGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">ConfigEndpointLookup</span><span class="sh">"</span><span class="p">:</span> <span class="n">ConfigEndpointLookup</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">ConfigListEndpoints</span><span class="sh">"</span><span class="p">:</span>  <span class="n">ConfigListEndpoints</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">ConfigGetValue</span><span class="sh">"</span><span class="p">:</span>       <span class="n">ConfigGetValue</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">NODE_DISPLAY_NAME_MAPPINGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">ConfigEndpointLookup</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Config: Endpoint Lookup</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">ConfigListEndpoints</span><span class="sh">"</span><span class="p">:</span>  <span class="sh">"</span><span class="s">Config: List Endpoints</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">ConfigGetValue</span><span class="sh">"</span><span class="p">:</span>       <span class="sh">"</span><span class="s">Config: Get Value</span><span class="sh">"</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="5-다른-노드-파일들에서-쓰는-법-가장-깔끔한-패턴">5) 다른 노드 “파일들”에서 쓰는 법 (가장 깔끔한 패턴)</h1>
+
+<p>다른 플러그인/노드 파일 어디에서든:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 예: OpenAI 호출 노드 파일 내부
+</span><span class="kn">from</span> <span class="n">comfyui_config_reader.config</span> <span class="kn">import</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">get</span>
+
+<span class="k">def</span> <span class="nf">_prepare_client</span><span class="p">():</span>
+    <span class="n">ep</span> <span class="o">=</span> <span class="nf">endpoint</span><span class="p">(</span><span class="sh">"</span><span class="s">text-model-a</span><span class="sh">"</span><span class="p">)</span>   <span class="c1"># 또는 display_name / request_name로 조회
+</span>    <span class="n">api_key</span> <span class="o">=</span> <span class="n">ep</span><span class="p">[</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">]</span>
+    <span class="n">base_url</span> <span class="o">=</span> <span class="n">ep</span><span class="p">[</span><span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">]</span>
+    <span class="c1"># ... 클라이언트 생성
+</span>    <span class="k">return</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">base_url</span>
+
+<span class="k">def</span> <span class="nf">_s3_settings</span><span class="p">():</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">storage.s3.region</span><span class="sh">"</span><span class="p">)</span>    <span class="c1"># 범용 설정 접근
+</span>    <span class="n">bucket</span> <span class="o">=</span> <span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">storage.s3.bucket</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">region</span><span class="p">,</span> <span class="n">bucket</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>기본 경로는 <code class="language-plaintext highlighter-rouge">COMFY_CONFIG_PATH</code> 또는 <code class="language-plaintext highlighter-rouge">comfyui_config_reader/config.toml</code>.</p>
+  </li>
+  <li>
+    <p>특정 파일을 쓰고 싶으면 <code class="language-plaintext highlighter-rouge">endpoint("text-model-a", path="/abs/path/to/config.toml")</code>처럼 <strong>함수 인자</strong> 로 주면 됩니다.</p>
+  </li>
+  <li>
+    <p>내부는 <strong>경로별 레지스트리(Multiton)</strong>라 같은 경로는 인스턴스를 공유(성능↑)하지만, 호출부는 <strong>함수형</strong> 이라 싱글톤에 종속되지 않아요.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="6-요건-체크">6) 요건 체크</h1>
+
+<ul>
+  <li>
+    <p>여러 노드/파일에서 공통 사용: <strong>함수형 API</strong> 로 간단 임포트</p>
+  </li>
+  <li>
+    <p>싱글톤 어색함 제거: <strong>경로별 Multiton + helper 함수</strong> → 명시적 DI도 가능(<code class="language-plaintext highlighter-rouge">get_store(path)</code>)</p>
+  </li>
+  <li>
+    <p>읽기 전용 + 1분 내 반영: <strong>mtime + 5~60s TTL(기본 30s)</strong></p>
+  </li>
+  <li>
+    <p>사람이 편집 쉬움: <strong>TOML + ENV 치환</strong></p>
+  </li>
+  <li>
+    <p>엔드포인트 4필드: <code class="language-plaintext highlighter-rouge">display_name, request_name, base_url, api_key</code></p>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하면 <code class="language-plaintext highlighter-rouge">get_store(path)</code>로 <strong>명시적 의존성 주입(DI)</strong>도 가능해요. 예컨대 프레임워크 초기화 시:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">comfyui_config_reader.config</span> <span class="kn">import</span> <span class="n">get_store</span>
+<span class="n">STORE</span> <span class="o">=</span> <span class="nf">get_store</span><span class="p">(</span><span class="sh">"</span><span class="s">/path/to/config.toml</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># 이후 어디서든:
+</span><span class="n">ep</span> <span class="o">=</span> <span class="n">STORE</span><span class="p">.</span><span class="nf">get_endpoint</span><span class="p">(</span><span class="sh">"</span><span class="s">text-model-a</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>이렇게 하면 아예 전역 함수도 안 쓰고, “내가 주입한 스토어”만 참조하는 형태로 완전히 분리할 수 있습니다.</p>
+
+<p class="chat--user">
+
+아니 싱글톤은 괜찮은데 외부에서 접근이 쉽지 않아보여서. 싱글톤이 낫지 않아?
+
+</p>
+
+<p>좋아, <strong>싱글톤으로 단순·직관 접근</strong> 가능하게 정리해줄게.<br />
+외부 노드 “파일들” 어디서든 한 줄 임포트로 바로 쓰는 형태야:</p>
+
+<ul>
+  <li>
+    <p>함수형: <code class="language-plaintext highlighter-rouge">from comfyui_config_reader import endpoint, get</code></p>
+  </li>
+  <li>
+    <p>객체형: <code class="language-plaintext highlighter-rouge">from comfyui_config_reader import CONFIG</code></p>
+  </li>
+</ul>
+
+<p>둘 다 같은 싱글톤 인스턴스를 뒤에서 사용해. (thread-safe, read-only, 1분 내 반영)</p>
+
+<hr />
+
+<h1 id="1-파일-구조-심플">1) 파일 구조 (심플)</h1>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ComfyUI/
+└─ custom_nodes/
+   └─ comfyui_config_reader/
+      ├─ __init__.py
+      ├─ config_singleton.py   # 싱글톤 본체
+      └─ config.toml
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="2-configtoml-예시-범용">2) <code class="language-plaintext highlighter-rouge">config.toml</code> 예시 (범용)</h1>
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">version</span> <span class="p">=</span> <span class="mi">1</span>
+
+<span class="nn">[settings]</span>
+<span class="py">refresh_interval_seconds</span> <span class="p">=</span> <span class="mi">30</span>  <span class="c"># 5~60 사이 권장</span>
+
+<span class="nn">[endpoints."text-model-a"]</span>
+<span class="py">display_name</span>  <span class="p">=</span> <span class="s">"Text Model A"</span>
+<span class="py">request_name</span>  <span class="p">=</span> <span class="s">"gpt-4o-mini"</span>
+<span class="py">base_url</span>      <span class="p">=</span> <span class="s">"https://api.openai.com/v1"</span>
+<span class="py">api_key</span>       <span class="p">=</span> <span class="s">"${OPENAI_API_KEY}"</span>
+
+<span class="nn">[feature_flags]</span>
+<span class="py">use_cache</span> <span class="p">=</span> <span class="kc">true</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">${ENV}</code> 는 환경변수 치환됨.</li>
+</ul>
+
+<hr />
+
+<h1 id="3-싱글톤-구현-config_singletonpy">3) 싱글톤 구현: <code class="language-plaintext highlighter-rouge">config_singleton.py</code></h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="n">threading</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="c1"># Python 3.11+: tomllib / 이하: tomli
+</span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="n">tomllib</span>  <span class="c1"># type: ignore
+</span>    <span class="n">_TOML_LOADS</span> <span class="o">=</span> <span class="n">tomllib</span><span class="p">.</span><span class="n">loads</span>
+<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="n">tomli</span>  <span class="c1"># type: ignore
+</span>    <span class="n">_TOML_LOADS</span> <span class="o">=</span> <span class="n">tomli</span><span class="p">.</span><span class="n">loads</span>
+
+<span class="k">def</span> <span class="nf">_expand_env</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="sh">""</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sh">"</span><span class="s">${</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="sh">"</span><span class="s">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">+=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">:</span><span class="n">j</span><span class="p">],</span> <span class="sh">""</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">+=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">+=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nf">_expand_env</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">.</span><span class="nf">items</span><span class="p">()}</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nf">_expand_env</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">v</span>
+
+<span class="k">def</span> <span class="nf">_norm</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">s</span><span class="p">).</span><span class="nf">strip</span><span class="p">().</span><span class="nf">lower</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">_ReadOnlyConfig</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    - TOML 파일 읽기 전용
+    - mtime 변경 + TTL(5~60s, 기본 30s) 자동 재로드
+    - endpoints 4필드 인덱싱(display_name, request_name, base_url, api_key)
+    - 임의 경로 접근 가능 (</span><span class="sh">'</span><span class="s">.</span><span class="sh">'</span><span class="s"> 구분)
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Lock</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_loaded_at</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_last_mtime</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_refresh</span> <span class="o">=</span> <span class="mi">30</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_raw</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_ep_index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># -------- 내부 로딩 --------
+</span>    <span class="k">def</span> <span class="nf">_read_text</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path</span><span class="p">,</span> <span class="sh">"</span><span class="s">rb</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_build_index</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_ep_index</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">endpoints</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span> <span class="k">return</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="n">eps</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span> <span class="k">continue</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="nf">_expand_env</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="n">req</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nf">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">]).</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">req</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">{</span><span class="nf">str</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">)),</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">))}:</span>
+                <span class="k">if</span> <span class="n">c</span><span class="p">:</span>
+                    <span class="n">self</span><span class="p">.</span><span class="n">_ep_index</span><span class="p">[</span><span class="nf">_norm</span><span class="p">(</span><span class="n">c</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">]),</span>
+                        <span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">]),</span>
+                        <span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">]),</span>
+                        <span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">]),</span>
+                    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_reload_locked</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_read_text</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nf">_TOML_LOADS</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+        <span class="c1"># refresh_interval_seconds (5~60) + env override
+</span>        <span class="n">r</span> <span class="o">=</span> <span class="nf">int</span><span class="p">((</span><span class="n">data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">settings</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">refresh_interval_seconds</span><span class="sh">"</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nf">min</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span>
+        <span class="n">env_r</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">COMFY_CONFIG_REFRESH_SECONDS</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">env_r</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span> <span class="n">r</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nf">min</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="nf">int</span><span class="p">(</span><span class="n">env_r</span><span class="p">)))</span>
+            <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span> <span class="k">pass</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_refresh</span> <span class="o">=</span> <span class="n">r</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">_raw</span> <span class="o">=</span> <span class="nf">_expand_env</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_build_index</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_raw</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_loaded_at</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_last_mtime</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">getmtime</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_last_mtime</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="k">def</span> <span class="nf">_stale_or_changed</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">getmtime</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="nf">return </span><span class="p">(</span><span class="n">m</span> <span class="o">!=</span> <span class="n">self</span><span class="p">.</span><span class="n">_last_mtime</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">_loaded_at</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">_refresh</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_ensure_loaded</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_loaded_at</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="nf">_stale_or_changed</span><span class="p">():</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">_reload_locked</span><span class="p">()</span>
+
+    <span class="c1"># -------- 퍼블릭 API --------
+</span>    <span class="k">def</span> <span class="nf">endpoint</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nf">str</span><span class="p">(</span><span class="n">key</span><span class="p">).</span><span class="nf">strip</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">KeyError</span><span class="p">(</span><span class="sh">"</span><span class="s">endpoint key is empty</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_ensure_loaded</span><span class="p">()</span>
+        <span class="n">hit</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_ep_index</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nf">_norm</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">hit</span><span class="p">:</span>
+            <span class="c1"># 즉시 재시도(갱신 지연 보정)
+</span>            <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_lock</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">_reload_locked</span><span class="p">()</span>
+                <span class="n">hit</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_ep_index</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nf">_norm</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">hit</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">endpoint not found: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hit</span>
+
+    <span class="k">def</span> <span class="nf">endpoints</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_ensure_loaded</span><span class="p">()</span>
+        <span class="n">out</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">_ep_index</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="sh">"</span><span class="s">display_name</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="sh">"</span><span class="s">request_name</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="k">return</span> <span class="n">out</span>  <span class="c1"># api_key 미노출
+</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">dotted</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_ensure_loaded</span><span class="p">()</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_raw</span>
+        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">dotted</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">cur</span><span class="p">:</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="p">[</span><span class="n">part</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">config path not found: </span><span class="si">{</span><span class="n">dotted</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cur</span>
+
+    <span class="k">def</span> <span class="nf">snapshot</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_ensure_loaded</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nf">dict</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_raw</span><span class="p">)</span>
+
+<span class="c1"># ===== 모듈 전역 싱글톤 =====
+</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Lock</span><span class="p">()</span>
+<span class="n">_instance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_ReadOnlyConfig</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">_default_path</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># configure()로 지정 가능
+</span>
+<span class="k">def</span> <span class="nf">_resolve_default_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_default_path</span> <span class="ow">or</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">COMFY_CONFIG_PATH</span><span class="sh">"</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="sh">"</span><span class="s">config.toml</span><span class="sh">"</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">_get_instance</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">_ReadOnlyConfig</span><span class="p">:</span>
+    <span class="k">global</span> <span class="n">_instance</span>
+    <span class="k">if</span> <span class="n">_instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">_instance</span> <span class="o">=</span> <span class="nf">_ReadOnlyConfig</span><span class="p">(</span><span class="nf">_resolve_default_path</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">_instance</span>
+
+<span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">refresh_seconds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    싱글톤 설정(선택): 경로/TTL 오버라이드.
+    - 가능한 한 </span><span class="sh">'</span><span class="s">초기화 시 1회</span><span class="sh">'</span><span class="s">만 호출 추천.
+    - 이후에도 호출 가능하며, 새 인스턴스로 교체됨( thread-safe ).
+    </span><span class="sh">"""</span>
+    <span class="k">global</span> <span class="n">_instance</span><span class="p">,</span> <span class="n">_default_path</span>
+    <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">_default_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">refresh_seconds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="sh">"</span><span class="s">COMFY_CONFIG_REFRESH_SECONDS</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">refresh_seconds</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">_lock</span><span class="p">:</span>
+        <span class="n">_instance</span> <span class="o">=</span> <span class="nf">_ReadOnlyConfig</span><span class="p">(</span><span class="nf">_resolve_default_path</span><span class="p">())</span>
+
+<span class="c1"># ---- 외부에 노출할 얇은 API (가장 쉬운 접근) ----
+</span><span class="k">def</span> <span class="nf">endpoint</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nf">_get_instance</span><span class="p">().</span><span class="nf">endpoint</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">endpoints</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+    <span class="k">return</span> <span class="nf">_get_instance</span><span class="p">().</span><span class="nf">endpoints</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">dotted</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">_get_instance</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="n">dotted</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">snapshot</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nf">_get_instance</span><span class="p">().</span><span class="nf">snapshot</span><span class="p">()</span>
+
+<span class="c1"># ---- 객체형 접근을 위한 프록시(CONFIG) ----
+</span><span class="k">class</span> <span class="nc">_ConfigProxy</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># CONFIG.endpoint(...), CONFIG.get(...) 형태 지원
+</span>        <span class="k">return</span> <span class="nf">getattr</span><span class="p">(</span><span class="nf">_get_instance</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span>
+
+<span class="n">CONFIG</span> <span class="o">=</span> <span class="nf">_ConfigProxy</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="4-__init__py-한-줄-임포트-지원">4) <code class="language-plaintext highlighter-rouge">__init__.py</code> (한 줄 임포트 지원)</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 외부에서 아주 간단히 접근 가능하게 re-export
+</span><span class="kn">from</span> <span class="n">.config_singleton</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CONFIG</span><span class="p">,</span>        <span class="c1"># 객체형: CONFIG.endpoint(...), CONFIG.get(...)
+</span>    <span class="n">configure</span><span class="p">,</span>     <span class="c1"># 선택: 초기화 시 경로/TTL 지정
+</span>    <span class="n">endpoint</span><span class="p">,</span>      <span class="c1"># 함수형: endpoint("text-model-a")
+</span>    <span class="n">endpoints</span><span class="p">,</span>
+    <span class="n">get</span><span class="p">,</span>
+    <span class="n">snapshot</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="5-외부-노드-파일들에서-쓰는-법">5) 외부 노드 “파일들”에서 쓰는 법</h1>
+
+<h2 id="가장-간단-함수형">가장 간단 (함수형)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">comfyui_config_reader</span> <span class="kn">import</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">get</span>
+
+<span class="k">def</span> <span class="nf">build_client</span><span class="p">():</span>
+    <span class="n">ep</span> <span class="o">=</span> <span class="nf">endpoint</span><span class="p">(</span><span class="sh">"</span><span class="s">text-model-a</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># 키 / display_name / request_name 중 아무거나 OK
+</span>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">ep</span><span class="p">[</span><span class="sh">"</span><span class="s">base_url</span><span class="sh">"</span><span class="p">]</span>
+    <span class="n">api_key</span>  <span class="o">=</span> <span class="n">ep</span><span class="p">[</span><span class="sh">"</span><span class="s">api_key</span><span class="sh">"</span><span class="p">]</span>
+    <span class="c1"># ... 클라이언트 생성
+</span></code></pre></div></div>
+
+<h2 id="객체형이-익숙하다면">객체형이 익숙하다면</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">comfyui_config_reader</span> <span class="kn">import</span> <span class="n">CONFIG</span>
+
+<span class="k">def</span> <span class="nf">build_client</span><span class="p">():</span>
+    <span class="n">ep</span> <span class="o">=</span> <span class="n">CONFIG</span><span class="p">.</span><span class="nf">endpoint</span><span class="p">(</span><span class="sh">"</span><span class="s">text-model-a</span><span class="sh">"</span><span class="p">)</span>
+    <span class="c1"># CONFIG.get("storage.s3.region") 등도 동일
+</span></code></pre></div></div>
+
+<h2 id="시작-시-경로ttl-지정선택">시작 시 경로/TTL 지정(선택)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 예: __init__ 혹은 ComfyUI 부팅 초기에 한 번
+</span><span class="kn">from</span> <span class="n">comfyui_config_reader</span> <span class="kn">import</span> <span class="n">configure</span>
+<span class="nf">configure</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="sh">"</span><span class="s">/abs/path/to/config.toml</span><span class="sh">"</span><span class="p">,</span> <span class="n">refresh_seconds</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># 5~60 사이
+</span></code></pre></div></div>
+
+<ul>
+  <li>이후 모든 모듈에서 같은 싱글톤을 사용하고, 파일 변경은 <strong>최대 1분 내</strong> 반영돼요(기본 30초, env/설정으로 조절).</li>
+</ul>
+
+<hr />
+
+<h1 id="6-요건-재확인">6) 요건 재확인</h1>
+
+<ul>
+  <li>
+    <p>✅ 외부 접근 쉬움: <code class="language-plaintext highlighter-rouge">from comfyui_config_reader import endpoint</code> 또는 <code class="language-plaintext highlighter-rouge">CONFIG.endpoint</code></p>
+  </li>
+  <li>
+    <p>✅ 싱글톤: 모듈 전역 한 개 인스턴스, thread-safe lazy init</p>
+  </li>
+  <li>
+    <p>✅ 읽기 전용: 쓰기 없음</p>
+  </li>
+  <li>
+    <p>✅ 1분 내 반영: mtime + TTL(기본 30s, 5~60s)</p>
+  </li>
+  <li>
+    <p>✅ 사람이 편집 쉬움: TOML + <code class="language-plaintext highlighter-rouge">${ENV}</code> 치환</p>
+  </li>
+  <li>
+    <p>✅ 엔드포인트 4필드: <code class="language-plaintext highlighter-rouge">display_name</code>, <code class="language-plaintext highlighter-rouge">request_name</code>, <code class="language-plaintext highlighter-rouge">base_url</code>, <code class="language-plaintext highlighter-rouge">api_key</code></p>
+  </li>
+</ul>
+
+<p>필요하면, 지금 구조 위에 “엔드포인트 호출용 노드”도 바로 얹어줄게.</p>]]></content><author><name>hvppyarchive</name></author><category term="comfyui" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">openai api Raw 데이터 확인 방법</title><link href="https://hvppyarchive.github.io/python/openai-package-data-hook/" rel="alternate" type="text/html" title="openai api Raw 데이터 확인 방법" /><published>2025-10-01T18:38:56+09:00</published><updated>2025-10-01T18:38:56+09:00</updated><id>https://hvppyarchive.github.io/python/openai-package-data-hook</id><content type="html" xml:base="https://hvppyarchive.github.io/python/openai-package-data-hook/"><![CDATA[<p class="chat--user">
 
 openai python package에서 내가 보내는 패킷을 가능한 raw 데이터 형태로 보고 싶어
 
