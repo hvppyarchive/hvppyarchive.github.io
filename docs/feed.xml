@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-10T10:52:20+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-10T10:52:20+09:00</published><updated>2025-10-10T10:52:20+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-10T11:43:06+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-10T11:43:06+09:00</published><updated>2025-10-10T11:43:06+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,174 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">VS Code 경고 해결법</title><link href="https://hvppyarchive.github.io/python/vscode-python-runtime-path/" rel="alternate" type="text/html" title="VS Code 경고 해결법" /><published>2025-10-10T10:52:16+09:00</published><updated>2025-10-10T10:52:16+09:00</updated><id>https://hvppyarchive.github.io/python/vscode-python-runtime-path</id><content type="html" xml:base="https://hvppyarchive.github.io/python/vscode-python-runtime-path/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">비동기 서브프로세스 실행</title><link href="https://hvppyarchive.github.io/python/python-async-subprocess/" rel="alternate" type="text/html" title="비동기 서브프로세스 실행" /><published>2025-10-10T11:43:03+09:00</published><updated>2025-10-10T11:43:03+09:00</updated><id>https://hvppyarchive.github.io/python/python-async-subprocess</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-async-subprocess/"><![CDATA[<p class="chat--user">
+
+Python에서 subprocess를 async task로 실행할 수 있어?
+
+</p>
+
+<p>네—가능합니다. “비동기적으로 서브프로세스 실행”은 보통 두 가지 방식이 있어요.</p>
+
+<h2 id="1-asyncio가-제공하는-진짜-비동기-서브프로세스-api-쓰기">1) <code class="language-plaintext highlighter-rouge">asyncio</code>가 제공하는 <strong>진짜 비동기 서브프로세스</strong> API 쓰기</h2>
+
+<p>핵심은 <code class="language-plaintext highlighter-rouge">asyncio.create_subprocess_exec()</code>(또는 <code class="language-plaintext highlighter-rouge">create_subprocess_shell()</code>)입니다. 반환값인 <code class="language-plaintext highlighter-rouge">Process</code>에는 <code class="language-plaintext highlighter-rouge">wait()</code>, <code class="language-plaintext highlighter-rouge">communicate()</code> 같은 <strong><code class="language-plaintext highlighter-rouge">await</code> 가능한</strong> 메서드가 있어서 이벤트 루프를 막지 않아요.</p>
+
+<h3 id="a-출력-전체-한-번에-받기">(A) 출력 전체 한 번에 받기</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">import time; [print(i) or time.sleep(0.3) for i in range(5)]</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span>
+    <span class="p">)</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">()</span>   <span class="c1"># 둘 다 bytes
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="sh">"</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="sh">"</span><span class="p">,</span> <span class="n">err</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="b-스트리밍-으로-줄-단위-읽기-긴-작업실시간-로그용">(B) <strong>스트리밍</strong> 으로 줄 단위 읽기 (긴 작업/실시간 로그용)</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">import time,sys</span><span class="se">\n</span><span class="s">for i in range(5):</span><span class="se">\n</span><span class="s"> print(i); sys.stdout.flush(); time.sleep(0.3)</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">STDOUT</span>
+    <span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">proc</span><span class="p">.</span><span class="n">stdout</span><span class="p">:</span>  <span class="c1"># bytes 스트림
+</span>        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">&gt; </span><span class="sh">"</span><span class="p">,</span> <span class="n">raw</span><span class="p">.</span><span class="nf">decode</span><span class="p">().</span><span class="nf">rstrip</span><span class="p">())</span>
+
+    <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p><strong>포인트</strong></p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">stdout=PIPE</code>, <code class="language-plaintext highlighter-rouge">stderr=PIPE/STDOUT</code>로 파이프 연결.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">communicate()</code>는 종료까지 기다리며 전부 모아 반환.</p>
+  </li>
+  <li>
+    <p>실시간이 필요하면 <code class="language-plaintext highlighter-rouge">async for proc.stdout</code>로 읽기.</p>
+  </li>
+  <li>
+    <p>파이썬 하위 프로세스는 <code class="language-plaintext highlighter-rouge">-u</code>(unbuffered)로 버퍼링 지연을 줄이는 게 좋아요.</p>
+  </li>
+</ul>
+
+<h2 id="2-기존의-블로킹-subprocessrun을-스레드로-돌리기">2) 기존의 <strong>블로킹</strong> <code class="language-plaintext highlighter-rouge">subprocess.run()</code>을 스레드로 돌리기</h2>
+
+<p>레거시 코드나 간단한 호출을 그대로 쓰고 싶다면, 이벤트 루프는 살리고 작업만 스레드로 넘길 수 있어요.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">subprocess</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_blocking</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+    <span class="c1"># Python 3.9+: to_thread 권장
+</span>    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">to_thread</span><span class="p">(</span>
+        <span class="n">subprocess</span><span class="p">.</span><span class="n">run</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span>
+        <span class="n">capture_output</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="bp">False</span>
+    <span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">run_blocking</span><span class="p">([</span><span class="sh">"</span><span class="s">git</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">])</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">stdout</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p><strong>포인트</strong></p>
+
+<ul>
+  <li>
+    <p>이 방법은 <em>진짜 비동기 I/O</em> 는 아니고, <strong>스레드 하나를 차지</strong> 해서 블로킹 호출을 우회합니다.</p>
+  </li>
+  <li>
+    <p>입출력을 줄 단위로 실시간 처리하긴 불편하고, “끝나면 결과”가 필요한 경우에 적합.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="여러-프로세스를-동시에-돌리기">여러 프로세스를 <strong>동시에</strong> 돌리기</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_one</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">print(</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s">)</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span>
+    <span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">procs</span> <span class="o">=</span> <span class="p">[</span><span class="k">await</span> <span class="nf">run_one</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+    <span class="n">outs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">gather</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">communicate</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">procs</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">_err</span><span class="p">)</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">outs</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">decode</span><span class="p">().</span><span class="nf">strip</span><span class="p">())</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h2 id="타임아웃취소정리중요">타임아웃/취소/정리(중요)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">safe_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span><span class="o">*</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">(),</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>                 <span class="c1"># or proc.terminate()
+</span>        <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>           <span class="c1"># 좀비 방지
+</span>        <span class="k">raise</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+        <span class="k">raise</span>
+</code></pre></div></div>
+
+<h2 id="플랫폼주의사항-한눈에">플랫폼/주의사항 한눈에</h2>
+
+<ul>
+  <li>
+    <p><strong>Windows</strong> : 파이프가 연결된 서브프로세스는 Python ≥3.8의 기본 이벤트 루프(프로액터)에서 잘 동작합니다. (아주 옛 버전은 <code class="language-plaintext highlighter-rouge">ProactorEventLoop</code> 필요)</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">shell=True</code></strong>는 편하지만 인자 이스케이프/보안 이슈가 있으니 꼭 필요한 경우만 사용하세요.</p>
+  </li>
+  <li>
+    <p><strong>대용량 출력</strong> 을 한꺼번에 <code class="language-plaintext highlighter-rouge">communicate()</code>로 받으면 메모리를 많이 먹을 수 있어요. 이런 경우 (B)처럼 스트리밍이 안전합니다.</p>
+  </li>
+  <li>
+    <p><strong>텍스트 디코딩</strong> : <code class="language-plaintext highlighter-rouge">asyncio.subprocess</code>는 <strong>bytes</strong> 를 줍니다. <code class="language-plaintext highlighter-rouge">.decode()</code> 직접 호출하거나 <code class="language-plaintext highlighter-rouge">codecs.StreamReader</code>로 감싸세요.</p>
+  </li>
+  <li>
+    <p><strong>프로세스 그룹</strong> : 리눅스/맥에서 하위 트리까지 종료하려면 <code class="language-plaintext highlighter-rouge">start_new_session=True</code>로 새 세션 시작 후, 필요 시 <code class="language-plaintext highlighter-rouge">os.killpg()</code> 사용(고급 주제).</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="요약">요약</h3>
+
+<ul>
+  <li>
+    <p>“이벤트 루프를 막지 않고” 서브프로세스를 돌리려면: <strong><code class="language-plaintext highlighter-rouge">asyncio.create_subprocess_exec/shell</code></strong>을 쓰세요.</p>
+  </li>
+  <li>
+    <p>기존 블로킹 코드를 그대로 쓰고 싶다면: <strong><code class="language-plaintext highlighter-rouge">asyncio.to_thread(subprocess.run, ...)</code></strong>으로 감싸세요.</p>
+  </li>
+  <li>
+    <p>스트리밍, 병렬 실행, 타임아웃/취소까지 위 예제 패턴이면 대부분의 케이스를 커버합니다.</p>
+  </li>
+</ul>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">VS Code 경고 해결법</title><link href="https://hvppyarchive.github.io/python/vscode-python-runtime-path/" rel="alternate" type="text/html" title="VS Code 경고 해결법" /><published>2025-10-10T10:52:16+09:00</published><updated>2025-10-10T10:52:16+09:00</updated><id>https://hvppyarchive.github.io/python/vscode-python-runtime-path</id><content type="html" xml:base="https://hvppyarchive.github.io/python/vscode-python-runtime-path/"><![CDATA[<p class="chat--user">
 
 VS Code에서 파이썬 코딩 중인데, 어떤 Framework의 Extension을 개발 중이야. 그런데 코드에서 Framework의 코드를 Reference 하는데 이게 동작 중에는 잘 동작하지만 개발 중에는 Framework의 소스코드는 같이 불러오지 않고 코딩해서 에러처럼 경고가 뜨고 Go to definition 같은 기능도 잘 동작하지 않아. 이를 해결하는 방법 있을까
 
@@ -9741,233 +9908,4 @@ PySide6 기반으로 가장 간단한 기능만 있는 가벼운 웹 브라우�
   </li>
 </ul>
 
-<p>필요한 추가 기능 있으면 바로 얹어서 만들어 줄게!</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">LangChain LangGraph 설치</title><link href="https://hvppyarchive.github.io/linux/redhat-langgraph-installation/" rel="alternate" type="text/html" title="LangChain LangGraph 설치" /><published>2025-09-03T12:34:30+09:00</published><updated>2025-09-03T12:34:30+09:00</updated><id>https://hvppyarchive.github.io/linux/redhat-langgraph-installation</id><content type="html" xml:base="https://hvppyarchive.github.io/linux/redhat-langgraph-installation/"><![CDATA[<p class="chat--user">
-
-langchain &amp; langgraph(+langgraph studio) 설치하는 방법 알려줘. 환경 OS: redhat 8.x 특이 사항: - sudo 권한 없음 - offline 환경 (windows나 docker에서 파일 받아 전송은 가능) - 단, pip와 npm은 방화벽을 뚫어놔서 가능함
-
-</p>
-
-<p>좋아요. 아래는 <strong>RHEL 8.x + sudo 없음 + (대부분) 오프라인</strong> 전제에서 <strong>LangChain / LangGraph / LangGraph Studio</strong> 를 설치·구동하는 방법을 <strong>한 번에 끝내는</strong> 단계별 가이드입니다.<br />
-(<em>pip/npm 트래픽은 허용된다고 하셨으니 그 경로를 기본으로, 완전 오프라인 대비책도 함께 적어둘게요.</em>)</p>
-
-<hr />
-
-<h1 id="0-사전-점검-필수">0) 사전 점검 (필수)</h1>
-
-<ol>
-  <li><strong>Python 버전</strong></li>
-</ol>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 <span class="nt">-V</span>
-</code></pre></div></div>
-
-<ul>
-  <li>LangChain / LangGraph 모두 <strong>Python ≥ 3.9</strong> 필요(권장 3.11+). <a href="https://pypi.org/project/langchain/?utm_source=chatgpt.com">PyPI+1</a></li>
-</ul>
-
-<ol>
-  <li><strong>Node/npm (선택)</strong><br />
-Studio 웹 UI 연결만 쓰면 꼭 필요하진 않지만, JS SDK나 UI 로컬 빌드가 필요할 땐 <strong>Node 18/20+</strong> 권장.</li>
-</ol>
-
-<hr />
-
-<h1 id="1-가상환경-만들기-sudo-불필요">1) 가상환경 만들기 (sudo 불필요)</h1>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 원하는 경로에 가상환경 생성</span>
-python3 <span class="nt">-m</span> venv ~/venvs/langgraph
-<span class="nb">source</span> ~/venvs/langgraph/bin/activate
-
-<span class="c"># pip 최신화</span>
-python <span class="nt">-m</span> pip <span class="nb">install</span> <span class="nt">--upgrade</span> pip
-</code></pre></div></div>
-
-<blockquote>
-  <p>참고: 사용자 홈에 설치/실행하는 표준 방법입니다(시스템 PATH 오염 피함). 사용자 설치 경로 안내는 공식 문서에 요약되어 있어요. <a href="https://packaging.python.org/tutorials/installing-packages/?utm_source=chatgpt.com">packaging.python.org</a></p>
-</blockquote>
-
-<hr />
-
-<h1 id="2-langchain--langgraph-설치">2) LangChain &amp; LangGraph 설치</h1>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 필수</span>
-pip <span class="nb">install</span> <span class="nt">-U</span> langchain langgraph
-
-<span class="c"># (옵션) 프로바이더 패키지 예시 - OpenAI 사용 시</span>
-pip <span class="nb">install</span> <span class="nt">-U</span> langchain-openai
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p>LangChain의 Python 지원 버전: <strong>&gt; =3.9,&lt;4.0</strong>. <a href="https://pypi.org/project/langchain/?utm_source=chatgpt.com">PyPI</a></p>
-  </li>
-  <li>
-    <p>LangGraph의 Python 지원 버전: <strong>&gt; =3.9</strong>. <a href="https://pypi.org/project/langgraph/?utm_source=chatgpt.com">PyPI</a></p>
-  </li>
-  <li>
-    <p>OpenAI 연동 패키지(<code class="language-plaintext highlighter-rouge">langchain-openai</code>)는 별도이며 Python ≥3.9. <a href="https://pypi.org/project/langchain-openai/?utm_source=chatgpt.com">PyPI</a></p>
-  </li>
-</ul>
-
-<hr />
-
-<h1 id="3-langgraph-cli--로컬-서버-dockersudo-없이-dev-모드">3) LangGraph CLI + 로컬 서버 (Docker·sudo 없이 “dev 모드”)</h1>
-
-<p><strong>Studio를 쓰려면 서버가 있어야 합니다.</strong> <code class="language-plaintext highlighter-rouge">langgraph-cli</code>의 <strong>dev 모드</strong> 는 Docker 없이 로컬에서 바로 띄울 수 있어요(개발용). <a href="https://docs.langchain.com/langgraph-platform/cli">docs.langchain.com</a></p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># dev 모드에 필요한 extra 포함 설치</span>
-pip <span class="nb">install</span> <span class="nt">-U</span> <span class="s2">"langgraph-cli[inmem]"</span>
-
-<span class="c"># 새 앱 템플릿으로 프로젝트 생성 (파이썬 버전 3.11+ 권장)</span>
-langgraph new myapp <span class="nt">--template</span> new-langgraph-project-python
-<span class="nb">cd </span>myapp
-
-<span class="c"># 템플릿이 만든 요구사항 설치(있다면)</span>
-pip <span class="nb">install</span> <span class="nt">-r</span> requirements.txt
-
-<span class="c"># 로컬 API 서버 구동 (기본: 127.0.0.1:2024)</span>
-langgraph dev
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">langgraph dev</code> 는 <strong>Docker 불필요</strong> , 개발/테스트 용 경량 서버이며 <strong>Python ≥ 3.11</strong> 에서 지원됩니다. 기본 포트 <strong>2024</strong>. <a href="https://docs.langchain.com/langgraph-platform/cli">docs.langchain.com</a></li>
-</ul>
-
-<hr />
-
-<h1 id="4-langgraph-studio-연결">4) LangGraph <strong>Studio</strong> 연결</h1>
-
-<p>Studio는 “LangGraph Server”에 붙는 웹 UI입니다. 로컬에서 <code class="language-plaintext highlighter-rouge">langgraph dev</code>를 띄우면, 브라우저에서 <strong>아래 URL</strong> 로 접속해 Studio를 바로 사용할 수 있어요:</p>
-<div class="language-perl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">https:</span><span class="sr">//smi</span><span class="nv">th</span><span class="o">.</span><span class="nv">langchain</span><span class="o">.</span><span class="nv">com</span><span class="sr">/studio/</span><span class="p">?</span><span class="nv">baseUrl</span><span class="o">=</span><span class="nv">http:</span><span class="sr">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">2024</span>
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p>다른 호스트/포트를 썼다면 <code class="language-plaintext highlighter-rouge">baseUrl</code>만 바꿔주세요. <a href="https://docs.langchain.com/langgraph-platform/quick-start-studio?utm_source=chatgpt.com">docs.langchain.com</a><a href="https://langchain-ai.github.io/langgraph/tutorials/langgraph-platform/local-server/?utm_source=chatgpt.com">langchain-ai.github.io</a></p>
-  </li>
-  <li>
-    <p><strong>개발 환경이 오프라인</strong> 이라 위 도메인 접근이 막혀 있으면 아래 대안을 참고하세요.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h1 id="5-오프라인폐쇄망-대안-studio-접근-대안">5) (오프라인/폐쇄망 대안) Studio 접근 대안</h1>
-
-<p>A) <strong>데스크톱 앱(구 버전, 현재는 deprecated)</strong></p>
-
-<ul>
-  <li>예전 “LangGraph Studio Desktop”은 더 이상 주요 경로가 아니고 저장소가 <strong>아카이브</strong> 상태입니다. 대신 CLI(+Web Studio) 사용을 권장합니다. 그래도 필요하면 GitHub 릴리스에서 바이너리 받아서 옮겨 실행할 수 있습니다(지원 중단 공지 포함). <a href="https://github.com/langchain-ai/langgraph-studio">GitHub+1</a></li>
-</ul>
-
-<p>B) <strong>로컬/사설 UI 구성 (JS)</strong></p>
-
-<ul>
-  <li>
-    <p>JS SDK로 간단한 <strong>Agent Chat UI</strong> 를 직접 띄우는 선택지도 있습니다. (LangGraph API 서버에 붙는 채팅 UI를 로컬로 개발/실행) <a href="https://docs.langchain.com/oss/javascript/langgraph/ui?utm_source=chatgpt.com">docs.langchain.com</a></p>
-  </li>
-  <li>
-    <p>JS 설치 예시:</p>
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 새 디렉토리에서</span>
-npm init <span class="nt">-y</span>
-npm <span class="nb">install</span> @langchain/langgraph @langchain/core
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<p>(LangGraph JS 패키지 최신 설치법 · 버전 참고) <a href="https://docs.langchain.com/oss/javascript/langgraph/installation?utm_source=chatgpt.com">docs.langchain.com</a><a href="https://www.npmjs.com/package/%40langchain/langgraph?utm_source=chatgpt.com">npm</a></p>
-
-<hr />
-
-<h1 id="6-선택-완전-오프라인-대비--패키지-미리-모아서-옮기기">6) (선택) 완전 오프라인 대비 — 패키지 미리 모아서 옮기기</h1>
-
-<h2 id="6-1-pip-휠-캐시wheelhouse-만들기">6-1) pip 휠 캐시(“wheelhouse”) 만들기</h2>
-
-<p><strong>온라인이 되는 PC/컨테이너</strong> 에서:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> venv wheelenv <span class="o">&amp;&amp;</span> <span class="nb">source </span>wheelenv/bin/activate
-pip <span class="nb">install</span> <span class="nt">--upgrade</span> pip
-pip download <span class="nt">-d</span> wheelhouse <span class="se">\</span>
-  <span class="s2">"langgraph-cli[inmem]"</span> langgraph langchain langchain-openai
-<span class="c"># wheelhouse/ 아래에 모든 의존 휠이 모입니다.</span>
-</code></pre></div></div>
-
-<p><strong>RHEL 서버(오프라인)</strong>에서:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> ~/venvs/langgraph/bin/activate
-pip <span class="nb">install</span> <span class="nt">--no-index</span> <span class="nt">--find-links</span> /path/to/wheelhouse <span class="se">\</span>
-  <span class="s2">"langgraph-cli[inmem]"</span> langgraph langchain langchain-openai
-</code></pre></div></div>
-
-<blockquote>
-  <p>pip의 사용자/오프라인 설치 동작과 경로 개념은 공식 패키징 가이드에 잘 정리돼 있습니다. <a href="https://packaging.python.org/tutorials/installing-packages/?utm_source=chatgpt.com">packaging.python.org</a></p>
-</blockquote>
-
-<h2 id="6-2-npm-패키지-묶기">6-2) npm 패키지 묶기</h2>
-
-<p><strong>온라인 머신</strong> 에서 필요한 패키지 tarball 생성:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir </span>npm_bundles <span class="o">&amp;&amp;</span> <span class="nb">cd </span>npm_bundles
-npm pack @langchain/langgraph @langchain/core
-<span class="c"># =&gt; .tgz 파일들이 생성됨</span>
-</code></pre></div></div>
-
-<p><strong>오프라인 머신</strong> 에서 tarball로 설치:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 프로젝트 디렉토리 내에서</span>
-npm <span class="nb">install</span> ./@langchain-langgraph-<span class="k">*</span>.tgz ./@langchain-core-<span class="k">*</span>.tgz
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">npm pack</code>/로컬 tgz 설치는 npm 공식 문서에 있는 표준 흐름입니다. <a href="https://docs.npmjs.com/cli/v7/commands/npm-pack/?utm_source=chatgpt.com">docs.npmjs.com+1</a></li>
-</ul>
-
-<hr />
-
-<h1 id="7-자주-막히는-포인트--해결">7) 자주 막히는 포인트 &amp; 해결</h1>
-
-<ul>
-  <li>
-    <p><strong>Python 버전 부족(≤3.8)</strong></p>
-
-    <ul>
-      <li>RHEL 8 기본 Python이 낮을 수 있습니다. 시스템 Python 건드리지 말고, <strong>독립 실행형 Python 배포본</strong>(python-build-standalone)을 받아 홈 디렉터리에 풀어 쓰는 방법이 있습니다(루트 불필요). <a href="https://gregoryszorc.com/docs/python-build-standalone/main/?utm_source=chatgpt.com">gregoryszorc.com</a><a href="https://github.com/astral-sh/python-build-standalone/releases?utm_source=chatgpt.com">GitHub</a></li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Docker 필요 여부</strong></p>
-
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">langgraph up</code> 등 플랫폼 전용 명령은 Docker가 필요하지만, <strong>개발용<code class="language-plaintext highlighter-rouge">langgraph dev</code>는 Docker 없이 동작</strong>합니다(위 3번 단계). <a href="https://docs.langchain.com/langgraph-platform/cli">docs.langchain.com</a></li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Studio 접근 차단</strong></p>
-
-    <ul>
-      <li>사내 방화벽이 <code class="language-plaintext highlighter-rouge">smith.langchain.com</code>을 막으면 A/B 대안을 사용하세요(5번). Studio 웹은 LangGraph Server에 <strong>프런트</strong> 로 붙는 형태입니다. <a href="https://docs.langchain.com/langgraph-platform/langgraph-studio?utm_source=chatgpt.com">docs.langchain.com</a></li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>기본 포트 충돌</strong></p>
-
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">langgraph dev --port 8080</code>처럼 포트를 바꾸면 됩니다(기본 2024). <a href="https://docs.langchain.com/langgraph-platform/cli">docs.langchain.com</a></li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="검증용-설치-후-빠른-점검">(검증용) 설치 후 빠른 점검</h2>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 파이썬 라이브러리 import 확인</span>
-python - <span class="o">&lt;&lt;</span><span class="sh">'</span><span class="no">PY</span><span class="sh">'
-import langchain, langgraph
-print("OK:", langchain.__version__, langgraph.__version__)
-</span><span class="no">PY
-
-</span><span class="c"># CLI 확인</span>
-langgraph <span class="nt">--help</span>
-<span class="c"># 서버 기동</span>
-langgraph dev  <span class="c"># =&gt; 127.0.0.1:2024</span>
-</code></pre></div></div>
-
-<p>그 다음 브라우저에서<br />
-<code class="language-plaintext highlighter-rouge">https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024</code> 접속 → 그래프/스레드/실행 과정을 시각화하며 테스트하세요. <a href="https://langchain-ai.github.io/langgraph/tutorials/langgraph-platform/local-server/?utm_source=chatgpt.com">langchain-ai.github.io</a></p>
-
-<hr />
-
-<p>필요하시면, <strong>완전 오프라인(내부 레지스트리/미러 구축)</strong> 시나리오(예: 사설 PyPI, Verdaccio 등)까지 포함한 배포 체크리스트도 정리해 드릴게요.</p>]]></content><author><name>hvppyarchive</name></author><category term="linux" /><summary type="html"><![CDATA[]]></summary></entry></feed>
+<p>필요한 추가 기능 있으면 바로 얹어서 만들어 줄게!</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry></feed>
