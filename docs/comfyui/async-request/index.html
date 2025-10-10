@@ -1,0 +1,920 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Async request 취소 처리 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="Async request 취소 처리">
+<meta property="og:url" content="https://hvppyarchive.github.io/comfyui/async-request/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-10T10:32:27+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/comfyui/async-request/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Async request 취소 처리">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-10-10T10:32:27+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/comfyui/async-request/" itemprop="url">Async request 취소 처리
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-10T10:32:27+09:00">2025-10-10</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+comfyui에서 custom node의 메인 함수를 async로 만들 수 있게 되었어. 그리고, openai python 패키지에서 AsyncOpenAI와 aiohttp를 이용해서 async하게 request를 보낼 수 있어. 근데 문제는 UI에서 stop을 보내고 interrupt가 즉시 동작하지 않는다는거야. request를 보낸 후 await 하는 도중에 작업이 취소되게 하고 싶어
+
+</p>
+
+<p>좋아, 핵심은 “네트워크 요청 await 중에도 바로 끊기게” 만드는 거야.<br />
+asyncio에서는 <strong>취소 신호와 실제 작업을 ‘경쟁(race)’</strong> 시키면 돼. 즉, 요청을 <code class="language-plaintext highlighter-rouge">Task</code>로 만들고, UI에서 오는 stop 신호(이하 <code class="language-plaintext highlighter-rouge">stop_event</code>)의 <code class="language-plaintext highlighter-rouge">wait()</code>도 <code class="language-plaintext highlighter-rouge">Task</code>로 만들어서 <strong>둘 중 먼저 끝나는 쪽</strong> 을 보고 행동을 바꾸면 즉시 중단이 가능해.</p>
+
+<p>아래를 그대로 가져다 쓸 수 있게 단계별(그리고 안전한) 패턴으로 정리했어.</p>
+
+<hr />
+
+<h1 id="1-공통-유틸-취소-가능한-await-래퍼">1) 공통 유틸: 취소 가능한 await 래퍼</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">contextlib</span>
+
+<span class="k">class</span> <span class="nc">StopByUser</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">UI stop/interrupt로 중단되었음을 나타내는 애플리케이션 레벨 예외.</span><span class="sh">"""</span>
+    <span class="k">pass</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">await_cancellable</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="n">stop_event</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    coro(코루틴)와 stop_event.wait()를 경쟁시킨다.
+    - stop이 먼저 오면 coro Task를 cancel하고 정리한 뒤 StopByUser를 올린다.
+    - 요청이 먼저 끝나면 stop 대기 Task를 취소하고 결과를 반환한다.
+    </span><span class="sh">"""</span>
+    <span class="n">req_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span>
+    <span class="n">stop_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">stop_event</span><span class="p">.</span><span class="nf">wait</span><span class="p">())</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">done</span><span class="p">,</span> <span class="n">pending</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">(</span>
+            <span class="p">{</span><span class="n">req_task</span><span class="p">,</span> <span class="n">stop_task</span><span class="p">},</span> <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">stop_task</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+            <span class="c1"># UI가 stop을 눌렀다: 네트워크 요청을 취소
+</span>            <span class="n">req_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+            <span class="c1"># 취소 정리 끝까지 기다려 경고/리소스 누수 방지
+</span>            <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                <span class="k">await</span> <span class="n">req_task</span>
+            <span class="k">raise</span> <span class="nc">StopByUser</span><span class="p">(</span><span class="sh">"</span><span class="s">Stopped by user</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="c1"># 요청이 먼저 끝남: stop 대기는 취소
+</span>        <span class="n">stop_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">stop_task</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">req_task</span>  <span class="c1"># 결과 리턴
+</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="c1"># 바깥 컨텍스트(ComfyUI 실행기)가 이 Task 자체를 취소한 경우: 바로 전파
+</span>        <span class="k">raise</span>
+
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># 혹시 남아있으면 확실히 정리
+</span>        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="n">req_task</span><span class="p">,</span> <span class="n">stop_task</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">t</span><span class="p">.</span><span class="nf">done</span><span class="p">():</span>
+                <span class="n">t</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                    <span class="k">await</span> <span class="n">t</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>중요: 코드 어딘가에 <code class="language-plaintext highlighter-rouge">except Exception:</code> 같은 광범위한 예외 처리기가 있다면, <strong>반드시</strong><br />
+ <code class="language-plaintext highlighter-rouge">except asyncio.CancelledError: raise</code> 를 <strong>맨 위에 따로</strong> 두어 취소가 삼켜지지 않게 하세요.<br />
+ (파이썬 버전에 따라 <code class="language-plaintext highlighter-rouge">CancelledError</code>가 일반 <code class="language-plaintext highlighter-rouge">Exception</code>에 잡힐 수 있으니 명시적으로 분기하는 게 안전합니다.)</p>
+</blockquote>
+
+<hr />
+
+<h1 id="2-comfyui-커스텀-노드mainasync에서-적용">2) ComfyUI 커스텀 노드(main=async)에서 적용</h1>
+
+<p>ComfyUI가 stop을 누르면 내부적으로 “중단 플래그/이벤트”가 켜질 텐데, 그걸 <code class="language-plaintext highlighter-rouge">stop_event</code>(asyncio.Event 호환)로 받는다고 가정해 보자.<br />
+(ComfyUI에서 제공하는 실제 인터럽트 신호를 어떻게 얻는지는 프로젝트마다 다를 수 있어. 노드에 주입 받거나, 실행 컨텍스트에서 꺼내 쓰는 식으로 연결해 주면 된다.)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">AsyncOpenAI</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">contextlib</span>
+
+<span class="k">class</span> <span class="nc">AsyncLLMNode</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">INPUT_TYPES</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">prompt</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">multiline</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">})}}</span>
+
+    <span class="n">RETURN_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,)</span>
+    <span class="n">FUNCTION</span> <span class="o">=</span> <span class="sh">"</span><span class="s">main</span><span class="sh">"</span>
+    <span class="n">CATEGORY</span> <span class="o">=</span> <span class="sh">"</span><span class="s">LLM</span><span class="sh">"</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">stop_event</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c1"># stop_event는 ComfyUI 쪽에서 넘겨주도록 연결해 두는 걸 권장
+</span>        <span class="k">if</span> <span class="n">stop_event</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># 최악의 경우를 대비한 더미 (즉시 완료되지 않음)
+</span>            <span class="n">stop_event</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nc">Event</span><span class="p">()</span>
+
+        <span class="n">client</span> <span class="o">=</span> <span class="nc">AsyncOpenAI</span><span class="p">()</span>  <span class="c1"># 필요시 api_key, base_url 등 설정
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># ◇ 비-스트리밍 요청 예시
+</span>            <span class="n">coro</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">await_cancellable</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="n">stop_event</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">resp</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span><span class="p">.</span><span class="n">content</span>
+            <span class="nf">return </span><span class="p">(</span><span class="n">text</span><span class="p">,)</span>
+
+        <span class="k">except</span> <span class="n">StopByUser</span><span class="p">:</span>
+            <span class="c1"># ComfyUI가 즉시 멈췄음을 위쪽으로 알리거나, 빈 결과/상태 메시지를 반환
+</span>            <span class="c1"># ComfyUI 쪽 정책에 맞춰 raise/return 중 하나를 선택
+</span>            <span class="k">raise</span>  <span class="c1"># 보통은 raise로 전파하는 게 인터럽트 체인에 충실
+</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="c1"># 바깥에서 Task 자체가 취소된 경우
+</span>            <span class="k">raise</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># http 커넥션 정리
+</span>            <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+                <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="3-스트리밍부분-응답일-때도-즉시-중단">3) 스트리밍(부분 응답)일 때도 즉시 중단</h1>
+
+<p>스트리밍은 내부적으로 <code class="language-plaintext highlighter-rouge">async for</code>로 청크를 읽는 동안 <code class="language-plaintext highlighter-rouge">__anext__()</code>에서 블록돼서<br />
+stop을 눌러도 바로 반응을 못할 수 있어. 이때도 <strong>chunk 읽기 vs stop</strong> 를 경쟁시키면 해결돼.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">AsyncOpenAI</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">contextlib</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">stream_chat_cancellable</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">stop_event</span><span class="p">):</span>
+    <span class="c1"># 새로운 Responses API 예시 (필요에 맞춰 Chat Completions로 바꿔도 동일 패턴)
+</span>    <span class="k">async</span> <span class="k">with</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">stream</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+        <span class="nb">input</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">aiter</span> <span class="o">=</span> <span class="n">stream</span><span class="p">.</span><span class="nf">aiter_text</span><span class="p">()</span>  <span class="c1"># 텍스트 청크 이터레이터
+</span>        <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">next_chunk</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">aiter</span><span class="p">.</span><span class="nf">__anext__</span><span class="p">())</span>
+            <span class="n">stop_task</span>  <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">stop_event</span><span class="p">.</span><span class="nf">wait</span><span class="p">())</span>
+            <span class="n">done</span><span class="p">,</span> <span class="n">pending</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">(</span>
+                <span class="p">{</span><span class="n">next_chunk</span><span class="p">,</span> <span class="n">stop_task</span><span class="p">},</span> <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">stop_task</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+                <span class="c1"># 읽기 중단 + 연결 정리
+</span>                <span class="n">next_chunk</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                    <span class="k">await</span> <span class="n">next_chunk</span>
+                <span class="k">await</span> <span class="n">stream</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>  <span class="c1"># 서버 쪽 스트림도 닫기
+</span>                <span class="k">raise</span> <span class="nc">StopByUser</span><span class="p">(</span><span class="sh">"</span><span class="s">Stopped by user</span><span class="sh">"</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">chunks</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">next_chunk</span><span class="p">.</span><span class="nf">result</span><span class="p">())</span>
+            <span class="k">except</span> <span class="nb">StopAsyncIteration</span><span class="p">:</span>
+                <span class="c1"># 스트림 종료
+</span>                <span class="k">break</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="n">stop_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                    <span class="k">await</span> <span class="n">stop_task</span>
+
+        <span class="k">return</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>ComfyUI 노드에서:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">stop_event</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">stop_event</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">stop_event</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nc">Event</span><span class="p">()</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="nc">AsyncOpenAI</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">stream_chat_cancellable</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">stop_event</span><span class="p">)</span>
+        <span class="nf">return </span><span class="p">(</span><span class="n">text</span><span class="p">,)</span>
+    <span class="k">except</span> <span class="n">StopByUser</span><span class="p">:</span>
+        <span class="k">raise</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="4-aiohttp-순수-사용-시-예시">4) aiohttp 순수 사용 시 예시</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">aiohttp</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">contextlib</span>
+<span class="kn">from</span> <span class="n">yarl</span> <span class="kn">import</span> <span class="n">URL</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_json_cancellable</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">stop_event</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="p">.</span><span class="nc">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="c1"># POST 코루틴 생성
+</span>        <span class="k">async</span> <span class="k">def</span> <span class="nf">do_post</span><span class="p">():</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span><span class="p">:</span>
+                <span class="n">resp</span><span class="p">.</span><span class="nf">raise_for_status</span><span class="p">()</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">resp</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="nf">await_cancellable</span><span class="p">(</span><span class="nf">do_post</span><span class="p">(),</span> <span class="n">stop_event</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>참고: <code class="language-plaintext highlighter-rouge">aiohttp</code>는 Task 취소 시 소켓을 닫으며 <code class="language-plaintext highlighter-rouge">CancelledError</code>가 전파돼요.<br />
+ 위의 패턴처럼 <em>항상</em> loser task를 <code class="language-plaintext highlighter-rouge">cancel()</code>하고 <code class="language-plaintext highlighter-rouge">await</code>해서 경고 없이 정리하세요.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="5-흔한-즉시-중단이-안-되는-원인-체크리스트">5) 흔한 “즉시 중단이 안 되는” 원인 체크리스트</h1>
+
+<ol>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">CancelledError</code>를 삼키는 예외 처리</strong></p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">except Exception:</code> 이 있다면 바로 위에 <code class="language-plaintext highlighter-rouge">except asyncio.CancelledError: raise</code> 를 추가.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">await</code> 없이 동기 블로킹 코드</strong></p>
+
+    <ul>
+      <li>CPU 바운드 루프/블로킹 I/O는 이벤트 루프를 막아 취소가 늦어짐 → <code class="language-plaintext highlighter-rouge">await</code> 가능한 API로 바꾸거나, <code class="language-plaintext highlighter-rouge">run_in_executor()</code>로 분리.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>스트리밍 루프에서 stop을 안 보고 있음</strong></p>
+
+    <ul>
+      <li>위의 “스트리밍 경쟁” 패턴으로 <code class="language-plaintext highlighter-rouge">__anext__()</code>와 <code class="language-plaintext highlighter-rouge">stop_event.wait()</code>를 경쟁시키기.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>정리(cleanup)를 취소가 덮어버림</strong></p>
+
+    <ul>
+      <li>정리 과정은 <code class="language-plaintext highlighter-rouge">asyncio.shield()</code>로 감싸거나 <code class="language-plaintext highlighter-rouge">with contextlib.suppress(asyncio.CancelledError)</code>로 마무리.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>긴 네트워크 타임아웃</strong></p>
+
+    <ul>
+      <li>취소 자체는 타임아웃과 무관하지만, 라이브러리 정리가 지연될 수 있음 → 세션/스트림을 <code class="language-plaintext highlighter-rouge">close()</code> 해주기.</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="6-comfyui-쪽-stop_event-연결-팁">6) ComfyUI 쪽 ‘stop_event’ 연결 팁</h1>
+
+<ul>
+  <li>
+    <p>프로젝트에 따라 다르지만, 보통 <strong>실행 컨텍스트</strong> 나 <strong>노드 인자 주입</strong> 으로 <code class="language-plaintext highlighter-rouge">asyncio.Event</code>를 받을 수 있게 해두면 가장 깔끔해.</p>
+  </li>
+  <li>
+    <p>만약 지금은 그런 훅이 없다면:</p>
+
+    <ul>
+      <li>
+        <p>최소한 주기적으로 확인하는 polling을 넣는 대신, <strong>위의 경쟁 패턴</strong> 을 사용하면 “await 중에도” 바로 반응한다.</p>
+      </li>
+      <li>
+        <p>stop을 누를 때 노드 측에 <code class="language-plaintext highlighter-rouge">stop_event.set()</code>이 호출되도록 연결(주입)만 해주면 된다.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하면 너의 현재 노드 코드 일부를 붙여줘. 거기에 맞춰 <code class="language-plaintext highlighter-rouge">await_cancellable</code>을 딱 들어맞게 리팩터링해 줄게.</p>
+
+<p class="chat--user">
+
+stop_event를 넣는다는게 뭔지 모르겠어. comfyui 내부적으로 interrupt 버튼이 있잖아? 그 버튼을 눌렀을 때 취소되면 좋겠어
+
+</p>
+
+<p>좋아, “UI의 Interrupt 버튼(또는 /interrupt)이 눌리면 내 async 커스텀 노드가 지금 <code class="language-plaintext highlighter-rouge">await</code> 중인 OpenAI 요청을 즉시 끊고 싶다”가 목표지요. 핵심은 <strong>ComfyUI가 인터럽트를 “플래그”로만 알리고, 실제로는 노드가 협조적으로 취소를 처리해야</strong> 한다는 점이에요. 아래를 그대로 넣으면 됩니다 — 단계별로 설명할게요.</p>
+
+<hr />
+
+<h2 id="1-comfyui가-인터럽트를-어떻게-알리냐">1) ComfyUI가 인터럽트를 어떻게 알리냐</h2>
+
+<ul>
+  <li>
+    <p>프론트엔드 Interrupt 버튼/단축키가 <strong><code class="language-plaintext highlighter-rouge">POST /interrupt</code></strong> 를 호출합니다. 서버는 내부 인터럽트 플래그를 세팅해요. <a href="https://docs.comfy.org/development/comfyui-server/comms_routes?utm_source=chatgpt.com">ComfyUI+2</a></p>
+  </li>
+  <li>
+    <p>실행기는 다음 노드 경계 혹은 노드 내부에서 체크될 때 <strong><code class="language-plaintext highlighter-rouge">InterruptProcessingException</code></strong> 으로 중단을 전파하고, 웹소켓 이벤트 <strong><code class="language-plaintext highlighter-rouge">execution_interrupted</code></strong> 를 보냅니다. <a href="https://docs.comfy.org/development/comfyui-server/comms_messages?utm_source=chatgpt.com">ComfyUI</a></p>
+  </li>
+  <li>
+    <p>단, <strong>노드가 블로킹 상태(타이트 루프/블로킹 I/O)</strong> 면 인터럽트가 바로 처리되지 않을 수 있습니다. 그래서 노드가 <strong>주기적으로 인터럽트를 체크</strong> 하거나 <strong><code class="language-plaintext highlighter-rouge">await</code> 를 취소</strong>해 줘야 해요. <a href="https://github.com/comfyanonymous/ComfyUI/issues/3131?utm_source=chatgpt.com">GitHub</a></p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="2-커스텀-노드에서-협조적-취소를-붙이는-가장-쉬운-방법">2) 커스텀 노드에서 “협조적 취소”를 붙이는 가장 쉬운 방법</h2>
+
+<p>ComfyUI는 <code class="language-plaintext highlighter-rouge">comfy.model_management.throw_exception_if_processing_interrupted()</code> 를 제공합니다. 이걸 주기적으로 호출하면 인터럽트 시 <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code> 을 던져요. (공식 코드와 여러 예시 노드에서 사용됩니다.) <a href="https://gitee.com/bug531/comfy-ui/blob/master/main.py?skip_mobile=true&amp;utm_source=chatgpt.com">Gitee+2</a></p>
+
+<p>아이디어: <strong>요청 태스크</strong> 와 <strong>인터럽트 감시 태스크</strong> 를 동시에 돌리고, 감지되면 요청 태스크를 <code class="language-plaintext highlighter-rouge">cancel()</code>로 끊습니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 커스텀 노드 파일 안
+</span><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">aiohttp</span>
+<span class="kn">import</span> <span class="n">comfy.model_management</span> <span class="k">as</span> <span class="n">mm</span>
+<span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">AsyncOpenAI</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_watch_interrupt_and_cancel</span><span class="p">(</span><span class="n">task</span><span class="p">:</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Task</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">ComfyUI 인터럽트가 오면 주어진 task를 cancel()</span><span class="sh">"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">task</span><span class="p">.</span><span class="nf">done</span><span class="p">():</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># 폴링 주기
+</span>            <span class="n">mm</span><span class="p">.</span><span class="nf">throw_exception_if_processing_interrupted</span><span class="p">()</span>  <span class="c1"># 인터럽트면 예외 발생
+</span>    <span class="k">except</span> <span class="n">mm</span><span class="p">.</span><span class="n">InterruptProcessingException</span><span class="p">:</span>
+        <span class="n">task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>  <span class="c1"># 메인 요청 취소
+</span>
+<span class="k">class</span> <span class="nc">MyAsyncNode</span><span class="p">:</span>
+    <span class="n">CATEGORY</span> <span class="o">=</span> <span class="sh">"</span><span class="s">example</span><span class="sh">"</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">INPUT_TYPES</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">prompt</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">multiline</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">})}}</span>
+
+    <span class="n">RETURN_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,)</span>
+    <span class="n">FUNCTION</span> <span class="o">=</span> <span class="sh">"</span><span class="s">run</span><span class="sh">"</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="nc">AsyncOpenAI</span><span class="p">()</span>  <span class="c1"># 필요 시 api_key, base_url, timeout 등 설정
+</span>
+        <span class="c1"># 1) OpenAI 비동기 요청을 태스크로 생성
+</span>        <span class="n">req_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>          <span class="c1"># 선택: 요청 타임아웃
+</span>                <span class="n">max_retries</span><span class="o">=</span><span class="mi">0</span>         <span class="c1"># 선택: 재시도 비활성화(취소 응답을 빠르게)
+</span>            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># 2) 인터럽트 감시 태스크 시작
+</span>        <span class="n">watcher</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">_watch_interrupt_and_cancel</span><span class="p">(</span><span class="n">req_task</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># 3) 결과 대기 — 인터럽트 시 req_task가 CancelledError로 깨짐
+</span>            <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">req_task</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">resp</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span><span class="p">.</span><span class="n">content</span>
+            <span class="nf">return </span><span class="p">(</span><span class="n">text</span><span class="p">,)</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="c1"># 4) ComfyUI에 “사용자 인터럽트”로 알리려면 이 예외로 승격
+</span>            <span class="k">raise</span> <span class="n">mm</span><span class="p">.</span><span class="nc">InterruptProcessingException</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># 5) 워처 정리
+</span>            <span class="n">watcher</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+                <span class="k">await</span> <span class="n">watcher</span>
+</code></pre></div></div>
+
+<h3 id="왜-이렇게-하느냐">왜 이렇게 하느냐?</h3>
+
+<ul>
+  <li>
+    <p><strong>UI 버튼</strong> → <code class="language-plaintext highlighter-rouge">/interrupt</code> → 내부 플래그 on. <a href="https://docs.comfy.org/development/comfyui-server/comms_routes?utm_source=chatgpt.com">ComfyUI</a></p>
+  </li>
+  <li>
+    <p>감시 코루틴이 <code class="language-plaintext highlighter-rouge">throw_exception_if_processing_interrupted()</code> 호출 중 <strong>예외를 받음</strong> → <strong><code class="language-plaintext highlighter-rouge">req_task.cancel()</code></strong> → <code class="language-plaintext highlighter-rouge">await</code>가 즉시 <code class="language-plaintext highlighter-rouge">CancelledError</code> 로 깨짐 → 이를 <strong><code class="language-plaintext highlighter-rouge">InterruptProcessingException</code> 으로 다시 던져</strong> ComfyUI가 <em>“Processing interrupted”</em> 경로로 종료. <a href="https://docs.comfy.org/development/comfyui-server/comms_messages?utm_source=chatgpt.com">ComfyUI+1</a></p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="3-대안-asynciowait로-레이스-구성">3) 대안: <code class="language-plaintext highlighter-rouge">asyncio.wait()</code>로 “레이스” 구성</h2>
+
+<p>폴링 코드를 줄이고 싶다면, “인터럽트 대기 코루틴”과 요청을 <strong>레이스</strong> 시키는 방법도 있어요:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="k">def</span> <span class="nf">_wait_for_interrupt</span><span class="p">():</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+        <span class="n">mm</span><span class="p">.</span><span class="nf">throw_exception_if_processing_interrupted</span><span class="p">()</span>
+
+<span class="c1"># ...
+</span><span class="n">req_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(...))</span>
+<span class="n">int_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">_wait_for_interrupt</span><span class="p">())</span>
+
+<span class="n">done</span><span class="p">,</span> <span class="n">pending</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">(</span>
+    <span class="p">{</span><span class="n">req_task</span><span class="p">,</span> <span class="n">int_task</span><span class="p">},</span> <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">int_task</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+    <span class="n">req_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+    <span class="k">raise</span> <span class="n">mm</span><span class="p">.</span><span class="nc">InterruptProcessingException</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">int_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+    <span class="nf">return </span><span class="p">(</span> <span class="p">(</span><span class="k">await</span> <span class="n">req_task</span><span class="p">).</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span><span class="p">.</span><span class="n">content</span><span class="p">,</span> <span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="4-자주-겪는-함정--팁">4) 자주 겪는 함정 &amp; 팁</h2>
+
+<ul>
+  <li>
+    <p><strong>블로킹 코드</strong>(동기 HTTP, 무한 루프 등)가 있으면 인터럽트가 “즉시” 안 먹힙니다. 네트워크는 반드시 <strong>aiohttp/비동기</strong> 를 쓰고, 루프 안에는 간간이 <code class="language-plaintext highlighter-rouge">mm.throw_exception_if_processing_interrupted()</code> 를 넣으세요. <a href="https://github.com/comfyanonymous/ComfyUI/issues/3131?utm_source=chatgpt.com">GitHub</a></p>
+  </li>
+  <li>
+    <p><strong>OpenAI 비동기 클라이언트</strong> 는 <code class="language-plaintext highlighter-rouge">AsyncOpenAI</code> 를 쓰면 됩니다(요청 옵션에 <code class="language-plaintext highlighter-rouge">timeout</code> 등 전달 가능).</p>
+  </li>
+  <li>
+    <p><strong>취소 전파</strong> : <code class="language-plaintext highlighter-rouge">asyncio.CancelledError</code> 를 <strong>잡아서</strong> <code class="language-plaintext highlighter-rouge">mm.InterruptProcessingException</code> 으로 <strong>다시 던지는 것</strong> 이 포인트입니다 — 그래야 UI에 정상적인 “중단”으로 보입니다.</p>
+  </li>
+  <li>
+    <p><strong>키보드 단축키</strong> 도 인터럽트를 보냅니다(Ctrl+Alt+Enter). <a href="https://docs.comfy.org/interface/shortcuts?utm_source=chatgpt.com">ComfyUI</a></p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="5-동작-원리-한눈-요약">5) 동작 원리 한눈 요약</h2>
+
+<ol>
+  <li>
+    <p>유저가 Interrupt 클릭 → <strong><code class="language-plaintext highlighter-rouge">POST /interrupt</code></strong> 호출 → 내부 플래그 on. <a href="https://docs.comfy.org/development/comfyui-server/comms_routes?utm_source=chatgpt.com">ComfyUI</a></p>
+  </li>
+  <li>
+    <p>내 노드의 “인터럽트 워처”가 플래그 감지 → <strong>요청 태스크 cancel()</strong>.</p>
+  </li>
+  <li>
+    <p>내 코드가 <code class="language-plaintext highlighter-rouge">CancelledError</code> 를 받아 <strong><code class="language-plaintext highlighter-rouge">InterruptProcessingException</code> 재-발생</strong> → 실행기에서 <strong><code class="language-plaintext highlighter-rouge">execution_interrupted</code></strong> 이벤트 전송 &amp; 즉시 중단. <a href="https://docs.comfy.org/development/comfyui-server/comms_messages?utm_source=chatgpt.com">ComfyUI</a></p>
+  </li>
+</ol>
+
+<p>이렇게 붙이면 “UI에서 정지 → 곧장 당신의 <code class="language-plaintext highlighter-rouge">await</code>가 끊기는” 동작을 안정적으로 만들 수 있어요.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#comfyui" class="page__taxonomy-item p-category" rel="tag">comfyui</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-10T10:32:27+09:00">2025-10-10</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/comfyui/comfyui-custom-node-config/" class="pagination--pager" title="ComfyUI 설정 파일 개발">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-10T10:32:35+09:00">2025-10-10</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comfyui/comfyui-custom-node-config/" rel="permalink">ComfyUI 설정 파일 개발
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-02T13:39:43+09:00">2025-10-02</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/openai-package-data-hook/" rel="permalink">openai api Raw 데이터 확인 방법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-01T18:38:56+09:00">2025-10-01</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/pickle-to-json/" rel="permalink">Pickle to JSON 변환
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-09-29T10:41:41+09:00">2025-09-29</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
