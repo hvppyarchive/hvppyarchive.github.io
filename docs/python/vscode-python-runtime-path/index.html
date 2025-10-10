@@ -1,0 +1,644 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>VS Code 경고 해결법 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="VS Code 경고 해결법">
+<meta property="og:url" content="https://hvppyarchive.github.io/python/vscode-python-runtime-path/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-10T10:52:16+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/python/vscode-python-runtime-path/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="VS Code 경고 해결법">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-10-10T10:52:16+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/python/vscode-python-runtime-path/" itemprop="url">VS Code 경고 해결법
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-10T10:52:16+09:00">2025-10-10</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+VS Code에서 파이썬 코딩 중인데, 어떤 Framework의 Extension을 개발 중이야. 그런데 코드에서 Framework의 코드를 Reference 하는데 이게 동작 중에는 잘 동작하지만 개발 중에는 Framework의 소스코드는 같이 불러오지 않고 코딩해서 에러처럼 경고가 뜨고 Go to definition 같은 기능도 잘 동작하지 않아. 이를 해결하는 방법 있을까
+
+</p>
+
+<p>좋아, 상황 정리하면 “실행 때는 잘 되는데, VS Code에서 개발할 때 프레임워크 모듈을 못 찾아서 경고/Go to Definition이 안 된다”는 거지. 이건 <strong>에디터가 쓰는 파이썬 인터프리터/검색 경로와 런타임의 그것이 다르기 때문</strong> 이야. 아래 순서대로 하면 거의 항상 해결돼.</p>
+
+<h1 id="1-에디터가-사용하는-인터프리터에-프레임워크를-설치">1) 에디터가 사용하는 인터프리터에 프레임워크를 설치</h1>
+
+<ol>
+  <li>
+    <p>프로젝트용 가상환경을 하나 정하고(또는 새로 만들고) VS Code에서 <strong>Python: Select Interpreter</strong> 로 그 인터프리터를 선택.</p>
+  </li>
+  <li>
+    <p>그 <strong>같은</strong> 인터프리터(venv)에 프레임워크를 설치.</p>
+
+    <ul>
+      <li>pip:
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> venv .venv
+.venv/Scripts/activate  <span class="c"># (Windows)  |  source .venv/bin/activate  # (macOS/Linux)</span>
+pip <span class="nb">install</span> &lt;framework&gt;  <span class="c"># 필요한 extras가 있으면 &lt;framework&gt;[dev] 처럼</span>
+</code></pre></div>        </div>
+      </li>
+      <li>Poetry:
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>poetry add <span class="nt">-G</span> dev &lt;framework&gt;
+poetry <span class="nb">env </span>use &lt;파이썬경로&gt;
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>이렇게 하면 Pylance/파이썬 확장도 그 venv의 <strong>site-packages</strong> 를 보게 되어 경고가 사라지고 “Go to Definition”도 동작해.</p>
+  </li>
+</ol>
+
+<h1 id="2-프레임워크-소스로-맞춰-개발해야-한다면-editable-install--멀티루트">2) 프레임워크 “소스”로 맞춰 개발해야 한다면 (editable install / 멀티루트)</h1>
+
+<p>런타임과 동일한 버전의 <strong>소스</strong> 를 보고 싶거나, 프레임워크를 로컬에서 같이 수정 중이면:</p>
+
+<ul>
+  <li>프레임워크 repo를 옆에 체크아웃해 두고 <strong>editable install</strong> :
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install</span> <span class="nt">-e</span> ../framework-repo  <span class="c"># src 레이아웃이면 -e ../framework-repo[src]</span>
+</code></pre></div>    </div>
+  </li>
+  <li>혹은 VS Code <strong>멀티 루트 워크스페이스</strong> 로 두 폴더를 함께 열고, Pylance가 경로를 알도록 <code class="language-plaintext highlighter-rouge">extraPaths</code>를 지정:<br />
+<strong>.vscode/settings.json</strong>
+    <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"python.defaultInterpreterPath"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${workspaceFolder}/.venv/bin/python"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"python.analysis.extraPaths"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"../framework-repo"</span><span class="p">,</span><span class="w">          </span><span class="err">//</span><span class="w"> </span><span class="err">패키지</span><span class="w"> </span><span class="err">루트</span><span class="w">
+    </span><span class="s2">"../framework-repo/src"</span><span class="w">       </span><span class="err">//</span><span class="w"> </span><span class="err">src</span><span class="w"> </span><span class="err">레이아웃일</span><span class="w"> </span><span class="err">때</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"python.analysis.typeCheckingMode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"basic"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="3-런타임에서만-syspath가-바뀌는-프레임워크플러그인확장-포인트일-때">3) 런타임에서만 sys.path가 바뀌는 프레임워크(플러그인/확장 포인트)일 때</h1>
+
+<p>프레임워크가 실행 시점에만 경로를 추가한다면 에디터는 그걸 몰라. 두 가지 중 하나로 맞춰줘:</p>
+
+<ul>
+  <li>
+    <p><strong>PYTHONPATH</strong> 사용 (VS Code가 로드하도록 <code class="language-plaintext highlighter-rouge">.env</code> 활용)</p>
+
+    <ul>
+      <li><strong>.vscode/settings.json</strong>
+        <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"python.envFile"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${workspaceFolder}/.env"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>        </div>
+      </li>
+      <li><strong>.env</strong>
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">PYTHONPATH</span><span class="o">=</span>../framework-runtime-path:../another/path
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>혹은 위의 <strong><code class="language-plaintext highlighter-rouge">python.analysis.extraPaths</code></strong>로 똑같은 경로를 넣어줘.</p>
+  </li>
+</ul>
+
+<h1 id="4-타입정의만-필요할-때대형비공개-프레임워크">4) 타입/정의만 필요할 때(대형/비공개 프레임워크)</h1>
+
+<p>실행 가능한 전체 설치가 부담스러우면 <strong>stub(.pyi)</strong> 만 만들어서 참조해도 “Go to Definition/타입 추론”이 좋아져.</p>
+
+<ul>
+  <li>Pyright로 스텁 생성:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pyright <span class="nt">--createstub</span> &lt;framework_pkg_name&gt;
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>생성된 스텁 폴더를 프로젝트의 <code class="language-plaintext highlighter-rouge">typings/</code>에 두고:
+    <code class="language-plaintext highlighter-rouge">json
+    {
+      "python.analysis.stubPath": "typings"
+    }
+   </code></p>
+
+<ul>
+  <li>mypy의 <code class="language-plaintext highlighter-rouge">stubgen</code>을 써도 됨:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> mypy.stubgen <span class="nt">-m</span> &lt;framework_pkg_name&gt; <span class="nt">-o</span> typings
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="5-도커원격-런타임에서만-설치되어-있을-때">5) 도커/원격 런타임에서만 설치되어 있을 때</h1>
+
+<p>런타임이 Docker/원격(SSH)라면 <strong>Dev Containers</strong> 또는 <strong>Remote - SSH</strong> 확장으로 “코딩도 그 환경에서” 하게 만드는 게 제일 깔끔해. 그러면 에디터가 보는 인터프리터 == 런타임 인터프리터가 되어 경로 문제 자체가 사라짐.</p>
+
+<h1 id="6-추가-팁-자잘하지만-유용">6) 추가 팁 (자잘하지만 유용)</h1>
+
+<ul>
+  <li>
+    <p>경고만 잠깐 숨기려면(원인 해결 전 임시):</p>
+
+    <ul>
+      <li>파일 상단에 <code class="language-plaintext highlighter-rouge"># pyright: reportMissingImports=false</code> (혹은 해당 import 줄에 <code class="language-plaintext highlighter-rouge"># type: ignore[import]</code>)<br />
+→ 근본 해결은 아님.</li>
+    </ul>
+  </li>
+  <li>
+    <p>네임스페이스 패키지(PEP 420)나 <code class="language-plaintext highlighter-rouge">src/</code> 레이아웃이면 <strong>패키지 루트</strong> 가 맞게 잡혔는지 확인.</p>
+  </li>
+  <li>
+    <p>동적 속성/컴파일드 모듈이라 정의 점프가 어려우면:</p>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="n">framework</span> <span class="kn">import</span> <span class="n">FancyAPI</span>  <span class="c1"># 에디터용 힌트
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="가장-빠른-체크리스트">가장 빠른 체크리스트</h2>
+
+<ol>
+  <li>
+    <p>VS Code에서 <strong>Python Interpreter</strong> 가 내가 쓰는 venv로 맞나?</p>
+  </li>
+  <li>
+    <p>그 venv에 <strong>프레임워크가 설치</strong> 되어 있나(또는 <code class="language-plaintext highlighter-rouge">pip install -e</code>로 연결했나)?</p>
+  </li>
+  <li>
+    <p>소스 트리라면 <strong><code class="language-plaintext highlighter-rouge">python.analysis.extraPaths</code>/<code class="language-plaintext highlighter-rouge">PYTHONPATH</code></strong>가 프레임워크 루트를 가리키나?</p>
+  </li>
+  <li>
+    <p>특별한 경우엔 <strong>stub</strong> 생성해서 <code class="language-plaintext highlighter-rouge">stubPath</code> 설정.</p>
+  </li>
+</ol>
+
+<p>원하시면 현재 프로젝트 구조(폴더 레이아웃/가상환경/설치 방식) 알려줘. 거기에 맞춘 <strong>settings.json / .env / 설치 커맨드</strong> 를 딱 맞게 써줄게.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#python" class="page__taxonomy-item p-category" rel="tag">python</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-10T10:52:16+09:00">2025-10-10</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/comfyui/async-request-cancel/" class="pagination--pager" title="Async request 취소 처리">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-10T10:52:20+09:00">2025-10-10</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comfyui/async-request-cancel/" rel="permalink">Async request 취소 처리
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-10T10:33:23+09:00">2025-10-10</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comfyui/async-request/" rel="permalink">Async request 취소 처리
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-10T10:33:16+09:00">2025-10-10</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comfyui/comfyui-custom-node-config/" rel="permalink">ComfyUI 설정 파일 개발
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-02T13:39:43+09:00">2025-10-02</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
