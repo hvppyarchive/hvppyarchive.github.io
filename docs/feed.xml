@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-10T11:53:08+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-10T11:53:08+09:00</published><updated>2025-10-10T11:53:08+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-10T12:35:53+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-10T12:35:53+09:00</published><updated>2025-10-10T12:35:53+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,343 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">Async request 취소 처리</title><link href="https://hvppyarchive.github.io/comfyui/async-request-cancel/" rel="alternate" type="text/html" title="Async request 취소 처리" /><published>2025-10-10T11:53:02+09:00</published><updated>2025-10-10T11:53:02+09:00</updated><id>https://hvppyarchive.github.io/comfyui/async-request-cancel</id><content type="html" xml:base="https://hvppyarchive.github.io/comfyui/async-request-cancel/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">Python 비동기 서브프로세스 실행</title><link href="https://hvppyarchive.github.io/python/python-async-subprocess/" rel="alternate" type="text/html" title="Python 비동기 서브프로세스 실행" /><published>2025-10-10T12:35:48+09:00</published><updated>2025-10-10T12:35:48+09:00</updated><id>https://hvppyarchive.github.io/python/python-async-subprocess</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-async-subprocess/"><![CDATA[<p class="chat--user">
+
+Python에서 subprocess를 async task로 실행할 수 있어?
+
+</p>
+
+<p>네—가능합니다. “비동기적으로 서브프로세스 실행”은 보통 두 가지 방식이 있어요.</p>
+
+<h2 id="1-asyncio가-제공하는-진짜-비동기-서브프로세스-api-쓰기">1) <code class="language-plaintext highlighter-rouge">asyncio</code>가 제공하는 <strong>진짜 비동기 서브프로세스</strong> API 쓰기</h2>
+
+<p>핵심은 <code class="language-plaintext highlighter-rouge">asyncio.create_subprocess_exec()</code>(또는 <code class="language-plaintext highlighter-rouge">create_subprocess_shell()</code>)입니다. 반환값인 <code class="language-plaintext highlighter-rouge">Process</code>에는 <code class="language-plaintext highlighter-rouge">wait()</code>, <code class="language-plaintext highlighter-rouge">communicate()</code> 같은 <strong><code class="language-plaintext highlighter-rouge">await</code> 가능한</strong> 메서드가 있어서 이벤트 루프를 막지 않아요.</p>
+
+<h3 id="a-출력-전체-한-번에-받기">(A) 출력 전체 한 번에 받기</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">import time; [print(i) or time.sleep(0.3) for i in range(5)]</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span>
+    <span class="p">)</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">()</span>   <span class="c1"># 둘 다 bytes
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="sh">"</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="sh">"</span><span class="p">,</span> <span class="n">err</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="b-스트리밍-으로-줄-단위-읽기-긴-작업실시간-로그용">(B) <strong>스트리밍</strong> 으로 줄 단위 읽기 (긴 작업/실시간 로그용)</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">import time,sys</span><span class="se">\n</span><span class="s">for i in range(5):</span><span class="se">\n</span><span class="s"> print(i); sys.stdout.flush(); time.sleep(0.3)</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">STDOUT</span>
+    <span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">proc</span><span class="p">.</span><span class="n">stdout</span><span class="p">:</span>  <span class="c1"># bytes 스트림
+</span>        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">&gt; </span><span class="sh">"</span><span class="p">,</span> <span class="n">raw</span><span class="p">.</span><span class="nf">decode</span><span class="p">().</span><span class="nf">rstrip</span><span class="p">())</span>
+
+    <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p><strong>포인트</strong></p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">stdout=PIPE</code>, <code class="language-plaintext highlighter-rouge">stderr=PIPE/STDOUT</code>로 파이프 연결.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">communicate()</code>는 종료까지 기다리며 전부 모아 반환.</p>
+  </li>
+  <li>
+    <p>실시간이 필요하면 <code class="language-plaintext highlighter-rouge">async for proc.stdout</code>로 읽기.</p>
+  </li>
+  <li>
+    <p>파이썬 하위 프로세스는 <code class="language-plaintext highlighter-rouge">-u</code>(unbuffered)로 버퍼링 지연을 줄이는 게 좋아요.</p>
+  </li>
+</ul>
+
+<h2 id="2-기존의-블로킹-subprocessrun을-스레드로-돌리기">2) 기존의 <strong>블로킹</strong> <code class="language-plaintext highlighter-rouge">subprocess.run()</code>을 스레드로 돌리기</h2>
+
+<p>레거시 코드나 간단한 호출을 그대로 쓰고 싶다면, 이벤트 루프는 살리고 작업만 스레드로 넘길 수 있어요.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">subprocess</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_blocking</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+    <span class="c1"># Python 3.9+: to_thread 권장
+</span>    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">to_thread</span><span class="p">(</span>
+        <span class="n">subprocess</span><span class="p">.</span><span class="n">run</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span>
+        <span class="n">capture_output</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="bp">False</span>
+    <span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">run_blocking</span><span class="p">([</span><span class="sh">"</span><span class="s">git</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">])</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">stdout</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p><strong>포인트</strong></p>
+
+<ul>
+  <li>
+    <p>이 방법은 <em>진짜 비동기 I/O</em> 는 아니고, <strong>스레드 하나를 차지</strong> 해서 블로킹 호출을 우회합니다.</p>
+  </li>
+  <li>
+    <p>입출력을 줄 단위로 실시간 처리하긴 불편하고, “끝나면 결과”가 필요한 경우에 적합.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="여러-프로세스를-동시에-돌리기">여러 프로세스를 <strong>동시에</strong> 돌리기</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_one</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">print(</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s">)</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span>
+    <span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">procs</span> <span class="o">=</span> <span class="p">[</span><span class="k">await</span> <span class="nf">run_one</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+    <span class="n">outs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">gather</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">communicate</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">procs</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">_err</span><span class="p">)</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">outs</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">decode</span><span class="p">().</span><span class="nf">strip</span><span class="p">())</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h2 id="타임아웃취소정리중요">타임아웃/취소/정리(중요)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">safe_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span><span class="o">*</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">(),</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>                 <span class="c1"># or proc.terminate()
+</span>        <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>           <span class="c1"># 좀비 방지
+</span>        <span class="k">raise</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+        <span class="k">raise</span>
+</code></pre></div></div>
+
+<h2 id="플랫폼주의사항-한눈에">플랫폼/주의사항 한눈에</h2>
+
+<ul>
+  <li>
+    <p><strong>Windows</strong> : 파이프가 연결된 서브프로세스는 Python ≥3.8의 기본 이벤트 루프(프로액터)에서 잘 동작합니다. (아주 옛 버전은 <code class="language-plaintext highlighter-rouge">ProactorEventLoop</code> 필요)</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">shell=True</code></strong>는 편하지만 인자 이스케이프/보안 이슈가 있으니 꼭 필요한 경우만 사용하세요.</p>
+  </li>
+  <li>
+    <p><strong>대용량 출력</strong> 을 한꺼번에 <code class="language-plaintext highlighter-rouge">communicate()</code>로 받으면 메모리를 많이 먹을 수 있어요. 이런 경우 (B)처럼 스트리밍이 안전합니다.</p>
+  </li>
+  <li>
+    <p><strong>텍스트 디코딩</strong> : <code class="language-plaintext highlighter-rouge">asyncio.subprocess</code>는 <strong>bytes</strong> 를 줍니다. <code class="language-plaintext highlighter-rouge">.decode()</code> 직접 호출하거나 <code class="language-plaintext highlighter-rouge">codecs.StreamReader</code>로 감싸세요.</p>
+  </li>
+  <li>
+    <p><strong>프로세스 그룹</strong> : 리눅스/맥에서 하위 트리까지 종료하려면 <code class="language-plaintext highlighter-rouge">start_new_session=True</code>로 새 세션 시작 후, 필요 시 <code class="language-plaintext highlighter-rouge">os.killpg()</code> 사용(고급 주제).</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="요약">요약</h3>
+
+<ul>
+  <li>
+    <p>“이벤트 루프를 막지 않고” 서브프로세스를 돌리려면: <strong><code class="language-plaintext highlighter-rouge">asyncio.create_subprocess_exec/shell</code></strong>을 쓰세요.</p>
+  </li>
+  <li>
+    <p>기존 블로킹 코드를 그대로 쓰고 싶다면: <strong><code class="language-plaintext highlighter-rouge">asyncio.to_thread(subprocess.run, ...)</code></strong>으로 감싸세요.</p>
+  </li>
+  <li>
+    <p>스트리밍, 병렬 실행, 타임아웃/취소까지 위 예제 패턴이면 대부분의 케이스를 커버합니다.</p>
+  </li>
+</ul>
+
+<p class="chat--user">
+
+async def main(): proc = await asyncio.create_subprocess_exec( sys.executable, "-u", "-c", "import time; [print(i) or time.sleep(0.3) for i in range(5)]", stdout=asp.PIPE, stderr=asp.PIPE ) out, err = await proc.communicate() # 둘 다 bytes print("RC:", proc.returncode) print("STDOUT:", out.decode()) print("STDERR:", err.decode()) 이 동작을 task로 만들고 싶어.
+
+</p>
+
+<p>가능하죠! 핵심은 “서브프로세스를 돌리는 코루틴”을 하나 만들고, 그걸 <code class="language-plaintext highlighter-rouge">asyncio.create_task()</code>로 스케줄하는 겁니다. 아래를 그대로 붙여 넣어 쓰세요.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">asyncio.subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="c1"># 1) 서브프로세스를 실행하고 결과를 반환하는 코루틴
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">run_subprocess</span><span class="p">():</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">import time; [print(i) or time.sleep(0.3) for i in range(5)]</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">()</span>  <span class="c1"># bytes 튜플
+</span>        <span class="k">return</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">decode</span><span class="p">(),</span> <span class="n">err</span><span class="p">.</span><span class="nf">decode</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="c1"># 취소 시 깔끔하게 종료(좀비 방지)
+</span>        <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+        <span class="k">raise</span>
+
+<span class="c1"># 2) 위 코루틴을 Task로 만들어 동시 실행
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">run_subprocess</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">my-subprocess-task</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># (선택) 여기서 다른 비동기 작업들을 병행할 수 있음
+</span>    <span class="c1"># await do_other_async_work()
+</span>
+    <span class="c1"># (선택) 타임아웃을 걸고 싶다면:
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rc</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="n">task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">task</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">raise</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="포인트-한걸음씩">포인트 (한걸음씩)</h3>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">run_subprocess()</code>는 <strong>서브프로세스 생명주기</strong> 를 책임지는 코루틴입니다.</p>
+
+    <ul>
+      <li>
+        <p>정상 완료 시 <code class="language-plaintext highlighter-rouge">(returncode, stdout(str), stderr(str))</code>를 반환.</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">CancelledError</code>에서 <code class="language-plaintext highlighter-rouge">kill()</code>+<code class="language-plaintext highlighter-rouge">wait()</code>로 정리(필수).</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">main()</code>에서 <code class="language-plaintext highlighter-rouge">asyncio.create_task(...)</code>로 <strong>Task</strong> 를 만들면, 이벤트 루프는 이 작업을 백그라운드로 진행하고, 필요할 때 <code class="language-plaintext highlighter-rouge">await task</code>로 결과를 회수합니다.</p>
+  </li>
+  <li>
+    <p><strong>타임아웃</strong> 은 <code class="language-plaintext highlighter-rouge">asyncio.wait_for(task, timeout=...)</code>로 감싸고, 만료 시 <code class="language-plaintext highlighter-rouge">task.cancel()</code> 후 정리.</p>
+  </li>
+  <li>
+    <p>실시간 로그가 필요하면, <code class="language-plaintext highlighter-rouge">communicate()</code> 대신 <code class="language-plaintext highlighter-rouge">async for line in proc.stdout:</code> 패턴을 <code class="language-plaintext highlighter-rouge">run_subprocess()</code> 안에 넣으면 됩니다(그 경우 문자열을 누적해서 반환하거나 콜백/큐로 전달).</p>
+  </li>
+</ol>
+
+<p>원하면, 같은 패턴으로 여러 개를 동시에 돌릴 수도 있어요:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="k">def</span> <span class="nf">main_many</span><span class="p">():</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">run_subprocess</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">as_completed</span><span class="p">(</span><span class="n">tasks</span><span class="p">):</span>
+        <span class="n">rc</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">t</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">done:</span><span class="sh">"</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>이렇게 하면 “서브프로세스 실행 → Task로 스케줄 → 결과 대기/취소/타임아웃”까지 깔끔하게 처리됩니다.</p>
+
+<p class="chat--user">
+
+proc = await asyncio.create_subprocess_exec( sys.executable, "-u", "-c", "import time; [print(i) or time.sleep(0.3) for i in range(5)]", stdout=asp.PIPE, stderr=asp.PIPE ) 이 코드를 try 안에 넣지 않는 이유가 있어?
+
+</p>
+
+<p>짧게 말하면: <strong>정리(cleanup)가 필요한 구간만<code class="language-plaintext highlighter-rouge">try</code>로 감싸기</strong> 위해서예요.<br />
+<code class="language-plaintext highlighter-rouge">create_subprocess_exec()</code> 호출 자체는 “아직 프로세스가 없거나(생성 전) 곧바로 실패하는” 단계라서, 여기서 예외/취소가 나면 <strong>정리할 대상이 없습니다.</strong></p>
+
+<p>step-by-step로 보면:</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">await asyncio.create_subprocess_exec(...)</code></p>
+
+    <ul>
+      <li>
+        <p>여기서 <strong>취소(<code class="language-plaintext highlighter-rouge">CancelledError</code>)</strong>가 나면 프로세스는 만들어지지 않았으니 kill/wait 불필요.</p>
+      </li>
+      <li>
+        <p>실행 파일 없음 등으로 <strong><code class="language-plaintext highlighter-rouge">FileNotFoundError</code>/<code class="language-plaintext highlighter-rouge">OSError</code></strong>가 나면 역시 프로세스가 없으니 정리할 게 없음.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>프로세스가 <strong>성공적으로 만들어진 뒤</strong> 에야 <code class="language-plaintext highlighter-rouge">proc</code>가 생깁니다.</p>
+
+    <ul>
+      <li>
+        <p>이후 <code class="language-plaintext highlighter-rouge">await proc.communicate()</code>에서 취소/타임아웃이 나면 <strong>좀비 방지</strong> 를 위해 <code class="language-plaintext highlighter-rouge">proc.kill(); await proc.wait()</code>가 필요하죠.</p>
+      </li>
+      <li>
+        <p>그래서 <code class="language-plaintext highlighter-rouge">try/except</code>는 이 <strong>두 번째 구간</strong>(communicate/대기 구간)에만 두는 게 맞습니다.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>또 다른 이유:</p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">create_subprocess_exec()</code>를 <code class="language-plaintext highlighter-rouge">try</code> 안에 두면, 예외 흐름에 따라 <code class="language-plaintext highlighter-rouge">proc</code>가 <strong>정의되지 않은 상태에서</strong> <code class="language-plaintext highlighter-rouge">proc.kill()</code>을 호출할 위험이 생깁니다(레퍼런스가 없어서 또 다른 예외 유발).</p>
+      </li>
+      <li>
+        <p>“취소 신호가 생성 직후~<code class="language-plaintext highlighter-rouge">try</code> 진입 사이에 들어오면 어떡해요?” → 취소는 <strong>다음<code class="language-plaintext highlighter-rouge">await</code> 지점에서</strong> 던져지므로, 생성이 끝나고 <code class="language-plaintext highlighter-rouge">try</code> 블록으로 들어간 뒤의 <code class="language-plaintext highlighter-rouge">await</code>(예: <code class="language-plaintext highlighter-rouge">communicate</code>)에서 처리됩니다. 레이스 걱정 없음.</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>원한다면 “스폰 실패”만 별도로 다루는 2단계 패턴이 가장 견고합니다:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">asyncio.subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_subprocess</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+            <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">import time; [print(i) or time.sleep(0.3) for i in range(5)]</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># 실행 파일 없음/권한 문제 등
+</span>        <span class="c1"># 여기서는 정리할 프로세스가 없음
+</span>        <span class="k">raise</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">decode</span><span class="p">(),</span> <span class="n">err</span><span class="p">.</span><span class="nf">decode</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+        <span class="k">raise</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="c1"># 원한다면 다른 예외에서도 프로세스 정리를 보장
+</span>        <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+        <span class="k">raise</span>
+</code></pre></div></div>
+
+<p>요약: <strong>프로세스가 생긴 이후에만</strong> 정리가 필요하므로, 생성 호출은 <code class="language-plaintext highlighter-rouge">try</code> 밖에 두고, 대기/통신 구간을 <code class="language-plaintext highlighter-rouge">try</code>로 감싸는 게 깔끔하고 안전합니다.</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Async request 취소 처리</title><link href="https://hvppyarchive.github.io/comfyui/async-request-cancel/" rel="alternate" type="text/html" title="Async request 취소 처리" /><published>2025-10-10T11:53:02+09:00</published><updated>2025-10-10T11:53:02+09:00</updated><id>https://hvppyarchive.github.io/comfyui/async-request-cancel</id><content type="html" xml:base="https://hvppyarchive.github.io/comfyui/async-request-cancel/"><![CDATA[<p class="chat--user">
 
 comfyui에서 custom node의 메인 함수를 async로 만들 수 있게 되었어. 그리고, openai python 패키지에서 AsyncOpenAI와 aiohttp를 이용해서 async하게 request를 보낼 수 있어. 근데 문제는 UI에서 stop을 보내고 interrupt가 즉시 동작하지 않는다는거야. request를 보낸 후 await 하는 도중에 작업이 취소되게 하고 싶어
 
@@ -995,174 +1331,7 @@ _wait_for_interrupt_level_trigger()에서 raise 안하고 그냥 return 하는�
 <hr />
 
 <p>정리: <strong>응, 헬퍼에서<code class="language-plaintext highlighter-rouge">raise</code> 대신 <code class="language-plaintext highlighter-rouge">return</code> 해도 완전히 OK.</strong><br />
-오히려 깔끔할 때가 많고, 위 패턴대로 센티널을 반환해주면 실수도 줄일 수 있어.</p>]]></content><author><name>hvppyarchive</name></author><category term="comfyui" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">비동기 서브프로세스 실행</title><link href="https://hvppyarchive.github.io/python/python-async-subprocess/" rel="alternate" type="text/html" title="비동기 서브프로세스 실행" /><published>2025-10-10T11:43:03+09:00</published><updated>2025-10-10T11:43:03+09:00</updated><id>https://hvppyarchive.github.io/python/python-async-subprocess</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-async-subprocess/"><![CDATA[<p class="chat--user">
-
-Python에서 subprocess를 async task로 실행할 수 있어?
-
-</p>
-
-<p>네—가능합니다. “비동기적으로 서브프로세스 실행”은 보통 두 가지 방식이 있어요.</p>
-
-<h2 id="1-asyncio가-제공하는-진짜-비동기-서브프로세스-api-쓰기">1) <code class="language-plaintext highlighter-rouge">asyncio</code>가 제공하는 <strong>진짜 비동기 서브프로세스</strong> API 쓰기</h2>
-
-<p>핵심은 <code class="language-plaintext highlighter-rouge">asyncio.create_subprocess_exec()</code>(또는 <code class="language-plaintext highlighter-rouge">create_subprocess_shell()</code>)입니다. 반환값인 <code class="language-plaintext highlighter-rouge">Process</code>에는 <code class="language-plaintext highlighter-rouge">wait()</code>, <code class="language-plaintext highlighter-rouge">communicate()</code> 같은 <strong><code class="language-plaintext highlighter-rouge">await</code> 가능한</strong> 메서드가 있어서 이벤트 루프를 막지 않아요.</p>
-
-<h3 id="a-출력-전체-한-번에-받기">(A) 출력 전체 한 번에 받기</h3>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
-        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
-        <span class="sh">"</span><span class="s">import time; [print(i) or time.sleep(0.3) for i in range(5)]</span><span class="sh">"</span><span class="p">,</span>
-        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span>
-    <span class="p">)</span>
-    <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">()</span>   <span class="c1"># 둘 다 bytes
-</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">)</span>
-    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="sh">"</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
-    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="sh">"</span><span class="p">,</span> <span class="n">err</span><span class="p">.</span><span class="nf">decode</span><span class="p">())</span>
-
-<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
-</code></pre></div></div>
-
-<h3 id="b-스트리밍-으로-줄-단위-읽기-긴-작업실시간-로그용">(B) <strong>스트리밍</strong> 으로 줄 단위 읽기 (긴 작업/실시간 로그용)</h3>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
-        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
-        <span class="sh">"</span><span class="s">import time,sys</span><span class="se">\n</span><span class="s">for i in range(5):</span><span class="se">\n</span><span class="s"> print(i); sys.stdout.flush(); time.sleep(0.3)</span><span class="sh">"</span><span class="p">,</span>
-        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">STDOUT</span>
-    <span class="p">)</span>
-
-    <span class="k">async</span> <span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">proc</span><span class="p">.</span><span class="n">stdout</span><span class="p">:</span>  <span class="c1"># bytes 스트림
-</span>        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">&gt; </span><span class="sh">"</span><span class="p">,</span> <span class="n">raw</span><span class="p">.</span><span class="nf">decode</span><span class="p">().</span><span class="nf">rstrip</span><span class="p">())</span>
-
-    <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
-    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
-
-<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
-</code></pre></div></div>
-
-<p><strong>포인트</strong></p>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">stdout=PIPE</code>, <code class="language-plaintext highlighter-rouge">stderr=PIPE/STDOUT</code>로 파이프 연결.</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">communicate()</code>는 종료까지 기다리며 전부 모아 반환.</p>
-  </li>
-  <li>
-    <p>실시간이 필요하면 <code class="language-plaintext highlighter-rouge">async for proc.stdout</code>로 읽기.</p>
-  </li>
-  <li>
-    <p>파이썬 하위 프로세스는 <code class="language-plaintext highlighter-rouge">-u</code>(unbuffered)로 버퍼링 지연을 줄이는 게 좋아요.</p>
-  </li>
-</ul>
-
-<h2 id="2-기존의-블로킹-subprocessrun을-스레드로-돌리기">2) 기존의 <strong>블로킹</strong> <code class="language-plaintext highlighter-rouge">subprocess.run()</code>을 스레드로 돌리기</h2>
-
-<p>레거시 코드나 간단한 호출을 그대로 쓰고 싶다면, 이벤트 루프는 살리고 작업만 스레드로 넘길 수 있어요.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">subprocess</span>
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">run_blocking</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
-    <span class="c1"># Python 3.9+: to_thread 권장
-</span>    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">to_thread</span><span class="p">(</span>
-        <span class="n">subprocess</span><span class="p">.</span><span class="n">run</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span>
-        <span class="n">capture_output</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="bp">False</span>
-    <span class="p">)</span>
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">run_blocking</span><span class="p">([</span><span class="sh">"</span><span class="s">git</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">])</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">stdout</span><span class="p">)</span>
-
-<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
-</code></pre></div></div>
-
-<p><strong>포인트</strong></p>
-
-<ul>
-  <li>
-    <p>이 방법은 <em>진짜 비동기 I/O</em> 는 아니고, <strong>스레드 하나를 차지</strong> 해서 블로킹 호출을 우회합니다.</p>
-  </li>
-  <li>
-    <p>입출력을 줄 단위로 실시간 처리하긴 불편하고, “끝나면 결과”가 필요한 경우에 적합.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h2 id="여러-프로세스를-동시에-돌리기">여러 프로세스를 <strong>동시에</strong> 돌리기</h2>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">run_one</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
-        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">print(</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s">)</span><span class="sh">"</span><span class="p">,</span>
-        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span>
-    <span class="p">)</span>
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">procs</span> <span class="o">=</span> <span class="p">[</span><span class="k">await</span> <span class="nf">run_one</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
-    <span class="n">outs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">gather</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">communicate</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">procs</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">_err</span><span class="p">)</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">outs</span><span class="p">):</span>
-        <span class="nf">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">decode</span><span class="p">().</span><span class="nf">strip</span><span class="p">())</span>
-
-<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
-</code></pre></div></div>
-
-<h2 id="타임아웃취소정리중요">타임아웃/취소/정리(중요)</h2>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span> <span class="k">as</span> <span class="n">asp</span>
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">safe_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span><span class="o">*</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">(),</span> <span class="n">timeout</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span>
-    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
-        <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>                 <span class="c1"># or proc.terminate()
-</span>        <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>           <span class="c1"># 좀비 방지
-</span>        <span class="k">raise</span>
-    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
-        <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
-        <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
-        <span class="k">raise</span>
-</code></pre></div></div>
-
-<h2 id="플랫폼주의사항-한눈에">플랫폼/주의사항 한눈에</h2>
-
-<ul>
-  <li>
-    <p><strong>Windows</strong> : 파이프가 연결된 서브프로세스는 Python ≥3.8의 기본 이벤트 루프(프로액터)에서 잘 동작합니다. (아주 옛 버전은 <code class="language-plaintext highlighter-rouge">ProactorEventLoop</code> 필요)</p>
-  </li>
-  <li>
-    <p><strong><code class="language-plaintext highlighter-rouge">shell=True</code></strong>는 편하지만 인자 이스케이프/보안 이슈가 있으니 꼭 필요한 경우만 사용하세요.</p>
-  </li>
-  <li>
-    <p><strong>대용량 출력</strong> 을 한꺼번에 <code class="language-plaintext highlighter-rouge">communicate()</code>로 받으면 메모리를 많이 먹을 수 있어요. 이런 경우 (B)처럼 스트리밍이 안전합니다.</p>
-  </li>
-  <li>
-    <p><strong>텍스트 디코딩</strong> : <code class="language-plaintext highlighter-rouge">asyncio.subprocess</code>는 <strong>bytes</strong> 를 줍니다. <code class="language-plaintext highlighter-rouge">.decode()</code> 직접 호출하거나 <code class="language-plaintext highlighter-rouge">codecs.StreamReader</code>로 감싸세요.</p>
-  </li>
-  <li>
-    <p><strong>프로세스 그룹</strong> : 리눅스/맥에서 하위 트리까지 종료하려면 <code class="language-plaintext highlighter-rouge">start_new_session=True</code>로 새 세션 시작 후, 필요 시 <code class="language-plaintext highlighter-rouge">os.killpg()</code> 사용(고급 주제).</p>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="요약">요약</h3>
-
-<ul>
-  <li>
-    <p>“이벤트 루프를 막지 않고” 서브프로세스를 돌리려면: <strong><code class="language-plaintext highlighter-rouge">asyncio.create_subprocess_exec/shell</code></strong>을 쓰세요.</p>
-  </li>
-  <li>
-    <p>기존 블로킹 코드를 그대로 쓰고 싶다면: <strong><code class="language-plaintext highlighter-rouge">asyncio.to_thread(subprocess.run, ...)</code></strong>으로 감싸세요.</p>
-  </li>
-  <li>
-    <p>스트리밍, 병렬 실행, 타임아웃/취소까지 위 예제 패턴이면 대부분의 케이스를 커버합니다.</p>
-  </li>
-</ul>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">VS Code 경고 해결법</title><link href="https://hvppyarchive.github.io/python/vscode-python-runtime-path/" rel="alternate" type="text/html" title="VS Code 경고 해결법" /><published>2025-10-10T10:52:16+09:00</published><updated>2025-10-10T10:52:16+09:00</updated><id>https://hvppyarchive.github.io/python/vscode-python-runtime-path</id><content type="html" xml:base="https://hvppyarchive.github.io/python/vscode-python-runtime-path/"><![CDATA[<p class="chat--user">
+오히려 깔끔할 때가 많고, 위 패턴대로 센티널을 반환해주면 실수도 줄일 수 있어.</p>]]></content><author><name>hvppyarchive</name></author><category term="comfyui" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">VS Code 경고 해결법</title><link href="https://hvppyarchive.github.io/python/vscode-python-runtime-path/" rel="alternate" type="text/html" title="VS Code 경고 해결법" /><published>2025-10-10T10:52:16+09:00</published><updated>2025-10-10T10:52:16+09:00</updated><id>https://hvppyarchive.github.io/python/vscode-python-runtime-path</id><content type="html" xml:base="https://hvppyarchive.github.io/python/vscode-python-runtime-path/"><![CDATA[<p class="chat--user">
 
 VS Code에서 파이썬 코딩 중인데, 어떤 Framework의 Extension을 개발 중이야. 그런데 코드에서 Framework의 코드를 Reference 하는데 이게 동작 중에는 잘 동작하지만 개발 중에는 Framework의 소스코드는 같이 불러오지 않고 코딩해서 에러처럼 경고가 뜨고 Go to definition 같은 기능도 잘 동작하지 않아. 이를 해결하는 방법 있을까
 
