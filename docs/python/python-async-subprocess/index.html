@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-10-10T12:35:48+09:00">
+  <meta property="article:published_time" content="2025-10-10T14:05:19+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python 비동기 서브프로세스 실행">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-10-10T12:35:48+09:00">
+    <meta itemprop="datePublished" content="2025-10-10T14:05:19+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-10T12:35:48+09:00">2025-10-10</time>
+        <time datetime="2025-10-10T14:05:19+09:00">2025-10-10</time>
       </span>
     
 
@@ -525,6 +525,282 @@ proc = await asyncio.create_subprocess_exec( sys.executable, "-u", "-c", "import
 
 <p>요약: <strong>프로세스가 생긴 이후에만</strong> 정리가 필요하므로, 생성 호출은 <code class="language-plaintext highlighter-rouge">try</code> 밖에 두고, 대기/통신 구간을 <code class="language-plaintext highlighter-rouge">try</code>로 감싸는 게 깔끔하고 안전합니다.</p>
 
+<p class="chat--user">
+
+기존 코드에서 subprocess 실행할 때 preexec_fn=os.setsid, creationflags=0하고, 꺼질 때는 getpgid(pid)해서 다 같이 끄는 코드가 있었는데 여기에는 필요없어?
+
+</p>
+
+<p>요지는 이거예요: <strong>“전체 프로세스 그룹까지 한 번에 끄고 싶다면 필요”, 아니면 불필요.</strong></p>
+
+<p>step-by-step로 정리하면:</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">asyncio.create_subprocess_exec()</code> 자체는 <strong>단일 프로세스만</strong> 관리합니다.</p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">proc.terminate()</code>/<code class="language-plaintext highlighter-rouge">proc.kill()</code>은 <strong>그 프로세스만</strong> 죽입니다. 자식·손자까지 보장하지 않아요.</li>
+    </ul>
+  </li>
+  <li>
+    <p>기존처럼 “프로세스 그룹(트리) 전체 종료”가 목적이면, <strong>스폰할 때 그룹을 분리</strong> 해야 합니다.</p>
+
+    <ul>
+      <li>
+        <p>POSIX(리눅스/맥): <code class="language-plaintext highlighter-rouge">preexec_fn=os.setsid</code> 대신 <strong><code class="language-plaintext highlighter-rouge">start_new_session=True</code></strong>가 권장(동일 효과, 더 안전).</p>
+      </li>
+      <li>
+        <p>윈도우: <strong><code class="language-plaintext highlighter-rouge">creationflags=subprocess.CREATE_NEW_PROCESS_GROUP</code></strong>로 새 그룹.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>종료할 때는 “그룹 신호”를 보내야 합니다.</p>
+
+    <ul>
+      <li>
+        <p>POSIX: <code class="language-plaintext highlighter-rouge">os.killpg(pgid, signal.SIGTERM)</code> → 대기 → 필요 시 <code class="language-plaintext highlighter-rouge">SIGKILL</code>.</p>
+      </li>
+      <li>
+        <p>윈도우: <code class="language-plaintext highlighter-rouge">proc.send_signal(signal.CTRL_BREAK_EVENT)</code>(새 그룹으로 띄웠을 때만 동작) → 필요 시 <code class="language-plaintext highlighter-rouge">taskkill /T</code>.</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>아래는 앞서 만든 Task 버전에 “그룹 분리 + 그룹 종료”를 붙인 예시입니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">os</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">subprocess</span>
+<span class="kn">import</span> <span class="n">asyncio.subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_subprocess</span><span class="p">():</span>
+    <span class="c1"># 1) 플랫폼별로 "새 그룹/세션"로 스폰
+</span>    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">win32</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="sh">"</span><span class="s">start_new_session</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>          <span class="c1"># == setsid()
+</span>    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="sh">"</span><span class="s">creationflags</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">CREATE_NEW_PROCESS_GROUP</span>
+
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">import time,sys; [print(i) or time.sleep(0.3) for i in range(5)]</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">decode</span><span class="p">(),</span> <span class="n">err</span><span class="p">.</span><span class="nf">decode</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="c1"># 2) Task 취소 시: 그룹 단위로 깔끔히 종료
+</span>        <span class="k">await</span> <span class="nf">terminate_process_tree</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="c1"># 다른 예외에서도 정리 보장
+</span>        <span class="k">await</span> <span class="nf">terminate_process_tree</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">terminate_process_tree</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">win32</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">killpg</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">signal</span><span class="p">.</span><span class="n">SIGTERM</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">ProcessLookupError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">(),</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="p">.</span><span class="nf">killpg</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">signal</span><span class="p">.</span><span class="n">SIGKILL</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">ProcessLookupError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">proc</span><span class="p">.</span><span class="nf">send_signal</span><span class="p">(</span><span class="n">signal</span><span class="p">.</span><span class="n">CTRL_BREAK_EVENT</span><span class="p">)</span>  <span class="c1"># CREATE_NEW_PROCESS_GROUP 필요
+</span>        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">(),</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="c1"># 최후 수단: 하위 트리까지 강제 종료
+</span>            <span class="n">subprocess</span><span class="p">.</span><span class="nf">run</span><span class="p">([</span><span class="sh">"</span><span class="s">taskkill</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/F</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/T</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/PID</span><span class="sh">"</span><span class="p">,</span> <span class="nf">str</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="n">pid</span><span class="p">)],</span>
+                           <span class="n">capture_output</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">run_subprocess</span><span class="p">())</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rc</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="n">task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">task</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="결론">결론</h3>
+
+<ul>
+  <li>
+    <p>“그냥 그 프로세스 하나만” 종료해도 된다면 <code class="language-plaintext highlighter-rouge">start_new_session</code>/<code class="language-plaintext highlighter-rouge">CREATE_NEW_PROCESS_GROUP</code>는 불필요.</p>
+  </li>
+  <li>
+    <p><strong>과거처럼 트리 전체를 확실히 종료</strong> 해야 한다면, 위처럼 <strong>스폰 시 그룹 분리 + 그룹 종료 루틴</strong> 을 그대로 넣어주세요.</p>
+  </li>
+  <li>
+    <p>POSIX에선 <code class="language-plaintext highlighter-rouge">start_new_session=True</code>가 <code class="language-plaintext highlighter-rouge">preexec_fn=os.setsid</code>의 안전한 대체입니다.</p>
+  </li>
+</ul>
+
+<p class="chat--user">
+
+타이머를 따로 task로 만들어서 subprocess task, timeout task 두 개를 그룹으로 실행시키는 방식으로 만들어줘. 타임아웃이 되면 자손 프로세스도 다 죽여야해
+
+</p>
+
+<p>좋아요—“타이머(Task)와 서브프로세스(Task)를 <strong>그룹처럼 함께 돌리고</strong> , 타임아웃 시 <strong>프로세스 트리 전체</strong> 를 종료”하는 패턴을 깔끔히 만들었습니다. 그대로 붙여 쓰세요.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">os</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">subprocess</span>
+<span class="kn">import</span> <span class="n">asyncio.subprocess</span> <span class="k">as</span> <span class="n">asp</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">terminate_process_tree</span><span class="p">(</span><span class="n">proc</span><span class="p">:</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">Process</span><span class="p">,</span> <span class="n">graceful_timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">proc를 </span><span class="sh">'</span><span class="s">그룹 단위</span><span class="sh">'</span><span class="s">로 종료. 안 죽으면 강제 종료까지.</span><span class="sh">"""</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">win32</span><span class="sh">"</span><span class="p">:</span>
+        <span class="c1"># 새 세션으로 띄웠다는 가정(start_new_session=True)
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">killpg</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">signal</span><span class="p">.</span><span class="n">SIGTERM</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">ProcessLookupError</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="n">graceful_timeout</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="p">.</span><span class="nf">killpg</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">signal</span><span class="p">.</span><span class="n">SIGKILL</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">ProcessLookupError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># CREATE_NEW_PROCESS_GROUP로 띄웠다는 가정
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="n">proc</span><span class="p">.</span><span class="nf">send_signal</span><span class="p">(</span><span class="n">signal</span><span class="p">.</span><span class="n">CTRL_BREAK_EVENT</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="n">graceful_timeout</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="c1"># 최후 수단: 트리까지 모두 강제 종료
+</span>            <span class="n">subprocess</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="sh">"</span><span class="s">taskkill</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/F</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/T</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/PID</span><span class="sh">"</span><span class="p">,</span> <span class="nf">str</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="n">pid</span><span class="p">)],</span>
+                <span class="n">capture_output</span><span class="o">=</span><span class="bp">True</span>
+            <span class="p">)</span>
+            <span class="k">await</span> <span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_with_timeout</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    타이머 Task와 서브프로세스 Task를 동시에 돌리되,
+    타임아웃이 먼저 끝나면 </span><span class="sh">'</span><span class="s">프로세스 트리</span><span class="sh">'</span><span class="s">를 종료한다.
+    반환: (timed_out: bool, returncode, stdout_str, stderr_str)
+    </span><span class="sh">"""</span>
+    <span class="c1"># 1) 프로세스를 "새 그룹/세션"으로 스폰 (자손 일괄 종료를 위해 필수)
+</span>    <span class="n">spawn_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">win32</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">spawn_kwargs</span><span class="p">[</span><span class="sh">"</span><span class="s">start_new_session</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>          <span class="c1"># == setsid()
+</span>    <span class="k">else</span><span class="p">:</span>
+        <span class="n">spawn_kwargs</span><span class="p">[</span><span class="sh">"</span><span class="s">creationflags</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="n">CREATE_NEW_PROCESS_GROUP</span>
+
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">cmd</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="n">stderr</span><span class="o">=</span><span class="n">asp</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">spawn_kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 2) 두 개의 Task를 그룹처럼 함께 실행
+</span>    <span class="n">proc_task</span>  <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">proc-communicate</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">timer_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">timeout</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">timeout-timer</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="n">done</span><span class="p">,</span> <span class="n">pending</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">(</span>
+        <span class="p">{</span><span class="n">proc_task</span><span class="p">,</span> <span class="n">timer_task</span><span class="p">},</span>
+        <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 3) 타이머가 먼저 끝남 → 트리 종료 후 결과 정리
+</span>    <span class="k">if</span> <span class="n">timer_task</span> <span class="ow">in</span> <span class="n">done</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">proc_task</span><span class="p">.</span><span class="nf">done</span><span class="p">():</span>
+        <span class="c1"># 프로세스 트리 종료
+</span>        <span class="k">await</span> <span class="nf">terminate_process_tree</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
+        <span class="c1"># 통신 Task 취소 (혹시 남아있다면)
+</span>        <span class="n">proc_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">proc_task</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">""</span>  <span class="c1"># timed_out=True
+</span>
+    <span class="c1"># 4) 프로세스가 먼저 끝남 → 타이머 취소 후 결과 반환
+</span>    <span class="n">timer_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">timer_task</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">out_b</span><span class="p">,</span> <span class="n">err_b</span> <span class="o">=</span> <span class="k">await</span> <span class="n">proc_task</span>  <span class="c1"># bytes
+</span>    <span class="k">return</span> <span class="bp">False</span><span class="p">,</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">,</span> <span class="n">out_b</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span> <span class="n">err_b</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># ------------------ 사용 예시 ------------------
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># 예: 0.3초 간격으로 5줄 출력하는 하위 파이썬을 1초 타임아웃으로 실행
+</span>    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="p">.</span><span class="n">executable</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-c</span><span class="sh">"</span><span class="p">,</span>
+           <span class="sh">"</span><span class="s">import time,sys; [print(i) or sys.stdout.flush() or time.sleep(0.3) for i in range(5)]</span><span class="sh">"</span><span class="p">]</span>
+
+    <span class="n">timed_out</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">run_with_timeout</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">timed_out</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[TIMEOUT] 하위 프로세스 트리를 모두 종료했습니다.</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="핵심-포인트-요약">핵심 포인트 (요약)</h3>
+
+<ul>
+  <li>
+    <p><strong>두 Task를 그룹처럼</strong> : <code class="language-plaintext highlighter-rouge">proc.communicate()</code> Task와 <code class="language-plaintext highlighter-rouge">asyncio.sleep(timeout)</code> Task를 <code class="language-plaintext highlighter-rouge">asyncio.wait(..., FIRST_COMPLETED)</code>로 경합시킵니다.</p>
+  </li>
+  <li>
+    <p><strong>타임아웃 경로</strong> : 타이머가 먼저 끝나면 <code class="language-plaintext highlighter-rouge">terminate_process_tree()</code>로 <strong>프로세스 그룹(트리)</strong>을 종료 → 통신 Task 취소.</p>
+  </li>
+  <li>
+    <p><strong>프로세스 완료 경로</strong> : 프로세스가 먼저 끝나면 타이머 Task만 취소.</p>
+  </li>
+  <li>
+    <p><strong>트리 종료를 위해 스폰 옵션 필수</strong></p>
+
+    <ul>
+      <li>
+        <p>POSIX: <code class="language-plaintext highlighter-rouge">start_new_session=True</code> (≒ <code class="language-plaintext highlighter-rouge">preexec_fn=os.setsid</code>)</p>
+      </li>
+      <li>
+        <p>Windows: <code class="language-plaintext highlighter-rouge">creationflags=CREATE_NEW_PROCESS_GROUP</code></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Windows에선 <code class="language-plaintext highlighter-rouge">CTRL_BREAK_EVENT</code> → 불응 시 <code class="language-plaintext highlighter-rouge">taskkill /T</code>로 강제 정리.</p>
+  </li>
+</ul>
+
+<p>이 패턴이면 “타이머를 별도 Task로 두고, 타임아웃 시 자손까지 전부 종료” 요구사항을 그대로 충족합니다.</p>
+
         
       </section>
 
@@ -550,7 +826,7 @@ proc = await asyncio.create_subprocess_exec( sys.executable, "-u", "-c", "import
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-10T12:35:48+09:00">2025-10-10</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-10T14:05:19+09:00">2025-10-10</time></p>
 
       </footer>
 
@@ -604,7 +880,7 @@ proc = await asyncio.create_subprocess_exec( sys.executable, "-u", "-c", "import
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-10T12:35:53+09:00">2025-10-10</time>
+        <time datetime="2025-10-10T14:05:25+09:00">2025-10-10</time>
       </span>
     
 
