@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-10-10T10:33:23+09:00">
+  <meta property="article:published_time" content="2025-10-10T11:53:02+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Async request 취소 처리">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-10-10T10:33:23+09:00">
+    <meta itemprop="datePublished" content="2025-10-10T11:53:02+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-10T10:33:23+09:00">2025-10-10</time>
+        <time datetime="2025-10-10T11:53:02+09:00">2025-10-10</time>
       </span>
     
 
@@ -621,6 +621,443 @@ stop_event를 넣는다는게 뭔지 모르겠어. comfyui 내부적으로 inter
 
 <p>이렇게 붙이면 “UI에서 정지 → 곧장 당신의 <code class="language-plaintext highlighter-rouge">await</code>가 끊기는” 동작을 안정적으로 만들 수 있어요.</p>
 
+<p class="chat--user">
+
+3번처럼 구성했어. 그런데 너가 만들어준 노드들이 다수의 노드가 동시에 실행될수도 있는데 그러면 그 중에 하나만 취소되는거 같기도해. 왜냐면 throw_exception_if_processing_interrupted() 함수가 interrupt_processing을 False로 만들거든. 그러면 두 번째 노드는 취소된지 모르지 않을까
+
+</p>
+
+<p>맞아. 네가 본 그대로야. ComfyUI의 인터럽트 플래그는 <strong>“한 번만 소비되는(edge-triggered)”</strong> 동작을 해.<br />
+소스 보면:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">interrupt_current_processing(True)</code> → 전역 플래그를 <strong>True</strong> 로 셋팅.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">processing_interrupted()</code> → <strong>플래그를 읽기만</strong> 함(안 지움). <a href="https://huggingface.co/spideyrim/ComfyUI/blob/main/comfy/model_management.py">Hugging Face</a></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">throw_exception_if_processing_interrupted()</code> → 플래그가 <strong>True면 False로 지우고</strong> <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 던짐(즉, <em>소비</em>). 그래서 <strong>먼저 호출한 노드만</strong> 확실히 취소 신호를 보게 되고, 뒤늦게 체크한 다른 노드는 “몰랐다”가 될 수 있어. <a href="https://huggingface.co/spideyrim/ComfyUI/blob/main/comfy/model_management.py">Hugging Face</a></p>
+  </li>
+</ul>
+
+<p>그래서 “여러 노드가 동시에 돌 때 하나만 취소되는 것 같다”는 네 추측이 정확해.</p>
+
+<hr />
+
+<h1 id="이렇게-바꿔서-해결해">이렇게 바꿔서 해결해</h1>
+
+<p>핵심은 <strong>노드 내부에서 플래그를 ‘읽기만’ 하되 지우지 않는 것</strong> 이야.<br />
+즉, 감시 코루틴은 <code class="language-plaintext highlighter-rouge">throw_exception_if_processing_interrupted()</code>(소비) 대신 <code class="language-plaintext highlighter-rouge">processing_interrupted()</code>(비소비)로 체크하고, <strong>직접<code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 raise</strong> 하자. 그러면 <strong>모든</strong> 실행 중 노드가 같은 인터럽트를 감지하고 동시에 멈출 수 있어.</p>
+
+<h2 id="1-레이스-패턴요청-vs-인터럽트-수정본">1) 레이스 패턴(요청 vs 인터럽트) 수정본</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">contextlib</span>
+<span class="kn">import</span> <span class="n">comfy.model_management</span> <span class="k">as</span> <span class="n">mm</span>
+<span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">AsyncOpenAI</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_wait_for_interrupt_level_trigger</span><span class="p">():</span>
+    <span class="c1"># 플래그를 '읽기만' 하는 루프: 여러 노드가 동시에 True를 감지 가능
+</span>    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mm</span><span class="p">.</span><span class="nf">processing_interrupted</span><span class="p">():</span>           <span class="c1"># ← 소비 안 함
+</span>            <span class="k">raise</span> <span class="n">mm</span><span class="p">.</span><span class="nc">InterruptProcessingException</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">MyAsyncNode</span><span class="p">:</span>
+    <span class="n">CATEGORY</span> <span class="o">=</span> <span class="sh">"</span><span class="s">example</span><span class="sh">"</span>
+    <span class="n">RETURN_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,)</span>
+    <span class="n">FUNCTION</span> <span class="o">=</span> <span class="sh">"</span><span class="s">run</span><span class="sh">"</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">INPUT_TYPES</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">prompt</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">STRING</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">multiline</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">})}}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="nc">AsyncOpenAI</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">req_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span>
+                <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+                    <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+                    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+                    <span class="n">max_retries</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">int_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">_wait_for_interrupt_level_trigger</span><span class="p">())</span>
+
+            <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">({</span><span class="n">req_task</span><span class="p">,</span> <span class="n">int_task</span><span class="p">},</span>
+                                        <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">int_task</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+                <span class="c1"># 인터럽트가 먼저 옴: 네트워크 요청 즉시 취소
+</span>                <span class="n">req_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                    <span class="k">await</span> <span class="n">req_task</span>
+                <span class="c1"># 여기서 throw_exception_if_processing_interrupted()를 부르면
+</span>                <span class="c1"># 플래그를 '지워' 버려 다른 노드가 못 봄 → 쓰지 말자.
+</span>                <span class="k">raise</span> <span class="n">mm</span><span class="p">.</span><span class="nc">InterruptProcessingException</span><span class="p">()</span>
+
+            <span class="c1"># 요청이 먼저 끝남
+</span>            <span class="n">int_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                <span class="k">await</span> <span class="n">int_task</span>
+            <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">req_task</span>
+            <span class="nf">return </span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span><span class="p">.</span><span class="n">content</span><span class="p">,)</span>
+
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="c1"># 상위에서 태스크 자체를 취소한 경우
+</span>            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+                <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>포인트: <strong>노드 코드에서는<code class="language-plaintext highlighter-rouge">throw_exception_if_processing_interrupted()</code>를 호출하지 않는다.</strong><br />
+ 모든 실행 중 노드가 <code class="language-plaintext highlighter-rouge">processing_interrupted()</code>로 동시에 감지 → 각자 자신의 작업을 취소하고 <strong>직접</strong> <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 던진다.<br />
+ 이렇게 해야 플래그가 한 노드에 의해 먼저 ‘소비’되어 사라지는 일이 없다. (해당 함수가 플래그를 False로 만들고 예외를 던지는 동작은 소스에 명시돼 있음) <a href="https://huggingface.co/spideyrim/ComfyUI/blob/main/comfy/model_management.py">Hugging Face</a></p>
+</blockquote>
+
+<h2 id="2-스트리밍-루프도-동일-원리">2) 스트리밍 루프도 동일 원리</h2>
+
+<p>청크 읽기(<code class="language-plaintext highlighter-rouge">__anext__</code>)와 인터럽트 감시를 레이스시키되, 감시는 <code class="language-plaintext highlighter-rouge">processing_interrupted()</code>만 사용:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="k">def</span> <span class="nf">stream_chat_cancellable</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">stream</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">prompt</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">aiter</span> <span class="o">=</span> <span class="n">stream</span><span class="p">.</span><span class="nf">aiter_text</span><span class="p">()</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">next_chunk</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">aiter</span><span class="p">.</span><span class="nf">__anext__</span><span class="p">())</span>
+            <span class="n">int_task</span>   <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">_wait_for_interrupt_level_trigger</span><span class="p">())</span>
+
+            <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">({</span><span class="n">next_chunk</span><span class="p">,</span> <span class="n">int_task</span><span class="p">},</span>
+                                         <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">int_task</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+                <span class="n">next_chunk</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                    <span class="k">await</span> <span class="n">next_chunk</span>
+                <span class="k">await</span> <span class="n">stream</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+                <span class="k">raise</span> <span class="n">mm</span><span class="p">.</span><span class="nc">InterruptProcessingException</span><span class="p">()</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">chunks</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">next_chunk</span><span class="p">.</span><span class="nf">result</span><span class="p">())</span>
+            <span class="k">except</span> <span class="nb">StopAsyncIteration</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="n">int_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                    <span class="k">await</span> <span class="n">int_task</span>
+
+        <span class="k">return</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="왜-이게-안전한가-step-by-step">왜 이게 안전한가 (step-by-step)</h1>
+
+<ol>
+  <li>
+    <p>사용자가 UI에서 <strong>Interrupt 버튼</strong> → 서버가 <code class="language-plaintext highlighter-rouge">interrupt_current_processing(True)</code>로 전역 플래그를 킴.</p>
+  </li>
+  <li>
+    <p>각 노드의 감시 코루틴이 <strong>지우지 않는</strong> <code class="language-plaintext highlighter-rouge">processing_interrupted()</code>로 True를 감지. (동시에 여러 노드 OK) <a href="https://huggingface.co/spideyrim/ComfyUI/blob/main/comfy/model_management.py">Hugging Face</a></p>
+  </li>
+  <li>
+    <p>감지한 노드는 <strong>자기 네트워크 태스크를<code class="language-plaintext highlighter-rouge">cancel()</code></strong> 하고 <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 <strong>직접 raise</strong>.</p>
+  </li>
+  <li>
+    <p>실행기는 이 예외를 받아 워크플로를 “Processing interrupted”로 종료.</p>
+  </li>
+  <li>
+    <p>플래그 초기화는 <strong>코어 쪽</strong>(다음 실행 준비 타이밍)에 의해 처리되거나, 코어가 적절히 <code class="language-plaintext highlighter-rouge">throw_exception_if_processing_interrupted()</code>를 한 번만 호출해 소비함. (이 함수가 플래그를 지우는 동작은 소스에 명확) <a href="https://huggingface.co/spideyrim/ComfyUI/blob/main/comfy/model_management.py">Hugging Face</a></p>
+  </li>
+</ol>
+
+<blockquote>
+  <p>요약: <strong>노드 단에서는 ‘읽기(레벨 트리거)’만 하고, 지우는(엣지 소비) 일은 코어에게 맡겨라.</strong></p>
+</blockquote>
+
+<hr />
+
+<h1 id="추가-체크리스트">추가 체크리스트</h1>
+
+<ul>
+  <li>
+    <p>예외 처리에서 <code class="language-plaintext highlighter-rouge">CancelledError</code>는 <strong>절대 삼키지 말고 전파</strong> 하세요. (취소 감도가 떨어지는 대표 원인)</p>
+  </li>
+  <li>
+    <p>aiohttp/OpenAI 비동기는 태스크 취소 시 소켓을 닫고 <code class="language-plaintext highlighter-rouge">CancelledError</code>를 던집니다. 취소 후에는 <code class="language-plaintext highlighter-rouge">with suppress(asyncio.CancelledError): await task</code>로 <strong>정리까지</strong> 해 주세요.</p>
+  </li>
+  <li>
+    <p>장시간 블로킹/CPU 작업이 있으면 <code class="language-plaintext highlighter-rouge">processing_interrupted()</code>를 루프에 간간히 넣어 주세요. (블로킹이면 인터럽트가 늦게 반영)</p>
+  </li>
+</ul>
+
+<p>이대로 바꾸면 “동시에 도는 여러 노드 중 하나만 멈추는” 현상 없이, <strong>모두가 즉시 멈추는</strong> 동작이 됩니다.</p>
+
+<p class="chat--user">
+
+Exception을 여러 노드에서 뿌려도 돼?
+
+</p>
+
+<p>짧게 답하면: <strong>네, 여러 노드에서<code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 동시에(또는 거의 동시에) 던져도 됩니다.</strong><br />
+ComfyUI 실행기는 이 예외를 “취소 신호”로 취급하고 상위 실행 루프에서 잡아서 프롬프트 실행을 중단하도록 설계되어 있어요. 한 노드가 던지든, 여러 노드가 던지든 결과는 같고, 추가로 던져지는 예외들은 상위에서 동일하게 처리(로그만 남기고 무시)됩니다. 공식 문서에도 <em>“노드가 <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 던질 때 실행이 중단된다”</em>고 명시돼 있어요. <a href="https://docs.comfy.org/development/comfyui-server/comms_messages">ComfyUI 공식 문서</a></p>
+
+<p>조금 더 구체적으로, 단계별로 생각해보면:</p>
+
+<ol>
+  <li>
+    <p><strong>UI의 Stop(또는<code class="language-plaintext highlighter-rouge">/interrupt</code>) → 실행 중단 플래그 세트</strong><br />
+프론트엔드가 중단을 보내면 서버가 현재 워크플로 실행을 멈추는 라우트를 처리합니다. <a href="https://docs.comfy.org/development/comfyui-server/comms_routes?utm_source=chatgpt.com">ComfyUI 공식 문서</a></p>
+  </li>
+  <li>
+    <p><strong>노드단 체크 → 예외 발생</strong><br />
+각 노드(혹은 진행률 훅/대기 지점)에서 <code class="language-plaintext highlighter-rouge">throw_exception_if_processing_interrupted()</code>를 호출하면, 플래그가 켜져 있을 때 <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 던집니다. 이건 의도된 흐름이에요. 실행기는 이 예외를 특별취급하여 “Processing interrupted”로 처리하고 <code class="language-plaintext highlighter-rouge">execution_interrupted</code> 메시지를 브로드캐스트합니다. <a href="https://docs.comfy.org/development/comfyui-server/comms_messages">ComfyUI 공식 문서+1</a></p>
+  </li>
+  <li>
+    <p><strong>여러 노드가 동시에 던져도 문제 없음</strong><br />
+실행기는 노드 실행을 감싸는 상위 try/except에서 <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 잡아 “중단”으로 정리합니다. 다른 노드에서도 같은 예외가 연달아 터져도 동일하게 중단 처리로 흘러갑니다(중복 로그 정도만 생길 수 있음). <a href="https://github.com/comfyanonymous/ComfyUI/discussions/6766?utm_source=chatgpt.com">GitHub+1</a></p>
+  </li>
+</ol>
+
+<p>그래서 실무 팁은 이렇습니다:</p>
+
+<ul>
+  <li>
+    <p><strong>각 노드에서</strong> 진입 시점과 <strong>모든<code class="language-plaintext highlighter-rouge">await</code> 직후</strong>에<br />
+<code class="language-plaintext highlighter-rouge">throw_exception_if_processing_interrupted()</code>를 호출하세요.</p>
+  </li>
+  <li>외부 비동기 요청(예: <code class="language-plaintext highlighter-rouge">AsyncOpenAI</code>/<code class="language-plaintext highlighter-rouge">aiohttp</code>)이 있다면 이렇게 감싸면 안전합니다:
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">comfy.model_management</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">InterruptProcessingException</span><span class="p">,</span>
+    <span class="n">throw_exception_if_processing_interrupted</span><span class="p">,</span>
+<span class="p">)</span>
+    
+<span class="k">async</span> <span class="k">def</span> <span class="nf">FUNCTION</span><span class="p">(...):</span>
+    <span class="nf">throw_exception_if_processing_interrupted</span><span class="p">()</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># 예: 대기 전에 한 번 더 체크
+</span>        <span class="nf">throw_exception_if_processing_interrupted</span><span class="p">()</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(...))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">task</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">except</span> <span class="n">InterruptProcessingException</span><span class="p">:</span>
+        <span class="c1"># 외부 요청/태스크 정리
+</span>        <span class="k">if</span> <span class="n">task</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">task</span><span class="p">.</span><span class="nf">done</span><span class="p">():</span>
+            <span class="n">task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                <span class="k">await</span> <span class="n">task</span>
+        <span class="k">raise</span>  <span class="c1"># 꼭 재전파! (중단으로 인식)
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>절대</strong> <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 일반 <code class="language-plaintext highlighter-rouge">Exception</code>으로 삼켜서 리턴하지 마세요. 그러면 “중단”이 아닌 “실패”로 기록됩니다(로그와 UI 이벤트가 달라짐). <code class="language-plaintext highlighter-rouge">execution_interrupted</code> 이벤트는 이 예외가 그대로 올라갈 때만 발생합니다. <a href="https://docs.comfy.org/development/comfyui-server/comms_messages">ComfyUI 공식 문서</a></p>
+  </li>
+  <li>여러 노드가 동시에 실행될 수 있는 구조라면 <strong>각 노드가 독립적으로 같은 예외를 던지도록</strong> 두는 게 맞습니다. 중복 예외는 상위 실행기에서 정리되며, 전체 프롬프트는 한 번만 “중단”으로 마감됩니다. <a href="https://github.com/comfyanonymous/ComfyUI/discussions/6766?utm_source=chatgpt.com">GitHub</a></li>
+</ul>
+
+<p>덤: 브라우저 탭을 닫아도 중단이 발생할 수 있다는 이슈들이 있어요(탭을 닫으면 세션이 끊기며 인터럽트가 트리거). API/헤드리스로 돌릴 때는 이 점을 유의하세요. <a href="https://github.com/comfyanonymous/ComfyUI/issues/6713?utm_source=chatgpt.com">GitHub+1</a></p>
+
+<p>정리: <strong>여러 노드에서 마음 편히<code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 던지세요.</strong> 이것이 ComfyUI가 의도한 “즉시 중단” 메커니즘이고, 예외가 여러 개여도 상위 실행기에서 안전하게 처리됩니다.</p>
+
+<p class="chat--user">
+
+_wait_for_interrupt_level_trigger()에서 raise 안하고 그냥 return 하는건 어때 어차피 밖에서 raise 하잖아
+
+</p>
+
+<p>가능해. <strong><code class="language-plaintext highlighter-rouge">_wait_for_interrupt_level_trigger()</code>에서 <code class="language-plaintext highlighter-rouge">raise</code> 대신 <code class="language-plaintext highlighter-rouge">return</code></strong> 해도 원하는 “레이스(요청 vs 인터럽트)” 동작은 똑같이 만들어져. 실무적으로는 <em>헬퍼에서 예외 스택을 남기지 않으니</em> 로그가 더 깔끔해지는 장점도 있어.</p>
+
+<p>아래처럼 바꾸면 돼 — 단계별로 정리할게.</p>
+
+<hr />
+
+<h1 id="핵심-아이디어-step-by-step">핵심 아이디어 (step-by-step)</h1>
+
+<ol>
+  <li>
+    <p><strong>헬퍼는 “인터럽트를 감지하면 끝났다”는 신호만 반환</strong> 한다.</p>
+  </li>
+  <li>
+    <p><strong>바깥(콜러)</strong>는 <code class="language-plaintext highlighter-rouge">asyncio.wait(..., FIRST_COMPLETED)</code>로 <code class="language-plaintext highlighter-rouge">req_task</code>(네트워크 요청)와 <code class="language-plaintext highlighter-rouge">int_task</code>(인터럽트 감시) 중 <strong>먼저 끝난 쪽</strong> 을 확인한다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">int_task</code>가 먼저 끝났다면 <strong>요청 태스크를 cancel() 하고</strong> , 여기서 <strong>한 번만</strong> <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 던진다.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="헬퍼-return-버전-레벨-트리거-소비-안-함">헬퍼: return 버전 (레벨 트리거, 소비 안 함)</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">comfy.model_management</span> <span class="k">as</span> <span class="n">mm</span>
+
+<span class="c1"># sentinel: 결과를 명확히 구분하고 싶다면 씀
+</span><span class="n">INTERRUPTED</span> <span class="o">=</span> <span class="nf">object</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_wait_for_interrupt_level_trigger</span><span class="p">(</span><span class="n">poll_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">ComfyUI 인터럽트 플래그를 </span><span class="sh">'</span><span class="s">읽기만</span><span class="sh">'</span><span class="s"> 하다가 감지되면 반환.</span><span class="sh">"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">sleep_s</span> <span class="o">=</span> <span class="n">poll_ms</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">sleep_s</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mm</span><span class="p">.</span><span class="nf">processing_interrupted</span><span class="p">():</span>   <span class="c1"># ← 소비하지 않음(여러 노드 동시 감지 가능)
+</span>                <span class="k">return</span> <span class="n">INTERRUPTED</span>            <span class="c1"># 또는 True 같은 간단한 값
+</span>    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="c1"># 바깥에서 int_task를 취소하면 여기로 옴. 정리 후 전파.
+</span>        <span class="k">raise</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="비-스트리밍-요청에-적용">비-스트리밍 요청에 적용</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">contextlib</span>
+<span class="kn">import</span> <span class="n">comfy.model_management</span> <span class="k">as</span> <span class="n">mm</span>
+<span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">AsyncOpenAI</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_node</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="nc">AsyncOpenAI</span><span class="p">()</span>
+    <span class="n">req_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span>
+        <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+            <span class="n">max_retries</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">int_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">_wait_for_interrupt_level_trigger</span><span class="p">())</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">({</span><span class="n">req_task</span><span class="p">,</span> <span class="n">int_task</span><span class="p">},</span>
+                                     <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">int_task</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+            <span class="c1"># 1) 네트워크 요청 즉시 취소
+</span>            <span class="n">req_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                <span class="k">await</span> <span class="n">req_task</span>
+
+            <span class="c1"># 2) (선택) 감시 결과를 확인해도 됨
+</span>            <span class="n">_</span> <span class="o">=</span> <span class="n">int_task</span><span class="p">.</span><span class="nf">result</span><span class="p">()</span>  <span class="c1"># INTERRUPTED 같은 값
+</span>
+            <span class="c1"># 3) 여기서 단 한 번 raise
+</span>            <span class="k">raise</span> <span class="n">mm</span><span class="p">.</span><span class="nc">InterruptProcessingException</span><span class="p">()</span>
+
+        <span class="c1"># 요청이 먼저 끝남 → 감시 태스크 취소/정리
+</span>        <span class="n">int_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">int_task</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">req_task</span>
+        <span class="k">return</span> <span class="n">resp</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span><span class="p">.</span><span class="n">content</span>
+
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="c1"># 상위에서 이 노드 태스크 자체를 취소했을 때
+</span>        <span class="k">raise</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="스트리밍에도-동일-패턴">스트리밍에도 동일 패턴</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">contextlib</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">stream_node</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="nc">AsyncOpenAI</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">stream</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">prompt</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="n">aiter</span> <span class="o">=</span> <span class="n">stream</span><span class="p">.</span><span class="nf">aiter_text</span><span class="p">()</span>
+            <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">next_chunk</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">aiter</span><span class="p">.</span><span class="nf">__anext__</span><span class="p">())</span>
+                <span class="n">int_task</span>   <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">_wait_for_interrupt_level_trigger</span><span class="p">())</span>
+
+                <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">({</span><span class="n">next_chunk</span><span class="p">,</span> <span class="n">int_task</span><span class="p">},</span>
+                                             <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">int_task</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+                    <span class="c1"># 스트림/청크 읽기 취소 및 정리
+</span>                    <span class="n">next_chunk</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                    <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                        <span class="k">await</span> <span class="n">next_chunk</span>
+                    <span class="k">await</span> <span class="n">stream</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+                    <span class="c1"># 여기서 raise 한 번
+</span>                    <span class="k">raise</span> <span class="n">mm</span><span class="p">.</span><span class="nc">InterruptProcessingException</span><span class="p">()</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">chunks</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">next_chunk</span><span class="p">.</span><span class="nf">result</span><span class="p">())</span>
+                <span class="k">except</span> <span class="nb">StopAsyncIteration</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="n">int_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                    <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                        <span class="k">await</span> <span class="n">int_task</span>
+
+            <span class="k">return</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="return-방식의-장단점-요약">return 방식의 장단점 요약</h1>
+
+<ul>
+  <li>
+    <p>✅ <strong>장점</strong></p>
+
+    <ul>
+      <li>
+        <p>헬퍼 내부에서 예외 스택이 안 생겨 <strong>로그가 단정</strong> 해짐.</p>
+      </li>
+      <li>
+        <p>“누가 예외를 던지나?”가 <strong>콜러 한 지점</strong> 으로 모여 <strong>정책 일관성</strong> 확보.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>⚠️ <strong>주의</strong></p>
+
+    <ul>
+      <li>
+        <p>나중에 실수로 <code class="language-plaintext highlighter-rouge">int_task.result()</code>를 다른 곳에서 써버리면 <code class="language-plaintext highlighter-rouge">None</code>을 받아 헷갈릴 수 있어.<br />
+→ 위처럼 <strong><code class="language-plaintext highlighter-rouge">INTERRUPTED</code> 센티널</strong>을 반환해 명시적으로 구분하는 걸 추천.</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">req_task</code>가 먼저 끝난 케이스에서 <code class="language-plaintext highlighter-rouge">int_task</code>를 <strong>반드시 cancel &amp; await</strong>(suppress)로 정리해야 경고가 안 남아.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="여러-노드-동시-실행일-때의-의미">여러 노드 동시 실행일 때의 의미</h1>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">processing_interrupted()</code>를 <strong>읽기만</strong> 하는 이 방식은 <strong>모든 노드가 같은 인터럽트를 함께 감지</strong> 할 수 있게 해.</p>
+  </li>
+  <li>
+    <p>각 노드는 자기 요청을 끊고, <strong>콜러 한 군데에서만</strong> <code class="language-plaintext highlighter-rouge">InterruptProcessingException</code>을 던지면 됨(혹은 각 노드가 자기 컨텍스트에서 던져도 무방).</p>
+  </li>
+  <li>
+    <p>핵심은 <strong><code class="language-plaintext highlighter-rouge">throw_exception_if_processing_interrupted()</code>를 노드 내부 헬퍼에서 호출하지 않는 것</strong>(그 함수는 플래그를 지우므로 ‘첫 번째 소비’ 문제가 생김).</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>정리: <strong>응, 헬퍼에서<code class="language-plaintext highlighter-rouge">raise</code> 대신 <code class="language-plaintext highlighter-rouge">return</code> 해도 완전히 OK.</strong><br />
+오히려 깔끔할 때가 많고, 위 패턴대로 센티널을 반환해주면 실수도 줄일 수 있어.</p>
+
         
       </section>
 
@@ -646,7 +1083,7 @@ stop_event를 넣는다는게 뭔지 모르겠어. comfyui 내부적으로 inter
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-10T10:33:23+09:00">2025-10-10</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-10T11:53:02+09:00">2025-10-10</time></p>
 
       </footer>
 
@@ -655,10 +1092,10 @@ stop_event를 넣는다는게 뭔지 모르겠어. comfyui 내부적으로 inter
       
   <nav class="pagination">
     
-      <a href="/comfyui/async-request/" class="pagination--pager" title="Async request 취소 처리">Previous</a>
+      <a href="/python/python-async-subprocess/" class="pagination--pager" title="비동기 서브프로세스 실행">Previous</a>
     
     
-      <a href="/python/vscode-python-runtime-path/" class="pagination--pager" title="VS Code 경고 해결법">Next</a>
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
     
   </nav>
 
@@ -700,7 +1137,7 @@ stop_event를 넣는다는게 뭔지 모르겠어. comfyui 내부적으로 inter
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-10T11:43:06+09:00">2025-10-10</time>
+        <time datetime="2025-10-10T11:53:08+09:00">2025-10-10</time>
       </span>
     
 
