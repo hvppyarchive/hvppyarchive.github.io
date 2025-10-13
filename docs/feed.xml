@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-13T15:12:03+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-13T15:12:03+09:00</published><updated>2025-10-13T15:12:03+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-13T15:34:46+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-13T15:34:46+09:00</published><updated>2025-10-13T15:34:46+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">IBM LSF Python 패키지 개발</title><link href="https://hvppyarchive.github.io/python/python-lsf-package/" rel="alternate" type="text/html" title="IBM LSF Python 패키지 개발" /><published>2025-10-13T15:11:57+09:00</published><updated>2025-10-13T15:11:57+09:00</updated><id>https://hvppyarchive.github.io/python/python-lsf-package</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-lsf-package/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">IBM LSF Python 패키지 개발</title><link href="https://hvppyarchive.github.io/python/python-lsf-package/" rel="alternate" type="text/html" title="IBM LSF Python 패키지 개발" /><published>2025-10-13T15:34:40+09:00</published><updated>2025-10-13T15:34:40+09:00</updated><id>https://hvppyarchive.github.io/python/python-lsf-package</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-lsf-package/"><![CDATA[<p class="chat--user">
 
 IBM LSF 알아?
 
@@ -666,7 +666,701 @@ bsub <span class="nt">-q</span> normal <span class="nt">-J</span> train <span cl
 <hr />
 
 <p>필요하시면 위 코드를 <strong>여러 파일 구조(패키지화 + 로깅/리트라이/치밍 등)</strong> 로 정리해 드릴 수 있어요.<br />
-혹시 지금 쓰시는 스크립트가 있다면, 핵심 호출부만 이 <code class="language-plaintext highlighter-rouge">LsfClient</code>로 감싸서 마이그레이션 예시도 만들어 드릴게요.</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Asyncio 사용법 설명</title><link href="https://hvppyarchive.github.io/python/python-asyncio-basic/" rel="alternate" type="text/html" title="Asyncio 사용법 설명" /><published>2025-10-13T14:06:20+09:00</published><updated>2025-10-13T14:06:20+09:00</updated><id>https://hvppyarchive.github.io/python/python-asyncio-basic</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-asyncio-basic/"><![CDATA[<p class="chat--user">
+혹시 지금 쓰시는 스크립트가 있다면, 핵심 호출부만 이 <code class="language-plaintext highlighter-rouge">LsfClient</code>로 감싸서 마이그레이션 예시도 만들어 드릴게요.</p>
+
+<p class="chat--user">
+
+추가 예시가 필요해. 만약 코드 변경이 필요하면 더 변경해도 돼. 1. 유저가 작업을 취소하면 깔끔하게 모두 취소되어야 함.(submit 작업 취소는 is_interrupted() 함수가 True를 리턴하는 경우임. 이를 polling하며 체크해야함. 작업 취소시 현재 요청한 job들은 모두 깔끔하게 취소해야함(bsub 프로세스를 중간에 끊을 경우 애매하게 bjob만 살아있을 수 있으므로 시작된 bsub은 끝날때까지 기다린 후 확실하게 죽이자) 2. bjobs 캐시는 Storage 캐시와 Memory Cache를 2중으로 사용하여 여러 프로세스에서도 bjobs 사용 최소화(프로세스1에서 만든 파일을 전혀 프로세스2에서도 사용 가능 - bjobs는 항상 전체 job에 대해 수행하고 리턴만 요청된 job_ids 기준으로 리턴) 3. LSF command가 아닌 command도 요청될 수 있음. 이 경우 그냥 실행만 하면 되며 에러를 뿌리진 말 것(boolean argument 받아서 에러를 raise 할지 선택하도록 하자)
+
+</p>
+
+<p>좋다! 요구 3가지를 모두 반영해서 코드를 <strong>업데이트(v2)</strong> 하고, 바로 써먹을 <strong>추가 예시</strong> 를 붙였습니다.<br />
+(파이썬 3.10+ / Linux 가정. 외부 의존성 없음.)</p>
+
+<hr />
+
+<h1 id="무엇이-달라졌나-step-by-step">무엇이 달라졌나 (step-by-step)</h1>
+
+<ol>
+  <li>
+    <p><strong>취소 플로우 완성</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">submit_many_with_cancel(...)</code> 제공: <code class="language-plaintext highlighter-rouge">is_interrupted()</code>를 주기적으로 폴링.</p>
+      </li>
+      <li>
+        <p>인터럽트 발생 시 <strong>새 제출은 중단</strong> , 이미 시작된 <code class="language-plaintext highlighter-rouge">bsub</code>는 <strong>끝까지 기다려 Job ID 확보 → 그 ID 전부 bkill</strong> 로 정리.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>2중 캐시(bjobs)</strong></p>
+
+    <ul>
+      <li>
+        <p><strong>메모리 캐시</strong> + <strong>디스크 캐시(프로세스 간 공유)</strong>.</p>
+      </li>
+      <li>
+        <p>디스크 캐시는 <code class="language-plaintext highlighter-rouge">fcntl.flock</code>으로 <strong>잠금</strong> , 원자적 파일 쓰기(임시파일→rename).</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">bjobs</code>는 항상 <strong>전체(현재 사용자) 조회</strong> 로 캐시를 갱신하고, 호출자는 <code class="language-plaintext highlighter-rouge">job_ids</code>로 필터만 함 → 여러 프로세스에서 <strong>호출 수 최소화</strong>.</p>
+      </li>
+      <li>
+        <p>TTL과 최소 호출 간격을 <strong>프로세스 내</strong> 에선 지키고, <strong>프로세스 간</strong> 에는 디스크 캐시의 TTL로 조절.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>일반 커맨드 실행 지원</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">exec_command(...)</code> 추가: LSF가 아닌 커맨드도 실행 가능.</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">raise_on_error: bool</code>로 예외 발생 여부 선택(기본: False → 에러여도 예외 미발생).</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="코드-lsf_async_v2py">코드 (lsf_async_v2.py)</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># lsf_async_v2.py
+</span><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">contextlib</span>
+<span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">re</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="n">tempfile</span>
+<span class="kn">import</span> <span class="n">getpass</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="c1"># --- POSIX file lock (for multi-process disk cache) ---
+</span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="n">fcntl</span>  <span class="c1"># Linux/Unix
+</span>    <span class="k">def</span> <span class="nf">_lock_file</span><span class="p">(</span><span class="n">fp</span><span class="p">):</span>
+        <span class="n">fcntl</span><span class="p">.</span><span class="nf">flock</span><span class="p">(</span><span class="n">fp</span><span class="p">.</span><span class="nf">fileno</span><span class="p">(),</span> <span class="n">fcntl</span><span class="p">.</span><span class="n">LOCK_EX</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_unlock_file</span><span class="p">(</span><span class="n">fp</span><span class="p">):</span>
+        <span class="n">fcntl</span><span class="p">.</span><span class="nf">flock</span><span class="p">(</span><span class="n">fp</span><span class="p">.</span><span class="nf">fileno</span><span class="p">(),</span> <span class="n">fcntl</span><span class="p">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>  <span class="c1"># pragma: no cover (Windows fallback: best-effort no lock)
+</span>    <span class="k">def</span> <span class="nf">_lock_file</span><span class="p">(</span><span class="n">fp</span><span class="p">):</span>  <span class="c1"># type: ignore
+</span>        <span class="k">return</span>
+    <span class="k">def</span> <span class="nf">_unlock_file</span><span class="p">(</span><span class="n">fp</span><span class="p">):</span>  <span class="c1"># type: ignore
+</span>        <span class="k">return</span>
+
+<span class="n">_JOBID_RE</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">compile</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">Job\s*&lt;(\d+)&gt;</span><span class="sh">"</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="nb">RuntimeError</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">returncode</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stdout</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">stderr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Command failed: </span><span class="si">{</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="si">}</span><span class="s"> (rc=</span><span class="si">{</span><span class="n">returncode</span><span class="si">}</span><span class="s">)</span><span class="se">\n</span><span class="si">{</span><span class="n">stderr</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="n">returncode</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stdout</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">stderr</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+               <span class="o">*</span><span class="p">,</span>
+               <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+               <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">Run a command asynchronously and return (stdout, stderr, returncode).</span><span class="sh">"""</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">cmd</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="n">stderr</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out_b</span><span class="p">,</span> <span class="n">err_b</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">ProcessLookupError</span><span class="p">):</span>
+            <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+        <span class="k">raise</span>
+    <span class="k">return</span> <span class="n">out_b</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span> <span class="n">err_b</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span>
+
+<span class="k">class</span> <span class="nc">LsfClient</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    Async LSF CLI wrapper with:
+      - concurrent bsub/bkill
+      - cached (mem+disk)/rate-limited bjobs (full snapshot per user)
+      - generic command execution
+      - cooperative cancellation for submit batches
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                 <span class="o">*</span><span class="p">,</span>
+                 <span class="n">bsub</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">bsub</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="n">bkill</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">bkill</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="n">bjobs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">bjobs</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="n">max_concurrent_cli</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+                 <span class="n">bjobs_ttl_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+                 <span class="n">bjobs_min_interval_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">disk_cache_ttl_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+                 <span class="n">cache_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                 <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">bsub</span><span class="sh">"</span><span class="p">:</span> <span class="n">bsub</span><span class="p">,</span> <span class="sh">"</span><span class="s">bkill</span><span class="sh">"</span><span class="p">:</span> <span class="n">bkill</span><span class="p">,</span> <span class="sh">"</span><span class="s">bjobs</span><span class="sh">"</span><span class="p">:</span> <span class="n">bjobs</span><span class="p">}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cli_sem</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nc">Semaphore</span><span class="p">(</span><span class="n">max_concurrent_cli</span><span class="p">)</span>
+
+        <span class="c1"># Cache (mem) &amp; in-flight tracking (per-process)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_ttl</span> <span class="o">=</span> <span class="n">bjobs_ttl_sec</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_min_interval</span> <span class="o">=</span> <span class="n">bjobs_min_interval_sec</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_memcache</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Future</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_last_call_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Disk cache (multi-process)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_disk_ttl</span> <span class="o">=</span> <span class="n">disk_cache_ttl_sec</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_user</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">LSF_USER</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">getpass</span><span class="p">.</span><span class="nf">getuser</span><span class="p">()</span>
+        <span class="n">base_cache</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">XDG_CACHE_HOME</span><span class="sh">"</span><span class="p">)</span>
+                      <span class="ow">or</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">expanduser</span><span class="p">(</span><span class="sh">"</span><span class="s">~</span><span class="sh">"</span><span class="p">),</span> <span class="sh">"</span><span class="s">.cache</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cache_dir</span> <span class="o">=</span> <span class="n">cache_dir</span> <span class="ow">or</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">base_cache</span><span class="p">,</span> <span class="sh">"</span><span class="s">lsf_async</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_cache_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_cache_dir</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">bjobs_all_</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">_user</span><span class="si">}</span><span class="s">.json</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_lock_path</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache_path</span> <span class="o">+</span> <span class="sh">"</span><span class="s">.lock</span><span class="sh">"</span>
+
+        <span class="c1"># Locale-stable env
+</span>        <span class="n">base_env</span> <span class="o">=</span> <span class="nf">dict</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">)</span>
+        <span class="n">base_env</span><span class="p">.</span><span class="nf">setdefault</span><span class="p">(</span><span class="sh">"</span><span class="s">LC_ALL</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">base_env</span><span class="p">.</span><span class="nf">setdefault</span><span class="p">(</span><span class="sh">"</span><span class="s">LANG</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">base_env</span> <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="bp">None</span> <span class="nf">else </span><span class="p">(</span><span class="n">base_env</span> <span class="o">|</span> <span class="n">env</span><span class="p">)</span>
+
+    <span class="c1"># ---------- helpers ----------
+</span>    <span class="k">async</span> <span class="k">def</span> <span class="nf">_guarded_run</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_cli_sem</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">env</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_now</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_mem_fresh</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_memcache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">ts</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">item</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nf">_now</span><span class="p">()</span> <span class="o">-</span> <span class="n">ts</span> <span class="o">&lt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_ttl</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="c1"># ---------- public API ----------
+</span>    <span class="k">async</span> <span class="k">def</span> <span class="nf">exec_command</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                           <span class="n">command</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+                           <span class="o">*</span><span class="p">,</span>
+                           <span class="n">raise_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                           <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">Run any command (not necessarily LSF).</span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># shell-ish execution via /bin/sh -c
+</span>            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">/bin/sh</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-lc</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">command</span><span class="p">))</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">raise_on_error</span> <span class="ow">and</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                     <span class="n">command</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+                     <span class="o">*</span><span class="p">,</span>
+                     <span class="n">queue</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">job_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">n_cpus</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">rusage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">out_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">err_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">extra_bsub_args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">,</span>
+                     <span class="n">raise_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">
+        Submit a job via bsub and return job id; returns None if failed and raise_on_error=False.
+        </span><span class="sh">"""</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="sh">"</span><span class="s">bsub</span><span class="sh">"</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">queue</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-q</span><span class="sh">"</span><span class="p">,</span> <span class="n">queue</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">job_name</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-J</span><span class="sh">"</span><span class="p">,</span> <span class="n">job_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">n_cpus</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-n</span><span class="sh">"</span><span class="p">,</span> <span class="nf">str</span><span class="p">(</span><span class="n">n_cpus</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">rusage</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-R</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">rusage[</span><span class="si">{</span><span class="n">rusage</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">out_file</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-oo</span><span class="sh">"</span><span class="p">,</span> <span class="n">out_file</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">err_file</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-eo</span><span class="sh">"</span><span class="p">,</span> <span class="n">err_file</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cwd</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-cwd</span><span class="sh">"</span><span class="p">,</span> <span class="n">cwd</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">extra_bsub_args</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="nf">list</span><span class="p">(</span><span class="n">extra_bsub_args</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Treat sequence as a single shell line (safe: args joined with spaces)
+</span>            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s"> </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">command</span><span class="p">))]</span>
+
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">raise_on_error</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="n">_JOBID_RE</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">raise_on_error</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Cannot parse job id from bsub output:</span><span class="se">\n</span><span class="si">{</span><span class="n">stdout</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">stderr</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="nf">int</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="nf">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                   <span class="n">job_ids</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
+                   <span class="o">*</span><span class="p">,</span>
+                   <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">,</span>
+                   <span class="n">raise_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">
+        Kill one or many jobs with a single bkill call.
+        Returns (stdout, stderr, rc). Does not raise if raise_on_error=False.
+        </span><span class="sh">"""</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">job_ids</span><span class="p">))]</span> <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ids</span><span class="p">:</span>
+            <span class="nf">return </span><span class="p">(</span><span class="sh">""</span><span class="p">,</span> <span class="sh">""</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="sh">"</span><span class="s">bkill</span><span class="sh">"</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-f</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="n">ids</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">raise_on_error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span>
+
+    <span class="c1"># ---------- bjobs (mem+disk cache; full snapshot per user) ----------
+</span>    <span class="k">def</span> <span class="nf">_disk_cache_read</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache_path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache_path</span><span class="p">,</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+                <span class="c1"># no need to lock for read; readers are okay to read slightly stale
+</span>                <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+            <span class="n">ts</span> <span class="o">=</span> <span class="n">payload</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">ts</span><span class="sh">"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nf">_now</span><span class="p">()</span> <span class="o">-</span> <span class="n">ts</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">_disk_ttl</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">None</span>
+            <span class="k">return</span> <span class="p">{</span><span class="nf">int</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">payload</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">data</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}).</span><span class="nf">items</span><span class="p">()}</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_disk_cache_write</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_cache_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="c1"># Acquire lock to ensure single writer
+</span>        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_bjobs_lock_path</span><span class="p">,</span> <span class="sh">"</span><span class="s">a+</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">lockfp</span><span class="p">:</span>
+            <span class="nf">_lock_file</span><span class="p">(</span><span class="n">lockfp</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tmp_fd</span><span class="p">,</span> <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="p">.</span><span class="nf">mkstemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="sh">"</span><span class="s">bjobs_</span><span class="sh">"</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="sh">"</span><span class="s">.json</span><span class="sh">"</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_cache_dir</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">os</span><span class="p">.</span><span class="nf">fdopen</span><span class="p">(</span><span class="n">tmp_fd</span><span class="p">,</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmpfp</span><span class="p">:</span>
+                        <span class="n">json</span><span class="p">.</span><span class="nf">dump</span><span class="p">({</span><span class="sh">"</span><span class="s">ts</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_now</span><span class="p">(),</span> <span class="sh">"</span><span class="s">data</span><span class="sh">"</span><span class="p">:</span> <span class="n">data</span><span class="p">},</span> <span class="n">tmpfp</span><span class="p">)</span>
+                        <span class="n">tmpfp</span><span class="p">.</span><span class="nf">flush</span><span class="p">()</span>
+                        <span class="n">os</span><span class="p">.</span><span class="nf">fsync</span><span class="p">(</span><span class="n">tmpfp</span><span class="p">.</span><span class="nf">fileno</span><span class="p">())</span>
+                    <span class="n">os</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache_path</span><span class="p">)</span>  <span class="c1"># atomic
+</span>                <span class="k">finally</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">FileNotFoundError</span><span class="p">):</span>
+                        <span class="n">os</span><span class="p">.</span><span class="nf">remove</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="nf">_unlock_file</span><span class="p">(</span><span class="n">lockfp</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_fetch_bjobs_all</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">include_done</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="c1"># Rate-limit (per-process)
+</span>        <span class="n">since</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_now</span><span class="p">()</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_last_call_ts</span>
+        <span class="k">if</span> <span class="n">since</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_min_interval</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_bjobs_min_interval</span> <span class="o">-</span> <span class="n">since</span><span class="p">)</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="sh">"</span><span class="s">bjobs</span><span class="sh">"</span><span class="p">],</span> <span class="sh">"</span><span class="s">-noheader</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">-u</span><span class="sh">"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">_user</span><span class="p">,</span> <span class="sh">"</span><span class="s">-o</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">jobid stat exit_code queue exec_host</span><span class="sh">"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">include_done</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-a</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_last_call_ts</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_now</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+
+        <span class="n">result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stdout</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="nf">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">jid</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">exit_code</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">exec_host</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">jid_i</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">jid</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">jid_i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">stat</span><span class="sh">"</span><span class="p">:</span> <span class="n">stat</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">exit_code</span><span class="sh">"</span><span class="p">:</span> <span class="bp">None</span> <span class="k">if</span> <span class="n">exit_code</span> <span class="o">==</span> <span class="sh">"</span><span class="s">-</span><span class="sh">"</span> <span class="k">else</span> <span class="n">exit_code</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">queue</span><span class="sh">"</span><span class="p">:</span> <span class="n">queue</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">exec_host</span><span class="sh">"</span><span class="p">:</span> <span class="n">exec_host</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_status_all_cached</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                                 <span class="o">*</span><span class="p">,</span>
+                                 <span class="n">include_done</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                                 <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">bjobs_all|</span><span class="si">{</span><span class="sh">'</span><span class="s">-a</span><span class="sh">'</span> <span class="k">if</span> <span class="n">include_done</span> <span class="k">else</span> <span class="sh">''</span><span class="si">}</span><span class="s">|user=</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">_user</span><span class="si">}</span><span class="sh">"</span>
+
+        <span class="c1"># 1) mem cache
+</span>        <span class="n">mem</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_mem_fresh</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mem</span>
+
+        <span class="c1"># 2) in-flight (per-process single-flight)
+</span>        <span class="n">inflight</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inflight</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">inflight</span>
+
+        <span class="n">fut</span><span class="p">:</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Future</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">().</span><span class="nf">create_future</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">fut</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># 3) disk cache
+</span>            <span class="n">disk_data</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_disk_cache_read</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">disk_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c1"># also refresh mem cache copy for TTL window
+</span>                <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_memcache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_now</span><span class="p">(),</span> <span class="n">disk_data</span><span class="p">)</span>
+                <span class="n">fut</span><span class="p">.</span><span class="nf">set_result</span><span class="p">(</span><span class="n">disk_data</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">disk_data</span>
+
+            <span class="c1"># 4) fetch &amp; write both caches (single writer guarded by process-level lock)
+</span>            <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_fetch_bjobs_all</span><span class="p">(</span><span class="n">include_done</span><span class="o">=</span><span class="n">include_done</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_memcache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_now</span><span class="p">(),</span> <span class="n">data</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_disk_cache_write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">fut</span><span class="p">.</span><span class="nf">set_result</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">fut</span><span class="p">.</span><span class="nf">set_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">.</span><span class="nf">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                     <span class="n">job_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="o">*</span><span class="p">,</span>
+                     <span class="n">include_done</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                     <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="sh">"""</span><span class="s">Return per-job map using FULL-SNAPSHOT cache; filters to job_ids if provided.</span><span class="sh">"""</span>
+        <span class="n">all_map</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_status_all_cached</span><span class="p">(</span><span class="n">include_done</span><span class="o">=</span><span class="n">include_done</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">job_ids</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">all_map</span>
+        <span class="n">wanted</span> <span class="o">=</span> <span class="p">{</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">all_map</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{})</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">wanted</span><span class="p">}</span>
+
+    <span class="c1"># ---------- high-level: submit many with cooperative cancellation ----------
+</span>    <span class="k">async</span> <span class="k">def</span> <span class="nf">submit_many_with_cancel</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">queue</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">job_name_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">n_cpus</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">rusage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">out_file_template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>   <span class="c1"># e.g. "job.%J.out"
+</span>        <span class="n">err_file_template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>   <span class="c1"># e.g. "job.%J.err"
+</span>        <span class="n">extra_bsub_args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">is_interrupted</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">bool</span><span class="p">],</span>
+        <span class="n">poll_interval_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">max_in_flight_submissions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">kill_force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">kill_raise_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">submit_timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">,</span>
+        <span class="n">submit_raise_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">
+        Submit many commands cooperatively. If is_interrupted() becomes True:
+          - stop launching new bsub
+          - wait for in-flight bsub to finish to collect job IDs
+          - bkill all collected job IDs (force if kill_force)
+        Returns:
+          {
+            </span><span class="sh">"</span><span class="s">submitted_job_ids</span><span class="sh">"</span><span class="s">: [int, ...],
+            </span><span class="sh">"</span><span class="s">interrupted</span><span class="sh">"</span><span class="s">: bool,
+            </span><span class="sh">"</span><span class="s">num_submitted</span><span class="sh">"</span><span class="s">: int,
+            </span><span class="sh">"</span><span class="s">num_failed</span><span class="sh">"</span><span class="s">: int
+          }
+        </span><span class="sh">"""</span>
+        <span class="n">submitted</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">failures</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">in_flight</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">asyncio</span><span class="p">.</span><span class="n">Task</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+
+        <span class="n">max_in_flight</span> <span class="o">=</span> <span class="n">max_in_flight_submissions</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="n">_cli_sem</span><span class="p">.</span><span class="n">_value</span>  <span class="c1"># heuristic
+</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">launch_one</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">jname</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">job_name_prefix</span><span class="si">}{</span><span class="n">idx</span><span class="si">}</span><span class="sh">"</span> <span class="k">if</span> <span class="n">job_name_prefix</span> <span class="k">else</span> <span class="bp">None</span>
+            <span class="n">outf</span> <span class="o">=</span> <span class="p">(</span><span class="n">out_file_template</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">errf</span> <span class="o">=</span> <span class="p">(</span><span class="n">err_file_template</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">jid</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span>
+                <span class="n">cmd</span><span class="p">,</span>
+                <span class="n">queue</span><span class="o">=</span><span class="n">queue</span><span class="p">,</span>
+                <span class="n">job_name</span><span class="o">=</span><span class="n">jname</span><span class="p">,</span>
+                <span class="n">n_cpus</span><span class="o">=</span><span class="n">n_cpus</span><span class="p">,</span>
+                <span class="n">rusage</span><span class="o">=</span><span class="n">rusage</span><span class="p">,</span>
+                <span class="n">out_file</span><span class="o">=</span><span class="n">outf</span><span class="p">,</span>
+                <span class="n">err_file</span><span class="o">=</span><span class="n">errf</span><span class="p">,</span>
+                <span class="n">extra_bsub_args</span><span class="o">=</span><span class="n">extra_bsub_args</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="n">submit_timeout</span><span class="p">,</span>
+                <span class="n">raise_on_error</span><span class="o">=</span><span class="n">submit_raise_on_error</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">jid</span>
+
+        <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">commands</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">while</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">total</span> <span class="ow">or</span> <span class="n">in_flight</span><span class="p">:</span>
+                <span class="c1"># Launch up to concurrency window
+</span>                <span class="k">while</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">total</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">in_flight</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_in_flight</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">is_interrupted</span><span class="p">():</span>
+                    <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">launch_one</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">commands</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
+                    <span class="n">in_flight</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+                    <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="c1"># If interrupted, stop launching new; still drain in-flight to collect jobids
+</span>                <span class="k">if</span> <span class="n">in_flight</span><span class="p">:</span>
+                    <span class="n">done</span><span class="p">,</span> <span class="n">pending</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">(</span><span class="n">in_flight</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">poll_interval_sec</span><span class="p">,</span> <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+                        <span class="n">in_flight</span><span class="p">.</span><span class="nf">discard</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">jid</span> <span class="o">=</span> <span class="k">await</span> <span class="n">t</span>
+                            <span class="k">if</span> <span class="n">jid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                                <span class="n">submitted</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">jid</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">failures</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                            <span class="n">failures</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="c1"># continue loop
+</span>                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># nothing in flight, just small pause (or will loop to launch more)
+</span>                    <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">poll_interval_sec</span><span class="p">)</span>
+
+                <span class="c1"># If interrupted, we simply stop launching; draining continues above
+</span>                <span class="c1"># (no action needed here)
+</span>        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># Drain any remaining in-flight submissions to harvest jobids (do not cancel bsub)
+</span>            <span class="k">if</span> <span class="n">in_flight</span><span class="p">:</span>
+                <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">(</span><span class="n">in_flight</span><span class="p">,</span> <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">ALL_COMPLETED</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">jid</span> <span class="o">=</span> <span class="k">await</span> <span class="n">t</span>
+                        <span class="k">if</span> <span class="n">jid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                            <span class="n">submitted</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">jid</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">failures</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                        <span class="n">failures</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">interrupted</span> <span class="o">=</span> <span class="nf">is_interrupted</span><span class="p">()</span>
+
+        <span class="c1"># On interruption, clean up all submitted jobs
+</span>        <span class="k">if</span> <span class="n">interrupted</span> <span class="ow">and</span> <span class="n">submitted</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">kill</span><span class="p">(</span><span class="n">submitted</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">kill_force</span><span class="p">,</span> <span class="n">raise_on_error</span><span class="o">=</span><span class="n">kill_raise_on_error</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">submitted_job_ids</span><span class="sh">"</span><span class="p">:</span> <span class="n">submitted</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">interrupted</span><span class="sh">"</span><span class="p">:</span> <span class="n">interrupted</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">num_submitted</span><span class="sh">"</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">submitted</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">num_failed</span><span class="sh">"</span><span class="p">:</span> <span class="n">failures</span><span class="p">,</span>
+        <span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="사용-예시">사용 예시</h1>
+
+<h2 id="1-유저가-취소-시-모두-정리-인터럽트-토큰-폴링">1) “유저가 취소” 시 모두 정리 (인터럽트 토큰 폴링)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">lsf_async_v2</span> <span class="kn">import</span> <span class="n">LsfClient</span>
+
+<span class="c1"># 예: 2초 뒤 인터럽트가 True가 되는 토큰
+</span><span class="k">class</span> <span class="nc">Token</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
+    <span class="k">def</span> <span class="nf">is_interrupted</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="nf">return </span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">t0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">delay</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">lsf</span> <span class="o">=</span> <span class="nc">LsfClient</span><span class="p">(</span>
+        <span class="n">max_concurrent_cli</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">bjobs_ttl_sec</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>
+        <span class="n">bjobs_min_interval_sec</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="n">disk_cache_ttl_sec</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>
+        <span class="n">cache_dir</span><span class="o">=</span><span class="sh">"</span><span class="s">/dev/shm/lsf_cache</span><span class="sh">"</span>  <span class="c1"># 여러 프로세스 공유 경로
+</span>    <span class="p">)</span>
+
+    <span class="n">cmds</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="sh">'</span><span class="s">echo </span><span class="sh">"</span><span class="s">job</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s"> start</span><span class="sh">"</span><span class="s">; sleep </span><span class="si">{</span><span class="mi">3</span><span class="o">+</span><span class="n">i</span><span class="o">%</span><span class="mi">3</span><span class="si">}</span><span class="s">; echo </span><span class="sh">"</span><span class="s">job</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s"> end</span><span class="sh">"'</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)]</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">submit_many_with_cancel</span><span class="p">(</span>
+        <span class="n">cmds</span><span class="p">,</span>
+        <span class="n">queue</span><span class="o">=</span><span class="sh">"</span><span class="s">normal</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">job_name_prefix</span><span class="o">=</span><span class="sh">"</span><span class="s">bulk_</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">n_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">rusage</span><span class="o">=</span><span class="sh">"</span><span class="s">mem=1024</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">out_file_template</span><span class="o">=</span><span class="sh">"</span><span class="s">bulk.%J.out</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">is_interrupted</span><span class="o">=</span><span class="nc">Token</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="mf">2.0</span><span class="p">).</span><span class="n">is_interrupted</span><span class="p">,</span>  <span class="c1"># 2초 뒤 취소
+</span>        <span class="n">poll_interval_sec</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">max_in_flight_submissions</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>     <span class="c1"># 동시에 bsub 최대 6개
+</span>        <span class="n">kill_force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>                  <span class="c1"># 취소 시 강제 종료
+</span>        <span class="n">kill_raise_on_error</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>        <span class="c1"># bkill 에러 무시
+</span>        <span class="n">submit_timeout</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
+        <span class="n">submit_raise_on_error</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>      <span class="c1"># bsub 실패 시 계속 진행
+</span>    <span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RESULT:</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p><strong>동작 요약</strong></p>
+
+<ul>
+  <li>
+    <p>2초 동안만 제출을 진행 → 그 전에 시작한 <code class="language-plaintext highlighter-rouge">bsub</code>는 끝까지 기다려 <strong>Job ID 수집</strong> → 수집된 ID 전부 <code class="language-plaintext highlighter-rouge">bkill -f</code>로 종료.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bsub</code> 프로세스를 <strong>중간에 kill 하지 않기</strong> 때문에 “애매하게 bjob만 살아있는” 상황을 피합니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="2-멀티프로세스에서-bjobs-최소화-디스크-캐시-공유">2) 멀티프로세스에서 <code class="language-plaintext highlighter-rouge">bjobs</code> 최소화 (디스크 캐시 공유)</h2>
+
+<p><strong>프로세스 A / B</strong> 에서 동일한 <code class="language-plaintext highlighter-rouge">cache_dir</code>를 사용하면 디스크 캐시를 공유합니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># process_A.py
+</span><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">lsf_async_v2</span> <span class="kn">import</span> <span class="n">LsfClient</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">lsf</span> <span class="o">=</span> <span class="nc">LsfClient</span><span class="p">(</span><span class="n">cache_dir</span><span class="o">=</span><span class="sh">"</span><span class="s">/dev/shm/lsf_cache</span><span class="sh">"</span><span class="p">,</span> <span class="n">bjobs_ttl_sec</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">disk_cache_ttl_sec</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
+    <span class="c1"># A 프로세스가 먼저 전체 스냅샷을 캐싱
+</span>    <span class="n">all_status</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">status</span><span class="p">()</span>  <span class="c1"># 내부적으로 bjobs -a -u &lt;user&gt; 1회
+</span>    <span class="c1"># 이후 특정 job_ids만 골라 쓰기
+</span>    <span class="n">subset</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">status</span><span class="p">([</span><span class="mi">123</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">125</span><span class="p">])</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">all_status</span><span class="p">),</span> <span class="n">subset</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># process_B.py
+</span><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">lsf_async_v2</span> <span class="kn">import</span> <span class="n">LsfClient</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">lsf</span> <span class="o">=</span> <span class="nc">LsfClient</span><span class="p">(</span><span class="n">cache_dir</span><span class="o">=</span><span class="sh">"</span><span class="s">/dev/shm/lsf_cache</span><span class="sh">"</span><span class="p">,</span> <span class="n">bjobs_ttl_sec</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">disk_cache_ttl_sec</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
+    <span class="c1"># B 프로세스는 디스크 캐시가 **신선하면** bjobs 호출 없이 그대로 사용
+</span>    <span class="n">subset</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">status</span><span class="p">([</span><span class="mi">20001</span><span class="p">,</span> <span class="mi">20002</span><span class="p">,</span> <span class="mi">20003</span><span class="p">])</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>동작 포인트:</p>
+
+<ul>
+  <li>
+    <p>A가 최신 스냅샷을 만들면 B는 <strong>디스크 캐시만 읽고</strong> 필터링해 반환 → <code class="language-plaintext highlighter-rouge">bjobs</code> 호출 <strong>0회</strong>.</p>
+  </li>
+  <li>
+    <p>TTL(예: 4초) 이내에는 양쪽 모두 <code class="language-plaintext highlighter-rouge">bjobs</code>를 다시 안 칩니다.</p>
+  </li>
+  <li>
+    <p>TTL이 지났을 때 <strong>동시에 갱신을 시도</strong> 하더라도 <code class="language-plaintext highlighter-rouge">.lock</code> 파일로 <strong>1개 프로세스만</strong> 갱신 → 호출 억제.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="3-lsf가-아닌-일반-커맨드-실행예외-발생-선택">3) LSF가 아닌 일반 커맨드 실행(예외 발생 선택)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">lsf_async_v2</span> <span class="kn">import</span> <span class="n">LsfClient</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">lsf</span> <span class="o">=</span> <span class="nc">LsfClient</span><span class="p">()</span>
+    <span class="c1"># 성공 예: hostname 얻기 (실패해도 raise_on_error=False면 예외 X)
+</span>    <span class="n">out</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">exec_command</span><span class="p">(</span><span class="sh">"</span><span class="s">hostname</span><span class="sh">"</span><span class="p">,</span> <span class="n">raise_on_error</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">hostname rc</span><span class="sh">"</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="sh">"</span><span class="s">out:</span><span class="sh">"</span><span class="p">,</span> <span class="n">out</span><span class="p">.</span><span class="nf">strip</span><span class="p">())</span>
+
+    <span class="c1"># 실패 예: 존재하지 않는 커맨드
+</span>    <span class="n">out</span><span class="p">,</span> <span class="n">err</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">exec_command</span><span class="p">(</span><span class="sh">"</span><span class="s">not_a_real_cmd --foo</span><span class="sh">"</span><span class="p">,</span> <span class="n">raise_on_error</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">custom rc</span><span class="sh">"</span><span class="p">,</span> <span class="n">rc</span><span class="p">)</span>  <span class="c1"># 에러여도 예외 없음
+</span>
+    <span class="c1"># 에러를 예외로 받고 싶다면:
+</span>    <span class="c1"># await lsf.exec_command("not_a_real_cmd --foo", raise_on_error=True)
+</span>
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="팁--운영-체크리스트">팁 &amp; 운영 체크리스트</h1>
+
+<ul>
+  <li>
+    <p><strong>캐시 TTL 조절</strong></p>
+
+    <ul>
+      <li>
+        <p>조용한 클러스터: <code class="language-plaintext highlighter-rouge">bjobs_ttl_sec</code>/<code class="language-plaintext highlighter-rouge">disk_cache_ttl_sec</code>를 5~10초까지 올리면 호출 수가 크게 줄어요.</p>
+      </li>
+      <li>
+        <p>실시간성이 필요할 때만 낮추세요.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>전체 스냅샷 전략</strong></p>
+
+    <ul>
+      <li>
+        <p>본 구현은 현재 사용자(<code class="language-plaintext highlighter-rouge">-u &lt;user&gt;</code>) 기준 전체 잡을 한 번에 가져옵니다. 팀/클러스터 정책상 잡 수가 매우 많으면,</p>
+
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">status_all_sharded()</code> 같은 변형(큐 단위/상태 단위 샤딩)으로 확장해도 좋습니다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>고아(Orphan) 잡 방지</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">submit_many_with_cancel</code>는 <code class="language-plaintext highlighter-rouge">bsub</code>를 <strong>절대 강제 종료하지 않음</strong> → Job ID를 확보한 뒤 <code class="language-plaintext highlighter-rouge">bkill</code>로 종료.</p>
+      </li>
+      <li>
+        <p>kill 시 <code class="language-plaintext highlighter-rouge">raise_on_error=False</code>를 기본으로 해서, 일시적 실패에도 전체 플로우가 중단되지 않게 했습니다.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>파싱 안정성</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">LC_ALL=C</code> 고정, <code class="language-plaintext highlighter-rouge">-o "jobid stat exit_code queue exec_host"</code>처럼 <strong>공백 없는 필드만</strong> 사용.</p>
+      </li>
+      <li>
+        <p>포맷이 다른 클러스터라면 출력 필드를 조정하세요(필요시 구분자 옵션 지원 버전 확인).</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<p>원하시면:</p>
+
+<ul>
+  <li>
+    <p>디스크 캐시 파일 경로/권한(공용 노드 vs 사용자 홈) 정책에 맞춰 <strong>경로/잠금 전략</strong> 을 더 엄격히 조정해 드릴 수 있고,</p>
+  </li>
+  <li>
+    <p>잡 수가 수만 단위일 때를 위한 <strong>샤딩/청크/스트리밍 파서</strong> 버전도 바로 만들어 드릴게요.</p>
+  </li>
+</ul>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Asyncio 사용법 설명</title><link href="https://hvppyarchive.github.io/python/python-asyncio-basic/" rel="alternate" type="text/html" title="Asyncio 사용법 설명" /><published>2025-10-13T14:06:20+09:00</published><updated>2025-10-13T14:06:20+09:00</updated><id>https://hvppyarchive.github.io/python/python-asyncio-basic</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-asyncio-basic/"><![CDATA[<p class="chat--user">
 
 python asyncio를 이용한 프로그래밍 하는 법 알려줘. 파이썬은 많이 써봤지만 이건 한 번 도 안 써본 사람 기준으로 쉽게 설명해줘.
 
