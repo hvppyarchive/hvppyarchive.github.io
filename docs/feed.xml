@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-13T14:06:25+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-13T14:06:25+09:00</published><updated>2025-10-13T14:06:25+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-13T15:12:03+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-13T15:12:03+09:00</published><updated>2025-10-13T15:12:03+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,547 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">Asyncio 사용법 설명</title><link href="https://hvppyarchive.github.io/python/python-asyncio-basic/" rel="alternate" type="text/html" title="Asyncio 사용법 설명" /><published>2025-10-13T14:06:20+09:00</published><updated>2025-10-13T14:06:20+09:00</updated><id>https://hvppyarchive.github.io/python/python-asyncio-basic</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-asyncio-basic/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">IBM LSF Python 패키지 개발</title><link href="https://hvppyarchive.github.io/python/python-lsf-package/" rel="alternate" type="text/html" title="IBM LSF Python 패키지 개발" /><published>2025-10-13T15:11:57+09:00</published><updated>2025-10-13T15:11:57+09:00</updated><id>https://hvppyarchive.github.io/python/python-lsf-package</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-lsf-package/"><![CDATA[<p class="chat--user">
+
+IBM LSF 알아?
+
+</p>
+
+<p>네! IBM <strong>Spectrum LSF</strong>(옛 <em>Platform LSF</em>)는 HPC/대규모 서버 팜에서 배치 작업을 스케줄링·큐잉·자원관리하는 상용 워크로드 매니저예요. 간단히 핵심만 단계별로 정리해볼게요.</p>
+
+<h1 id="1-뭐-하는-툴">1) 뭐 하는 툴?</h1>
+
+<ul>
+  <li>
+    <p>많은 사용자/작업을 큐(Queue)에 넣고, 클러스터의 CPU·메모리·GPU·라이선스 같은 자원을 규칙에 맞춰 자동 분배합니다.</p>
+  </li>
+  <li>
+    <p>우선순위, 공정 배분(fairshare), 선점/백필(backfill), 예약(SLA/예약슬롯), 다중 클러스터 등 정책을 세밀하게 걸 수 있어요.</p>
+  </li>
+</ul>
+
+<h1 id="2-구성-요소아주-요약">2) 구성 요소(아주 요약)</h1>
+
+<ul>
+  <li>
+    <p><strong>mbatchd / mbschd</strong> : 마스터 배치·스케줄러 데몬(작업 결정 뇌).</p>
+  </li>
+  <li>
+    <p><strong>sbatchd</strong>(각 워커 호스트): 작업 실행/모니터링.</p>
+  </li>
+  <li>
+    <p><strong>lim / res</strong> : 호스트 부하정보 수집과 원격 실행.</p>
+  </li>
+  <li>
+    <p>관리/사용자는 <strong>bsub, bjobs, bqueues</strong> 같은 CLI로 상호작용.</p>
+  </li>
+</ul>
+
+<h1 id="3-기본-사용-흐름">3) 기본 사용 흐름</h1>
+
+<ol>
+  <li>
+    <p>사용자가 큐/요구자원과 함께 작업 제출 → <code class="language-plaintext highlighter-rouge">bsub ...</code></p>
+  </li>
+  <li>
+    <p>LSF가 정책·가용자원 평가 → 적합한 노드에 할당</p>
+  </li>
+  <li>
+    <p>실행·모니터링 → 완료 후 로그/결과 수집</p>
+  </li>
+</ol>
+
+<h1 id="4-자주-쓰는-명령필수-최소셋">4) 자주 쓰는 명령(필수 최소셋)</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 작업 제출</span>
+bsub <span class="nt">-q</span> normal <span class="nt">-J</span> myjob <span class="nt">-n</span> 4 <span class="nt">-R</span> <span class="s2">"rusage[mem=8G]"</span> <span class="nt">-oo</span> out.%J <span class="nt">-eo</span> err.%J ./run.sh
+
+<span class="c"># 상태/출력 확인</span>
+bjobs              <span class="c"># 내 잡 요약</span>
+bjobs <span class="nt">-l</span> &lt;JOBID&gt;   <span class="c"># 상세</span>
+bpeek &lt;JOBID&gt;      <span class="c"># 실행 중 표준출력 엿보기(설정에 따라 지원)</span>
+
+<span class="c"># 큐/호스트 보기</span>
+bqueues <span class="nt">-l</span>         <span class="c"># 큐 상세 정책</span>
+bhosts             <span class="c"># 호스트 상태</span>
+
+<span class="c"># 제어</span>
+bstop &lt;JOBID&gt;      <span class="c"># 일시중지</span>
+bresume &lt;JOBID&gt;    <span class="c"># 재개</span>
+bkill &lt;JOBID&gt;      <span class="c"># 종료</span>
+bhist <span class="nt">-l</span> &lt;JOBID&gt;   <span class="c"># 히스토리</span>
+</code></pre></div></div>
+
+<h1 id="5-제출-스크립트-예시가장-단순한-형태">5) 제출 스크립트 예시(가장 단순한 형태)</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># run.sh</span>
+<span class="c">#!/usr/bin/env bash</span>
+<span class="nb">echo</span> <span class="s2">"Host: </span><span class="si">$(</span><span class="nb">hostname</span><span class="si">)</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"Start: </span><span class="si">$(</span><span class="nb">date</span><span class="si">)</span><span class="s2">"</span>
+python train.py <span class="nt">--epochs</span> 10
+</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 제출</span>
+bsub <span class="nt">-q</span> normal <span class="nt">-J</span> train <span class="nt">-n</span> 4 <span class="nt">-R</span> <span class="s2">"rusage[mem=8G]"</span> <span class="nt">-oo</span> train.%J.out ./run.sh
+</code></pre></div></div>
+
+<h1 id="6-정책자원-요청-팁">6) 정책/자원 요청 팁</h1>
+
+<ul>
+  <li>
+    <p><strong>CPU 코어 수</strong> : <code class="language-plaintext highlighter-rouge">-n 8</code></p>
+  </li>
+  <li>
+    <p><strong>메모리</strong> : <code class="language-plaintext highlighter-rouge">-R "rusage[mem=16G]"</code> (클러스터 정책과 단위 확인 필수)</p>
+  </li>
+  <li>
+    <p><strong>노드 스프레드</strong> : <code class="language-plaintext highlighter-rouge">-R "span[ptile=4]"</code> (호스트당 코어 4개씩 배치)</p>
+  </li>
+  <li>
+    <p><strong>GPU</strong> : 클러스터 설정에 따라 전용 옵션/리소스명이 다릅니다. 보통 전용 큐를 쓰거나 <code class="language-plaintext highlighter-rouge">-R</code>/<code class="language-plaintext highlighter-rouge">-gpu</code>(환경에 따라 지원)로 요청합니다. 운영팀이 정한 표준을 확인하세요.</p>
+  </li>
+</ul>
+
+<h1 id="7-장단점한눈에">7) 장단점(한눈에)</h1>
+
+<ul>
+  <li>
+    <p><strong>장점</strong> : 성숙한 정책/엔터프라이즈 지원, 이기종·대규모 클러스터 운영 경험 풍부, 모니터링/리포팅(LSF RTM 등) 생태계.</p>
+  </li>
+  <li>
+    <p><strong>단점</strong> : 상용 라이선스 비용, 설정 초기 러닝커브, 커스텀 정책 이해 필요.</p>
+  </li>
+  <li>
+    <p><strong>대안</strong> : Slurm(오픈소스), PBS Pro/Altair PBS, Grid Engine 계열 등.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>원하시면,</p>
+
+<ul>
+  <li>
+    <p>현재 환경(큐 이름, 자원 규칙, GPU 요청 방식)에 맞춘 <strong>제출 템플릿</strong> 을 바로 만들어 드릴게요,</p>
+  </li>
+  <li>
+    <p>또는 기존 Slurm/PBS 스크립트를 LSF로 <strong>자동 변환</strong> 해서 드릴 수도 있어요. 어떤 워크로드를 돌리실 계획인가요?</p>
+  </li>
+</ul>
+
+<p class="chat--user">
+
+나는 LSF에 여러 Job을 Submit하고 종료시키기/완료 여부 파악 등등 자동화 업무를 하고 있어.(파이썬) 그런데 "bsub", "bkill", "bjobs" 같은 커맨드를 subprocess로 매번 call하니 관리가 힘들고 느리기도 해(subprocess가 끝나서 job ID를 받아와야 하므로) bsub, bkill 시에는 async 기능을 활용하고, bjobs는 memory/storage cache를 통해 너무 자주 프로세스를 호출하지 않았으면 좋겠어(LSF 시스템 부하 줄이기 위해).
+
+</p>
+
+<p>좋아요! 요구사항(비동기 제출/종료 + <code class="language-plaintext highlighter-rouge">bjobs</code> 호출 캐싱/감속)을 만족하는 <strong>간단하지만 탄탄한 아키텍처 + 참조 구현</strong> 을 바로 드릴게요.<br />
+아래 순서대로 보시면 됩니다.</p>
+
+<h1 id="0-목표-step-by-step">0) 목표 (Step-by-step)</h1>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bsub</code>, <code class="language-plaintext highlighter-rouge">bkill</code>은 <code class="language-plaintext highlighter-rouge">asyncio</code> 기반으로 <strong>동시에 많이</strong> 돌릴 수 있게.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bjobs</code>는 <strong>TTL 캐시 + 단일비행(single-flight) + 레이트리밋</strong> 으로 과호출 방지.</p>
+  </li>
+  <li>
+    <p>가능한 한 <strong>배치(batch)</strong> 로 묶어서 호출수 최소화.</p>
+  </li>
+  <li>
+    <p>출력 파싱은 <strong>locale 고정(LC_ALL=C)</strong> + <strong>안전한 정규식/필드셋</strong> 만 사용.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="1-설계-핵심">1) 설계 핵심</h1>
+
+<ul>
+  <li>
+    <p><strong>동시성 제어</strong> : 모든 LSF CLI 호출에 공통 세마포어(예: 동시 8개) + 명령별 레이트리밋(예: <code class="language-plaintext highlighter-rouge">bjobs</code>는 초당 1회).</p>
+  </li>
+  <li>
+    <p><strong>비동기 제출/종료</strong> : <code class="language-plaintext highlighter-rouge">asyncio.create_subprocess_exec</code>로 <code class="language-plaintext highlighter-rouge">bsub</code>, <code class="language-plaintext highlighter-rouge">bkill</code>를 비동기 실행.</p>
+  </li>
+  <li>
+    <p><strong>bjobs 캐시</strong> :</p>
+
+    <ul>
+      <li>
+        <p><strong>TTL 캐시</strong>(예: 3~5초): TTL 내 재요청은 메모리에서 즉시 응답.</p>
+      </li>
+      <li>
+        <p><strong>단일비행</strong> : 같은 키(동일 Job ID 세트/필터)의 <code class="language-plaintext highlighter-rouge">bjobs</code> 요청이 동시 들어오면 <strong>이미 진행 중인</strong> 한 번만 실제 실행, 나머지는 그 Future를 await.</p>
+      </li>
+      <li>
+        <p><strong>레이트리밋</strong> : 최소 호출 간격 보장(예: 1~2초).</p>
+      </li>
+      <li>
+        <p><strong>배치 쿼리</strong> : 여러 Job ID 요청을 <strong>합집합</strong> 으로 묶어 한 번에 조회 → 결과를 per-job로 분산.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>참고: LSF는 <code class="language-plaintext highlighter-rouge">bjobs</code>의 출력 포맷을 <code class="language-plaintext highlighter-rouge">-o</code>로 제어할 수 있지만, 날짜 필드는 공백이 있어 파싱이 까다롭습니다. 여기서는 <strong>필요 최소 필드</strong>(공백 없는 것들)만 요청합니다: <code class="language-plaintext highlighter-rouge">jobid stat exit_code queue exec_host</code><br />
+ (시간이 필요하면 별도 포맷/구분 기호를 추가해 확장 가능)</p>
+</blockquote>
+
+<hr />
+
+<h1 id="2-참조-구현-단일-파일-바로-붙여넣어-사용-가능">2) 참조 구현 (단일 파일; 바로 붙여넣어 사용 가능)</h1>
+
+<p>아래는 의존성 없는 순수 Python 3.10+ 코드입니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># lsf_async.py
+</span><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">re</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="n">_JOBID_RE</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">compile</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">Job\s*&lt;(\d+)&gt;</span><span class="sh">"</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="nb">RuntimeError</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">returncode</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stdout</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">stderr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Command failed: </span><span class="si">{</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="si">}</span><span class="s"> (rc=</span><span class="si">{</span><span class="n">returncode</span><span class="si">}</span><span class="s">)</span><span class="se">\n</span><span class="si">{</span><span class="n">stderr</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="n">returncode</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stdout</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">stderr</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+               <span class="o">*</span><span class="p">,</span>
+               <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+               <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">Run a command asynchronously and return (stdout, stderr, returncode).</span><span class="sh">"""</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">cmd</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="n">stderr</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out_b</span><span class="p">,</span> <span class="n">err_b</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">ProcessLookupError</span><span class="p">):</span>
+            <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+        <span class="k">raise</span>
+    <span class="k">return</span> <span class="n">out_b</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span> <span class="n">err_b</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span>
+
+<span class="k">class</span> <span class="nc">LsfClient</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    Async LSF CLI wrapper with:
+      - concurrent bsub/bkill
+      - cached/rate-limited bjobs
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                 <span class="o">*</span><span class="p">,</span>
+                 <span class="n">bsub</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">bsub</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="n">bkill</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">bkill</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="n">bjobs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">bjobs</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="n">max_concurrent_cli</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+                 <span class="n">bjobs_ttl_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+                 <span class="n">bjobs_min_interval_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">bsub</span><span class="sh">"</span><span class="p">:</span> <span class="n">bsub</span><span class="p">,</span> <span class="sh">"</span><span class="s">bkill</span><span class="sh">"</span><span class="p">:</span> <span class="n">bkill</span><span class="p">,</span> <span class="sh">"</span><span class="s">bjobs</span><span class="sh">"</span><span class="p">:</span> <span class="n">bjobs</span><span class="p">}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cli_sem</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nc">Semaphore</span><span class="p">(</span><span class="n">max_concurrent_cli</span><span class="p">)</span>
+
+        <span class="c1"># Cache &amp; in-flight tracking for bjobs
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_ttl</span> <span class="o">=</span> <span class="n">bjobs_ttl_sec</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_min_interval</span> <span class="o">=</span> <span class="n">bjobs_min_interval_sec</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Future</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_last_call_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">base_env</span> <span class="o">=</span> <span class="nf">dict</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">)</span>
+        <span class="n">base_env</span><span class="p">.</span><span class="nf">setdefault</span><span class="p">(</span><span class="sh">"</span><span class="s">LC_ALL</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">base_env</span><span class="p">.</span><span class="nf">setdefault</span><span class="p">(</span><span class="sh">"</span><span class="s">LANG</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">base_env</span> <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="bp">None</span> <span class="nf">else </span><span class="p">(</span><span class="n">base_env</span> <span class="o">|</span> <span class="n">env</span><span class="p">)</span>
+
+    <span class="c1"># ---------- helpers ----------
+</span>    <span class="k">def</span> <span class="nf">_key_for_bjobs</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">extra_flags</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="nf">tuple</span><span class="p">(</span><span class="nf">sorted</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">)))</span> <span class="k">if</span> <span class="n">job_ids</span> <span class="nf">else </span><span class="p">()</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="s">bjobs|</span><span class="si">{</span><span class="n">extra_flags</span><span class="si">}</span><span class="s">|</span><span class="si">{</span><span class="n">ids</span><span class="si">}</span><span class="sh">"</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_guarded_run</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_cli_sem</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">env</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="c1"># ---------- public API ----------
+</span>    <span class="k">async</span> <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                     <span class="n">command</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+                     <span class="o">*</span><span class="p">,</span>
+                     <span class="n">queue</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">job_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">n_cpus</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">rusage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">out_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">err_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">extra_bsub_args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">
+        Submit a job via bsub and return job id.
+        `command` may be a shell string or a sequence.
+        </span><span class="sh">"""</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="sh">"</span><span class="s">bsub</span><span class="sh">"</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">queue</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-q</span><span class="sh">"</span><span class="p">,</span> <span class="n">queue</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">job_name</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-J</span><span class="sh">"</span><span class="p">,</span> <span class="n">job_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">n_cpus</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-n</span><span class="sh">"</span><span class="p">,</span> <span class="nf">str</span><span class="p">(</span><span class="n">n_cpus</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">rusage</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-R</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">rusage[</span><span class="si">{</span><span class="n">rusage</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">out_file</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-oo</span><span class="sh">"</span><span class="p">,</span> <span class="n">out_file</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">err_file</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-eo</span><span class="sh">"</span><span class="p">,</span> <span class="n">err_file</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">extra_bsub_args</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="nf">list</span><span class="p">(</span><span class="n">extra_bsub_args</span><span class="p">)</span>
+
+        <span class="c1"># bsub expects the job command at the end; if a string, run via /bin/sh -c
+</span>        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Treat the sequence as an executable + args (no shell)
+</span>            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s"> </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">command</span><span class="p">))]</span>
+
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+
+        <span class="c1"># Parse: "Job &lt;12345&gt; is submitted to queue &lt;normal&gt;."
+</span>        <span class="n">m</span> <span class="o">=</span> <span class="n">_JOBID_RE</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Cannot parse job id from bsub output:</span><span class="se">\n</span><span class="si">{</span><span class="n">stdout</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">stderr</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">int</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="nf">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                   <span class="n">job_ids</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
+                   <span class="o">*</span><span class="p">,</span>
+                   <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">
+        Kill one or many jobs with a single bkill call.
+        </span><span class="sh">"""</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">job_ids</span><span class="p">))]</span> <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ids</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="sh">"</span><span class="s">bkill</span><span class="sh">"</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-f</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="n">ids</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                     <span class="n">job_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="o">*</span><span class="p">,</span>
+                     <span class="n">include_done</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                     <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="sh">"""</span><span class="s">
+        Get job status map: {jobid: {stat, exit_code, queue, exec_host}}.
+        Uses TTL cache + single-flight + rate limiting.
+        If job_ids is None, queries all of the current user</span><span class="sh">'</span><span class="s">s jobs.
+        </span><span class="sh">"""</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="sh">"</span><span class="s">-a</span><span class="sh">"</span> <span class="k">if</span> <span class="n">include_done</span> <span class="k">else</span> <span class="sh">""</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_key_for_bjobs</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+
+        <span class="c1"># Serve cached if fresh
+</span>        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="n">cached</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cached</span> <span class="ow">and</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="n">cached</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_ttl</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">cached</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Single-flight: if another coroutine is already fetching this key, await it
+</span>        <span class="n">inflight</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inflight</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">inflight</span>
+
+        <span class="c1"># Create the in-flight future
+</span>        <span class="n">fut</span><span class="p">:</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Future</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">().</span><span class="nf">create_future</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">fut</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Simple rate limit for bjobs
+</span>            <span class="n">since</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_last_call_ts</span>
+            <span class="k">if</span> <span class="n">since</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_min_interval</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_bjobs_min_interval</span> <span class="o">-</span> <span class="n">since</span><span class="p">)</span>
+
+            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="sh">"</span><span class="s">bjobs</span><span class="sh">"</span><span class="p">],</span> <span class="sh">"</span><span class="s">-noheader</span><span class="sh">"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">include_done</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-a</span><span class="sh">"</span><span class="p">]</span>
+            <span class="c1"># Request only whitespace-safe fields
+</span>            <span class="c1"># Fields: jobid stat exit_code queue exec_host
+</span>            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-o</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">jobid stat exit_code queue exec_host</span><span class="sh">"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">job_ids</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">set</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)]</span>
+
+            <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_last_call_ts</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+
+            <span class="c1"># Parse lines; with chosen fields, tokens are whitespace-separated safely
+</span>            <span class="n">result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stdout</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">():</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="nf">split</span><span class="p">()</span>
+                <span class="c1"># Expect exactly 5 tokens
+</span>                <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="c1"># best-effort: skip malformed
+</span>                    <span class="k">continue</span>
+                <span class="n">jid</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">exit_code</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">exec_host</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">jid_i</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">jid</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">jid_i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="sh">"</span><span class="s">stat</span><span class="sh">"</span><span class="p">:</span> <span class="n">stat</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">exit_code</span><span class="sh">"</span><span class="p">:</span> <span class="bp">None</span> <span class="k">if</span> <span class="n">exit_code</span> <span class="o">==</span> <span class="sh">"</span><span class="s">-</span><span class="sh">"</span> <span class="k">else</span> <span class="n">exit_code</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">queue</span><span class="sh">"</span><span class="p">:</span> <span class="n">queue</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">exec_host</span><span class="sh">"</span><span class="p">:</span> <span class="n">exec_host</span><span class="p">,</span>
+                <span class="p">}</span>
+
+            <span class="c1"># Cache and resolve the in-flight future
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">(),</span> <span class="n">result</span><span class="p">)</span>
+            <span class="n">fut</span><span class="p">.</span><span class="nf">set_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">fut</span><span class="p">.</span><span class="nf">set_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># clean inflight
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">.</span><span class="nf">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="c1"># --------- convenience: bulk status with de-dup &amp; union batching ----------
+</span>    <span class="k">async</span> <span class="k">def</span> <span class="nf">status_union_batched</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                                   <span class="n">list_of_job_id_sets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+                                   <span class="o">*</span><span class="p">,</span>
+                                   <span class="n">include_done</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                                   <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+        <span class="sh">"""</span><span class="s">
+        Given multiple callers wanting statuses for different sets, perform
+        ONE bjobs with the union of ids, then slice the result per request.
+        (Uses the normal cache path internally.)
+        </span><span class="sh">"""</span>
+        <span class="n">union_ids</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        <span class="n">normalized</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ids</span> <span class="ow">in</span> <span class="n">list_of_job_id_sets</span><span class="p">:</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">]</span>
+            <span class="n">normalized</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
+            <span class="n">union_ids</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
+        <span class="n">union_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">status</span><span class="p">(</span><span class="n">union_ids</span><span class="p">,</span> <span class="n">include_done</span><span class="o">=</span><span class="n">include_done</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">req_ids</span> <span class="ow">in</span> <span class="n">normalized</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">union_result</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{})</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">req_ids</span><span class="p">}</span>
+            <span class="n">out</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="3-사용-예시">3) 사용 예시</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">lsf_async</span> <span class="kn">import</span> <span class="n">LsfClient</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">lsf</span> <span class="o">=</span> <span class="nc">LsfClient</span><span class="p">(</span>
+        <span class="n">max_concurrent_cli</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>      <span class="c1"># 동시에 열 수 있는 LSF CLI 프로세스 수
+</span>        <span class="n">bjobs_ttl_sec</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>         <span class="c1"># bjobs 캐시 TTL
+</span>        <span class="n">bjobs_min_interval_sec</span><span class="o">=</span><span class="mf">1.5</span> <span class="c1"># 최소 호출 간격(레이트리밋)
+</span>    <span class="p">)</span>
+
+    <span class="c1"># 1) 여러 작업 동시 제출 (async)
+</span>    <span class="n">cmds</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sh">'</span><span class="s">echo </span><span class="sh">"</span><span class="s">A</span><span class="sh">"</span><span class="s">; sleep 10</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">echo </span><span class="sh">"</span><span class="s">B</span><span class="sh">"</span><span class="s">; sleep 5</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">echo </span><span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="s">; sleep 2</span><span class="sh">'</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">submit_tasks</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">lsf</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">queue</span><span class="o">=</span><span class="sh">"</span><span class="s">normal</span><span class="sh">"</span><span class="p">,</span> <span class="n">job_name</span><span class="o">=</span><span class="sa">f</span><span class="sh">"</span><span class="s">demo_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="sa">f</span><span class="sh">"</span><span class="s">demo_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">.%J.out</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">cmds</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">job_ids</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">gather</span><span class="p">(</span><span class="o">*</span><span class="n">submit_tasks</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">submitted:</span><span class="sh">"</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">)</span>
+
+    <span class="c1"># 2) 상태 조회 (캐시 ON)
+</span>    <span class="n">st1</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">status</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)</span>     <span class="c1"># 실제 bjobs 호출
+</span>    <span class="n">st2</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">status</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)</span>     <span class="c1"># TTL 내라면 캐시에서 즉시 반환
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">status1:</span><span class="sh">"</span><span class="p">,</span> <span class="n">st1</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">status2 (cached):</span><span class="sh">"</span><span class="p">,</span> <span class="n">st2</span><span class="p">)</span>
+
+    <span class="c1"># 3) 일부 종료 (배치 bkill)
+</span>    <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">kill</span><span class="p">(</span><span class="n">job_ids</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># 4) 여러 consumer가 각자 상태를 원할 때 union 배치
+</span>    <span class="n">reqs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">job_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">job_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">job_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">job_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]]]</span>
+    <span class="n">batched</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">status_union_batched</span><span class="p">(</span><span class="n">reqs</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">batched</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="4-튜닝-포인트">4) 튜닝 포인트</h1>
+
+<ul>
+  <li>
+    <p><strong>동시성</strong> : <code class="language-plaintext highlighter-rouge">max_concurrent_cli</code>(기본 8). LSF 마스터/파일서버 부하에 따라 4~16 사이로 조정 권장.</p>
+  </li>
+  <li>
+    <p><strong>bjobs TTL</strong> : <code class="language-plaintext highlighter-rouge">bjobs_ttl_sec</code>(기본 3s). 워크로드가 조용하면 5~10s까지 올리면 더 효과적.</p>
+  </li>
+  <li>
+    <p><strong>최소 호출 간격</strong> : <code class="language-plaintext highlighter-rouge">bjobs_min_interval_sec</code>(기본 1~2s). 팀/클러스터 정책에 맞춰 설정.</p>
+  </li>
+  <li>
+    <p><strong>배치 종료</strong> : <code class="language-plaintext highlighter-rouge">kill([...])</code>는 ID 리스트를 받아 <strong>한 번의<code class="language-plaintext highlighter-rouge">bkill</code></strong> 로 처리 → 호출 수 절감.</p>
+  </li>
+  <li>
+    <p><strong>배치 상태 조회</strong> : 여러 호출을 묶고 싶으면 <code class="language-plaintext highlighter-rouge">status_union_batched()</code> 사용.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="5-확장-아이디어">5) 확장 아이디어</h1>
+
+<ul>
+  <li>
+    <p><strong>Persistent 캐시(옵션)</strong> : 마지막 상태를 SQLite 등에 저장 → 프로세스 재시작 시 “최근 상태” 즉시 제공 + 백그라운드 리프레시.</p>
+  </li>
+  <li>
+    <p><strong>이벤트 기반 보완</strong> : 클러스터에서 접근 가능한 상태 이벤트/로그가 있다면(권한 필요) <code class="language-plaintext highlighter-rouge">bjobs</code> 폴링 주기를 더 늘릴 수 있음.</p>
+  </li>
+  <li>
+    <p><strong>출력 포맷 확장</strong> : 시간이 필요하면 <code class="language-plaintext highlighter-rouge">-o</code> 필드를 커스터마이즈하고, 공백 문제는 <code class="language-plaintext highlighter-rouge">delimiter</code> 옵션(클러스터 버전에 따라 지원)을 검토하세요.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="6-실전-체크리스트">6) 실전 체크리스트</h1>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">LANG/LC_ALL=C</code>로 고정해 <strong>Job ID 파싱 안정성</strong> 확보(다국어 출력 회피).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bsub</code> 실패/큐 거부 시 <code class="language-plaintext highlighter-rouge">LSFCommandError</code>로 즉시 구분(로그에 <code class="language-plaintext highlighter-rouge">stderr</code> 남김).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bjobs</code> 필드 수가 예상과 다르면 <strong>스킵</strong>(방어코딩) — 필요 시 로깅.</p>
+  </li>
+  <li>
+    <p>너무 많은 Job ID를 한 번에 조회한다면 <strong>ID를 N개 단위로 chunking</strong>(예: 500개)하는 래퍼 추가 권장.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하시면 위 코드를 <strong>여러 파일 구조(패키지화 + 로깅/리트라이/치밍 등)</strong> 로 정리해 드릴 수 있어요.<br />
+혹시 지금 쓰시는 스크립트가 있다면, 핵심 호출부만 이 <code class="language-plaintext highlighter-rouge">LsfClient</code>로 감싸서 마이그레이션 예시도 만들어 드릴게요.</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Asyncio 사용법 설명</title><link href="https://hvppyarchive.github.io/python/python-asyncio-basic/" rel="alternate" type="text/html" title="Asyncio 사용법 설명" /><published>2025-10-13T14:06:20+09:00</published><updated>2025-10-13T14:06:20+09:00</updated><id>https://hvppyarchive.github.io/python/python-asyncio-basic</id><content type="html" xml:base="https://hvppyarchive.github.io/python/python-asyncio-basic/"><![CDATA[<p class="chat--user">
 
 python asyncio를 이용한 프로그래밍 하는 법 알려줘. 파이썬은 많이 써봤지만 이건 한 번 도 안 써본 사람 기준으로 쉽게 설명해줘.
 
@@ -12341,1124 +12881,4 @@ response.aread()를 해야 읽을 수 있는거 아니야?
   </li>
 </ol>
 
-<p>원하시면 <strong>요청/응답에서 특정 키만 골라서 pretty-print</strong> 하도록 필터링까지 넣어드릴게요. 어떤 키들만 보이면 좋을까요?</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Pickle to JSON 변환</title><link href="https://hvppyarchive.github.io/python/pickle-to-json/" rel="alternate" type="text/html" title="Pickle to JSON 변환" /><published>2025-09-29T10:41:41+09:00</published><updated>2025-09-29T10:41:41+09:00</updated><id>https://hvppyarchive.github.io/python/pickle-to-json</id><content type="html" xml:base="https://hvppyarchive.github.io/python/pickle-to-json/"><![CDATA[<p class="chat--user">
-
-너는 파이썬 프로그래밍 전문가야. python pickle로 저장된 데이터가 있어. 이걸 읽어서 그 안의 모든 객체 tree를 json 형태로 뱉도록 하고 싶어. 이 때 pickle은 커스텀 클래스를 담고 있어. 이걸 해내기 위해서 어떻게 접근해야할까? 최대한 에러가 없이 동작하도록 고민해줘. Step by Step으로 생각해줘.
-
-</p>
-
-<p>좋아, “피클 → 안전하고 튼튼한 JSON”을 목표로 단계별로 설계해볼게. (코드 샘플도 아래에 한 방에 넣어뒀어.)</p>
-
-<h1 id="step-by-step-접근">Step by Step 접근</h1>
-
-<h2 id="1-위협-모델전략-먼저-결정">1) 위협 모델/전략 먼저 결정</h2>
-
-<ul>
-  <li>
-    <p><strong>pickle은 임의 코드 실행 위험</strong> 이 있어. <em>출처가 100% 신뢰되는 파일만</em> 바로 <code class="language-plaintext highlighter-rouge">pickle.load</code> 하면 되고, 그 외에는 “제한 해제”를 절대 하지 말아야 해.</p>
-  </li>
-  <li>
-    <p>따라서 두 가지 모드를 추천:</p>
-
-    <ol>
-      <li>
-        <p><strong>신뢰 모드(trusted)</strong> : 그냥 로드 → 직렬화.</p>
-      </li>
-      <li>
-        <p><strong>세이프 모드(safe/whitelist)</strong> : 허용 목록(모듈.클래스)을 지정한 <code class="language-plaintext highlighter-rouge">RestrictedUnpickler</code>로만 언피클.</p>
-      </li>
-    </ol>
-  </li>
-</ul>
-
-<h2 id="2-미리-무엇이-들어있는지-검사">2) 미리 “무엇이 들어있는지” 검사</h2>
-
-<ul>
-  <li>
-    <p>언피클을 실행하지 않고 <code class="language-plaintext highlighter-rouge">pickletools.genops</code>로 피클 스트림의 <code class="language-plaintext highlighter-rouge">GLOBAL/STACK_GLOBAL</code> opcode를 스캔해서, 필요한 클래스/모듈 목록을 뽑아본다.</p>
-  </li>
-  <li>
-    <p>그 결과를 보고 <strong>화이트리스트</strong> 를 만든다. (예: <code class="language-plaintext highlighter-rouge">{"mymodels.User", "numpy.ndarray"}</code>)</p>
-  </li>
-</ul>
-
-<h2 id="3-안전한-로더-만들기">3) 안전한 로더 만들기</h2>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">pickle.Unpickler</code>를 상속해서 <code class="language-plaintext highlighter-rouge">find_class</code>를 오버라이드.</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">builtins</code>의 기본 컨테이너 정도만 허용하고, 나머지는 <strong>화이트리스트에 있는 것만 통과</strong>.</p>
-  </li>
-  <li>
-    <p>화이트리스트에 없는 건 <code class="language-plaintext highlighter-rouge">UnpicklingError</code>로 막는다.</p>
-  </li>
-</ul>
-
-<h2 id="4-json-가능-형태로-변환기-설계">4) “JSON 가능 형태”로 변환기 설계</h2>
-
-<p>JSON은 다음을 그대로 표현 못 하거나 깨지기 쉬워:</p>
-
-<ul>
-  <li>
-    <p>순환/공유 참조(cycles/aliases), 사용자 정의 객체, <code class="language-plaintext highlighter-rouge">set/tuple</code>, <code class="language-plaintext highlighter-rouge">bytes</code>, <code class="language-plaintext highlighter-rouge">datetime</code>, <code class="language-plaintext highlighter-rouge">Decimal/UUID</code>, <code class="language-plaintext highlighter-rouge">numpy/pandas/torch</code> 등.</p>
-  </li>
-  <li>
-    <p><strong>원칙</strong> : “가능하면 손실 없이”, “그래도 항상 직렬화되게”.</p>
-
-    <ul>
-      <li>
-        <p><strong>순환/공유 참조</strong> : <code class="language-plaintext highlighter-rouge">"$id"</code>/<code class="language-plaintext highlighter-rouge">"$ref"</code> 프로토콜을 사용 (예: <code class="language-plaintext highlighter-rouge">{"$id":"obj1", "value": ...}</code>, 참조는 <code class="language-plaintext highlighter-rouge">{"$ref":"obj1"}</code>).</p>
-      </li>
-      <li>
-        <p><strong>커스텀 클래스</strong> : 우선 순위대로</p>
-
-        <ol>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">__json__()</code> → 딕트/리스트 등</p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">to_json()</code> / <code class="language-plaintext highlighter-rouge">to_dict()</code> / <code class="language-plaintext highlighter-rouge">model_dump()</code>(pydantic)</p>
-          </li>
-          <li>
-            <p>dataclass → <code class="language-plaintext highlighter-rouge">asdict</code></p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">__getstate__()</code> or <code class="language-plaintext highlighter-rouge">__dict__</code></p>
-          </li>
-          <li>
-            <p>마지막 수단: <code class="language-plaintext highlighter-rouge">repr(obj)</code>에 타입 메타(<code class="language-plaintext highlighter-rouge">"$type"</code>).</p>
-          </li>
-        </ol>
-      </li>
-      <li>
-        <p><strong>특수 타입들</strong> (가능한 한 보존):</p>
-
-        <ul>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">set/frozenset</code> → <code class="language-plaintext highlighter-rouge">{"$type":"set","items":[...]}</code></p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">tuple</code> → <code class="language-plaintext highlighter-rouge">{"$type":"tuple","items":[...]}</code></p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">bytes/bytearray</code> → <code class="language-plaintext highlighter-rouge">{"$type":"bytes","base64":"..."}</code></p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">datetime/date/time</code> → <code class="language-plaintext highlighter-rouge">{"$type":"datetime","iso":"..."}</code></p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">Decimal</code> → <code class="language-plaintext highlighter-rouge">{"$type":"decimal","value":"..."}</code></p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">UUID</code> → <code class="language-plaintext highlighter-rouge">{"$type":"uuid","value":"..."}</code></p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">Path</code> → <code class="language-plaintext highlighter-rouge">{"$type":"path","value":"..."}</code></p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">re.Pattern</code> → 패턴/플래그 보존</p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">Enum</code> → 이름/값 보존</p>
-          </li>
-          <li>
-            <p><code class="language-plaintext highlighter-rouge">Exception</code> → 타입/args/str</p>
-          </li>
-          <li>
-            <p><strong>NumPy</strong> : <code class="language-plaintext highlighter-rouge">ndarray</code>는 <code class="language-plaintext highlighter-rouge">.tolist()</code> + shape/dtype 메타</p>
-          </li>
-          <li>
-            <p><strong>pandas</strong> : DataFrame/Series는 <code class="language-plaintext highlighter-rouge">to_dict(orient="records")</code> 등 + 메타</p>
-          </li>
-          <li>
-            <p><strong>PyTorch/TensorFlow</strong> 텐서는 <code class="language-plaintext highlighter-rouge">.detach().cpu().numpy().tolist()</code> 등으로 값만 (가능하면 dtype/shape 메타 포함)</p>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p><strong>dict의 비문자열 키</strong> : JSON은 키가 문자열만 되므로</p>
-
-        <ul>
-          <li>
-            <p>전부 문자열이면 그대로 유지</p>
-          </li>
-          <li>
-            <p>아니면 <code class="language-plaintext highlighter-rouge">{"$type":"dict","entries":[[key,value], ...]}</code> 형태로 보존</p>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p><strong>깊이 제한/메모</strong> : 무한 재귀 방지 위해 <code class="language-plaintext highlighter-rouge">seen</code>(id→$id) 메모와 <code class="language-plaintext highlighter-rouge">max_depth</code> 도입.</p>
-      </li>
-      <li>
-        <p><strong>마지막 안전판</strong> : 무엇이든 실패하면 <code class="language-plaintext highlighter-rouge">repr</code> + <code class="language-plaintext highlighter-rouge">"$error"</code> 메타를 달아 절대 실패하지 않게.</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="5-덤프-옵션">5) 덤프 옵션</h2>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">json.dumps(jsonable, ensure_ascii=False, indent=2, allow_nan=False)</code>를 권장.</p>
-  </li>
-  <li>
-    <p>파일이 크면 <code class="language-plaintext highlighter-rouge">indent=None</code>로 용량 최소화.</p>
-  </li>
-  <li>
-    <p>덤프 후 한 번 <code class="language-plaintext highlighter-rouge">json.loads</code>로 <strong>역파싱 검증</strong> 하면 실수 줄일 수 있어.</p>
-  </li>
-</ul>
-
-<h2 id="6-대안-라이브러리-사용">6) 대안: 라이브러리 사용</h2>
-
-<ul>
-  <li>
-    <p><strong>jsonpickle</strong> 은 자체적으로 클래스/참조를 잘 처리한다. 빠르게 되고 범용성이 좋지만, <em>언피클 단계의 보안은 별도 처리</em> 가 필요하다(즉, <code class="language-plaintext highlighter-rouge">RestrictedUnpickler</code>는 여전히 필요).</p>
-  </li>
-  <li>
-    <p>직접 규칙을 통제하고 싶으면 아래 커스텀 직렬화기를 쓰는 게 안전/예측 가능.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h1 id="견고한-예시-코드-스크립트-1개로-동작">견고한 예시 코드 (스크립트 1개로 동작)</h1>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
-# pickle_to_json.py
-</span><span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">base64</span><span class="p">,</span> <span class="n">math</span><span class="p">,</span> <span class="n">re</span><span class="p">,</span> <span class="n">types</span><span class="p">,</span> <span class="n">sys</span>
-<span class="kn">import</span> <span class="n">pickle</span><span class="p">,</span> <span class="n">pickletools</span><span class="p">,</span> <span class="n">importlib</span>
-<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">is_dataclass</span><span class="p">,</span> <span class="n">asdict</span>
-<span class="kn">from</span> <span class="n">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
-<span class="kn">from</span> <span class="n">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
-<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="n">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Any</span>
-
-<span class="c1"># --- Optional dependencies detection ---
-</span><span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
-<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-    <span class="n">np</span> <span class="o">=</span> <span class="bp">None</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
-<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-    <span class="n">pd</span> <span class="o">=</span> <span class="bp">None</span>
-
-<span class="c1"># ---------- 1) 분석: 피클 안의 글로벌 심볼 스캔 ----------
-</span><span class="k">def</span> <span class="nf">audit_pickle_globals</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
-    <span class="sh">"""</span><span class="s">언피클 없이 GLOBAL/STACK_GLOBAL 사용 내역을 (module.name) 집합으로 리턴.</span><span class="sh">"""</span>
-    <span class="n">refs</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">pickletools</span><span class="p">.</span><span class="nf">genops</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">op</span><span class="p">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">GLOBAL</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">STACK_GLOBAL</span><span class="sh">"</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-                <span class="n">mod</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">arg</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># For GLOBAL, arg like "module\nname\n"
-</span>                <span class="n">parts</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">arg</span><span class="p">).</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
-                <span class="n">mod</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">refs</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">mod</span><span class="si">}</span><span class="s">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">refs</span>
-
-<span class="c1"># ---------- 2) 화이트리스트 기반 Restricted Unpickler ----------
-</span><span class="k">class</span> <span class="nc">RestrictedUnpickler</span><span class="p">(</span><span class="n">pickle</span><span class="p">.</span><span class="n">Unpickler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="n">allowed</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
-        <span class="n">self</span><span class="p">.</span><span class="n">allowed</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="n">allowed</span> <span class="ow">or</span> <span class="p">[])</span>
-
-    <span class="k">def</span> <span class="nf">find_class</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">full</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">module</span><span class="si">}</span><span class="s">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span>
-        <span class="c1"># 빌트인 컨테이너/예외/기본 타입 일부 허용
-</span>        <span class="n">allowed_builtins</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="sh">"</span><span class="s">builtins.set</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">builtins.frozenset</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">builtins.bytes</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">builtins.bytearray</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">builtins.complex</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">builtins.Exception</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">builtins.slice</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">builtins.range</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">builtins.dict</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">builtins.list</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">builtins.tuple</span><span class="sh">"</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="n">full</span> <span class="ow">in</span> <span class="n">allowed_builtins</span> <span class="ow">or</span> <span class="n">full</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">allowed</span><span class="p">:</span>
-            <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="p">.</span><span class="nf">import_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">pickle</span><span class="p">.</span><span class="nc">UnpicklingError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">forbidden global: </span><span class="si">{</span><span class="n">full</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">restricted_loads</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">allowed</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nc">RestrictedUnpickler</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="nc">BytesIO</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">),</span> <span class="n">allowed</span><span class="o">=</span><span class="n">allowed</span><span class="p">).</span><span class="nf">load</span><span class="p">()</span>
-
-<span class="c1"># ---------- 3) JSON 직렬화기 ----------
-</span><span class="n">JSON_PRIMITIVES</span> <span class="o">=</span> <span class="p">(</span><span class="nf">type</span><span class="p">(</span><span class="bp">None</span><span class="p">),</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">is_primitive</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">JSON_PRIMITIVES</span><span class="p">):</span>
-        <span class="c1"># NaN/Inf는 allow_nan=False에 막히므로 문자열 처리
-</span>        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">math</span><span class="p">.</span><span class="nf">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">or</span> <span class="n">math</span><span class="p">.</span><span class="nf">isinf</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="c1"># 너무 큰 int는 JS에서 안전하지 않지만 JSON 스펙엔 문제 없음. 필요시 문자열화 가능.
-</span>        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">return</span> <span class="bp">False</span>
-
-<span class="k">def</span> <span class="nf">_pattern_type</span><span class="p">():</span>
-    <span class="c1"># Py&gt;=3.8: re.Pattern, Py&lt;3.8: type(re.compile(''))
-</span>    <span class="n">pat</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">re</span><span class="p">,</span> <span class="sh">"</span><span class="s">Pattern</span><span class="sh">"</span><span class="p">,</span> <span class="nf">type</span><span class="p">(</span><span class="n">re</span><span class="p">.</span><span class="nf">compile</span><span class="p">(</span><span class="sh">""</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="n">pat</span>
-
-<span class="k">def</span> <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">seen</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">_depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
-    <span class="sh">"""</span><span class="s">객체 그래프를 JSON 가능 구조로 변환(+ 순환/참조 보존). 절대 예외 던지지 않음.</span><span class="sh">"""</span>
-    <span class="k">if</span> <span class="n">seen</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">seen</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="c1"># 깊이 보호
-</span>    <span class="k">if</span> <span class="n">_depth</span> <span class="o">&gt;</span> <span class="n">max_depth</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">depth_truncated</span><span class="sh">"</span><span class="p">}</span>
-
-    <span class="c1"># 기본형
-</span>    <span class="k">if</span> <span class="nf">is_primitive</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">obj</span>
-
-    <span class="n">oid</span> <span class="o">=</span> <span class="nf">id</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="c1"># 불변이지만 큰 튜플/프리미티브 아닌 객체에도 id를 부여해 참조 보존
-</span>    <span class="k">if</span> <span class="n">oid</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$ref</span><span class="sh">"</span><span class="p">:</span> <span class="n">seen</span><span class="p">[</span><span class="n">oid</span><span class="p">]}</span>
-
-    <span class="c1"># 새 객체에 $id 할당
-</span>    <span class="n">sid</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">obj</span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">seen</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="sh">"</span>
-    <span class="n">seen</span><span class="p">[</span><span class="n">oid</span><span class="p">]</span> <span class="o">=</span> <span class="n">sid</span>
-
-    <span class="c1"># bytes/bytearray
-</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">,</span> <span class="nb">memoryview</span><span class="p">)):</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="nf">bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">bytes</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">base64</span><span class="sh">"</span><span class="p">:</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64encode</span><span class="p">(</span><span class="n">b</span><span class="p">).</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">ascii</span><span class="sh">"</span><span class="p">),</span> <span class="sh">"</span><span class="s">length</span><span class="sh">"</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">b</span><span class="p">)}</span>
-
-    <span class="c1"># datetime-like
-</span>    <span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">_dt</span>
-    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">_dt</span><span class="p">.</span><span class="n">datetime</span><span class="p">,</span> <span class="n">_dt</span><span class="p">.</span><span class="n">date</span><span class="p">,</span> <span class="n">_dt</span><span class="p">.</span><span class="n">time</span><span class="p">)):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">iso</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="nf">isoformat</span><span class="p">()</span>
-        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-            <span class="n">iso</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="p">.</span><span class="nf">lower</span><span class="p">(),</span> <span class="sh">"</span><span class="s">iso</span><span class="sh">"</span><span class="p">:</span> <span class="n">iso</span><span class="p">}</span>
-
-    <span class="c1"># Decimal / UUID / Path
-</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">decimal</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">value</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)}</span>
-    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">UUID</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">uuid</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">value</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)}</span>
-    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">value</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)}</span>
-
-    <span class="c1"># 정규식 패턴
-</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nf">_pattern_type</span><span class="p">()):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">regex</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">pattern</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">pattern</span><span class="p">,</span> <span class="sh">"</span><span class="s">flags</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">flags</span><span class="p">}</span>
-
-    <span class="c1"># Enum
-</span>    <span class="kn">import</span> <span class="n">enum</span> <span class="k">as</span> <span class="n">_enum</span>
-    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">_enum</span><span class="p">.</span><span class="n">Enum</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">enum:</span><span class="si">{</span><span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="sh">"</span><span class="s">value</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">value</span><span class="p">}</span>
-
-    <span class="c1"># 예외
-</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">BaseException</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">exception:</span><span class="si">{</span><span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="nf">to_jsonable</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">.</span><span class="n">args</span><span class="p">],</span>
-            <span class="sh">"</span><span class="s">str</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span>
-        <span class="p">}</span>
-
-    <span class="c1"># NumPy
-</span>    <span class="k">if</span> <span class="n">np</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">{</span>
-                <span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">numpy.ndarray</span><span class="sh">"</span><span class="p">,</span>
-                <span class="sh">"</span><span class="s">shape</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="sh">"</span><span class="s">dtype</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">dtype</span><span class="p">),</span>
-                <span class="sh">"</span><span class="s">data</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="nf">tolist</span><span class="p">(),</span>
-            <span class="p">}</span>
-        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">generic</span><span class="p">):</span>  <span class="c1"># numpy scalar
-</span>            <span class="k">return</span> <span class="n">obj</span><span class="p">.</span><span class="nf">item</span><span class="p">()</span>
-
-    <span class="c1"># pandas
-</span>    <span class="k">if</span> <span class="n">pd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">{</span>
-                <span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">pandas.DataFrame</span><span class="sh">"</span><span class="p">,</span>
-                <span class="sh">"</span><span class="s">columns</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="nf">tolist</span><span class="p">(),</span>
-                <span class="sh">"</span><span class="s">records</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="nf">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="sh">"</span><span class="s">records</span><span class="sh">"</span><span class="p">),</span>
-            <span class="p">}</span>
-        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">{</span>
-                <span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">pandas.Series</span><span class="sh">"</span><span class="p">,</span>
-                <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
-                <span class="sh">"</span><span class="s">values</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="nf">to_list</span><span class="p">(),</span>
-                <span class="sh">"</span><span class="s">index</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="nf">tolist</span><span class="p">(),</span>
-            <span class="p">}</span>
-
-    <span class="c1"># torch / tf 텐서 (가능하면 값만)
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="n">torch</span>
-        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">):</span>
-            <span class="n">arr</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="nf">detach</span><span class="p">().</span><span class="nf">cpu</span><span class="p">().</span><span class="nf">numpy</span><span class="p">()</span>
-            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">torch.Tensor</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">shape</span><span class="sh">"</span><span class="p">:</span> <span class="nf">list</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">shape</span><span class="p">),</span> <span class="sh">"</span><span class="s">dtype</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">dtype</span><span class="p">),</span> <span class="sh">"</span><span class="s">data</span><span class="sh">"</span><span class="p">:</span> <span class="n">arr</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()}</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="n">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
-        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">Tensor</span><span class="p">,)):</span>
-            <span class="n">arr</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="nf">numpy</span><span class="p">()</span>
-            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">tf.Tensor</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">shape</span><span class="sh">"</span><span class="p">:</span> <span class="nf">list</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">shape</span><span class="p">),</span> <span class="sh">"</span><span class="s">dtype</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">dtype</span><span class="p">),</span> <span class="sh">"</span><span class="s">data</span><span class="sh">"</span><span class="p">:</span> <span class="n">arr</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()}</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="c1"># set / frozenset
-</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">set</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">)):</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">items</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="nf">to_jsonable</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">],</span>
-        <span class="p">}</span>
-
-    <span class="c1"># tuple / list
-</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="nf">to_jsonable</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">tuple</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">items</span><span class="sh">"</span><span class="p">:</span> <span class="n">items</span><span class="p">}</span>
-        <span class="k">return</span> <span class="n">items</span>  <span class="c1"># list는 흔히 그대로
-</span>
-    <span class="c1"># dict / mapping
-</span>    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="c1"># 모든 키가 문자열이면 평범한 dict 유지
-</span>        <span class="k">if</span> <span class="nf">all</span><span class="p">(</span><span class="nf">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">.</span><span class="nf">keys</span><span class="p">()):</span>
-            <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">.</span><span class="nf">items</span><span class="p">()}</span>
-        <span class="c1"># 아니면 entries로 보존
-</span>        <span class="k">return</span> <span class="p">{</span>
-            <span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">dict</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">entries</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">[</span><span class="nf">to_jsonable</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
-                 <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">.</span><span class="nf">items</span><span class="p">()</span>
-            <span class="p">],</span>
-        <span class="p">}</span>
-
-    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">OrderedDict</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">OrderedDict</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">entries</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">[</span><span class="nf">to_jsonable</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
-                 <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">.</span><span class="nf">items</span><span class="p">()</span>
-            <span class="p">],</span>
-        <span class="p">}</span>
-
-    <span class="c1"># dataclass / attrs / pydantic / 사용자 정의 클래스
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># dataclass
-</span>        <span class="k">if</span> <span class="nf">is_dataclass</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-            <span class="n">payload</span> <span class="o">=</span> <span class="nf">asdict</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="p">,</span> <span class="sh">"</span><span class="s">fields</span><span class="sh">"</span><span class="p">:</span>
-                    <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="c1"># attrs
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="n">attr</span>
-        <span class="k">if</span> <span class="n">attr</span><span class="p">.</span><span class="nf">has</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">):</span>
-            <span class="n">payload</span> <span class="o">=</span> <span class="n">attr</span><span class="p">.</span><span class="nf">asdict</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="p">,</span> <span class="sh">"</span><span class="s">fields</span><span class="sh">"</span><span class="p">:</span>
-                    <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="c1"># pydantic
-</span>    <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="sh">"</span><span class="s">model_dump</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="nf">callable</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="sh">"</span><span class="s">model_dump</span><span class="sh">"</span><span class="p">)):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">payload</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="nf">model_dump</span><span class="p">()</span>
-            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="p">,</span> <span class="sh">"</span><span class="s">fields</span><span class="sh">"</span><span class="p">:</span>
-                    <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
-        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-            <span class="k">pass</span>
-
-    <span class="c1"># 커스텀 메서드들
-</span>    <span class="k">for</span> <span class="n">meth</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">__json__</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">to_json</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">to_dict</span><span class="sh">"</span><span class="p">):</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">meth</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nf">callable</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">payload</span> <span class="o">=</span> <span class="nf">fn</span><span class="p">()</span>
-                <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="p">,</span> <span class="sh">"</span><span class="s">fields</span><span class="sh">"</span><span class="p">:</span>
-                        <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
-            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-                <span class="k">pass</span>
-
-    <span class="c1"># __getstate__ / __dict__
-</span>    <span class="n">state</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="sh">"</span><span class="s">__getstate__</span><span class="sh">"</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="n">obj</span><span class="p">.</span><span class="nf">__getstate__</span><span class="p">()</span>
-        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="sh">"</span><span class="s">__dict__</span><span class="sh">"</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="nf">dict</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">__dict__</span><span class="p">)</span>
-        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="p">,</span> <span class="sh">"</span><span class="s">state</span><span class="sh">"</span><span class="p">:</span>
-                <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="n">seen</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">_depth</span><span class="o">=</span><span class="n">_depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
-
-    <span class="c1"># 마지막 안전판
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="n">rep</span> <span class="o">=</span> <span class="nf">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="n">rep</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">&lt;unreprable </span><span class="si">{</span><span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="s">&gt;</span><span class="sh">"</span>
-    <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">$id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="sh">"</span><span class="s">$type</span><span class="sh">"</span><span class="p">:</span> <span class="n">obj</span><span class="p">.</span><span class="n">__class__</span><span class="p">.</span><span class="n">__name__</span><span class="p">,</span> <span class="sh">"</span><span class="s">repr</span><span class="sh">"</span><span class="p">:</span> <span class="n">rep</span><span class="p">,</span> <span class="sh">"</span><span class="s">$error</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">fallback_repr</span><span class="sh">"</span><span class="p">}</span>
-
-<span class="c1"># ---------- 4) 최종 유틸 ----------
-</span><span class="k">def</span> <span class="nf">pickle_to_json_bytes</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">safe</span><span class="sh">"</span><span class="p">,</span> <span class="n">allow</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
-                         <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">safe</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">trusted</span><span class="sh">"</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">mode must be </span><span class="sh">'</span><span class="s">safe</span><span class="sh">'</span><span class="s"> or </span><span class="sh">'</span><span class="s">trusted</span><span class="sh">'"</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">safe</span><span class="sh">"</span><span class="p">:</span>
-        <span class="c1"># 사전 점검: 어떤 클래스가 필요한지
-</span>        <span class="n">needed</span> <span class="o">=</span> <span class="nf">audit_pickle_globals</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">allow</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">allow</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">allow</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
-        <span class="c1"># numpy/pandas 등 자동 허용 (있을 때)
-</span>        <span class="k">if</span> <span class="n">np</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">allow</span><span class="p">.</span><span class="nf">update</span><span class="p">({</span><span class="sh">"</span><span class="s">numpy.ndarray</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">numpy.dtype</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">numpy.core.numeric.complexfloating</span><span class="sh">"</span><span class="p">})</span>
-        <span class="k">if</span> <span class="n">pd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">allow</span><span class="p">.</span><span class="nf">update</span><span class="p">({</span><span class="sh">"</span><span class="s">pandas.core.frame.DataFrame</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">pandas.core.series.Series</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">pandas.core.indexes.base.Index</span><span class="sh">"</span><span class="p">})</span>
-        <span class="c1"># 필요하지만 화이트리스트에 없는 것 있으면 경고(여기선 예외로 명확히)
-</span>        <span class="n">missing</span> <span class="o">=</span> <span class="n">needed</span> <span class="o">-</span> <span class="n">allow</span> <span class="o">-</span> <span class="p">{</span>
-            <span class="c1"># 종종 피클 스트림에 등장하는 builtins/eval 보조들 (이미 Restricted에서 기본 거름)
-</span>        <span class="p">}</span>
-        <span class="c1"># 실제로는 사용자에게 리스트를 보여주고 승인받는 게 가장 안전
-</span>        <span class="c1"># 여기서는 '허용 안 된 심볼이 있다'면 실패 처리
-</span>        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">pickle</span><span class="p">.</span><span class="nc">UnpicklingError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Unapproved classes in pickle: </span><span class="si">{</span><span class="nf">sorted</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
-
-        <span class="n">obj</span> <span class="o">=</span> <span class="nf">restricted_loads</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">,</span> <span class="n">allowed</span><span class="o">=</span><span class="n">allow</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># trusted
-</span>        <span class="n">obj</span> <span class="o">=</span> <span class="n">pickle</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">)</span>
-
-    <span class="n">jsonable</span> <span class="o">=</span> <span class="nf">to_jsonable</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="n">txt</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">jsonable</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="n">ensure_ascii</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">allow_nan</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="c1"># 역파싱 검증
-</span>    <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">txt</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span>
-
-<span class="c1"># ---------- 5) CLI ----------
-</span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="kn">import</span> <span class="n">argparse</span><span class="p">,</span> <span class="n">os</span>
-    <span class="n">ap</span> <span class="o">=</span> <span class="n">argparse</span><span class="p">.</span><span class="nc">ArgumentParser</span><span class="p">()</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">input</span><span class="sh">"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">input .pkl file</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">output .json file</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--mode</span><span class="sh">"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">safe</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">trusted</span><span class="sh">"</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="sh">"</span><span class="s">safe</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--allow</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">append</span><span class="sh">"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">extra allowed </span><span class="sh">'</span><span class="s">module.Class</span><span class="sh">'</span><span class="s"> (repeatable)</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--no-indent</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">args</span> <span class="o">=</span> <span class="n">ap</span><span class="p">.</span><span class="nf">parse_args</span><span class="p">()</span>
-
-    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nb">input</span><span class="p">,</span> <span class="sh">"</span><span class="s">rb</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">pkl</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
-
-    <span class="n">indent</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">no_indent</span> <span class="k">else</span> <span class="mi">2</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="nf">pickle_to_json_bytes</span><span class="p">(</span><span class="n">pkl</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">args</span><span class="p">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="nf">set</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">allow</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">output</span><span class="p">,</span> <span class="sh">"</span><span class="s">wb</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
-
-    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Wrote </span><span class="si">{</span><span class="n">args</span><span class="p">.</span><span class="n">output</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
-    <span class="nf">main</span><span class="p">()</span>
-</code></pre></div></div>
-
-<h2 id="사용-예">사용 예</h2>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 1) 먼저 어떤 클래스가 필요한지 확인만 해보려면 (스크립트 수정 없이 간단 확인)</span>
-python <span class="nt">-c</span> <span class="s2">"import sys, pickletools; import pathlib; p=pathlib.Path(sys.argv[1]).read_bytes(); </span><span class="se">\</span><span class="s2">
-print({(a.split('</span><span class="se">\n</span><span class="s2">')[0]+'.'+a.split('</span><span class="se">\n</span><span class="s2">')[1]) for (op,a,_) in pickletools.genops(p) if op.name in ('GLOBAL','STACK_GLOBAL')})"</span> mydata.pkl
-
-<span class="c"># 2) 안전 모드에서 허용 클래스 지정 후 변환</span>
-python pickle_to_json.py mydata.pkl mydata.json <span class="nt">--mode</span> safe <span class="nt">--allow</span> mypkg.models.User <span class="nt">--allow</span> mypkg.models.Order
-
-<span class="c"># 3) 신뢰 모드(출처가 확실할 때만)</span>
-python pickle_to_json.py mydata.pkl mydata.json <span class="nt">--mode</span> trusted
-</code></pre></div></div>
-
-<hr />
-
-<h1 id="실무-팁-에러-최소화-포인트">실무 팁 (에러 최소화 포인트)</h1>
-
-<ol>
-  <li>
-    <p><strong>화이트리스트는 점진적으로 넓혀라</strong><br />
-먼저 “막고 → 필요한 것만 허용”이 안전하고, 에러도 찾기 쉽다. 허용할 때는 <strong>정확한 풀네임(module.Class)</strong> 로.</p>
-  </li>
-  <li>
-    <p><strong>커스텀 클래스에<code class="language-plaintext highlighter-rouge">__json__</code> 또는 <code class="language-plaintext highlighter-rouge">to_dict()</code> 추가</strong><br />
-프로젝트 내부 클래스라면 여기에 직렬화 규칙을 넣어두면, 변환기가 알아서 호출하므로 실패율이 크게 준다.</p>
-  </li>
-  <li>
-    <p><strong>순환 참조가 많은 그래프는<code class="language-plaintext highlighter-rouge">$id/$ref</code> 스킴 필수</strong><br />
-JSON 순환은 불가하니, 위 스킴 같은 <strong>참조 표현</strong> 을 반드시 도입해야 데이터 손실/오류가 없다.</p>
-  </li>
-  <li>
-    <p><strong>거대한 배열/데이터프레임은 별도 파일 고려</strong><br />
-JSON은 용량/속도에 약하다. 정말 크면 <code class="language-plaintext highlighter-rouge">.npy</code>나 <code class="language-plaintext highlighter-rouge">.parquet</code>를 <strong>사이드카</strong> 로 저장하고 JSON에는 메타/경로만 넣는 전략이 좋다.</p>
-  </li>
-  <li>
-    <p><strong>덤프 전에 변환만 먼저 실행해보기</strong><br />
-<code class="language-plaintext highlighter-rouge">to_jsonable(obj)</code> 결과를 한 번 찍어보면 어떤 타입이 어떻게 나오는지 바로 파악 가능. 실패 지점이 드러난다.</p>
-  </li>
-  <li>
-    <p><strong>로스리스가 중요하면 타입 메타를 꼭 남겨라</strong><br />
-<code class="language-plaintext highlighter-rouge">"$type"</code>, <code class="language-plaintext highlighter-rouge">shape</code>, <code class="language-plaintext highlighter-rouge">dtype</code> 같은 메타가 재구성에 필수다.</p>
-  </li>
-  <li>
-    <p><strong>테스트</strong></p>
-
-    <ul>
-      <li>
-        <p>작은 샘플 피클로 시작 → 점진 확대</p>
-      </li>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">json.loads(dumps(...))</code> 역파싱 검증</p>
-      </li>
-      <li>
-        <p>대표 케이스: set/tuple/bytes/datetime/enum/numpy/pandas/커스텀 클래스를 모두 포함하는 합성 테스트</p>
-      </li>
-    </ul>
-  </li>
-</ol>
-
-<hr />
-
-<p>원하면 위 스크립트를 네 상황에 맞게 더 최소/간결화하거나, <code class="language-plaintext highlighter-rouge">jsonpickle</code>을 활용한 초간단 버전도 만들어줄게.</p>
-
-<p class="chat--user">
-
-1. 그냥 모든걸 trust로 하고 싶어. 모두 내가 만든 파일들이야. 2. 질문. 파이썬 버전은 상관 없을까? 3. jsonpickle을 사용해서 간단해진다면 그렇게 해줘
-
-</p>
-
-<p>좋아! 네 3가지 조건(1. 전부 trust 모드, 2. 파이썬 버전 이슈, 3. jsonpickle로 간단히) 기준으로, 에러를 최소화하는 <strong>실전용 절차 + 바로 쓸 수 있는 스크립트</strong> 까지 준비했어.</p>
-
-<h1 id="step-by-step">Step by Step</h1>
-
-<h2 id="1-전략-요약-trust-모드">1) 전략 요약 (Trust 모드)</h2>
-
-<ul>
-  <li>
-    <p><strong>전제</strong> : 피클은 전부 네가 만든 파일 → <code class="language-plaintext highlighter-rouge">pickle.load</code>로 곧바로 로드하고, 그 객체를 <strong>jsonpickle</strong> 로 JSON 변환.</p>
-  </li>
-  <li>
-    <p><strong>이점</strong> : 커스텀 클래스/순환 참조/공유 참조를 jsonpickle이 자동 처리(<code class="language-plaintext highlighter-rouge">py/object</code>, <code class="language-plaintext highlighter-rouge">py/id</code>, <code class="language-plaintext highlighter-rouge">py/ref</code> 메타).</p>
-  </li>
-  <li>
-    <p><strong>선택지</strong> :</p>
-
-    <ul>
-      <li>
-        <p>타입 복원 메타 포함(기본): <code class="language-plaintext highlighter-rouge">unpicklable=True</code> → 로스리스에 가까운 표현.</p>
-      </li>
-      <li>
-        <p><strong>순수 JSON만</strong>(타입 메타 제거): <code class="language-plaintext highlighter-rouge">unpicklable=False</code> → 아주 깔끔하지만, 타입/참조 복원 불가.</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="2-파이썬-버전-호환성-필수-체크">2) 파이썬 버전 호환성 (필수 체크)</h2>
-
-<ul>
-  <li>
-    <p><strong>같거나 더 새 버전의 파이썬</strong> 에서 로드하자. (예: Py 3.8에서 만든 피클 → Py 3.8 이상에서 로드 권장)</p>
-  </li>
-  <li>
-    <p>피클 <strong>프로토콜</strong> 은 “신버전이 구버전 읽기 OK, 그 반대는 종종 불가”가 일반적.</p>
-  </li>
-  <li>
-    <p><strong>클래스 import 가능성</strong> : 피클 안에 저장된 모듈/클래스 경로가 현재 환경에서 <strong>import</strong> 되어야 언피클 성공.</p>
-
-    <ul>
-      <li>즉, 프로젝트 코드가 <code class="language-plaintext highlighter-rouge">PYTHONPATH</code> 에 있어야 하고, <strong>모듈/클래스 이름이 바뀌지 않아야</strong> 해.</li>
-    </ul>
-  </li>
-  <li>
-    <p>(구피클) Python 2에서 만든 피클이라면 Py3에서 <code class="language-plaintext highlighter-rouge">encoding='latin1'</code> 옵션이 필요할 수 있음.</p>
-  </li>
-</ul>
-
-<h2 id="3-jsonpickle로-간단튼튼하게-변환">3) jsonpickle로 간단/튼튼하게 변환</h2>
-
-<ul>
-  <li>
-    <p><strong>핵심 한 줄</strong> : <code class="language-plaintext highlighter-rouge">jsonpickle.encode(obj, unpicklable=..., make_refs=..., max_depth=...)</code></p>
-  </li>
-  <li>
-    <p><strong>핸들러 등록</strong> : NumPy/Pandas가 있다면 <code class="language-plaintext highlighter-rouge">jsonpickle.ext.numpy.register_handlers()</code>, <code class="language-plaintext highlighter-rouge">jsonpickle.ext.pandas.register_handlers()</code> 호출로 배열/데이터프레임을 자연스럽게 직렬화.</p>
-  </li>
-  <li>
-    <p><strong>Strict JSON</strong> 필요하면: <code class="language-plaintext highlighter-rouge">allow_nan=False</code> (NaN/Infinity 금지) 를 백엔드 옵션으로 지정.</p>
-  </li>
-  <li>
-    <p><strong>대용량</strong> 이면: 들여쓰기 <code class="language-plaintext highlighter-rouge">None</code>(압축), 필요 시 <code class="language-plaintext highlighter-rouge">sort_keys=False</code> 유지로 성능/용량 최소화.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h1 id="바로-실행-가능한-스크립트">바로 실행 가능한 스크립트</h1>
-
-<p>내가 <strong>trust 모드 전용 변환 스크립트</strong> 를 만들어 뒀어. 옵션으로 순수 JSON, 참조 트래킹, strict JSON, 들여쓰기 등 세밀 제어가 가능해.</p>
-
-<p>Download: <code class="language-plaintext highlighter-rouge">pickle_to_json_trusted.py</code></p>
-
-<h2 id="사용법-예시">사용법 예시</h2>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 1) 기본: 타입/참조 메타 유지 (권장: 로스리스에 가까움)</span>
-python pickle_to_json_trusted.py mydata.pkl mydata.json
-
-<span class="c"># 2) 순수 JSON(메타 제거) — 사람이 읽기/타 시스템 교환에 좋음</span>
-python pickle_to_json_trusted.py mydata.pkl mydata.json <span class="nt">--pure</span>
-
-<span class="c"># 3) 사이클이 없고 참조 추적이 불필요하다면 약간 더 단순화</span>
-python pickle_to_json_trusted.py mydata.pkl mydata.json <span class="nt">--no-refs</span>
-
-<span class="c"># 4) Strict JSON (NaN/Infinity 금지), 컴팩트 출력</span>
-python pickle_to_json_trusted.py mydata.pkl mydata.json <span class="nt">--strict</span> <span class="nt">--no-indent</span>
-
-<span class="c"># 5) NumPy/Pandas가 있다면 자동 핸들러 등록됨(별도 옵션 불필요)</span>
-
-<span class="c"># 6) 정보 출력(프로토콜/글로벌 심볼 훑어보기)</span>
-python pickle_to_json_trusted.py mydata.pkl mydata.json <span class="nt">--info</span>
-
-<span class="c"># 7) (레거시) Python 2에서 만든 피클이라면</span>
-python pickle_to_json_trusted.py mydata.pkl mydata.json <span class="nt">--py2-latin1</span>
-</code></pre></div></div>
-
-<p>출력 모드에 따른 JSON 형태는 대략 다음과 같아:</p>
-
-<ul>
-  <li>
-    <p><strong>기본(메타 포함)</strong> : 각 객체에 <code class="language-plaintext highlighter-rouge">py/object</code>, 참조엔 <code class="language-plaintext highlighter-rouge">py/id</code>/<code class="language-plaintext highlighter-rouge">py/ref</code>가 붙음 → 복원 친화적.</p>
-  </li>
-  <li>
-    <p><strong>--pure</strong> : 표준 JSON만 남김 → 최대 호환성, 대신 타입/참조 정보는 사라짐.</p>
-  </li>
-</ul>
-
-<hr />
-
-<h1 id="에러를-더-줄이는-팁">에러를 더 줄이는 팁</h1>
-
-<ol>
-  <li>
-    <p><strong>런타임 정합성</strong></p>
-
-    <ul>
-      <li>
-        <p>언피클 시 <code class="language-plaintext highlighter-rouge">ModuleNotFoundError</code>, <code class="language-plaintext highlighter-rouge">AttributeError</code>가 나면, 현재 환경에서 필요한 모듈/클래스가 <strong>그대로 import 가능</strong> 한지 확인.</p>
-      </li>
-      <li>
-        <p>패키지/모듈 이름 변경, 클래스 이동이 있었다면 임시 호환 레이어(구이름 alias) 추가가 현실적.</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>메모리/성능</strong></p>
-
-    <ul>
-      <li>
-        <p>매우 큰 배열/프레임은 <code class="language-plaintext highlighter-rouge">--no-indent</code>로 용량 줄이기.</p>
-      </li>
-      <li>
-        <p>정말 큰 수치 데이터는 JSON 대신 <strong>사이드카 포맷</strong>(예: <code class="language-plaintext highlighter-rouge">.npy</code>/<code class="language-plaintext highlighter-rouge">.parquet</code>) 고려 후 JSON에는 메타/경로만 담는 전략도 가능.</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>안전/정합성 검증</strong></p>
-
-    <ul>
-      <li>생성된 JSON을 한 번 <code class="language-plaintext highlighter-rouge">json.loads</code>로 역파싱하면 문법 실수를 조기에 발견.</li>
-    </ul>
-  </li>
-</ol>
-
-<hr />
-
-<h1 id="요약-답변">요약 답변</h1>
-
-<ol>
-  <li>
-    <p><strong>Trust로 가자</strong> → <code class="language-plaintext highlighter-rouge">pickle.load</code> 후 <code class="language-plaintext highlighter-rouge">jsonpickle.encode</code> 가 가장 간단/범용.</p>
-  </li>
-  <li>
-    <p><strong>파이썬 버전</strong> 은 “같거나 더 최신”을 쓰면 대부분 안전. (특히 Py ≥3.8이면 프로토콜 5 대응 OK.) 모듈/클래스 경로가 동일하게 import 가능해야 함.</p>
-  </li>
-  <li>
-    <p><strong>jsonpickle 사용</strong> 이 가장 손쉬움. 위 스크립트로 바로 가능하고, 필요 시 <code class="language-plaintext highlighter-rouge">--pure</code>(메타 제거), <code class="language-plaintext highlighter-rouge">--strict</code>(NaN 금지), <code class="language-plaintext highlighter-rouge">--no-indent</code>(대용량) 등 옵션으로 상황 맞춤화하면 돼.</p>
-  </li>
-</ol>
-
-<p>원하면 <code class="language-plaintext highlighter-rouge">py/object</code> 메타 포맷 대신, 아예 <code class="language-plaintext highlighter-rouge">$type</code> 같은 커스텀 스킴으로 바꾼 미니 직렬화기도 만들어줄 수 있어.</p>
-
-<p class="chat--user">
-
-본문에 그냥 써주고, 커스텀 클래스 import 는 어떤 식으로 해야해?
-
-</p>
-
-<p>좋아—<strong>trust 모드 + jsonpickle</strong> 로 “피클 → JSON”을 <strong>간단/튼튼</strong> 하게 처리하는 스크립트를 본문에 바로 넣어둘게.<br />
-그리고 <strong>커스텀 클래스 import</strong> 는 어떻게 해야 언피클이 잘 되는지, 가장 실전적인 방법들을 아래에 정리했어.</p>
-
-<hr />
-
-<h1 id="step-by-step-1">Step by Step</h1>
-
-<ol>
-  <li>
-    <p><strong>전제</strong> : 전부 네가 만든 피클 → <code class="language-plaintext highlighter-rouge">pickle.load</code>(trust)로 로드해도 됨.</p>
-  </li>
-  <li>
-    <p><strong>버전</strong> : 피클을 만든 파이썬 <strong>동일 또는 더 최신 버전</strong> 에서 로드(특히 모듈 경로가 동일하게 import 가능해야 함).</p>
-  </li>
-  <li>
-    <p><strong>핵심</strong> : 로드한 객체를 <code class="language-plaintext highlighter-rouge">jsonpickle.encode(...)</code>로 JSON 변환.</p>
-  </li>
-  <li>
-    <p><strong>대용량/호환성 옵션</strong> :</p>
-
-    <ul>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">--pure</code> → 타입 메타 제거(아주 깔끔한 JSON), 대신 복원 불가.</p>
-      </li>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">--no-refs</code> → 참조/사이클 추적 비활성화(간단하지만 공유참조 정보 사라짐).</p>
-      </li>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">--strict</code> → NaN/Infinity 금지(정-표준 JSON).</p>
-      </li>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">--no-indent</code> → 용량 최소화.</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>커스텀 클래스 import</strong> 는 “현재 프로세스에서 해당 모듈을 <strong>정확히 import 가능</strong> ”해야 함. 아래 “Import 요령” 참고.</p>
-  </li>
-</ol>
-
-<hr />
-
-<h1 id="신뢰-모드-전용-스크립트-jsonpickle-사용">신뢰 모드 전용 스크립트 (jsonpickle 사용)</h1>
-
-<p>아래 코드를 <code class="language-plaintext highlighter-rouge">pickle_to_json_trusted.py</code>로 저장해서 바로 써.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
-# pickle_to_json_trusted.py
-# Trust-mode: loads your own pickle files, then encodes to JSON with jsonpickle.
-</span>
-<span class="kn">import</span> <span class="n">argparse</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">pickle</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">os</span><span class="p">,</span> <span class="n">traceback</span><span class="p">,</span> <span class="n">importlib</span>
-<span class="kn">import</span> <span class="n">pickletools</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="n">jsonpickle</span>
-<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">ERROR: jsonpickle is required. Install with: pip install jsonpickle</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-    <span class="k">raise</span>
-
-<span class="k">def</span> <span class="nf">register_optional_exts</span><span class="p">():</span>
-    <span class="c1"># Optional handlers for numpy/pandas if available
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="n">jsonpickle.ext</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jsonpickle_numpy</span>
-        <span class="n">jsonpickle_numpy</span><span class="p">.</span><span class="nf">register_handlers</span><span class="p">()</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="n">jsonpickle.ext</span> <span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">jsonpickle_pandas</span>
-        <span class="n">jsonpickle_pandas</span><span class="p">.</span><span class="nf">register_handlers</span><span class="p">()</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-<span class="k">def</span> <span class="nf">peek_protocol</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">pickletools</span><span class="p">.</span><span class="nf">genops</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">op</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">PROTO</span><span class="sh">"</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">arg</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
-    <span class="k">return</span> <span class="bp">None</span>
-
-<span class="k">def</span> <span class="nf">scan_globals</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
-    <span class="n">refs</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">pickletools</span><span class="p">.</span><span class="nf">genops</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">op</span><span class="p">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">GLOBAL</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">STACK_GLOBAL</span><span class="sh">"</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-                    <span class="n">mod</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">arg</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">parts</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">arg</span><span class="p">).</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-                        <span class="n">mod</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">continue</span>
-                <span class="n">refs</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">mod</span><span class="si">}</span><span class="s">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
-    <span class="k">return</span> <span class="nf">sorted</span><span class="p">(</span><span class="n">refs</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">ap</span> <span class="o">=</span> <span class="n">argparse</span><span class="p">.</span><span class="nc">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">Trust-mode: Convert a Python pickle to JSON using jsonpickle.</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">input</span><span class="sh">"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Input .pkl file path</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Output .json file path</span><span class="sh">"</span><span class="p">)</span>
-    <span class="c1"># JSON shape options
-</span>    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--pure</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Emit plain JSON (unpicklable=False) without py/object metadata.</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--no-refs</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Do not track object references/cycles (make_refs=False).</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--max-depth</span><span class="sh">"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Limit traversal depth (None = unlimited).</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--indent</span><span class="sh">"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Pretty-print indent (use 0 or --no-indent for compact).</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--no-indent</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Compact JSON (indent=None).</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--ensure-ascii</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Escape non-ASCII characters.</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--strict</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Disallow NaN/Infinity (allow_nan=False).</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--sort-keys</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Sort JSON object keys.</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--info</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Print pickle protocol &amp; referenced globals before converting.</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--py2-latin1</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">store_true</span><span class="sh">"</span><span class="p">,</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">If the pickle came from Python 2, try encoding=</span><span class="sh">'</span><span class="s">latin1</span><span class="sh">'</span><span class="s">.</span><span class="sh">"</span><span class="p">)</span>
-
-    <span class="c1"># Import help (for custom classes)
-</span>    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--sys-path</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">append</span><span class="sh">"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Prepend a path to sys.path (repeatable).</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--preload</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">append</span><span class="sh">"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Import module(s) before unpickling, e.g. mypkg.models (repeatable).</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">ap</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--alias</span><span class="sh">"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="sh">"</span><span class="s">append</span><span class="sh">"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
-                    <span class="n">help</span><span class="o">=</span><span class="sh">"</span><span class="s">Module alias mapping OLD=NEW (repeatable).</span><span class="sh">"</span><span class="p">)</span>
-
-    <span class="n">args</span> <span class="o">=</span> <span class="n">ap</span><span class="p">.</span><span class="nf">parse_args</span><span class="p">()</span>
-
-    <span class="c1"># sys.path adjustments for project importability
-</span>    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">args</span><span class="p">.</span><span class="n">sys_path</span><span class="p">:</span>
-        <span class="n">sys</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
-
-    <span class="c1"># module aliasing (module path changed)
-</span>    <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">args</span><span class="p">.</span><span class="n">alias</span><span class="p">:</span>
-        <span class="k">if</span> <span class="sh">"</span><span class="s">=</span><span class="sh">"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pair</span><span class="p">:</span>
-            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">WARNING: --alias expects OLD=NEW, got </span><span class="si">{</span><span class="n">pair</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-            <span class="k">continue</span>
-        <span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="o">=</span> <span class="n">pair</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">=</span><span class="sh">"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">new_mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="p">.</span><span class="nf">import_module</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
-        <span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">old</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_mod</span>
-
-    <span class="c1"># preload modules so that pickle can resolve classes
-</span>    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">args</span><span class="p">.</span><span class="n">preload</span><span class="p">:</span>
-        <span class="n">importlib</span><span class="p">.</span><span class="nf">import_module</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-
-    <span class="c1"># read pickle bytes
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nb">input</span><span class="p">,</span> <span class="sh">"</span><span class="s">rb</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">pkl_bytes</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
-    <span class="k">except</span> <span class="nb">FileNotFoundError</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">ERROR: file not found: </span><span class="si">{</span><span class="n">args</span><span class="p">.</span><span class="nb">input</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">info</span><span class="p">:</span>
-        <span class="n">proto</span> <span class="o">=</span> <span class="nf">peek_protocol</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">)</span>
-        <span class="n">globs</span> <span class="o">=</span> <span class="nf">scan_globals</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">)</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[info] protocol: </span><span class="si">{</span><span class="n">proto</span> <span class="k">if</span> <span class="n">proto</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="sh">'</span><span class="s">unknown</span><span class="sh">'</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">globs</span><span class="p">:</span>
-            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[info] referenced globals (</span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">globs</span><span class="p">)</span><span class="si">}</span><span class="s">):</span><span class="sh">"</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">globs</span><span class="p">:</span>
-                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">  - </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[info] referenced globals: (none found)</span><span class="sh">"</span><span class="p">)</span>
-
-    <span class="c1"># jsonpickle backend setup
-</span>    <span class="nf">register_optional_exts</span><span class="p">()</span>
-    <span class="n">jsonpickle</span><span class="p">.</span><span class="nf">set_preferred_backend</span><span class="p">(</span><span class="sh">'</span><span class="s">json</span><span class="sh">'</span><span class="p">)</span>
-    <span class="n">indent</span> <span class="o">=</span> <span class="bp">None</span> <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">no_indent</span> <span class="k">else</span> <span class="n">args</span><span class="p">.</span><span class="n">indent</span>
-    <span class="c1"># encoder opts
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="n">jsonpickle</span><span class="p">.</span><span class="nf">set_encoder_options</span><span class="p">(</span>
-            <span class="sh">'</span><span class="s">json</span><span class="sh">'</span><span class="p">,</span>
-            <span class="n">ensure_ascii</span><span class="o">=</span><span class="n">args</span><span class="p">.</span><span class="n">ensure_ascii</span><span class="p">,</span>
-            <span class="n">allow_nan</span><span class="o">=</span><span class="ow">not</span> <span class="n">args</span><span class="p">.</span><span class="n">strict</span><span class="p">,</span>
-            <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
-            <span class="n">sort_keys</span><span class="o">=</span><span class="n">args</span><span class="p">.</span><span class="n">sort_keys</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">except</span> <span class="nb">TypeError</span><span class="p">:</span>
-        <span class="n">jsonpickle</span><span class="p">.</span><span class="nf">set_encoder_options</span><span class="p">(</span><span class="sh">'</span><span class="s">json</span><span class="sh">'</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="n">args</span><span class="p">.</span><span class="n">ensure_ascii</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span>
-
-    <span class="c1"># unpickle (TRUST)
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="n">io</span>
-        <span class="n">bio</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="nc">BytesIO</span><span class="p">(</span><span class="n">pkl_bytes</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">py2_latin1</span><span class="p">:</span>
-            <span class="n">obj</span> <span class="o">=</span> <span class="n">pickle</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">bio</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">'</span><span class="s">latin1</span><span class="sh">'</span><span class="p">,</span> <span class="n">fix_imports</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">obj</span> <span class="o">=</span> <span class="n">pickle</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">bio</span><span class="p">)</span>
-    <span class="k">except</span> <span class="nb">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">ERROR: Required module isn</span><span class="sh">'</span><span class="s">t importable.</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Detail: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Tip: Use --sys-path/--preload/--alias or set PYTHONPATH.</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">except</span> <span class="nb">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">ERROR: Class/attribute moved or renamed.</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Detail: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">ERROR: Unpickling failed.</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">()</span>
-        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="c1"># encode with jsonpickle
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="n">json_str</span> <span class="o">=</span> <span class="n">jsonpickle</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span>
-            <span class="n">obj</span><span class="p">,</span>
-            <span class="n">unpicklable</span><span class="o">=</span><span class="ow">not</span> <span class="n">args</span><span class="p">.</span><span class="n">pure</span><span class="p">,</span>
-            <span class="n">make_refs</span><span class="o">=</span><span class="ow">not</span> <span class="n">args</span><span class="p">.</span><span class="n">no_refs</span><span class="p">,</span>
-            <span class="n">max_depth</span><span class="o">=</span><span class="n">args</span><span class="p">.</span><span class="n">max_depth</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">ERROR: jsonpickle encoding failed.</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">()</span>
-        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-
-    <span class="c1"># write
-</span>    <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">output</span><span class="p">,</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">json_str</span><span class="p">)</span>
-    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">ERROR: writing output failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-
-    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Wrote </span><span class="si">{</span><span class="n">args</span><span class="p">.</span><span class="n">output</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
-    <span class="nf">main</span><span class="p">()</span>
-</code></pre></div></div>
-
-<h3 id="실행-예">실행 예</h3>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># (가장 기본) 타입/참조 메타 유지: 복원 친화적</span>
-python pickle_to_json_trusted.py data.pkl data.json
-
-<span class="c"># 순수 JSON (메타 제거)</span>
-python pickle_to_json_trusted.py data.pkl data.json <span class="nt">--pure</span>
-
-<span class="c"># 사이클/참조 추적 끄기 + 컴팩트 + Strict JSON</span>
-python pickle_to_json_trusted.py data.pkl data.json <span class="nt">--no-refs</span> <span class="nt">--no-indent</span> <span class="nt">--strict</span>
-
-<span class="c"># 피클 정보(프로토콜/글로벌): 디버깅용</span>
-python pickle_to_json_trusted.py data.pkl data.json <span class="nt">--info</span>
-</code></pre></div></div>
-
-<hr />
-
-<h1 id="커스텀-클래스-import--이렇게-하면-된다-실전-레시피">커스텀 클래스 import — 이렇게 하면 된다 (실전 레시피)</h1>
-
-<p>언피클이 커스텀 클래스를 복원하려면, <strong>피클에 기록된 “모듈.클래스”가 현재 런타임에서 import 가능</strong> 해야 해.</p>
-
-<h2 id="1-가장-깔끔-프로젝트를-패키지로-설치">1) 가장 깔끔: 프로젝트를 패키지로 설치</h2>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 프로젝트 루트에서</span>
-pip <span class="nb">install</span> <span class="nt">-e</span> <span class="nb">.</span>
-<span class="c"># 또는 PYTHONPATH로 임시 등록</span>
-<span class="nv">PYTHONPATH</span><span class="o">=</span>/path/to/project python pickle_to_json_trusted.py data.pkl out.json
-</code></pre></div></div>
-
-<ul>
-  <li>이러면 <code class="language-plaintext highlighter-rouge">mypkg.models.User</code> 같은 경로를 파이썬이 자연스럽게 찾음.</li>
-</ul>
-
-<h2 id="2-경로만-추가해서-import-가능하게-스크립트-옵션">2) 경로만 추가해서 import 가능하게 (스크립트 옵션)</h2>
-
-<p>프로젝트 루트를 <code class="language-plaintext highlighter-rouge">sys.path</code> 앞에 추가:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python pickle_to_json_trusted.py data.pkl out.json <span class="se">\</span>
-  <span class="nt">--sys-path</span> /absolute/path/to/project_root <span class="se">\</span>
-  <span class="nt">--preload</span> mypkg.models
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">--preload</code>는 해당 모듈을 미리 import해서 클래스 등록을 확실히 해줘.</li>
-</ul>
-
-<h2 id="3-모듈-경로가-바뀐-경우리팩터링--모듈-alias">3) 모듈 경로가 바뀐 경우(리팩터링) → <strong>모듈 alias</strong></h2>
-
-<p>예: 예전에는 <code class="language-plaintext highlighter-rouge">oldpkg.models</code>였는데 지금은 <code class="language-plaintext highlighter-rouge">newpkg.models</code>로 이동했다면:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python pickle_to_json_trusted.py data.pkl out.json <span class="se">\</span>
-  <span class="nt">--sys-path</span> /path/to/project <span class="se">\</span>
-  <span class="nt">--alias</span> oldpkg.models<span class="o">=</span>newpkg.models <span class="se">\</span>
-  <span class="nt">--preload</span> newpkg.models
-</code></pre></div></div>
-
-<ul>
-  <li>이러면 <code class="language-plaintext highlighter-rouge">pickle.load</code>가 <code class="language-plaintext highlighter-rouge">oldpkg.models</code>를 찾으려 할 때, 내부적으로 <code class="language-plaintext highlighter-rouge">newpkg.models</code>를 대신 사용.</li>
-</ul>
-
-<h2 id="4-클래스가-다른-모듈로-이동했다면--런타임-shim간단-예">4) 클래스가 다른 모듈로 이동했다면 → <strong>런타임 shim(간단 예)</strong></h2>
-
-<p>모듈 alias만으로 부족할 때(클래스 이름도 바뀌었거나 세부 구조가 바뀐 경우), 언피클 전에 <strong>임시 shim 모듈</strong> 을 만들어 매핑해 줄 수 있어:</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 예: OldClass가 oldpkg.models → newpkg.models.NewClass 로 이동/개명된 경우
-</span><span class="kn">import</span> <span class="n">types</span><span class="p">,</span> <span class="n">sys</span>
-<span class="kn">import</span> <span class="n">newpkg.models</span> <span class="k">as</span> <span class="n">newmod</span>
-
-<span class="n">shim</span> <span class="o">=</span> <span class="n">types</span><span class="p">.</span><span class="nc">ModuleType</span><span class="p">(</span><span class="sh">"</span><span class="s">oldpkg.models</span><span class="sh">"</span><span class="p">)</span>
-<span class="c1"># 예전 이름을 새 클래스에 매핑
-</span><span class="n">shim</span><span class="p">.</span><span class="n">OldClass</span> <span class="o">=</span> <span class="n">newmod</span><span class="p">.</span><span class="n">NewClass</span>
-<span class="c1"># 언피클이 찾아쓰도록 sys.modules 등록
-</span><span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="sh">"</span><span class="s">oldpkg.models</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">shim</span>
-
-<span class="c1"># 이제 pickle.load를 호출
-</span></code></pre></div></div>
-
-<blockquote>
-  <p>위 shim 코드는 <strong>스크립트 최상단(언피클 직전)</strong>에 넣으면 되고, 경우에 따라 여러 클래스를 넣어 매핑하면 된다.</p>
-</blockquote>
-
-<h2 id="5-python-2--3-피클일-때">5) Python 2 → 3 피클일 때</h2>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python pickle_to_json_trusted.py data.pkl out.json <span class="nt">--py2-latin1</span>
-</code></pre></div></div>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">encoding='latin1'</code>, <code class="language-plaintext highlighter-rouge">fix_imports=True</code>로 과거 피클 호환을 시도.</li>
-</ul>
-
-<hr />
-
-<h1 id="작게-요약">작게 요약</h1>
-
-<ul>
-  <li>
-    <p><strong>Trust OK</strong> → <code class="language-plaintext highlighter-rouge">pickle.load</code> + <code class="language-plaintext highlighter-rouge">jsonpickle.encode</code>가 가장 간단.</p>
-  </li>
-  <li>
-    <p><strong>버전</strong> 은 “같거나 최신” 권장 + 모듈/클래스 경로가 현재 환경에서 그대로 import 가능해야 함.</p>
-  </li>
-  <li>
-    <p><strong>커스텀 클래스 import</strong> 는</p>
-
-    <ol>
-      <li>
-        <p>패키지로 설치(또는 PYTHONPATH),</p>
-      </li>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">--sys-path</code> / <code class="language-plaintext highlighter-rouge">--preload</code>,</p>
-      </li>
-      <li>
-        <p><code class="language-plaintext highlighter-rouge">--alias 올드=뉴</code>(모듈 경로 변경),</p>
-      </li>
-      <li>
-        <p>필요 시 <strong>shim 모듈</strong> 로 클래스 레벨 매핑.</p>
-      </li>
-    </ol>
-  </li>
-</ul>
-
-<p>원하면 shim을 옵션화해서 스크립트에 바로 넣는 버전(예: <code class="language-plaintext highlighter-rouge">--shim oldpkg.models:OldClass=newpkg.models:NewClass</code>)도 만들어줄게.</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry></feed>
+<p>원하시면 <strong>요청/응답에서 특정 키만 골라서 pretty-print</strong> 하도록 필터링까지 넣어드릴게요. 어떤 키들만 보이면 좋을까요?</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry></feed>

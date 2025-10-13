@@ -1,0 +1,1028 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>IBM LSF Python 패키지 개발 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="IBM LSF Python 패키지 개발">
+<meta property="og:url" content="https://hvppyarchive.github.io/python/python-lsf-package/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-13T15:11:57+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/python/python-lsf-package/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="IBM LSF Python 패키지 개발">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-10-13T15:11:57+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/python/python-lsf-package/" itemprop="url">IBM LSF Python 패키지 개발
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-13T15:11:57+09:00">2025-10-13</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+IBM LSF 알아?
+
+</p>
+
+<p>네! IBM <strong>Spectrum LSF</strong>(옛 <em>Platform LSF</em>)는 HPC/대규모 서버 팜에서 배치 작업을 스케줄링·큐잉·자원관리하는 상용 워크로드 매니저예요. 간단히 핵심만 단계별로 정리해볼게요.</p>
+
+<h1 id="1-뭐-하는-툴">1) 뭐 하는 툴?</h1>
+
+<ul>
+  <li>
+    <p>많은 사용자/작업을 큐(Queue)에 넣고, 클러스터의 CPU·메모리·GPU·라이선스 같은 자원을 규칙에 맞춰 자동 분배합니다.</p>
+  </li>
+  <li>
+    <p>우선순위, 공정 배분(fairshare), 선점/백필(backfill), 예약(SLA/예약슬롯), 다중 클러스터 등 정책을 세밀하게 걸 수 있어요.</p>
+  </li>
+</ul>
+
+<h1 id="2-구성-요소아주-요약">2) 구성 요소(아주 요약)</h1>
+
+<ul>
+  <li>
+    <p><strong>mbatchd / mbschd</strong> : 마스터 배치·스케줄러 데몬(작업 결정 뇌).</p>
+  </li>
+  <li>
+    <p><strong>sbatchd</strong>(각 워커 호스트): 작업 실행/모니터링.</p>
+  </li>
+  <li>
+    <p><strong>lim / res</strong> : 호스트 부하정보 수집과 원격 실행.</p>
+  </li>
+  <li>
+    <p>관리/사용자는 <strong>bsub, bjobs, bqueues</strong> 같은 CLI로 상호작용.</p>
+  </li>
+</ul>
+
+<h1 id="3-기본-사용-흐름">3) 기본 사용 흐름</h1>
+
+<ol>
+  <li>
+    <p>사용자가 큐/요구자원과 함께 작업 제출 → <code class="language-plaintext highlighter-rouge">bsub ...</code></p>
+  </li>
+  <li>
+    <p>LSF가 정책·가용자원 평가 → 적합한 노드에 할당</p>
+  </li>
+  <li>
+    <p>실행·모니터링 → 완료 후 로그/결과 수집</p>
+  </li>
+</ol>
+
+<h1 id="4-자주-쓰는-명령필수-최소셋">4) 자주 쓰는 명령(필수 최소셋)</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 작업 제출</span>
+bsub <span class="nt">-q</span> normal <span class="nt">-J</span> myjob <span class="nt">-n</span> 4 <span class="nt">-R</span> <span class="s2">"rusage[mem=8G]"</span> <span class="nt">-oo</span> out.%J <span class="nt">-eo</span> err.%J ./run.sh
+
+<span class="c"># 상태/출력 확인</span>
+bjobs              <span class="c"># 내 잡 요약</span>
+bjobs <span class="nt">-l</span> &lt;JOBID&gt;   <span class="c"># 상세</span>
+bpeek &lt;JOBID&gt;      <span class="c"># 실행 중 표준출력 엿보기(설정에 따라 지원)</span>
+
+<span class="c"># 큐/호스트 보기</span>
+bqueues <span class="nt">-l</span>         <span class="c"># 큐 상세 정책</span>
+bhosts             <span class="c"># 호스트 상태</span>
+
+<span class="c"># 제어</span>
+bstop &lt;JOBID&gt;      <span class="c"># 일시중지</span>
+bresume &lt;JOBID&gt;    <span class="c"># 재개</span>
+bkill &lt;JOBID&gt;      <span class="c"># 종료</span>
+bhist <span class="nt">-l</span> &lt;JOBID&gt;   <span class="c"># 히스토리</span>
+</code></pre></div></div>
+
+<h1 id="5-제출-스크립트-예시가장-단순한-형태">5) 제출 스크립트 예시(가장 단순한 형태)</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># run.sh</span>
+<span class="c">#!/usr/bin/env bash</span>
+<span class="nb">echo</span> <span class="s2">"Host: </span><span class="si">$(</span><span class="nb">hostname</span><span class="si">)</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"Start: </span><span class="si">$(</span><span class="nb">date</span><span class="si">)</span><span class="s2">"</span>
+python train.py <span class="nt">--epochs</span> 10
+</code></pre></div></div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 제출</span>
+bsub <span class="nt">-q</span> normal <span class="nt">-J</span> train <span class="nt">-n</span> 4 <span class="nt">-R</span> <span class="s2">"rusage[mem=8G]"</span> <span class="nt">-oo</span> train.%J.out ./run.sh
+</code></pre></div></div>
+
+<h1 id="6-정책자원-요청-팁">6) 정책/자원 요청 팁</h1>
+
+<ul>
+  <li>
+    <p><strong>CPU 코어 수</strong> : <code class="language-plaintext highlighter-rouge">-n 8</code></p>
+  </li>
+  <li>
+    <p><strong>메모리</strong> : <code class="language-plaintext highlighter-rouge">-R "rusage[mem=16G]"</code> (클러스터 정책과 단위 확인 필수)</p>
+  </li>
+  <li>
+    <p><strong>노드 스프레드</strong> : <code class="language-plaintext highlighter-rouge">-R "span[ptile=4]"</code> (호스트당 코어 4개씩 배치)</p>
+  </li>
+  <li>
+    <p><strong>GPU</strong> : 클러스터 설정에 따라 전용 옵션/리소스명이 다릅니다. 보통 전용 큐를 쓰거나 <code class="language-plaintext highlighter-rouge">-R</code>/<code class="language-plaintext highlighter-rouge">-gpu</code>(환경에 따라 지원)로 요청합니다. 운영팀이 정한 표준을 확인하세요.</p>
+  </li>
+</ul>
+
+<h1 id="7-장단점한눈에">7) 장단점(한눈에)</h1>
+
+<ul>
+  <li>
+    <p><strong>장점</strong> : 성숙한 정책/엔터프라이즈 지원, 이기종·대규모 클러스터 운영 경험 풍부, 모니터링/리포팅(LSF RTM 등) 생태계.</p>
+  </li>
+  <li>
+    <p><strong>단점</strong> : 상용 라이선스 비용, 설정 초기 러닝커브, 커스텀 정책 이해 필요.</p>
+  </li>
+  <li>
+    <p><strong>대안</strong> : Slurm(오픈소스), PBS Pro/Altair PBS, Grid Engine 계열 등.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>원하시면,</p>
+
+<ul>
+  <li>
+    <p>현재 환경(큐 이름, 자원 규칙, GPU 요청 방식)에 맞춘 <strong>제출 템플릿</strong> 을 바로 만들어 드릴게요,</p>
+  </li>
+  <li>
+    <p>또는 기존 Slurm/PBS 스크립트를 LSF로 <strong>자동 변환</strong> 해서 드릴 수도 있어요. 어떤 워크로드를 돌리실 계획인가요?</p>
+  </li>
+</ul>
+
+<p class="chat--user">
+
+나는 LSF에 여러 Job을 Submit하고 종료시키기/완료 여부 파악 등등 자동화 업무를 하고 있어.(파이썬) 그런데 "bsub", "bkill", "bjobs" 같은 커맨드를 subprocess로 매번 call하니 관리가 힘들고 느리기도 해(subprocess가 끝나서 job ID를 받아와야 하므로) bsub, bkill 시에는 async 기능을 활용하고, bjobs는 memory/storage cache를 통해 너무 자주 프로세스를 호출하지 않았으면 좋겠어(LSF 시스템 부하 줄이기 위해).
+
+</p>
+
+<p>좋아요! 요구사항(비동기 제출/종료 + <code class="language-plaintext highlighter-rouge">bjobs</code> 호출 캐싱/감속)을 만족하는 <strong>간단하지만 탄탄한 아키텍처 + 참조 구현</strong> 을 바로 드릴게요.<br />
+아래 순서대로 보시면 됩니다.</p>
+
+<h1 id="0-목표-step-by-step">0) 목표 (Step-by-step)</h1>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bsub</code>, <code class="language-plaintext highlighter-rouge">bkill</code>은 <code class="language-plaintext highlighter-rouge">asyncio</code> 기반으로 <strong>동시에 많이</strong> 돌릴 수 있게.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bjobs</code>는 <strong>TTL 캐시 + 단일비행(single-flight) + 레이트리밋</strong> 으로 과호출 방지.</p>
+  </li>
+  <li>
+    <p>가능한 한 <strong>배치(batch)</strong> 로 묶어서 호출수 최소화.</p>
+  </li>
+  <li>
+    <p>출력 파싱은 <strong>locale 고정(LC_ALL=C)</strong> + <strong>안전한 정규식/필드셋</strong> 만 사용.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="1-설계-핵심">1) 설계 핵심</h1>
+
+<ul>
+  <li>
+    <p><strong>동시성 제어</strong> : 모든 LSF CLI 호출에 공통 세마포어(예: 동시 8개) + 명령별 레이트리밋(예: <code class="language-plaintext highlighter-rouge">bjobs</code>는 초당 1회).</p>
+  </li>
+  <li>
+    <p><strong>비동기 제출/종료</strong> : <code class="language-plaintext highlighter-rouge">asyncio.create_subprocess_exec</code>로 <code class="language-plaintext highlighter-rouge">bsub</code>, <code class="language-plaintext highlighter-rouge">bkill</code>를 비동기 실행.</p>
+  </li>
+  <li>
+    <p><strong>bjobs 캐시</strong> :</p>
+
+    <ul>
+      <li>
+        <p><strong>TTL 캐시</strong>(예: 3~5초): TTL 내 재요청은 메모리에서 즉시 응답.</p>
+      </li>
+      <li>
+        <p><strong>단일비행</strong> : 같은 키(동일 Job ID 세트/필터)의 <code class="language-plaintext highlighter-rouge">bjobs</code> 요청이 동시 들어오면 <strong>이미 진행 중인</strong> 한 번만 실제 실행, 나머지는 그 Future를 await.</p>
+      </li>
+      <li>
+        <p><strong>레이트리밋</strong> : 최소 호출 간격 보장(예: 1~2초).</p>
+      </li>
+      <li>
+        <p><strong>배치 쿼리</strong> : 여러 Job ID 요청을 <strong>합집합</strong> 으로 묶어 한 번에 조회 → 결과를 per-job로 분산.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>참고: LSF는 <code class="language-plaintext highlighter-rouge">bjobs</code>의 출력 포맷을 <code class="language-plaintext highlighter-rouge">-o</code>로 제어할 수 있지만, 날짜 필드는 공백이 있어 파싱이 까다롭습니다. 여기서는 <strong>필요 최소 필드</strong>(공백 없는 것들)만 요청합니다: <code class="language-plaintext highlighter-rouge">jobid stat exit_code queue exec_host</code><br />
+ (시간이 필요하면 별도 포맷/구분 기호를 추가해 확장 가능)</p>
+</blockquote>
+
+<hr />
+
+<h1 id="2-참조-구현-단일-파일-바로-붙여넣어-사용-가능">2) 참조 구현 (단일 파일; 바로 붙여넣어 사용 가능)</h1>
+
+<p>아래는 의존성 없는 순수 Python 3.10+ 코드입니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># lsf_async.py
+</span><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">re</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="n">_JOBID_RE</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">compile</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">Job\s*&lt;(\d+)&gt;</span><span class="sh">"</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="nb">RuntimeError</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">returncode</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stdout</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">stderr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Command failed: </span><span class="si">{</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="si">}</span><span class="s"> (rc=</span><span class="si">{</span><span class="n">returncode</span><span class="si">}</span><span class="s">)</span><span class="se">\n</span><span class="si">{</span><span class="n">stderr</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="n">returncode</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stdout</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">stderr</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+               <span class="o">*</span><span class="p">,</span>
+               <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+               <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">Run a command asynchronously and return (stdout, stderr, returncode).</span><span class="sh">"""</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">cmd</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="n">stderr</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out_b</span><span class="p">,</span> <span class="n">err_b</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">ProcessLookupError</span><span class="p">):</span>
+            <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+        <span class="k">raise</span>
+    <span class="k">return</span> <span class="n">out_b</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span> <span class="n">err_b</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span>
+
+<span class="k">class</span> <span class="nc">LsfClient</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    Async LSF CLI wrapper with:
+      - concurrent bsub/bkill
+      - cached/rate-limited bjobs
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                 <span class="o">*</span><span class="p">,</span>
+                 <span class="n">bsub</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">bsub</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="n">bkill</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">bkill</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="n">bjobs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">bjobs</span><span class="sh">"</span><span class="p">,</span>
+                 <span class="n">max_concurrent_cli</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+                 <span class="n">bjobs_ttl_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+                 <span class="n">bjobs_min_interval_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">bsub</span><span class="sh">"</span><span class="p">:</span> <span class="n">bsub</span><span class="p">,</span> <span class="sh">"</span><span class="s">bkill</span><span class="sh">"</span><span class="p">:</span> <span class="n">bkill</span><span class="p">,</span> <span class="sh">"</span><span class="s">bjobs</span><span class="sh">"</span><span class="p">:</span> <span class="n">bjobs</span><span class="p">}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cli_sem</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nc">Semaphore</span><span class="p">(</span><span class="n">max_concurrent_cli</span><span class="p">)</span>
+
+        <span class="c1"># Cache &amp; in-flight tracking for bjobs
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_ttl</span> <span class="o">=</span> <span class="n">bjobs_ttl_sec</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_min_interval</span> <span class="o">=</span> <span class="n">bjobs_min_interval_sec</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Future</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_last_call_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">base_env</span> <span class="o">=</span> <span class="nf">dict</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">)</span>
+        <span class="n">base_env</span><span class="p">.</span><span class="nf">setdefault</span><span class="p">(</span><span class="sh">"</span><span class="s">LC_ALL</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">base_env</span><span class="p">.</span><span class="nf">setdefault</span><span class="p">(</span><span class="sh">"</span><span class="s">LANG</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">base_env</span> <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="bp">None</span> <span class="nf">else </span><span class="p">(</span><span class="n">base_env</span> <span class="o">|</span> <span class="n">env</span><span class="p">)</span>
+
+    <span class="c1"># ---------- helpers ----------
+</span>    <span class="k">def</span> <span class="nf">_key_for_bjobs</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">extra_flags</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="nf">tuple</span><span class="p">(</span><span class="nf">sorted</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">)))</span> <span class="k">if</span> <span class="n">job_ids</span> <span class="nf">else </span><span class="p">()</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="s">bjobs|</span><span class="si">{</span><span class="n">extra_flags</span><span class="si">}</span><span class="s">|</span><span class="si">{</span><span class="n">ids</span><span class="si">}</span><span class="sh">"</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_guarded_run</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_cli_sem</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">env</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="c1"># ---------- public API ----------
+</span>    <span class="k">async</span> <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                     <span class="n">command</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+                     <span class="o">*</span><span class="p">,</span>
+                     <span class="n">queue</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">job_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">n_cpus</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">rusage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">out_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">err_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">extra_bsub_args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">
+        Submit a job via bsub and return job id.
+        `command` may be a shell string or a sequence.
+        </span><span class="sh">"""</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="sh">"</span><span class="s">bsub</span><span class="sh">"</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">queue</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-q</span><span class="sh">"</span><span class="p">,</span> <span class="n">queue</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">job_name</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-J</span><span class="sh">"</span><span class="p">,</span> <span class="n">job_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">n_cpus</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-n</span><span class="sh">"</span><span class="p">,</span> <span class="nf">str</span><span class="p">(</span><span class="n">n_cpus</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">rusage</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-R</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">rusage[</span><span class="si">{</span><span class="n">rusage</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">out_file</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-oo</span><span class="sh">"</span><span class="p">,</span> <span class="n">out_file</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">err_file</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-eo</span><span class="sh">"</span><span class="p">,</span> <span class="n">err_file</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">extra_bsub_args</span><span class="p">:</span> <span class="n">args</span> <span class="o">+=</span> <span class="nf">list</span><span class="p">(</span><span class="n">extra_bsub_args</span><span class="p">)</span>
+
+        <span class="c1"># bsub expects the job command at the end; if a string, run via /bin/sh -c
+</span>        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">command</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Treat the sequence as an executable + args (no shell)
+</span>            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s"> </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">command</span><span class="p">))]</span>
+
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+
+        <span class="c1"># Parse: "Job &lt;12345&gt; is submitted to queue &lt;normal&gt;."
+</span>        <span class="n">m</span> <span class="o">=</span> <span class="n">_JOBID_RE</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Cannot parse job id from bsub output:</span><span class="se">\n</span><span class="si">{</span><span class="n">stdout</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">stderr</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">int</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="nf">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                   <span class="n">job_ids</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span>
+                   <span class="o">*</span><span class="p">,</span>
+                   <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">
+        Kill one or many jobs with a single bkill call.
+        </span><span class="sh">"""</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">job_ids</span><span class="p">))]</span> <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ids</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="sh">"</span><span class="s">bkill</span><span class="sh">"</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-f</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="n">ids</span>
+        <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                     <span class="n">job_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="o">*</span><span class="p">,</span>
+                     <span class="n">include_done</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                     <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="sh">"""</span><span class="s">
+        Get job status map: {jobid: {stat, exit_code, queue, exec_host}}.
+        Uses TTL cache + single-flight + rate limiting.
+        If job_ids is None, queries all of the current user</span><span class="sh">'</span><span class="s">s jobs.
+        </span><span class="sh">"""</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="sh">"</span><span class="s">-a</span><span class="sh">"</span> <span class="k">if</span> <span class="n">include_done</span> <span class="k">else</span> <span class="sh">""</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_key_for_bjobs</span><span class="p">(</span><span class="n">job_ids</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+
+        <span class="c1"># Serve cached if fresh
+</span>        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+        <span class="n">cached</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cached</span> <span class="ow">and</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="n">cached</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_ttl</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">cached</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Single-flight: if another coroutine is already fetching this key, await it
+</span>        <span class="n">inflight</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inflight</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">inflight</span>
+
+        <span class="c1"># Create the in-flight future
+</span>        <span class="n">fut</span><span class="p">:</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Future</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">().</span><span class="nf">create_future</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">fut</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Simple rate limit for bjobs
+</span>            <span class="n">since</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_last_call_ts</span>
+            <span class="k">if</span> <span class="n">since</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_min_interval</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_bjobs_min_interval</span> <span class="o">-</span> <span class="n">since</span><span class="p">)</span>
+
+            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">paths</span><span class="p">[</span><span class="sh">"</span><span class="s">bjobs</span><span class="sh">"</span><span class="p">],</span> <span class="sh">"</span><span class="s">-noheader</span><span class="sh">"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">include_done</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-a</span><span class="sh">"</span><span class="p">]</span>
+            <span class="c1"># Request only whitespace-safe fields
+</span>            <span class="c1"># Fields: jobid stat exit_code queue exec_host
+</span>            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="sh">"</span><span class="s">-o</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">jobid stat exit_code queue exec_host</span><span class="sh">"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">job_ids</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="nf">str</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">set</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)]</span>
+
+            <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_guarded_run</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_last_call_ts</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">LSFCommandError</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+
+            <span class="c1"># Parse lines; with chosen fields, tokens are whitespace-separated safely
+</span>            <span class="n">result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stdout</span><span class="p">.</span><span class="nf">splitlines</span><span class="p">():</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="nf">split</span><span class="p">()</span>
+                <span class="c1"># Expect exactly 5 tokens
+</span>                <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="c1"># best-effort: skip malformed
+</span>                    <span class="k">continue</span>
+                <span class="n">jid</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">exit_code</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">exec_host</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">jid_i</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">jid</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">jid_i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="sh">"</span><span class="s">stat</span><span class="sh">"</span><span class="p">:</span> <span class="n">stat</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">exit_code</span><span class="sh">"</span><span class="p">:</span> <span class="bp">None</span> <span class="k">if</span> <span class="n">exit_code</span> <span class="o">==</span> <span class="sh">"</span><span class="s">-</span><span class="sh">"</span> <span class="k">else</span> <span class="n">exit_code</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">queue</span><span class="sh">"</span><span class="p">:</span> <span class="n">queue</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">exec_host</span><span class="sh">"</span><span class="p">:</span> <span class="n">exec_host</span><span class="p">,</span>
+                <span class="p">}</span>
+
+            <span class="c1"># Cache and resolve the in-flight future
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">(),</span> <span class="n">result</span><span class="p">)</span>
+            <span class="n">fut</span><span class="p">.</span><span class="nf">set_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">fut</span><span class="p">.</span><span class="nf">set_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># clean inflight
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">_bjobs_inflight</span><span class="p">.</span><span class="nf">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="c1"># --------- convenience: bulk status with de-dup &amp; union batching ----------
+</span>    <span class="k">async</span> <span class="k">def</span> <span class="nf">status_union_batched</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                                   <span class="n">list_of_job_id_sets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+                                   <span class="o">*</span><span class="p">,</span>
+                                   <span class="n">include_done</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                                   <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+        <span class="sh">"""</span><span class="s">
+        Given multiple callers wanting statuses for different sets, perform
+        ONE bjobs with the union of ids, then slice the result per request.
+        (Uses the normal cache path internally.)
+        </span><span class="sh">"""</span>
+        <span class="n">union_ids</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nf">set</span><span class="p">()</span>
+        <span class="n">normalized</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ids</span> <span class="ow">in</span> <span class="n">list_of_job_id_sets</span><span class="p">:</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">]</span>
+            <span class="n">normalized</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
+            <span class="n">union_ids</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
+        <span class="n">union_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">status</span><span class="p">(</span><span class="n">union_ids</span><span class="p">,</span> <span class="n">include_done</span><span class="o">=</span><span class="n">include_done</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">req_ids</span> <span class="ow">in</span> <span class="n">normalized</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">union_result</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{})</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">req_ids</span><span class="p">}</span>
+            <span class="n">out</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="3-사용-예시">3) 사용 예시</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">lsf_async</span> <span class="kn">import</span> <span class="n">LsfClient</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">lsf</span> <span class="o">=</span> <span class="nc">LsfClient</span><span class="p">(</span>
+        <span class="n">max_concurrent_cli</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>      <span class="c1"># 동시에 열 수 있는 LSF CLI 프로세스 수
+</span>        <span class="n">bjobs_ttl_sec</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>         <span class="c1"># bjobs 캐시 TTL
+</span>        <span class="n">bjobs_min_interval_sec</span><span class="o">=</span><span class="mf">1.5</span> <span class="c1"># 최소 호출 간격(레이트리밋)
+</span>    <span class="p">)</span>
+
+    <span class="c1"># 1) 여러 작업 동시 제출 (async)
+</span>    <span class="n">cmds</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sh">'</span><span class="s">echo </span><span class="sh">"</span><span class="s">A</span><span class="sh">"</span><span class="s">; sleep 10</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">echo </span><span class="sh">"</span><span class="s">B</span><span class="sh">"</span><span class="s">; sleep 5</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">echo </span><span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="s">; sleep 2</span><span class="sh">'</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">submit_tasks</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">lsf</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">queue</span><span class="o">=</span><span class="sh">"</span><span class="s">normal</span><span class="sh">"</span><span class="p">,</span> <span class="n">job_name</span><span class="o">=</span><span class="sa">f</span><span class="sh">"</span><span class="s">demo_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="sa">f</span><span class="sh">"</span><span class="s">demo_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s">.%J.out</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">cmds</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">job_ids</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">gather</span><span class="p">(</span><span class="o">*</span><span class="n">submit_tasks</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">submitted:</span><span class="sh">"</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">)</span>
+
+    <span class="c1"># 2) 상태 조회 (캐시 ON)
+</span>    <span class="n">st1</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">status</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)</span>     <span class="c1"># 실제 bjobs 호출
+</span>    <span class="n">st2</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">status</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)</span>     <span class="c1"># TTL 내라면 캐시에서 즉시 반환
+</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">status1:</span><span class="sh">"</span><span class="p">,</span> <span class="n">st1</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">status2 (cached):</span><span class="sh">"</span><span class="p">,</span> <span class="n">st2</span><span class="p">)</span>
+
+    <span class="c1"># 3) 일부 종료 (배치 bkill)
+</span>    <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">kill</span><span class="p">(</span><span class="n">job_ids</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># 4) 여러 consumer가 각자 상태를 원할 때 union 배치
+</span>    <span class="n">reqs</span> <span class="o">=</span> <span class="p">[[</span><span class="n">job_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">job_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">job_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">job_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]]]</span>
+    <span class="n">batched</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">.</span><span class="nf">status_union_batched</span><span class="p">(</span><span class="n">reqs</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">batched</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="4-튜닝-포인트">4) 튜닝 포인트</h1>
+
+<ul>
+  <li>
+    <p><strong>동시성</strong> : <code class="language-plaintext highlighter-rouge">max_concurrent_cli</code>(기본 8). LSF 마스터/파일서버 부하에 따라 4~16 사이로 조정 권장.</p>
+  </li>
+  <li>
+    <p><strong>bjobs TTL</strong> : <code class="language-plaintext highlighter-rouge">bjobs_ttl_sec</code>(기본 3s). 워크로드가 조용하면 5~10s까지 올리면 더 효과적.</p>
+  </li>
+  <li>
+    <p><strong>최소 호출 간격</strong> : <code class="language-plaintext highlighter-rouge">bjobs_min_interval_sec</code>(기본 1~2s). 팀/클러스터 정책에 맞춰 설정.</p>
+  </li>
+  <li>
+    <p><strong>배치 종료</strong> : <code class="language-plaintext highlighter-rouge">kill([...])</code>는 ID 리스트를 받아 <strong>한 번의<code class="language-plaintext highlighter-rouge">bkill</code></strong> 로 처리 → 호출 수 절감.</p>
+  </li>
+  <li>
+    <p><strong>배치 상태 조회</strong> : 여러 호출을 묶고 싶으면 <code class="language-plaintext highlighter-rouge">status_union_batched()</code> 사용.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="5-확장-아이디어">5) 확장 아이디어</h1>
+
+<ul>
+  <li>
+    <p><strong>Persistent 캐시(옵션)</strong> : 마지막 상태를 SQLite 등에 저장 → 프로세스 재시작 시 “최근 상태” 즉시 제공 + 백그라운드 리프레시.</p>
+  </li>
+  <li>
+    <p><strong>이벤트 기반 보완</strong> : 클러스터에서 접근 가능한 상태 이벤트/로그가 있다면(권한 필요) <code class="language-plaintext highlighter-rouge">bjobs</code> 폴링 주기를 더 늘릴 수 있음.</p>
+  </li>
+  <li>
+    <p><strong>출력 포맷 확장</strong> : 시간이 필요하면 <code class="language-plaintext highlighter-rouge">-o</code> 필드를 커스터마이즈하고, 공백 문제는 <code class="language-plaintext highlighter-rouge">delimiter</code> 옵션(클러스터 버전에 따라 지원)을 검토하세요.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="6-실전-체크리스트">6) 실전 체크리스트</h1>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">LANG/LC_ALL=C</code>로 고정해 <strong>Job ID 파싱 안정성</strong> 확보(다국어 출력 회피).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bsub</code> 실패/큐 거부 시 <code class="language-plaintext highlighter-rouge">LSFCommandError</code>로 즉시 구분(로그에 <code class="language-plaintext highlighter-rouge">stderr</code> 남김).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bjobs</code> 필드 수가 예상과 다르면 <strong>스킵</strong>(방어코딩) — 필요 시 로깅.</p>
+  </li>
+  <li>
+    <p>너무 많은 Job ID를 한 번에 조회한다면 <strong>ID를 N개 단위로 chunking</strong>(예: 500개)하는 래퍼 추가 권장.</p>
+  </li>
+</ul>
+
+<hr />
+
+<p>필요하시면 위 코드를 <strong>여러 파일 구조(패키지화 + 로깅/리트라이/치밍 등)</strong> 로 정리해 드릴 수 있어요.<br />
+혹시 지금 쓰시는 스크립트가 있다면, 핵심 호출부만 이 <code class="language-plaintext highlighter-rouge">LsfClient</code>로 감싸서 마이그레이션 예시도 만들어 드릴게요.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#python" class="page__taxonomy-item p-category" rel="tag">python</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-13T15:11:57+09:00">2025-10-13</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/python/python-asyncio-basic/" class="pagination--pager" title="Asyncio 사용법 설명">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-13T15:12:03+09:00">2025-10-13</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/python-asyncio-basic/" rel="permalink">Asyncio 사용법 설명
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-13T14:06:20+09:00">2025-10-13</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comfyui/comfyui-lsf-job-submit/" rel="permalink">ComfyUI LSF Job Submit
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-10T20:07:23+09:00">2025-10-10</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/python-async-subprocess/" rel="permalink">Python 비동기 서브프로세스 실행
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-10T14:05:19+09:00">2025-10-10</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
