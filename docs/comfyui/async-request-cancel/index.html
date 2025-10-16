@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-10-10T11:53:02+09:00">
+  <meta property="article:published_time" content="2025-10-16T11:57:41+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Async request 취소 처리">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-10-10T11:53:02+09:00">
+    <meta itemprop="datePublished" content="2025-10-16T11:57:41+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-10T11:53:02+09:00">2025-10-10</time>
+        <time datetime="2025-10-16T11:57:41+09:00">2025-10-16</time>
       </span>
     
 
@@ -1058,6 +1058,184 @@ _wait_for_interrupt_level_trigger()에서 raise 안하고 그냥 return 하는�
 <p>정리: <strong>응, 헬퍼에서<code class="language-plaintext highlighter-rouge">raise</code> 대신 <code class="language-plaintext highlighter-rouge">return</code> 해도 완전히 OK.</strong><br />
 오히려 깔끔할 때가 많고, 위 패턴대로 센티널을 반환해주면 실수도 줄일 수 있어.</p>
 
+<p class="chat--user">
+
+동시에 요청하는 요청 수를 제한하고 싶어. (예를 들어 8개로) 최대한 간단히 추가할 수 있는 방법 추천해줘
+
+</p>
+
+<p>좋아—<strong>가장 간단한 방법은 전역<code class="language-plaintext highlighter-rouge">asyncio.BoundedSemaphore</code> 하나로 동시 네트워크 요청 수를 제한</strong>하는 거야.<br />
+요청을 만드는 부분만 살짝 감싸면 되고, 취소(Interrupt)랑도 잘 맞물려서 자동으로 슬롯이 반환돼.</p>
+
+<h1 id="step-by-step">step-by-step</h1>
+
+<ol>
+  <li>
+    <p><strong>전역 세마포어</strong> 를 한 곳에 정의 (예: 8개 동시 요청 제한).</p>
+  </li>
+  <li>
+    <p><strong>모든 네트워크 요청 함수</strong>(OpenAI, aiohttp, 스트리밍 포함)를 <code class="language-plaintext highlighter-rouge">async with SEM</code> 블록으로 감싼다.</p>
+  </li>
+  <li>
+    <p>기존의 <strong>레이스 패턴</strong>(요청 태스크 vs 인터럽트 감시)은 그대로 유지한다.</p>
+
+    <ul>
+      <li>인터럽트가 먼저 오면 <code class="language-plaintext highlighter-rouge">req_task.cancel()</code> → <code class="language-plaintext highlighter-rouge">async with</code>가 빠져나가며 <strong>슬롯 자동 반환</strong>.</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="1-공유-세마포어-한-파일로-만들어-여러-노드에서-import">1) 공유 세마포어 (한 파일로 만들어 여러 노드에서 import)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># throttle.py
+</span><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">asyncio</span>
+
+<span class="n">OPENAI_MAX_CONCURRENCY</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">OPENAI_MAX_CONCURRENCY</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">8</span><span class="sh">"</span><span class="p">))</span>
+<span class="n">OPENAI_SEMA</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nc">BoundedSemaphore</span><span class="p">(</span><span class="n">OPENAI_MAX_CONCURRENCY</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>여러 커스텀 노드에서 같은 세마포어를 쓰려면 이렇게 <strong>공유 모듈</strong> 로 빼는 게 깔끔해.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="2-비-스트리밍-요청에-붙이기-기존-레이스-코드에-최소-수정">2) 비-스트리밍 요청에 붙이기 (기존 레이스 코드에 최소 수정)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># node_async.py
+</span><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">contextlib</span>
+<span class="kn">import</span> <span class="n">comfy.model_management</span> <span class="k">as</span> <span class="n">mm</span>
+<span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">AsyncOpenAI</span>
+<span class="kn">from</span> <span class="n">throttle</span> <span class="kn">import</span> <span class="n">OPENAI_SEMA</span>
+
+<span class="n">INTERRUPTED</span> <span class="o">=</span> <span class="nf">object</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_wait_for_interrupt_level_trigger</span><span class="p">(</span><span class="n">poll_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">comfy</span><span class="p">.</span><span class="n">model_management</span> <span class="k">as</span> <span class="n">mm</span>
+    <span class="n">sleep_s</span> <span class="o">=</span> <span class="n">poll_ms</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">sleep_s</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mm</span><span class="p">.</span><span class="nf">processing_interrupted</span><span class="p">():</span>   <span class="c1"># 소비 無
+</span>            <span class="k">return</span> <span class="n">INTERRUPTED</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_openai_chat_with_limit</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">AsyncOpenAI</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="c1"># ▼ 동시성 제한은 여기 한 줄!
+</span>    <span class="k">async</span> <span class="k">with</span> <span class="n">OPENAI_SEMA</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+            <span class="n">max_retries</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_node</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="nc">AsyncOpenAI</span><span class="p">()</span>
+    <span class="n">req_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">_openai_chat_with_limit</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">))</span>
+    <span class="n">int_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">_wait_for_interrupt_level_trigger</span><span class="p">())</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">({</span><span class="n">req_task</span><span class="p">,</span> <span class="n">int_task</span><span class="p">},</span> <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">int_task</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+            <span class="c1"># 인터럽트 우선: 요청 태스크 취소 → 세마포어 슬롯 자동 반환
+</span>            <span class="n">req_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                <span class="k">await</span> <span class="n">req_task</span>
+            <span class="k">raise</span> <span class="n">mm</span><span class="p">.</span><span class="nc">InterruptProcessingException</span><span class="p">()</span>
+
+        <span class="c1"># 요청이 먼저 끝난 경우: 감시 태스크 정리
+</span>        <span class="n">int_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">int_task</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">req_task</span>
+        <span class="k">return</span> <span class="n">resp</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span><span class="p">.</span><span class="n">content</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-스트리밍에도-동일-적용">3) 스트리밍에도 동일 적용</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">throttle</span> <span class="kn">import</span> <span class="n">OPENAI_SEMA</span>
+<span class="kn">import</span> <span class="n">contextlib</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">stream_node</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="nc">AsyncOpenAI</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># ▼ 스트림 전 구간을 슬롯으로 보호
+</span>        <span class="k">async</span> <span class="k">with</span> <span class="n">OPENAI_SEMA</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">stream</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">prompt</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+                <span class="n">aiter</span> <span class="o">=</span> <span class="n">stream</span><span class="p">.</span><span class="nf">aiter_text</span><span class="p">()</span>
+                <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="n">next_chunk</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="n">aiter</span><span class="p">.</span><span class="nf">__anext__</span><span class="p">())</span>
+                    <span class="n">int_task</span>   <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">_wait_for_interrupt_level_trigger</span><span class="p">())</span>
+
+                    <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait</span><span class="p">({</span><span class="n">next_chunk</span><span class="p">,</span> <span class="n">int_task</span><span class="p">},</span>
+                                                 <span class="n">return_when</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">FIRST_COMPLETED</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">int_task</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+                        <span class="n">next_chunk</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                            <span class="k">await</span> <span class="n">next_chunk</span>
+                        <span class="k">await</span> <span class="n">stream</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+                        <span class="k">raise</span> <span class="n">mm</span><span class="p">.</span><span class="nc">InterruptProcessingException</span><span class="p">()</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">chunks</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">next_chunk</span><span class="p">.</span><span class="nf">result</span><span class="p">())</span>
+                    <span class="k">except</span> <span class="nb">StopAsyncIteration</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="k">finally</span><span class="p">:</span>
+                        <span class="n">int_task</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+                        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+                            <span class="k">await</span> <span class="n">int_task</span>
+            <span class="k">return</span> <span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="4-aiohttp-순수-요청도-동일">4) aiohttp 순수 요청도 동일</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">aiohttp</span>
+<span class="kn">from</span> <span class="n">throttle</span> <span class="kn">import</span> <span class="n">OPENAI_SEMA</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_json_cancellable</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="p">.</span><span class="nc">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">OPENAI_SEMA</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span><span class="p">:</span>
+                <span class="n">resp</span><span class="p">.</span><span class="nf">raise_for_status</span><span class="p">()</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">resp</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="왜-이게-좋은가">왜 이게 좋은가</h3>
+
+<ul>
+  <li>
+    <p><strong>간단함</strong> : 요청부에 <code class="language-plaintext highlighter-rouge">async with OPENAI_SEMA:</code> 한 줄만 추가.</p>
+  </li>
+  <li>
+    <p><strong>취소 친화적</strong> : <code class="language-plaintext highlighter-rouge">CancelledError</code>가 나도 컨텍스트가 자동으로 <strong>슬롯 해제</strong>.</p>
+  </li>
+  <li>
+    <p><strong>대기 중 인터럽트</strong> : 세마포어 획득 대기 중인 태스크도 <code class="language-plaintext highlighter-rouge">req_task.cancel()</code>로 즉시 깨짐.</p>
+  </li>
+  <li>
+    <p><strong>확장 용이</strong> : 환경변수(<code class="language-plaintext highlighter-rouge">OPENAI_MAX_CONCURRENCY</code>)로 쉽게 튜닝.</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>참고: 프로세스가 여러 개인 경우(예: 멀티 프로세스 실행)는 프로세스마다 8개가 적용돼. 그땐 Redis 등 외부 토큰 버킷이 필요하지만, ComfyUI 일반 사용에선 보통 위 방식이면 충분해.</p>
+</blockquote>
+
+<p>필요하면 <strong>모델/엔드포인트별</strong> 로 다른 세마포어를 쓰는 패턴도 알려줄게 (dict로 <code class="language-plaintext highlighter-rouge">base_url</code> 키잉).</p>
+
         
       </section>
 
@@ -1083,7 +1261,7 @@ _wait_for_interrupt_level_trigger()에서 raise 안하고 그냥 return 하는�
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-10T11:53:02+09:00">2025-10-10</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-16T11:57:41+09:00">2025-10-16</time></p>
 
       </footer>
 
@@ -1092,10 +1270,10 @@ _wait_for_interrupt_level_trigger()에서 raise 안하고 그냥 return 하는�
       
   <nav class="pagination">
     
-      <a href="/python/vscode-python-runtime-path/" class="pagination--pager" title="VS Code 경고 해결법">Previous</a>
+      <a href="/comfyui/comfyui-settings/" class="pagination--pager" title="ComfyUI Custom Node 설정">Previous</a>
     
     
-      <a href="/python/python-async-subprocess/" class="pagination--pager" title="Python 비동기 서브프로세스 실행">Next</a>
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
     
   </nav>
 
@@ -1137,7 +1315,7 @@ _wait_for_interrupt_level_trigger()에서 raise 안하고 그냥 return 하는�
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-16T11:19:50+09:00">2025-10-16</time>
+        <time datetime="2025-10-16T11:57:47+09:00">2025-10-16</time>
       </span>
     
 
