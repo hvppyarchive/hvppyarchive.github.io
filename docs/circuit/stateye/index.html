@@ -1,0 +1,791 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>HSPICE StatEye 설정 방법 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="HSPICE StatEye 설정 방법">
+<meta property="og:url" content="https://hvppyarchive.github.io/circuit/stateye/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-16T19:49:25+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/circuit/stateye/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="HSPICE StatEye 설정 방법">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-10-16T19:49:25+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/circuit/stateye/" itemprop="url">HSPICE StatEye 설정 방법
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-16T19:49:25+09:00">2025-10-16</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+matlab에서는 stateye simulation 할 때 Rx CDR Mean/Rj/Dj/DCD 등도 반영이 가능한데, primesim hspice stateye에서는 Tx/Rx의 RJ/PJ/PDF FILE 만 입력이 가능해. DCD나 CDR Mean과 같은 요소를 반영해서 hspice에서 볼 수 있을까
+
+</p>
+
+<p>가능해요. PrimeSim HSPICE의 StatEye도 DCD, CDR 평균 오프셋(Mean)을 반영할 수 있습니다. 방법을 단계별로 정리할게요.</p>
+
+<h1 id="1-dcd듀티-사이클-왜곡-반영">1) DCD(듀티 사이클 왜곡) 반영</h1>
+
+<ul>
+  <li>
+    <p><strong>Incident 포트(P-Element)</strong>에 <code class="language-plaintext highlighter-rouge">DCD</code>와 <code class="language-plaintext highlighter-rouge">DCD_TYPE</code>을 주면 됩니다.</p>
+  </li>
+  <li>
+    <p>DCD 효과는 상승/하강 폭 비대칭을 다뤄야 하므로 <strong>.STATEYE에서 <code class="language-plaintext highlighter-rouge">EDGE=2</code>(double-edge)</strong>를 켜세요.<br />
+예시:</p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+
+* 기본 파라미터
+.param UI=100p
+.param TRF='0.1*UI'
+
+* 포트 정의 (Tx = incident, Rx = probe)
+P1 txp txn 0 port=1  DCD=10  DCD_TYPE=1   ; 10% 고정 DCD
+P2 rxo  0   port=2
+
+* StatEye 분석 (double-edge로 DCD 평가)
+.STATEYE T='UI' TRF='TRF' INCIDENT_PORT=1 PROBE_PORT=2 EDGE=2
+.PROBE stateye eye(2) ber(2)
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">DCD_TYPE</code>: 0=없음, 1=고정, 2=삼각 변동, 3=사인 변동. (공식 문서에 명시) <a href="https://picture.iczhiku.com/resource/eetop/WHiEDyLJfpPZFbMM.pdf">picture.iczhiku.com</a></p>
+  </li>
+  <li>
+    <p>HSPICE 사용 가이드도 DCD는 <strong>incident 포트 키워드</strong> 로 지정한다고 못 박고 있어요. <a href="https://picture.iczhiku.com/resource/eetop/WHiEDyLJfpPZFbMM.pdf">picture.iczhiku.com</a></p>
+  </li>
+</ul>
+
+<h1 id="2-cdr-mean평균-위상-오프셋-반영">2) CDR Mean(평균 위상 오프셋) 반영</h1>
+
+<p>CDR 평균은 “샘플링 기준의 <strong>고정 시간 오프셋</strong> ”으로 해석하면 됩니다. HSPICE에선 두 가지 루트가 있어요.</p>
+
+<h3 id="a-rx가-ibis-ami-cdr-를-제공하는-경우권장">A. Rx가 <strong>IBIS-AMI CDR</strong> 를 제공하는 경우(권장)</h3>
+
+<ul>
+  <li>
+    <p>Rx 포트(P-Element)에 <strong>AMI 연결</strong> 후 <code class="language-plaintext highlighter-rouge">AMI_CDR=1</code>을 켜면, <strong>AMI_GetWave의 CDR 복구클록</strong> 을 아이 생성에 사용합니다.</p>
+  </li>
+  <li>
+    <p>평균 오프셋/PPM 같은 파라미터는 <strong>.ami 파일</strong> 에서 설정(벤더 매뉴얼 기준).<br />
+예시:</p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+
+P2 rxo 0 port=2  AMI_OBJ='./libMyRx.so' AMI_PARAM='./MyRx.ami' AMI_CDR=1
+.STATEYE T='UI' TRF='TRF' INCIDENT_PORT=1 PROBE_PORT=2 EDGE=2
+</code></pre></div></div>
+
+<ul>
+  <li>문서: <code class="language-plaintext highlighter-rouge">AMI_OBJ</code>, <code class="language-plaintext highlighter-rouge">AMI_PARAM</code>, <code class="language-plaintext highlighter-rouge">AMI_CDR</code>는 포트 키워드이며, CDR 출력으로 아이를 만들 수 있다고 나옵니다. <a href="https://picture.iczhiku.com/resource/eetop/WHiEDyLJfpPZFbMM.pdf?utm_source=chatgpt.com">picture.iczhiku.com</a></li>
+</ul>
+
+<h3 id="b-ami-없이-고정-평균-오프셋만-주고-싶은-경우">B. <strong>AMI 없이</strong> 고정 평균 오프셋만 주고 싶은 경우</h3>
+
+<ul>
+  <li>
+    <p><strong>.STATEYE 옵션의 <code class="language-plaintext highlighter-rouge">TD_In</code>, <code class="language-plaintext highlighter-rouge">TD_PROBE</code></strong>로 <strong>입력/프로브 쪽 시간 오프셋</strong> 을 직접 부여하세요.</p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">TD_In</code> : incident 쪽 기준을 미세 이동</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">TD_PROBE</code> : 아이 추출 시의 샘플링 기준을 미세 이동<br />
+예시(샘플링을 +0.02UI 지연):</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+
+.STATEYE T='UI' TRF='TRF' INCIDENT_PORT=1 PROBE_PORT=2 EDGE=2 TD_PROBE='0.02*UI'
+</code></pre></div></div>
+
+<ul>
+  <li>이 키워드는 HSPICE Quick Reference에 정식으로 기재돼 있습니다. <a href="https://www.synopsys.com/content/dam/synopsys/verification/hspice-quickrefcard-M-2017-03.pdf">synopsys.com</a></li>
+</ul>
+
+<h1 id="3-참고-커스텀-지터-pdf로-mean-표현">3) (참고) 커스텀 지터 PDF로 Mean 표현</h1>
+
+<ul>
+  <li>StatEye는 <strong>커스텀 지터 분포</strong> 를 지원해(포트에서 정의) <strong>비영(非0) 평균 PDF</strong> 로도 Mean을 모사할 수 있습니다. 매뉴얼의 “Specifying Custom Jitter Distribution” 절을 참고하세요. (버전에 따라 키워드명이 다를 수 있음) <a href="https://picture.iczhiku.com/resource/eetop/WHiEDyLJfpPZFbMM.pdf">picture.iczhiku.com</a></li>
+</ul>
+
+<hr />
+
+<h2 id="최소-동작-예-dcd--cdr-mean002ui-동시-반영">최소 동작 예 (DCD + CDR Mean(0.02UI) 동시 반영)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+
+.param UI=100p
+.param TRF='0.1*UI'
+
+P1 txp txn 0 port=1  DCD=10 DCD_TYPE=1
+P2 rxo 0   port=2  AMI_OBJ='./libMyRx.so' AMI_PARAM='./MyRx.ami' AMI_CDR=1
+
+.STATEYE T='UI' TRF='TRF' INCIDENT_PORT=1 PROBE_PORT=2 EDGE=2 TD_PROBE='0.02*UI'
+.PROBE stateye eye(2) ber(2)
+</code></pre></div></div>
+
+<h3 id="요약">요약</h3>
+
+<ul>
+  <li>
+    <p><strong>DCD</strong> : incident 포트에 <code class="language-plaintext highlighter-rouge">DCD</code>, <code class="language-plaintext highlighter-rouge">DCD_TYPE</code> + <code class="language-plaintext highlighter-rouge">.STATEYE EDGE=2</code>. <a href="https://picture.iczhiku.com/resource/eetop/WHiEDyLJfpPZFbMM.pdf">picture.iczhiku.com</a></p>
+  </li>
+  <li>
+    <p><strong>CDR Mean</strong> :</p>
+
+    <ul>
+      <li>
+        <p><strong>있으면</strong> AMI CDR 사용(<code class="language-plaintext highlighter-rouge">AMI_CDR=1</code>, .ami에서 PPM/오프셋 지정). <a href="https://picture.iczhiku.com/resource/eetop/WHiEDyLJfpPZFbMM.pdf?utm_source=chatgpt.com">picture.iczhiku.com</a></p>
+      </li>
+      <li>
+        <p><strong>없으면</strong> <code class="language-plaintext highlighter-rouge">.STATEYE</code>의 <code class="language-plaintext highlighter-rouge">TD_In</code>/<code class="language-plaintext highlighter-rouge">TD_PROBE</code>로 고정 오프셋. <a href="https://www.synopsys.com/content/dam/synopsys/verification/hspice-quickrefcard-M-2017-03.pdf">synopsys.com</a></p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>필요하시면 현재 쓰시는 넷리스트 일부를 보내주세요. 위 방식으로 바로 적용 가능한 형태로 손봐 드릴게요.</p>
+
+<p class="chat--user">
+
+DJ랑 PJ랑은 같은거야?
+
+</p>
+
+<p>짧게: <strong>아니요. PJ는 DJ의 한 종류예요.</strong></p>
+
+<ul>
+  <li>
+    <p><strong>DJ (Deterministic Jitter)</strong> : 원인이 규칙적·재현 가능해서 <strong>유한 범위( bounded )</strong> 안에 머무는 지터의 총칭.</p>
+  </li>
+  <li>
+    <p><strong>PJ (Periodic Jitter)</strong> : DJ 중에서도 <strong>주기성</strong>(한두 개 이상의 톤)으로 나타나는 성분.</p>
+  </li>
+</ul>
+
+<h3 id="관계-정리-step-by-step">관계 정리 (step-by-step)</h3>
+
+<ol>
+  <li>
+    <p><strong>지터 분류 큰 그림</strong></p>
+
+    <ul>
+      <li>
+        <p><strong>TJ(BER)</strong> ≈ <strong>DJ_pp</strong> + 2·Q(BER)·σ_RJ</p>
+      </li>
+      <li>
+        <p>여기서 <strong>RJ</strong>(Random Jitter)는 가우시안, 무한대 가능(unbounded).</p>
+      </li>
+      <li>
+        <p><strong>DJ</strong> 는 유한(bounded)이며 보통 아래가 포함됩니다:</p>
+
+        <ul>
+          <li>
+            <p><strong>PJ</strong> : 사인/펄스열 같은 <strong>주기성 지터</strong></p>
+          </li>
+          <li>
+            <p><strong>DCD</strong> : 듀티 비대칭</p>
+          </li>
+          <li>
+            <p><strong>DDJ/ISI</strong> : 데이터 패턴/채널에 의존</p>
+          </li>
+          <li>
+            <p>(벤더에 따라 <strong>BUJ</strong> 등으로 더 쪼개기도 함)</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>왜 헷갈리나?</strong></p>
+
+    <ul>
+      <li>측정기/툴 메뉴에서 <strong>PJ를 별도 입력</strong> 하게 하다 보니 PJ ≠ DJ처럼 보일 수 있지만, 실제로는 <strong>DJ 안에 PJ가 포함</strong> 됩니다.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>툴 입력 팁 (PrimeSim HSPICE/StatEye 관점)</strong></p>
+
+    <ul>
+      <li>
+        <p><strong>PJ</strong> : <code class="language-plaintext highlighter-rouge">PJ</code>(진폭/주파수)로 직접 넣는 <strong>DJ의 일부</strong></p>
+      </li>
+      <li>
+        <p><strong>DCD</strong> : <code class="language-plaintext highlighter-rouge">DCD</code>/<code class="language-plaintext highlighter-rouge">DCD_TYPE</code>으로 지정 (또는 Tx 파형 비대칭으로 구현) → 이것도 <strong>DJ</strong></p>
+      </li>
+      <li>
+        <p><strong>DDJ</strong> : 채널 ISI/이퀄라이저 설정으로 자연스럽게 발생 → 이것도 <strong>DJ</strong></p>
+      </li>
+      <li>
+        <p><strong>RJ</strong> 는 따로 <code class="language-plaintext highlighter-rouge">RJ(σ)</code>로 지정</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="예시로-구분">예시로 구분</h3>
+
+<ul>
+  <li>
+    <p>3 MHz, 0.05 UI의 사인 지터 주입 → <strong>PJ</strong> (⇒ DJ의 일부)</p>
+  </li>
+  <li>
+    <p>듀티 48/52% 비대칭 → <strong>DCD</strong> (⇒ DJ의 일부)</p>
+  </li>
+  <li>
+    <p>긴 채널·불충분한 EQ로 비트 패턴마다 지연이 달라짐 → <strong>DDJ</strong> (⇒ DJ의 일부)</p>
+  </li>
+</ul>
+
+<p>필요하시면 현재 사용하는 StatEye 입력(예: PJ 톤, DCD%, RJ σ) 보내주세요. 세팅이 DJ 전체를 적절히 커버하는지 같이 점검해 드릴게요.</p>
+
+<p class="chat--user">
+
+B. AMI 없이 고정 평균 오프셋만 주고 싶은 경우 -&gt; 이러면 stateye가 안 작아지는거 아니야?
+
+</p>
+
+<p>맞아요. <strong>AMI 없이<code class="language-plaintext highlighter-rouge">TD_PROBE</code>로 평균(Mean)만 옮기면 StatEye “아이(eye)” 자체는 안 작아집니다.</strong><br />
+그건 <strong>분산(σ)이나 DJ_pp가 늘지 않고, 시간축만 일정량 평행 이동</strong> 하기 때문이에요. HSPICE의 <code class="language-plaintext highlighter-rouge">.STATEYE</code>에서 <code class="language-plaintext highlighter-rouge">TD_PROBE/TD_In</code>은 고정 시간 오프셋(위상 이동) 옵션이고, 형태를 줄이는 옵션이 아닙니다. <a href="https://www.synopsys.com/content/dam/synopsys/verification/hspice-quickrefcard-M-2017-03.pdf?utm_source=chatgpt.com">synopsys.com</a></p>
+
+<h1 id="왜-안-작아지나-step-by-step">왜 안 작아지나 (step-by-step)</h1>
+
+<ol>
+  <li>
+    <p><strong>StatEye의 아이 컨투어</strong> 는 RJ(σ)와 DJ_pp(DDJ, DCD, PJ 등)의 <strong>폭</strong> 으로 결정됩니다.<br />
+평균만 바꾸는 건 <strong>위치</strong>(phase)를 바꾸는 거라 컨투어 모양은 동일하게 옮겨질 뿐이에요. (아이 축소는 σ↑ 또는 DJ_pp↑일 때 생깁니다.) <a href="https://people.engr.tamu.edu/spalermo/ecen689/stateye_theory_sanders_designcon_2004.pdf?utm_source=chatgpt.com">people.engr.tamu.edu</a></p>
+  </li>
+  <li>
+    <p>대신, <strong>고정된 샘플링 위상</strong> 에서 보는 <strong>BER/배스텁</strong> 은 통째로 <strong>좌우로 이동</strong> 합니다. 즉 “UI/2에서의 마진”은 줄어들 수 있지만, 2D 아이 그림 자체는 같아 보여요. 배스텁과 아이의 관계는 표준 StatEye 설명 자료에도 정리돼 있습니다. <a href="https://www.ieee802.org/3/ap/public/signal_adhoc/ghiasi_01_0904.pdf?utm_source=chatgpt.com">ieee802.org</a></p>
+  </li>
+  <li>
+    <p>HSPICE에서도 <code class="language-plaintext highlighter-rouge">.PROBE stateye ber(...)</code>/<code class="language-plaintext highlighter-rouge">eye(...)</code>로 이 변화를 확인할 수 있어요(배스텁/아이 출력). <a href="https://www.scribd.com/document/807844871/Primesim-Hspice-Si?utm_source=chatgpt.com">Scribd</a></p>
+  </li>
+</ol>
+
+<h1 id="아이를-실제로-작아지게-보고-싶다면">아이를 실제로 “작아지게” 보고 싶다면</h1>
+
+<ul>
+  <li>
+    <p><strong>CDR의 추적 특성</strong>(저주파 추적·고주파 미추적)을 모델에 넣어야 합니다. 가장 깔끔한 방법은 <strong>Rx AMI + <code class="language-plaintext highlighter-rouge">AMI_CDR=1</code></strong>로 CDR을 활성화하는 것. 일반적인 CDR은 평균 TIE를 자동으로 0으로 재센터링하기 때문에(= Mean 오프셋 자체는 제거), <strong>미추적 대역의 지터가 아이 축소</strong> 로 나타납니다. <a href="https://picture.iczhiku.com/resource/eetop/WHiEDyLJfpPZFbMM.pdf?utm_source=chatgpt.com">picture.iczhiku.com+1</a></p>
+  </li>
+  <li>
+    <p><strong>비-AMI 근사</strong> 라면, 고정 Mean 대신 <strong>지터 폭을 늘리는 성분을 추가</strong> 해야 합니다. 예를 들어</p>
+
+    <ul>
+      <li>
+        <p><strong>PJ 톤</strong> 을 CDR 대역 밖(“미추적”이라 가정하는) 주파수에 넣어 <strong>DJ_pp를 키우거나</strong> ,</p>
+      </li>
+      <li>
+        <p><strong>DCD</strong>(상승/하강 비대칭)로 <strong>엣지 위치를 갈라지게</strong> 해서 유효 수평 여유를 줄이세요(아이 축소).</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">PDF FILE</code>을 쓰더라도 <strong>평균만 이동</strong> 시키면 여전히 이동만 있을 뿐이므로, <strong>분산(꼬리)</strong>를 키워야 축소가 표현됩니다. (구체 옵션은 버전별 매뉴얼 참고)</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="실무-체크리스트">실무 체크리스트</h1>
+
+<ol>
+  <li>
+    <p>아이 축소가 목적이면 <strong>RJ σ / PJ / DCD / DDJ(EQ/채널)</strong> 중 무엇으로 폭을 키울지 결정</p>
+  </li>
+  <li>
+    <p><strong>AMI 사용 가능</strong> 하면 Rx AMI + <code class="language-plaintext highlighter-rouge">AMI_CDR=1</code> 권장(현실적인 축소/배스텁) <a href="https://picture.iczhiku.com/resource/eetop/WHiEDyLJfpPZFbMM.pdf?utm_source=chatgpt.com">picture.iczhiku.com</a></p>
+  </li>
+  <li>
+    <p>AMI 없이 <strong>오프셋 영향만</strong> 보고싶으면:</p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+     
+.STATEYE ... TD_PROBE='0.02*UI'
+.PROBE  stateye eye(2) ber(2)
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>→ 아이 컨투어는 동일(이동), <strong>배스텁 위치</strong> 가 0.02 UI만큼 이동. <a href="https://www.synopsys.com/content/dam/synopsys/verification/hspice-quickrefcard-M-2017-03.pdf?utm_source=chatgpt.com">synopsys.com+1</a></p>
+
+<p>요약: <strong>“고정 Mean = 위치 이동”</strong>이라 아이 자체는 안 작아집니다. <strong>아이 축소</strong> 를 원하면 <strong>CDR 동작(AMI) 또는 지터 폭(DJ_pp, σ) 증가</strong> 로 모델링해야 해요. <a href="https://www.synopsys.com/content/dam/synopsys/verification/hspice-quickrefcard-M-2017-03.pdf?utm_source=chatgpt.com">synopsys.com+4</a></p>
+
+<p>원하시면 현재 넷리스트 옵션(RJ/PJ/DCD/TD_PROBE/AMI) 보내주세요. 목적(오프셋 vs 실제 축소)에 맞게 바로 적용 가능한 설정으로 정리해 드릴게요.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#circuit" class="page__taxonomy-item p-category" rel="tag">circuit</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-16T19:49:25+09:00">2025-10-16</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/comfyui/async-request-cancel/" class="pagination--pager" title="Async request 취소 처리">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-16T19:49:30+09:00">2025-10-16</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comfyui/async-request-cancel/" rel="permalink">Async request 취소 처리
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-16T11:57:41+09:00">2025-10-16</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comfyui/comfyui-settings/" rel="permalink">ComfyUI Custom Node 설정
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-16T11:19:42+09:00">2025-10-16</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/python-lsf-package/" rel="permalink">IBM LSF Python 패키지 개발
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-13T17:02:21+09:00">2025-10-13</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
