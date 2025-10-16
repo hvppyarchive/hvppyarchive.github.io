@@ -1,0 +1,640 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>ComfyUI Custom Node 설정 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="ComfyUI Custom Node 설정">
+<meta property="og:url" content="https://hvppyarchive.github.io/comfyui/comfyui-settings/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-16T11:19:42+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/comfyui/comfyui-settings/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="ComfyUI Custom Node 설정">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-10-16T11:19:42+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/comfyui/comfyui-settings/" itemprop="url">ComfyUI Custom Node 설정
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-16T11:19:42+09:00">2025-10-16</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+ComfyUI Settings 페이지 쪽에 Custom Node의 행동을 조절하는 세팅을 넣고 싶어. (쓰레드 몇 개를 쓸 지 정수로 입력하게 하고 싶어) 가능할까?
+
+</p>
+
+<p>가능해요. “Settings” 패널에 정수 입력을 하나 추가하고, 그 값을 커스텀 노드의 파라미터로 넘기면 됩니다. 흐름은 이렇게 잡으면 가장 단순합니다:</p>
+
+<ol>
+  <li>프론트엔드(웹 확장)에서 Settings 항목 추가</li>
+</ol>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">web/extensions/your_extension.js</code> 같은 파일에서 ComfyUI 확장을 등록하고 <code class="language-plaintext highlighter-rouge">type: "number"</code> 설정을 만듭니다.</p>
+  </li>
+  <li>
+    <p>ComfyUI는 확장이 등록한 <code class="language-plaintext highlighter-rouge">settings</code> 정의를 자동으로 설정 패널에 보여주고 값을 저장/로드합니다. 값은 <code class="language-plaintext highlighter-rouge">ComfyUI/user/default/comfy.settings.json</code>에 저장됩니다. <a href="https://docs.comfy.org/custom-nodes/js/javascript_settings">docs.comfy.org+1</a></p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// web/extensions/my_node_settings.js
+import { app } from "../../scripts/app.js";
+
+app.registerExtension({
+  name: "MyNode.Settings",
+  settings: [
+    {
+      id: "mynode.threads",              // 고유 ID (카테고리.섹션 형태 권장)
+      name: "Threads for MyNode",
+      type: "number",
+      defaultValue: 4,
+      tooltip: "커스텀 노드가 사용할 스레드 수",
+      attrs: { min: 1, max: 128, showButtons: true } // PrimeVue props 전달 가능
+    },
+  ],
+});
+</code></pre></div></div>
+
+<ul>
+  <li>어디서든 현재 값을 읽을 땐:</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+const threads = app.extensionManager.setting.get("mynode.threads");
+</code></pre></div></div>
+
+<p>(Settings 정의/읽기 API는 공식 문서에 명시되어 있습니다.) <a href="https://docs.comfy.org/custom-nodes/js/javascript_settings">docs.comfy.org</a></p>
+
+<ol>
+  <li>노드 UI에 값 주입(선택)<br />
+가장 쉬운 연동법은 노드에 “숨김 입력(hidden)” 또는 “optional 위젯”을 하나 두고, 노드가 캔버스에 생길 때 Settings 값을 그 위젯에 밀어넣는 겁니다. 이렇게 하면 <strong>워크플로 저장/재실행 시 값이 함께 저장</strong> 되어 예측 가능해집니다.</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// (같은 파일에서) 노드가 생성될 때 위젯 값 세팅
+app.registerExtension({
+  name: "MyNode.ApplySettings",
+  async beforeRegisterNodeDef(nodeType, nodeData, appInstance) {
+    if (nodeData?.name !== "MyThreadedNode") return;
+
+    const orig = nodeType.prototype.onNodeCreated;
+    nodeType.prototype.onNodeCreated = function() {
+      orig?.apply(this, arguments);
+      const threads = app.extensionManager.setting.get("mynode.threads");
+      // 위젯 이름은 파이썬 INPUT_TYPES에 맞춰야 함 (아래 예시 기준 "threads")
+      const w = this.widgets?.find(w =&gt; w.name === "threads");
+      if (w &amp;&amp; typeof threads === "number") w.value = threads;
+    };
+
+    // 설정이 바뀌면 캔버스 위 노드들의 위젯도 반영하고 싶다면:
+    app.extensionManager.setting.onChange?.(("mynode.threads"), (nv) =&gt; {
+      appInstance.graph._nodes
+        .filter(n =&gt; n.type === "MyThreadedNode")
+        .forEach(n =&gt; {
+          const w = n.widgets?.find(w =&gt; w.name === "threads");
+          if (w) { w.value = nv; n.setDirtyCanvas(true, true); }
+        });
+    });
+  }
+});
+</code></pre></div></div>
+
+<ol>
+  <li>파이썬(백엔드) 커스텀 노드에서 입력 선언 및 사용<br />
+ComfyUI는 입력 타입/제약을 <code class="language-plaintext highlighter-rouge">INPUT_TYPES</code>로 선언하고 실행 시 해당 값을 함수 인자로 넣어줍니다. 숨김 입력도 지원합니다. <a href="https://docs.comfy.org/custom-nodes/backend/server_overview">docs.comfy.org</a></li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># custom_nodes/my_threaded_node.py
+</span><span class="k">class</span> <span class="nc">MyThreadedNode</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">INPUT_TYPES</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="c1"># 다른 입력들...
+</span>            <span class="p">},</span>
+            <span class="sh">"</span><span class="s">hidden</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="c1"># Settings에서 꽂아줄 스레드 수
+</span>                <span class="sh">"</span><span class="s">threads</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="sh">"</span><span class="s">INT</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="sh">"</span><span class="s">min</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">max</span><span class="sh">"</span><span class="p">:</span> <span class="mi">128</span><span class="p">}),</span>
+            <span class="p">},</span>
+            <span class="c1"># 또는 optional 위젯으로 노출하고 싶다면 "required" 대신 "optional"에 넣어도 됨
+</span>        <span class="p">}</span>
+
+    <span class="n">RETURN_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="sh">"</span><span class="s">IMAGE</span><span class="sh">"</span><span class="p">,)</span>
+    <span class="n">FUNCTION</span> <span class="o">=</span> <span class="sh">"</span><span class="s">run</span><span class="sh">"</span>
+    <span class="n">CATEGORY</span> <span class="o">=</span> <span class="sh">"</span><span class="s">MyNodes</span><span class="sh">"</span>
+
+    <span class="c1"># 필요하면 유효성 체크
+</span>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">VALIDATE_INPUTS</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="nf">int</span><span class="p">(</span><span class="n">threads</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">128</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">threads는 1~128 사이여야 합니다.</span><span class="sh">"</span>
+    <span class="c1"># 참고: VALIDATE_INPUTS 동작은 백엔드 섹션 문서에 설명되어 있습니다. :contentReference[oaicite:3]{index=3}
+</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">threads</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">threads</span><span class="p">)</span>
+        <span class="c1"># 예: ThreadPoolExecutor로 병렬 처리
+</span>        <span class="kn">from</span> <span class="n">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+        <span class="k">with</span> <span class="nc">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="c1"># ex.submit(...) 병렬 작업들
+</span>            <span class="k">pass</span>
+        <span class="c1"># 결과 리턴
+</span>        <span class="nf">return </span><span class="p">(</span><span class="n">some_image_tensor</span><span class="p">,)</span>
+</code></pre></div></div>
+
+<ol>
+  <li>(대안) 커스텀 REST 라우트로 값 전달<br />
+위 방식이 아니라 “글로벌 설정 → 서버로 즉시 푸시 → 노드가 전역 상태에서 읽기”가 필요하다면, 간단한 <strong>커스텀 라우트</strong> 를 만들어 프론트에서 설정 변경 시 POST로 서버에 저장하고, 노드 실행 때 모듈 전역에서 그 값을 참조하는 식도 가능해요. 커스텀 라우트 추가/호출 방법은 서버 문서에 예시가 있습니다. <a href="https://docs.comfy.org/development/comfyui-server/comms_routes">docs.comfy.org</a></li>
+</ol>
+
+<hr />
+
+<h3 id="요약스텝별">요약(스텝별)</h3>
+
+<ol>
+  <li>
+    <p>JS 확장에서 <code class="language-plaintext highlighter-rouge">type:"number"</code> 설정을 등록한다 → Settings 패널에 노출되고 자동 저장됨. <a href="https://docs.comfy.org/custom-nodes/js/javascript_settings">docs.comfy.org+1</a></p>
+  </li>
+  <li>
+    <p>노드 생성 시 해당 설정값을 노드의 <code class="language-plaintext highlighter-rouge">threads</code> 위젯(숨김/옵셔널)으로 주입한다. <a href="https://docs.comfy.org/custom-nodes/js/javascript_settings">docs.comfy.org</a></p>
+  </li>
+  <li>
+    <p>파이썬 노드는 <code class="language-plaintext highlighter-rouge">INPUT_TYPES</code>로 <code class="language-plaintext highlighter-rouge">threads</code>를 받고 실행 로직에서 활용한다(필요 시 <code class="language-plaintext highlighter-rouge">VALIDATE_INPUTS</code>로 체크). <a href="https://docs.comfy.org/custom-nodes/backend/server_overview">docs.comfy.org</a></p>
+  </li>
+  <li>
+    <p>(특수 케이스) 전역 상태로 다루고 싶다면 커스텀 라우트로 서버에 보관/조회한다. <a href="https://docs.comfy.org/development/comfyui-server/comms_routes">docs.comfy.org</a></p>
+  </li>
+</ol>
+
+<p>필요하시면 위 예시들을 실제 파일 구조에 맞춰 더 깔끔하게 정리해드릴게요. 원하는 노드 이름/폴더 구조가 있으면 바로 코드 맞춰 드릴게요!</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#comfyui" class="page__taxonomy-item p-category" rel="tag">comfyui</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-16T11:19:42+09:00">2025-10-16</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/python/python-lsf-package/" class="pagination--pager" title="IBM LSF Python 패키지 개발">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-16T11:19:50+09:00">2025-10-16</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/python-lsf-package/" rel="permalink">IBM LSF Python 패키지 개발
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-13T17:02:21+09:00">2025-10-13</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/python-asyncio-basic/" rel="permalink">Asyncio 사용법 설명
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-13T14:06:20+09:00">2025-10-13</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comfyui/comfyui-lsf-job-submit/" rel="permalink">ComfyUI LSF Job Submit
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-10T20:07:23+09:00">2025-10-10</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
