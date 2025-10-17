@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-17T11:22:32+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-17T11:22:32+09:00</published><updated>2025-10-17T11:22:32+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-17T11:37:20+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-17T11:37:20+09:00</published><updated>2025-10-17T11:37:20+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">아날로그 회로 최적화 데모</title><link href="https://hvppyarchive.github.io/circuit/circuit-optimization-example/" rel="alternate" type="text/html" title="아날로그 회로 최적화 데모" /><published>2025-10-17T11:22:26+09:00</published><updated>2025-10-17T11:22:26+09:00</updated><id>https://hvppyarchive.github.io/circuit/circuit-optimization-example</id><content type="html" xml:base="https://hvppyarchive.github.io/circuit/circuit-optimization-example/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">아날로그 회로 최적화 데모</title><link href="https://hvppyarchive.github.io/circuit/circuit-optimization-example/" rel="alternate" type="text/html" title="아날로그 회로 최적화 데모" /><published>2025-10-17T11:37:15+09:00</published><updated>2025-10-17T11:37:15+09:00</updated><id>https://hvppyarchive.github.io/circuit/circuit-optimization-example</id><content type="html" xml:base="https://hvppyarchive.github.io/circuit/circuit-optimization-example/"><![CDATA[<p class="chat--user">
 
 Analog 회로 최적화를 소개하는 간단한 데모 예시를 만들고 싶어. 
 
@@ -849,7 +849,209 @@ RLOAD VOUT     0    'RL'
   </li>
 </ol>
 
-<p>추가로, E96 후보 리스트를 바로 쓸 수 있게 <code class="language-plaintext highlighter-rouge">.include</code> 또는 외부 스크립트용 <strong>리스트 텍스트</strong> 가 필요하면 알려줘. 원하는 범위로 만들어 줄게.</p>]]></content><author><name>hvppyarchive</name></author><category term="circuit" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">HSPICE StatEye 설정 방법</title><link href="https://hvppyarchive.github.io/circuit/stateye/" rel="alternate" type="text/html" title="HSPICE StatEye 설정 방법" /><published>2025-10-16T19:49:25+09:00</published><updated>2025-10-16T19:49:25+09:00</updated><id>https://hvppyarchive.github.io/circuit/stateye</id><content type="html" xml:base="https://hvppyarchive.github.io/circuit/stateye/"><![CDATA[<p class="chat--user">
+<p>추가로, E96 후보 리스트를 바로 쓸 수 있게 <code class="language-plaintext highlighter-rouge">.include</code> 또는 외부 스크립트용 <strong>리스트 텍스트</strong> 가 필요하면 알려줘. 원하는 범위로 만들어 줄게.</p>
+
+<p class="chat--user">
+
+그냥 tran 해석으로 바꿔줄 수 있어?
+
+</p>
+
+<p>좋아, <strong>.tran(과도 해석)만 쓰는 전압 분배기 데모</strong> 로 바꿔서 정리했어.<br />
+아래 덱은 <strong>바이패스 커패시터(CLOAD)</strong>를 둬서 유의미한 과도 응답이 나오도록 했고, <strong>정착 오차/라이즈 타임/전류·에너지</strong> 같은 측정을 <code class="language-plaintext highlighter-rouge">.measure tran</code>으로 정의했어. (부하 스텝을 주는 <strong>옵션 블록</strong> 도 포함)</p>
+
+<hr />
+
+<h1 id="1-finesim-netlist--tran-전용-복붙-실행">1) FineSim Netlist — .tran 전용 (복붙 실행)</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+
+*------------------------------------------------------------
+* Voltage Divider Transient Demo (FineSim/HSPICE compatible)
+*   - 모든 해석은 .tran(과도) 기반
+*------------------------------------------------------------
+.option post=2 measform=1
+
+* ===== 파라미터 =====
+.param VSUP   = 3.3          * 공급전압 [V]
+.param V_SPEC = 1.0          * 목표 출력 [V]
+.param RS     = 50           * 소스 직렬저항 [Ohm]
+.param RL     = 100k         * 부하 [Ohm]
+.param R1     = 1.80k        * 최적화 변수 (Discrete/E96 권장)
+.param R2     = 820          * 최적화 변수 (Discrete/E96 권장)
+.param CLOAD  = 100n         * 출력 노드 바이패스(과도 응답 유도)
+.param TRISE  = 1n
+.param TFALL  = 1n
+.param TSTOP  = 1m
+.param V_BAND = 10m          * 정착 허용 밴드(±10 mV)
+
+* ===== 회로 =====
+V1    VIN_SRC  0   PULSE(0 'VSUP' 0 'TRISE' 'TFALL' '10*TSTOP' '20*TSTOP')
+RSRC  VIN_SRC  VIN 'RS'
+RUP   VIN      VOUT 'R1'
+RDN   VOUT     0    'R2'
+RLOAD VOUT     0    'RL'
+COUT  VOUT     0    'CLOAD'
+
+* ===== 과도 해석 =====
+.tran 'TSTOP/1000' 'TSTOP'
+
+* ===== 측정 (기본: 단일 상승 스텝 응답) =====
+.measure TRAN VOUT_FINAL  AVG  v(VOUT) FROM='0.8*TSTOP' TO='TSTOP'          ; 최종값 근사
+.measure TRAN VERR_ABS    PARAM='abs(VOUT_FINAL - V_SPEC)'                  ; 최종 오차
+.measure TRAN IIN_AVG     AVG  '-I(V1)' FROM=0 TO='TSTOP'                    ; 평균 소스전류
+.measure TRAN QIN         INTEG '-I(V1)' FROM=0 TO='TSTOP'                   ; 총 전하 [C]
+.measure TRAN EAPP        PARAM='VSUP*QIN'                                   ; 근사 에너지 [J]
+.measure TRAN TR10_90     TRIG v(VOUT) VAL='0.1*V_SPEC' RISE=1               \
+                          TARG v(VOUT) VAL='0.9*V_SPEC' RISE=1               ; 10–90% 라이즈
+.measure TRAN TSETTLE     WHEN 'abs(v(VOUT)-V_SPEC)-V_BAND' = 0 CROSS=1      ; ±밴드 최초 진입 시간
+
+* ===== [옵션] 부하 스텝 응답(드룹/재정착) =====
+* - 필요할 때만 해제해서 사용 (스위치로 병렬 부하를 추가)
+*.param TLD   = '0.3*TSTOP'          * 부하 온 시간
+*.param TW    = '0.2*TSTOP'          * 온 유지 시간
+*.param RSTEP = 10k                   * 추가 부하(작아질수록 더 무거운 부하)
+*VCTRL VCTL   0 PULSE(0 1 'TLD' 1n 1n 'TW' '2*TSTOP')
+*.model SLD SW VT=0.5 VH=0 RON=1 ROFF=1e12
+*RLD2  VOUT   NX 'RSTEP'
+*S1    NX     0  VCTL 0 SLD
+*.measure TRAN VOUT_MIN_L  MIN  v(VOUT) FROM='TLD' TO='TLD+TW'               ; 드룹 최소값
+*.measure TRAN VOUT_PRE    FIND v(VOUT) AT='TLD-1n'
+*.measure TRAN VDROP       PARAM='VOUT_PRE - VOUT_MIN_L'                      ; 드룹 크기
+*.measure TRAN TSETTLE_L   WHEN 'abs(v(VOUT)-V_SPEC)-V_BAND' = 0 CROSS=2      ; 부하 스텝 후 재정착
+.end
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="2-최적화-변수-parameter">2) 최적화 변수 (Parameter)</h1>
+
+<ul>
+  <li>
+    <p><strong>R1, R2</strong> : 실제 생산을 고려해 <strong>Discrete(E96, 1%)</strong> 운용 권장</p>
+
+    <ul>
+      <li>
+        <p>예시 범위(정확도 우선): <strong>R2 = 680 Ω ~ 1.2 kΩ</strong> , <strong>R1 ≈ 2.3×R2 → 1.6 kΩ ~ 3.0 kΩ</strong></p>
+      </li>
+      <li>
+        <p>탐색은 외부 스크립트/옵티마이저에서 E96 후보를 순회 → <code class="language-plaintext highlighter-rouge">.measure</code> 결과를 스코어로 사용</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>(원하면 <code class="language-plaintext highlighter-rouge">RT, K</code> 방식으로도 바꿔줄 수 있어: <code class="language-plaintext highlighter-rouge">R1=RT*(1-K)</code>, <code class="language-plaintext highlighter-rouge">R2=RT*K</code>)</p>
+
+<hr />
+
+<h1 id="3-측정-대상-measure-2">3) 측정 대상 (Measure)</h1>
+
+<ul>
+  <li>
+    <p><strong>정확도</strong> : <code class="language-plaintext highlighter-rouge">VOUT_FINAL</code>, <code class="language-plaintext highlighter-rouge">VERR_ABS</code></p>
+  </li>
+  <li>
+    <p><strong>속도</strong> : <code class="language-plaintext highlighter-rouge">TR10_90</code>, <code class="language-plaintext highlighter-rouge">TSETTLE(±V_BAND)</code></p>
+  </li>
+  <li>
+    <p><strong>전류/에너지</strong> : <code class="language-plaintext highlighter-rouge">IIN_AVG</code>, <code class="language-plaintext highlighter-rouge">QIN</code>, <code class="language-plaintext highlighter-rouge">EAPP</code></p>
+  </li>
+  <li>
+    <p><strong>(옵션) 부하 스텝 성능</strong> : <code class="language-plaintext highlighter-rouge">VDROP</code>, <code class="language-plaintext highlighter-rouge">TSETTLE_L</code></p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>메모</p>
+
+  <ul>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">V_BAND</code>(기본 10 mV)만 조절하면 정착 스펙을 손쉽게 변경 가능.</p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">CLOAD</code>은 과도 거동(속도/드룹)을 만드는 핵심 파라미터이니 시스템에 맞춰 설정해줘.</p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">PULSE</code> 폭을 <code class="language-plaintext highlighter-rouge">10*TSTOP</code>로 길게 잡아서 시뮬레이션 내내 High 상태가 유지되도록 했어.</p>
+    </li>
+  </ul>
+
+</blockquote>
+
+<p>필요하면 위 범위의 <strong>E96 리스트(.step list)</strong>나, <code class="language-plaintext highlighter-rouge">RT·K</code> 파라미터화 버전(같은 <code class="language-plaintext highlighter-rouge">.tran</code> 측정 유지)도 바로 만들어줄게.</p>
+
+<p class="chat--user">
+
+CLOAD를 넣은 이유 좀 쉽게 설명해줘
+
+</p>
+
+<p>좋아, 핵심만 <strong>쉽게</strong> 정리해볼게. (step-by-step)</p>
+
+<ol>
+  <li>
+    <p><strong>그냥 R만 있으면, 시간적인 드라마가 없다</strong><br />
+전압 분배기(R1–R2–RL)만 있으면 회로는 “메모리”가 없는 <strong>순수 저항망</strong> 이야. .tran에서 입력을 PULSE로 바꿔도, Vout은 <strong>입력 파형을 즉시 비율만큼 나눠</strong> 따라갈 뿐(이론적으로는 소스의 상승/하강시간만큼만 변함).<br />
+→ 이러면 <strong>Rise time / Settling time 같은 과도 지표가 의미가 거의 없어</strong>(거의 입력 파형에 의해 정해짐).</p>
+  </li>
+  <li>
+    <p><strong>CLOAD를 달아야 ‘시간상수’가 생긴다</strong><br />
+CLOAD가 붙으면 Vout 노드는 <strong>(저항망의 테브난 저항 R_th) + 캐패시터</strong> 구조가 돼서 <strong>RC 시간상수 τ</strong> 가 생긴다.</p>
+
+    <ul>
+      <li>
+        <p>Rth≈(R1+RS)∥(R2∥RL)R_{\text{th}} \approx (R_1+R_S) \parallel (R_2 \parallel R_L)Rth​≈(R1​+RS​)∥(R2​∥RL​)</p>
+      </li>
+      <li>
+        <p>τ=Rth⋅CLOAD\tau = R_{\text{th}} \cdot C_{\text{LOAD}}τ=Rth​⋅CLOAD​<br />
+이제 Vout은 지수적으로 천천히 올라가고(1−e−t/τ1-e^{-t/\tau}1−e−t/τ), <strong>TR(10–90%)</strong> , <strong>정착시간(TSETTLE)</strong> 같은 과도 지표를 <strong>회로의 파라미터로</strong> 제어·측정할 수 있어.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>현실 파라사이트를 간단히 대변</strong><br />
+실제 보드는 배선/부하(ADC 샘플링캡, 다음 단계 입력 C 등) 때문에 <strong>수~수백 nF 수준의 등가 C</strong> 가 거의 항상 존재. CLOAD는 이런 <strong>현실적인 로딩/디커플링</strong> 을 간단히 모델링해줘.</p>
+
+    <ul>
+      <li>
+        <p>노이즈/리플을 필터링(고주파에서 출력 임피던스 ↓)</p>
+      </li>
+      <li>
+        <p>부하 스텝 시 <strong>즉각적인 드룹을 완화</strong>(C가 순간적으로 전류 공급)하고, 그 뒤 τ\tauτ로 재정착</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>수치 감(예: R1=1.8 kΩ, R2=820 Ω, RS=50 Ω, RL=100 kΩ, CLOAD=100 nF)</strong></p>
+
+    <ul>
+      <li>
+        <p>R2∥RL≈814 ΩR_2 \parallel R_L \approx 814 \,\OmegaR2​∥RL​≈814Ω, R1+RS=1850 ΩR_1+R_S=1850 \,\OmegaR1​+RS​=1850Ω</p>
+      </li>
+      <li>
+        <p>Rth≈566 Ω⇒τ≈56.6 μsR_{\text{th}} \approx 566 \,\Omega \Rightarrow \tau \approx 56.6\,\mu sRth​≈566Ω⇒τ≈56.6μs</p>
+      </li>
+      <li>
+        <p>대략 <strong>TR(10–90%) ≈ 2.2τ ≈ 124 μs</strong> , <strong>정착 4–5τ ≈ 0.23–0.28 ms</strong><br />
+→ 이런 값들이 <strong>CLOAD나 저항값을 바꾸면 예측 가능하게 변</strong> 하니, 최적화/트레이드오프가 가능해진다.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>요약</strong></p>
+
+    <ul>
+      <li>
+        <p><strong>왜 넣었나?</strong> .tran에서 <strong>의미 있는 과도 특성</strong>(속도·정착·드룹·에너지)을 만들고, <strong>현실 파라사이트/디커플링 효과</strong> 를 반영하려고.</p>
+      </li>
+      <li>
+        <p><strong>어떻게 쓰나?</strong> 원하는 응답 속도면 τ\tauτ 목표를 정하고 CLOADC_{\text{LOAD}}CLOAD​ 또는 저항 합/비율을 조정. 빠르게 하고 싶으면 CLOAD↓(또는 RT↓), 리플/드룹 억제는 CLOAD↑(단, 기동 전류/에너지는 ↑).</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>원하면, 위 RthR_{\text{th}}Rth​ 공식으로 목표 <strong>정착시간/라이즈타임 → 필요한 CLOAD</strong> 를 바로 역산해주는 스니펫(.measure/파라미터 계산)도 덱에 추가해줄게.</p>]]></content><author><name>hvppyarchive</name></author><category term="circuit" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">HSPICE StatEye 설정 방법</title><link href="https://hvppyarchive.github.io/circuit/stateye/" rel="alternate" type="text/html" title="HSPICE StatEye 설정 방법" /><published>2025-10-16T19:49:25+09:00</published><updated>2025-10-16T19:49:25+09:00</updated><id>https://hvppyarchive.github.io/circuit/stateye</id><content type="html" xml:base="https://hvppyarchive.github.io/circuit/stateye/"><![CDATA[<p class="chat--user">
 
 matlab에서는 stateye simulation 할 때 Rx CDR Mean/Rj/Dj/DCD 등도 반영이 가능한데, primesim hspice stateye에서는 Tx/Rx의 RJ/PJ/PDF FILE 만 입력이 가능해. DCD나 CDR Mean과 같은 요소를 반영해서 hspice에서 볼 수 있을까
 
