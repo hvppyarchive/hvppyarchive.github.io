@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-17T11:37:20+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-17T11:37:20+09:00</published><updated>2025-10-17T11:37:20+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-17T15:03:57+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-17T15:03:57+09:00</published><updated>2025-10-17T15:03:57+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">아날로그 회로 최적화 데모</title><link href="https://hvppyarchive.github.io/circuit/circuit-optimization-example/" rel="alternate" type="text/html" title="아날로그 회로 최적화 데모" /><published>2025-10-17T11:37:15+09:00</published><updated>2025-10-17T11:37:15+09:00</updated><id>https://hvppyarchive.github.io/circuit/circuit-optimization-example</id><content type="html" xml:base="https://hvppyarchive.github.io/circuit/circuit-optimization-example/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">아날로그 회로 최적화 데모</title><link href="https://hvppyarchive.github.io/circuit/circuit-optimization-example/" rel="alternate" type="text/html" title="아날로그 회로 최적화 데모" /><published>2025-10-17T15:03:52+09:00</published><updated>2025-10-17T15:03:52+09:00</updated><id>https://hvppyarchive.github.io/circuit/circuit-optimization-example</id><content type="html" xml:base="https://hvppyarchive.github.io/circuit/circuit-optimization-example/"><![CDATA[<p class="chat--user">
 
 Analog 회로 최적화를 소개하는 간단한 데모 예시를 만들고 싶어. 
 
@@ -1051,7 +1051,322 @@ CLOAD가 붙으면 Vout 노드는 <strong>(저항망의 테브난 저항 R_th) +
   </li>
 </ol>
 
-<p>원하면, 위 RthR_{\text{th}}Rth​ 공식으로 목표 <strong>정착시간/라이즈타임 → 필요한 CLOAD</strong> 를 바로 역산해주는 스니펫(.measure/파라미터 계산)도 덱에 추가해줄게.</p>]]></content><author><name>hvppyarchive</name></author><category term="circuit" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">HSPICE StatEye 설정 방법</title><link href="https://hvppyarchive.github.io/circuit/stateye/" rel="alternate" type="text/html" title="HSPICE StatEye 설정 방법" /><published>2025-10-16T19:49:25+09:00</published><updated>2025-10-16T19:49:25+09:00</updated><id>https://hvppyarchive.github.io/circuit/stateye</id><content type="html" xml:base="https://hvppyarchive.github.io/circuit/stateye/"><![CDATA[<p class="chat--user">
+<p>원하면, 위 RthR_{\text{th}}Rth​ 공식으로 목표 <strong>정착시간/라이즈타임 → 필요한 CLOAD</strong> 를 바로 역산해주는 스니펫(.measure/파라미터 계산)도 덱에 추가해줄게.</p>
+
+<p class="chat--user">
+
+VERR_ABS와 EAPP 측정 결과가 나왔는데 각 단위가 뭐야
+
+</p>
+
+<p>짧게 말하면:</p>
+
+<ul>
+  <li>
+    <p><strong>VERR_ABS</strong> : <strong>볼트 [V]</strong></p>
+  </li>
+  <li>
+    <p><strong>EAPP</strong> : <strong>줄 [J]</strong> (= 전기적 에너지)</p>
+  </li>
+</ul>
+
+<p>step-by-step로 풀면,</p>
+
+<ol>
+  <li>
+    <p><strong>정의 복습</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">VOUT_FINAL</code>을 마지막 구간(예: 0.8·TSTOP~TSTOP)에서 평균한 출력 전압 → <strong>단위 V</strong></p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">VERR_ABS = |VOUT_FINAL − V_SPEC|</code> → <strong>단위 V</strong></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>EAPP가 왜 줄[J]인가</strong></p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">QIN = INTEG(-I(V1))</code> → <strong>쿨롬 [C]</strong> (전하)</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">EAPP = VSUP · QIN</code> → <strong>V × C = J</strong></p>
+      </li>
+      <li>
+        <p>즉, 소스가 공급한 <strong>에너지(근사)</strong>야. 여기서 “근사”인 이유는, 덱에서 <code class="language-plaintext highlighter-rouge">V1</code>이 거의 상수(VSUP)지만 <strong>상승 구간</strong> 에선 순간적으로 <code class="language-plaintext highlighter-rouge">V&lt;VSUP</code>이기 때문이야. 이 구간까지 정확히 포함하려면 아래처럼 <strong>전압·전류 곱을 적분</strong> 하면 돼:</p>
+
+        <ul>
+          <li>참고: <em>정확 에너지</em> ≈ ∫ v(V1)·(-I(V1)) dt → 결과 단위도 <strong>J</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>보너스 단위 체크</p>
+
+  <ul>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">IIN_AVG</code>: <strong>암페어 [A]</strong></p>
+    </li>
+    <li>
+      <p><code class="language-plaintext highlighter-rouge">TR10_90</code>, <code class="language-plaintext highlighter-rouge">TSETTLE</code>: <strong>초 [s]</strong></p>
+    </li>
+  </ul>
+
+</blockquote>
+
+<p>필요하면 <strong>정확 에너지 측정식(∫v·i dt 버전)</strong>으로 바꾼 <code class="language-plaintext highlighter-rouge">.measure</code> 예시도 만들어줄게.</p>
+
+<p class="chat--user">
+
+파워 소모라고 하면 W일거 같은데 J이야?
+
+</p>
+
+<p>짧은 답:</p>
+
+<ul>
+  <li>
+    <p><strong>EAPP</strong> 는 <strong>에너지 [J]</strong>야. (시간에 걸쳐 들어간 전력의 적분)</p>
+  </li>
+  <li>
+    <p>“파워 소모”를 보고 싶다면 <strong>전력 [W]</strong>로 계산해야 해. (평균 전력 = 에너지 / 시간)</p>
+  </li>
+</ul>
+
+<p>step-by-step:</p>
+
+<ol>
+  <li>
+    <p><strong>왜 J냐?</strong><br />
+EAPP를 <code class="language-plaintext highlighter-rouge">∫ v·i dt</code>(또는 <code class="language-plaintext highlighter-rouge">VSUP·∫i dt</code>)로 정의하면, 단위가 <strong>V·A·s = J</strong> 가 돼. 즉 “한 번의 과도 이벤트에서 쓴 총량”을 뜻해.</p>
+  </li>
+  <li>
+    <p><strong>전력[W]가 필요하면</strong><br />
+같은 구간 [T0,T1][T0, T1][T0,T1]에서 평균 전력은</p>
+  </li>
+</ol>
+
+<p>Pavg=1T1−T0∫T0T1v(t) i(t) dt=EAPPT1−T0[W]P_{\text{avg}}=\frac{1}{T_1-T_0}\int_{T_0}^{T_1} v(t)\,i(t)\,dt=\frac{\text{EAPP}}{T_1-T_0}\quad[\text{W}]Pavg​=T1​−T0​1​∫T0​T1​​v(t)i(t)dt=T1​−T0​EAPP​[W]</p>
+<ol>
+  <li><strong>.tran에서 바로 쓰는 측정 스니펫</strong> (복붙 가능)</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+
+* 구간 정의
+.param T0 = 0
+.param T1 = 'TSTOP'
+
+* (정확한) 에너지 [J]
+.measure TRAN EAPP  INTEG 'v(V1)*(-I(V1))' FROM='T0' TO='T1'
+
+* 평균 전력 [W] — 직접 평균
+.measure TRAN P_AVG AVG   'v(V1)*(-I(V1))' FROM='T0' TO='T1'
+
+* (동일 의미) 평균 전력 [W] — 에너지/시간
+*.measure TRAN DT    PARAM='T1 - T0'
+*.measure TRAN P_AVG2 PARAM='EAPP/DT'
+
+* 피크 전력 [W] (최대값)
+.measure TRAN P_PEAK MAX   'v(V1)*(-I(V1))' FROM='T0' TO='T1'
+</code></pre></div></div>
+
+<ol>
+  <li><strong>주의(옵션)</strong><br />
+방전 때 소스에 에너지가 “되돌아갈” 수 있어 v⋅i&lt;0v·i&lt;0v⋅i&lt;0. “진짜 소비만” 보고 싶다면 양의 부분만 적분:</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+
+* 소비 에너지(양수만 적분) [J]
+.measure TRAN E_CONS INTEG '0.5*( v(V1)*(-I(V1)) + abs(v(V1)*(-I(V1))) )' FROM='T0' TO='T1'
+</code></pre></div></div>
+
+<p>정리: <strong>EAPP=J(에너지)</strong>가 맞고, <strong>파워 소모는 W(전력)</strong>이야. 평균 전력을 보고 싶으면 위 <code class="language-plaintext highlighter-rouge">P_AVG</code>로 측정하거나 <code class="language-plaintext highlighter-rouge">EAPP/(T1-T0)</code>로 계산하면 돼.</p>
+
+<p class="chat--user">
+
+왜 P_AVG가 0이 나오지? 아까 써준 tran input에 재대로 assign 해줘봐
+
+</p>
+
+<p>가능해! <strong>P_AVG=0</strong> 나오는 가장 흔한 이유는, 내가 예시로 쓴 <code class="language-plaintext highlighter-rouge">v(V1)</code>가 “소스의 <strong>소자 전압</strong> ”을 뜻한다고 가정했는데, FineSim/HSPICE에서는 그게 제대로 해석되지 않아서 <strong>0으로 처리</strong> 되는 경우가 있어.<br />
+소스 전압은 <strong>노드 전압</strong> 으로 안전하게 참조하는 게 확실해—즉 <code class="language-plaintext highlighter-rouge">v(VIN_SRC,0)</code>처럼 <strong>노드 이름</strong> 을 써주자.</p>
+
+<p>아래처럼 <strong>.tran 입력 덱의 측정 블록</strong> 을 교체하면 돼(복붙 OK).</p>
+
+<hr />
+
+<h2 id="수정된-측정-블록-tran-전용-전력에너지-포함">수정된 측정 블록 (.tran 전용, 전력/에너지 포함)</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+
+* ===== 과도 해석 =====
+.tran 'TSTOP/1000' 'TSTOP'
+
+* --- 기존 측정(정확도/시간) 유지 ---
+.measure TRAN VOUT_FINAL  AVG  v(VOUT) FROM='0.8*TSTOP' TO='TSTOP'
+.measure TRAN VERR_ABS    PARAM='abs(VOUT_FINAL - V_SPEC)'
+.measure TRAN TR10_90     TRIG v(VOUT) VAL='0.1*V_SPEC' RISE=1 \
+                          TARG v(VOUT) VAL='0.9*V_SPEC' RISE=1
+.measure TRAN TSETTLE     WHEN 'abs(v(VOUT)-V_SPEC)-V_BAND' = 0 CROSS=1
+
+* --- 파워/에너지: 노드전압 v(VIN_SRC,0) × 소스전류 -I(V1) 로 측정 ---
+.param T0 = 0
+.param T1 = 'TSTOP'
+
+* 정확한 에너지 [J] = ∫ v*i dt
+.measure TRAN EAPP  INTEG 'v(VIN_SRC,0)*(-I(V1))' FROM='T0' TO='T1'
+
+* 평균 전력 [W] = 평균(v*i)
+.measure TRAN P_AVG AVG   'v(VIN_SRC,0)*(-I(V1))' FROM='T0' TO='T1'
+
+* 피크 전력 [W]
+.measure TRAN P_PEAK MAX   'v(VIN_SRC,0)*(-I(V1))' FROM='T0' TO='T1'
+
+* (선택) 소비 에너지(양수만 적분) [J]
+.measure TRAN E_CONS INTEG '0.5*( v(VIN_SRC,0)*(-I(V1)) + abs(v(VIN_SRC,0)*(-I(V1))) )' \
+                           FROM='T0' TO='T1'
+</code></pre></div></div>
+
+<h3 id="왜-이렇게-바꾸면-되나-짧게">왜 이렇게 바꾸면 되나 (짧게)</h3>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">v(VIN_SRC,0)</code>: <strong>소스 양단 노드 전압</strong> 을 직접 참조 ⇒ 항상 유효.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">-I(V1)</code>: 소스가 <strong>회로로 공급하는 전류</strong>(양수) ⇒ 공급 전력 <code class="language-plaintext highlighter-rouge">v*i</code>가 <strong>양수</strong> 로 계산됨.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">AVG</code>는 표현식의 시간 평균이므로, 저항망에 DC 전류가 흐르면 <strong>0이 될 수 없음</strong>. 0이 나왔다면 거의 항상 전압 참조가 잘못된 케이스야.</p>
+  </li>
+</ul>
+
+<p>이렇게 수정하고 돌리면 <strong>P_AVG가 정상적인 W 단위 값</strong> 으로 나올 거야.</p>
+
+<p class="chat--user">
+
+전체 다시 써. 게으르지말고 사람이 화나려고 해
+
+</p>
+
+<p>알겠어. 전부 깨끗이 <strong>.tran 전용</strong> 으로 다시 정리해서 <strong>복붙 바로 실행</strong> 가능한 덱을 줘.<br />
+(전력/에너지 측정은 <strong>노드 전압 v(VIN_SRC,0)</strong> × <strong>소스전류 -I(V1)</strong> 로 계산해서 <code class="language-plaintext highlighter-rouge">P_AVG=0</code> 문제를 근본적으로 회피했어.)</p>
+
+<hr />
+
+<h1 id="finesimhspice-netlist--transient-only-complete">FineSim/HSPICE Netlist — Transient Only (Complete)</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spice
+
+*------------------------------------------------------------
+* Voltage Divider — Transient-Only Optimization Deck
+* (FineSim/HSPICE compatible)
+*------------------------------------------------------------
+.option post=2 measform=1
+
+* ===== Parameters (edit here) =====
+.param VSUP    = 3.3          * 입력 전압 [V]
+.param V_SPEC  = 1.0          * 목표 Vout [V]
+.param RS      = 50           * 소스 직렬저항 [Ohm]
+.param RL      = 100k         * 부하 [Ohm]
+
+* ---- 최적화 변수 (Discrete/E96 권장) ----
+.param R1      = 1.80k        * 위쪽 저항
+.param R2      = 820          * 아래쪽 저항
+
+* ---- 과도/측정 관련 ----
+.param CLOAD   = 100n         * 출력 바이패스/부하 커패시터
+.param TRISE   = 1n
+.param TFALL   = 1n
+.param TSTOP   = 1m
+.param V_BAND  = 10m          * 정착 허용 밴드(±)
+.param T0      = 0            * 에너지/전력 집계 시작
+.param T1      = 'TSTOP'      * 에너지/전력 집계 끝
+
+* ===== Circuit =====
+V1     VIN_SRC   0      PULSE(0 'VSUP' 0 'TRISE' 'TFALL' 'TSTOP' '100*TSTOP')
+RSRC   VIN_SRC   VIN    'RS'
+RUP    VIN       VOUT   'R1'
+RDN    VOUT      0      'R2'
+RLOAD  VOUT      0      'RL'
+COUT   VOUT      0      'CLOAD'
+
+* ===== Transient Analysis =====
+.tran  'TSTOP/1000'  'TSTOP'
+
+* ===== Measures (steady-state / timing) =====
+.measure TRAN VOUT_FINAL  AVG  v(VOUT) FROM='0.8*TSTOP' TO='TSTOP'    ; 최종값 근사 [V]
+.measure TRAN VERR_ABS    PARAM='abs(VOUT_FINAL - V_SPEC)'            ; 최종 오차 [V]
+
+.measure TRAN TR10_90     TRIG v(VOUT) VAL='0.1*V_SPEC' RISE=1 \
+                          TARG v(VOUT) VAL='0.9*V_SPEC' RISE=1        ; 10–90% 라이즈 [s]
+
+.measure TRAN TSETTLE     WHEN 'abs(v(VOUT)-V_SPEC)-V_BAND' = 0 CROSS=1  ; 정착 시간 [s]
+
+* ===== Power / Energy (robust node-based) =====
+*  - 전력 p(t) = v(VIN_SRC,0) * (-I(V1))
+*  - 평균전력 [W] = AVG p(t), 에너지 [J] = ∫ p(t) dt
+.measure TRAN P_AVG   AVG   'v(VIN_SRC,0)*(-I(V1))' FROM='T0' TO='T1'      ; 평균 전력 [W]
+.measure TRAN P_PEAK  MAX   'v(VIN_SRC,0)*(-I(V1))' FROM='T0' TO='T1'      ; 피크 전력 [W]
+.measure TRAN EAPP    INTEG 'v(VIN_SRC,0)*(-I(V1))' FROM='T0' TO='T1'      ; 소비 에너지 [J]
+* (선택) 양의 전력만 적분한 소비 에너지
+*.measure TRAN E_CONS INTEG '0.5*( v(VIN_SRC,0)*(-I(V1)) + abs(v(VIN_SRC,0)*(-I(V1))) )' \
+*                           FROM='T0' TO='T1'
+
+.end
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="쓰는-순서-진짜-짧게">쓰는 순서 (진짜 짧게)</h2>
+
+<ol>
+  <li>
+    <p>위 덱 그대로 붙여 넣고 <strong>.tran</strong> 실행.</p>
+  </li>
+  <li>
+    <p><strong>.mt#</strong> 결과에서 <code class="language-plaintext highlighter-rouge">VERR_ABS [V]</code>, <code class="language-plaintext highlighter-rouge">TR10_90 [s]</code>, <code class="language-plaintext highlighter-rouge">TSETTLE [s]</code>, <code class="language-plaintext highlighter-rouge">P_AVG [W]</code>, <code class="language-plaintext highlighter-rouge">EAPP [J]</code> 확인.</p>
+  </li>
+  <li>
+    <p><strong>R1/R2(Discrete, E96)</strong> 후보를 바꿔가며 측정값을 최적화.</p>
+  </li>
+</ol>
+
+<h3 id="변수-유형범위요약">변수 유형/범위(요약)</h3>
+
+<ul>
+  <li>
+    <p><strong>R1, R2 = Discrete(E96, 1%)</strong> 권장</p>
+
+    <ul>
+      <li>
+        <p>정확도 우선: <strong>R2 = 680 Ω ~ 1.2 kΩ</strong> , <strong>R1 ≈ 2.3×R2 → 1.6 kΩ ~ 3.0 kΩ</strong></p>
+      </li>
+      <li>
+        <p>전류 절약형(정확도 일부 양보): <strong>R2 = 1.5 kΩ ~ 10 kΩ</strong> , <strong>R1 = 3.5 kΩ ~ 23 kΩ</strong></p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="왜-이제-p_avg가-0이-안-나오냐">왜 이제 <code class="language-plaintext highlighter-rouge">P_AVG</code>가 0이 안 나오냐?</h3>
+
+<ul>
+  <li>
+    <p>전력 식을 <strong>소자이름이 아닌 노드 전압</strong> <code class="language-plaintext highlighter-rouge">v(VIN_SRC,0)</code>과 <strong>소스 전류</strong> <code class="language-plaintext highlighter-rouge">-I(V1)</code>로 정의했기 때문.</p>
+  </li>
+  <li>
+    <p>이 조합은 FineSim/HSPICE에서 항상 유효하고, DC 성분이 있으면 평균이 0일 수 없어.</p>
+  </li>
+</ul>
+
+<p>필요하면 <strong>부하 스텝 응답(.tran) 측정 블록</strong> 도 추가해 줄게.</p>]]></content><author><name>hvppyarchive</name></author><category term="circuit" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">HSPICE StatEye 설정 방법</title><link href="https://hvppyarchive.github.io/circuit/stateye/" rel="alternate" type="text/html" title="HSPICE StatEye 설정 방법" /><published>2025-10-16T19:49:25+09:00</published><updated>2025-10-16T19:49:25+09:00</updated><id>https://hvppyarchive.github.io/circuit/stateye</id><content type="html" xml:base="https://hvppyarchive.github.io/circuit/stateye/"><![CDATA[<p class="chat--user">
 
 matlab에서는 stateye simulation 할 때 Rx CDR Mean/Rj/Dj/DCD 등도 반영이 가능한데, primesim hspice stateye에서는 Tx/Rx의 RJ/PJ/PDF FILE 만 입력이 가능해. DCD나 CDR Mean과 같은 요소를 반영해서 hspice에서 볼 수 있을까
 
