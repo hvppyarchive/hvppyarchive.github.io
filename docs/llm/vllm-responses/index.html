@@ -1,0 +1,1148 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>vLLM Responses 적용 방법 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="vLLM Responses 적용 방법">
+<meta property="og:url" content="https://hvppyarchive.github.io/llm/vllm-responses/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-19T11:28:44+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/llm/vllm-responses/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="vLLM Responses 적용 방법">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-10-19T11:28:44+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/llm/vllm-responses/" itemprop="url">vLLM Responses 적용 방법
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-19T11:28:44+09:00">2025-10-19</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+vLLM + GPTOSS 120B 조합에 <a href="https://platform.openai.com/docs/api-reference/responses">Responses</a>를 적용할 수 있나?
+
+</p>
+
+<p>짧게 답하면: <strong>가능합니다.</strong> 최신 vLLM( gpt-oss 전용 빌드)로 <code class="language-plaintext highlighter-rouge">openai/gpt-oss-120b</code>를 서빙하면, <strong>OpenAI Responses API(<code class="language-plaintext highlighter-rouge">/v1/responses</code>)를 그대로 쓸 수 있어요.</strong> OpenAI 공식 Cookbook도 vLLM가 <em>Chat Completions</em> 와 <em>Responses</em> <strong>둘 다</strong> 를 노출한다고 예시 코드까지 제공합니다. <a href="https://cookbook.openai.com/articles/gpt-oss/run-vllm">OpenAI Cookbook</a></p>
+
+<hr />
+
+<h1 id="어떻게-하면-되나요-step-by-step">어떻게 하면 되나요? (step-by-step)</h1>
+
+<ol>
+  <li><strong>vLLM 설치 &amp; 서버 기동</strong></li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 권장: gpt-oss 대응 vLLM 빌드</span>
+uv venv <span class="nt">--python</span> 3.12 <span class="nt">--seed</span>
+<span class="nb">source</span> .venv/bin/activate
+uv pip <span class="nb">install</span> <span class="nt">--pre</span> <span class="nv">vllm</span><span class="o">==</span>0.10.1+gptoss <span class="se">\</span>
+  <span class="nt">--extra-index-url</span> https://wheels.vllm.ai/gpt-oss/ <span class="se">\</span>
+  <span class="nt">--extra-index-url</span> https://download.pytorch.org/whl/nightly/cu128 <span class="se">\</span>
+  <span class="nt">--index-strategy</span> unsafe-best-match
+
+<span class="c"># gpt-oss-120b 서빙 (기본 포트 8000)</span>
+vllm serve openai/gpt-oss-120b
+</code></pre></div></div>
+
+<p>위 흐름은 OpenAI Cookbook과 HF의 모델 카드에도 안내가 있습니다. <a href="https://cookbook.openai.com/articles/gpt-oss/run-vllm">OpenAI Cookbook+1</a></p>
+
+<ol>
+  <li><strong>OpenAI SDK에서 Responses 호출 (vLLM로 라우팅)</strong></li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="nc">OpenAI</span><span class="p">(</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="sh">"</span><span class="s">http://localhost:8000/v1</span><span class="sh">"</span><span class="p">,</span>  <span class="c1"># vLLM OpenAI-호환 서버
+</span>    <span class="n">api_key</span><span class="o">=</span><span class="sh">"</span><span class="s">EMPTY</span><span class="sh">"</span>                       <span class="c1"># 아무 값이면 됨(서버 측 검증 안 쓰는 기본 설정)
+</span><span class="p">)</span>
+
+<span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">openai/gpt-oss-120b</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">instructions</span><span class="o">=</span><span class="sh">"</span><span class="s">간단히 설명해줘.</span><span class="sh">"</span><span class="p">,</span>
+    <span class="nb">input</span><span class="o">=</span><span class="sh">"</span><span class="s">MXFP4 양자화가 뭔가요?</span><span class="sh">"</span>
+<span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="n">output_text</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Cookbook의 샘플과 동일한 방식으로 <code class="language-plaintext highlighter-rouge">client.responses.create(...)</code>가 동작합니다. <a href="https://cookbook.openai.com/articles/gpt-oss/run-vllm">OpenAI Cookbook</a><br />
+(Responses API 스펙은 여기서 확인할 수 있어요. <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼</a>)</p>
+
+<ol>
+  <li><strong>cURL로도 바로 호출 가능</strong></li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-s</span> http://localhost:8000/v1/responses <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer EMPTY"</span> <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{
+    "model":"openai/gpt-oss-120b",
+    "input":"하모니(Harmony) 포맷은 뭐죠?",
+    "instructions":"짧고 쉽게."
+  }'</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="알아두면-좋은-점-주의사항">알아두면 좋은 점 (주의사항)</h1>
+
+<ul>
+  <li>
+    <p><strong>gpt-oss는 텍스트 전용</strong> 입니다. 따라서 Responses의 이미지/오디오 관련 기능은 해당 모델에선 의미가 없습니다. (Responses는 범용 통합 엔드포인트지만 무엇이 되느냐는 <em>모델 능력</em> 에 좌우됩니다.) <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼</a></p>
+  </li>
+  <li>
+    <p><strong>버전 주의:</strong> 2025년 초에는 vLLM에 <code class="language-plaintext highlighter-rouge">/v1/responses</code>가 없었고(요청 이슈 존재), 이후 gpt-oss 대응 릴리스에서 Responses가 추가되었습니다. 최신 gpt-oss 대응 vLLM을 쓰세요. <a href="https://github.com/vllm-project/vllm/issues/14721?utm_source=chatgpt.com">GitHub+1</a></p>
+  </li>
+  <li>
+    <p><strong>도구 호출(툴/함수 호출) &amp; Harmony 포맷:</strong> gpt-oss는 체인오브소트 내부에서 툴 호출이 일어나는 <strong>Harmony</strong> 포맷을 사용합니다. vLLM의 <strong>Responses 경로는 기본 지원</strong> 하지만, 일부 기능(예: 스트리밍, Chat Completions 측의 도구호출 호환성)은 아직 개선 중인 이슈들이 언급됩니다. 문제를 만나면 <strong>Responses 엔드포인트</strong> 를 우선 사용하거나 최신 빌드로 업데이트하세요. <a href="https://github.com/vllm-project/vllm/issues/23217?utm_source=chatgpt.com">GitHub+1</a></p>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="대안백업-플랜">대안(백업 플랜)</h1>
+
+<p>만약 현재 vLLM 배포본이 <code class="language-plaintext highlighter-rouge">/v1/responses</code>를 아직 노출하지 않는다면, <strong>LiteLLM 프록시</strong> 를 앞에 두고 <strong>Responses → Chat Completions</strong>(또는 해당 서버 지원 경로)로 브릿지할 수 있습니다. LiteLLM은 OpenAI Responses API를 프록시 레벨에서 지원합니다. <a href="https://docs.litellm.ai/docs/providers/openai/responses_api?utm_source=chatgpt.com">LiteLLM+1</a></p>
+
+<hr />
+
+<p>원하시면, <strong>귀하의 환경(쿠다/VRAM/포트/도메인)에 맞춘 최소 설정 스크립트</strong> 와 <strong>Responses+도구호출 예제</strong> 를 바로 만들어 드릴게요.</p>
+
+<p class="chat--user">
+
+체인오브소트 내부에서 툴 호출이 일어나는 Harmony 포맷을 사용합니다. -&gt; 이게 무슨 말이야
+
+</p>
+
+<p>좋은 질문! 문장을 풀어서 말하면:</p>
+
+<blockquote>
+  <p>“Harmony 포맷은 <strong>모델이 생각(체인오브소트)</strong> 하는 도중에 <strong>툴을 부를 타이밍과 방법</strong> 을 포맷(규칙)으로 <strong>명시</strong> 하고, 그 과정을 <strong>채널</strong> 로 구분해 표준화한다”는 뜻이에요.</p>
+</blockquote>
+
+<p>아래처럼 이해하면 쉽습니다.</p>
+
+<h1 id="한눈에-보기-step-by-step">한눈에 보기 (step-by-step)</h1>
+
+<ol>
+  <li>
+    <p><strong>역할(Roles)</strong><br />
+대화는 <code class="language-plaintext highlighter-rouge">system / developer / user / assistant / tool</code> 역할로 구성돼요. 각 역할이 무엇을 담아야 하는지가 정해져 있습니다. <a href="https://cookbook.openai.com/articles/openai-harmony">OpenAI Cookbook</a></p>
+  </li>
+  <li>
+    <p><strong>채널(Channels)</strong> — assistant 메시지 안의 “의도” 구분</p>
+  </li>
+</ol>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">analysis</code>: 모델의 <strong>내부 사고(체인오브소트)</strong>. 사용자에게 보여주지 않는 영역.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">commentary</code>: <strong>툴 호출 지시</strong> 를 주로 내보내는 영역(함수 호출 등).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">final</code>: 유저에게 보여줄 <strong>최종 답변</strong>.<br />
+이렇게 분리해 두어, 생각/행동/최종답을 깔끔히 구분합니다. <a href="https://cookbook.openai.com/articles/openai-harmony">OpenAI Cookbook</a></p>
+  </li>
+</ul>
+
+<ol>
+  <li><strong>툴 호출이 CoT 중에 “어떻게” 나타나나?</strong><br />
+모델이 <code class="language-plaintext highlighter-rouge">analysis</code>에서 “지금 날씨 API가 필요하군”이라고 <strong>판단</strong> 하면, 곧바로 <code class="language-plaintext highlighter-rouge">commentary</code> 채널로 <strong>툴 사용 선언</strong> 을 찍어내요(함수명과 파라미터). 실행 결과는 <code class="language-plaintext highlighter-rouge">tool</code> 역할 메시지로 돌아오고, 모델은 다시 <code class="language-plaintext highlighter-rouge">analysis</code>에서 그 결과를 <strong>해석</strong> 한 뒤 <code class="language-plaintext highlighter-rouge">final</code>로 사용자 답을 마무리합니다. <a href="https://cookbook.openai.com/articles/openai-harmony">OpenAI Cookbook</a></li>
+</ol>
+
+<p>작은 흐름 예시(의사표기):</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">assistant</span> <span class="o">(</span><span class="nt">analysis</span><span class="o">):</span> <span class="s1">"도쿄 현재 날씨가 필요"</span>
+<span class="nt">assistant</span> <span class="o">(</span><span class="nt">commentary</span><span class="o">):</span> <span class="nt">tool_use</span><span class="o">(</span><span class="nt">name</span><span class="o">=</span><span class="s1">"get_weather"</span><span class="o">,</span> <span class="nt">params</span><span class="o">=</span><span class="p">{</span><span class="py">location</span><span class="p">:</span><span class="s1">"Tokyo"</span><span class="p">}</span><span class="o">)</span>
+<span class="nt">tool</span> <span class="o">(</span><span class="nt">get_weather</span><span class="o">):</span> <span class="nt">tool_result</span><span class="o">(..</span><span class="nc">.현재</span> <span class="err">23°</span><span class="nt">C</span><span class="o">,</span> <span class="nt">맑음</span><span class="o">...)</span>
+<span class="nt">assistant</span> <span class="o">(</span><span class="nt">final</span><span class="o">):</span> <span class="s1">"도쿄는 지금 맑고 23°C입니다."</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>핵심은 <strong>툴 호출이 모델의 사고(analysis)와 맞물려 순서대로 표준화</strong> 돼 나온다는 점이에요.</p>
+  </li>
+  <li>
+    <p>Harmony는 이 과정을 Responses API에서 쓰는 <strong>콘텐츠 블록 구조</strong> 와 아주 비슷하게 설계되어 있어, Responses를 쓰면 자연스럽게 이 흐름을 그대로 다룰 수 있습니다. <a href="https://cookbook.openai.com/articles/openai-harmony">OpenAI Cookbook</a></p>
+  </li>
+</ul>
+
+<ol>
+  <li><strong>왜 이렇게 하느냐?</strong></li>
+</ol>
+
+<ul>
+  <li>
+    <p><strong>관찰 가능성</strong> : 언제/왜 툴을 썼는지 형태가 드러나 디버깅이 쉬움</p>
+  </li>
+  <li>
+    <p><strong>안전/표시 분리</strong> : 내부 사고(<code class="language-plaintext highlighter-rouge">analysis</code>)는 숨기고, 사용자 답(<code class="language-plaintext highlighter-rouge">final</code>)만 노출</p>
+  </li>
+  <li>
+    <p><strong>호환성</strong> : Responses API와의 정합성—에이전트/툴 파이프라인 연결이 간단해짐 <a href="https://github.com/openai/harmony">GitHub</a></p>
+  </li>
+</ul>
+
+<ol>
+  <li><strong>gpt-oss와의 관계</strong><br />
+<code class="language-plaintext highlighter-rouge">gpt-oss-120b/20b</code>는 <strong>Harmony 포맷에 맞춰 훈련</strong> 되었고, <strong>이 포맷 없이</strong> 쓰면 제대로 동작하지 않는다고 모델 카드가 못 박고 있어요.</li>
+</ol>
+
+<ul>
+  <li>
+    <p>vLLM 등 <strong>OpenAI-호환 서버</strong> 를 쓰면 보통 이 포맷을 자동으로 처리합니다.</p>
+  </li>
+  <li>
+    <p>Transformers로 <strong>로우(generate) 호출</strong> 을 하면 <strong>Harmony 템플릿/라이브러리</strong> 로 감싸야 합니다. <a href="https://huggingface.co/openai/gpt-oss-120b">Hugging Face</a></p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="요약-한-줄">요약 한 줄</h2>
+
+<p>Harmony = “<strong>생각(analysis)</strong> → <strong>툴 호출(commentary/tool)</strong> → <strong>최종 답(final)</strong> ”을 <strong>표준 채널과 블록</strong> 으로 엄격히 구분해, Responses API와 잘 맞게 만든 <strong>대화/툴 사용 포맷</strong> 입니다. <a href="https://cookbook.openai.com/articles/openai-harmony">OpenAI Cookbook+1</a></p>
+
+<p>원하면 vLLM+gpt-oss에서 <strong>툴 호출 왕복(Responses → tool_result → 최종답)</strong> 샘플 코드를 바로 만들어 드릴게요.</p>
+
+<p class="chat--user">
+
+기존에는 chat completion -&gt; LLM의 툴 요청 -&gt; 툴 실행 후 실행 결과 포함해서 다시 chat completion 이 과정이었다면, 이제는 LLM이 첫 답변을 생성하면서 툴 콜링을 한다고 보면 될까
+
+</p>
+
+<p>짧게: <strong>거의 맞아요.</strong><br />
+정확히는 “<strong>한 번의<code class="language-plaintext highlighter-rouge">Responses</code> 세션 안에서</strong> 모델이 답을 만들어 가는 <strong>중간에 툴 호출 이벤트</strong> 를 내보내고, 그 결과를 <strong>클라이언트가 제출</strong> 하면 <strong>같은 세션이 이어져</strong> 최종 답을 마무리한다”는 흐름이에요. <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼+2</a></p>
+
+<hr />
+
+<h1 id="단계별로-비교">단계별로 비교</h1>
+
+<h2 id="예전챗-컴플리션-방식-2턴-왕복">예전(챗 컴플리션 방식, 2턴 왕복)</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">POST /v1/chat/completions</code> (tools 정의 포함) →</p>
+  </li>
+  <li>
+    <p>모델이 <code class="language-plaintext highlighter-rouge">tool_calls</code>를 돌려줌 →</p>
+  </li>
+  <li>
+    <p><strong>클라이언트가 툴 실행</strong> 해서 결과를 메시지로 추가 →</p>
+  </li>
+  <li>
+    <p><strong>다시</strong> <code class="language-plaintext highlighter-rouge">chat.completions</code> 호출 →</p>
+  </li>
+  <li>
+    <p>최종 답.<br />
+(턴을 <strong>두 번</strong> 치는 구조)</p>
+  </li>
+</ol>
+
+<h2 id="지금responses-방식-한-세션-안에서">지금(Responses 방식, 한 세션 안에서)</h2>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">POST /v1/responses</code> (tools 정의 포함) →</p>
+  </li>
+  <li>
+    <p>모델이 <strong>응답 생성 중</strong> <code class="language-plaintext highlighter-rouge">tool_call</code> 블록을 내보냄(스트리밍 가능) →</p>
+  </li>
+  <li>
+    <p><strong>클라이언트가 툴 실행</strong> →</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">responses.{id}.**submit_tool_outputs**</code>로 <strong>그 결과를 제출</strong> →</p>
+  </li>
+  <li>
+    <p><strong>같은 response 컨텍스트</strong> 에서 이어서 생성 → 필요하면 2–4 반복 →</p>
+  </li>
+  <li>
+    <p>최종 <code class="language-plaintext highlighter-rouge">final</code>(user-facing) 출력으로 완료. <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼+1</a></p>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="이해-포인트-3가지">이해 포인트 3가지</h1>
+
+<ol>
+  <li>
+    <p><strong>“첫 답변을 만들면서 툴 콜”</strong> → 네. 모델이 텍스트를 내뱉는 <strong>중간에</strong> 툴 호출을 트리거합니다. 스트리밍이면 <code class="language-plaintext highlighter-rouge">tool_call</code> 이벤트가 먼저 오고, 툴 결과를 제출하면 같은 세션이 <strong>계속 흘러가며</strong> 최종 텍스트가 나와요. <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼+1</a></p>
+  </li>
+  <li>
+    <p><strong>왕복은 남아있다</strong> → 툴을 진짜로 실행하는 건 여전히 여러분 앱이 하고, <strong>결과를 제출</strong> 해야 모델이 다음 토큰 생성을 이어갑니다. 다만 <strong>새 대화 턴을 다시 열지 않고</strong> , <strong>같은 Response</strong> 의 생명주기 안에서 끝나요. <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼</a></p>
+  </li>
+  <li>
+    <p><strong>Harmony 포맷과의 관계</strong> → gpt-oss 계열은 <code class="language-plaintext highlighter-rouge">analysis / commentary / final</code> <strong>채널</strong> 을 써서 “생각→툴 콜→최종답”을 <strong>표준화</strong> 합니다. 이 포맷이 <strong>Responses API와 닮게 설계</strong> 되어 있어, 방금 설명한 흐름이 그대로 매핑돼요. <a href="https://cookbook.openai.com/articles/openai-harmony">OpenAI Cookbook+1</a></p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="한-줄-정리">한 줄 정리</h2>
+
+<blockquote>
+  <p>예전엔 “두 번 호출”이었다면, 지금은 <strong>한 번의 Responses 세션 안에서</strong> 모델이 <strong>중간에 툴을 부르고</strong> , <strong>툴 결과를 제출받은 뒤 같은 세션을 이어</strong> 최종 답을 내놓는 구조입니다. <a href="https://platform.openai.com/docs/api-reference/responses?utm_source=chatgpt.com">OpenAI 플랫폼+1</a></p>
+</blockquote>
+
+<p>필요하시면, <strong>vLLM+gpt-oss에서 <code class="language-plaintext highlighter-rouge">Responses → tool_call → submit_tool_outputs → final</code></strong>이 어떻게 스트리밍으로 흘러오는지 콘솔 로그 예시로도 바로 보여드릴게요.</p>
+
+<p class="chat--user">
+
+openai package로 할 수 있어?
+
+</p>
+
+<p>네. <strong><code class="language-plaintext highlighter-rouge">openai</code> 파이썬 패키지</strong>만으로도 그 흐름(Responses 세션 안에서 툴 호출 → 결과 제출 → 같은 세션 이어서 최종 답)을 그대로 구현할 수 있어요. 핵심은 두 가지입니다:</p>
+
+<ol>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">client.responses.create(...)</code></strong> 로 시작하고</p>
+  </li>
+  <li>
+    <p>모델이 툴을 부르면 <strong><code class="language-plaintext highlighter-rouge">client.responses.submit_tool_outputs(...)</code></strong> 로 결과를 <strong>같은 response ID</strong> 에 제출합니다. <a href="https://github.com/openai/openai-python">GitHub+1</a></p>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="빠른-스타터-step-by-step">빠른 스타터 (step-by-step)</h1>
+
+<h2 id="0-설치">0) 설치</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>openai
+</code></pre></div></div>
+
+<p>공식 SDK가 <code class="language-plaintext highlighter-rouge">Responses</code> 엔드포인트와 스트리밍을 기본 지원합니다. <a href="https://github.com/openai/openai-python">GitHub+1</a></p>
+
+<h2 id="1-옵션-vllm--gpt-oss에-붙일-때">1) (옵션) vLLM + gpt-oss에 붙일 때</h2>
+
+<p>자체 호스팅한 vLLM(OpenAI 호환 서버)에 붙일 땐 <strong><code class="language-plaintext highlighter-rouge">base_url</code></strong> 을 바꿔주면 됩니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="n">client</span> <span class="o">=</span> <span class="nc">OpenAI</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="sh">"</span><span class="s">http://localhost:8000/v1</span><span class="sh">"</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="sh">"</span><span class="s">EMPTY</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>OpenAI Cookbook의 gpt-oss+vLLM 예시도 같은 방식(클라이언트 <code class="language-plaintext highlighter-rouge">base_url</code> 변경)을 씁니다. <a href="https://cookbook.openai.com/articles/gpt-oss/run-vllm">OpenAI Cookbook</a></p>
+
+<h2 id="2-툴-정의--첫-요청-responses">2) 툴 정의 + 첫 요청 (Responses)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span> <span class="n">json</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="nc">OpenAI</span><span class="p">()</span>  <span class="c1"># OpenAI 클라우드 사용시
+</span>
+<span class="n">tools</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">get_weather</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">도시의 현재 날씨를 반환</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span> <span class="sh">"</span><span class="s">city</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">}</span> <span class="p">},</span>
+        <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">city</span><span class="sh">"</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="c1"># 1) 첫 생성
+</span><span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>                 <span class="c1"># 또는 openai/gpt-oss-120b (vLLM)
+</span>    <span class="nb">input</span><span class="o">=</span><span class="sh">"</span><span class="s">서울 날씨 알려줘</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="n">tools</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>여기까지가 <strong>툴 호출이 필요한지 모델이 판단</strong> 하는 단계입니다. SDK의 <code class="language-plaintext highlighter-rouge">Responses</code> 사용 예시는 공식 리포지토리에 있습니다. <a href="https://github.com/openai/openai-python">GitHub</a></p>
+
+<h2 id="3-모델이-툴을-요구하면-결과-제출">3) 모델이 툴을 요구하면 결과 제출</h2>
+
+<p>Responses는 툴을 요구할 때 <strong>동일 세션이<code class="language-plaintext highlighter-rouge">requires_action</code> 상태</strong>가 되며, 해당 response에 <strong>툴 호출 목록</strong> 이 들어있습니다. 그때 <strong>각 툴을 실행 → 결과를 제출</strong> 하면 됩니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># (의미만 보여주는 최소 예시)
+</span><span class="k">if</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="o">==</span> <span class="sh">"</span><span class="s">requires_action</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">calls</span> <span class="o">=</span> <span class="n">resp</span><span class="p">.</span><span class="n">required_action</span><span class="p">.</span><span class="n">submit_tool_outputs</span><span class="p">.</span><span class="n">tool_calls</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">calls</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">call</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span> <span class="ow">and</span> <span class="n">call</span><span class="p">.</span><span class="n">function</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">get_weather</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">function</span><span class="p">.</span><span class="n">arguments</span><span class="p">)</span>
+            <span class="c1"># 👉 실제 툴 실행
+</span>            <span class="n">result</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">args</span><span class="p">[</span><span class="sh">'</span><span class="s">city</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s">: 맑음 23℃</span><span class="sh">"</span>
+            <span class="n">outputs</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">:</span> <span class="n">result</span><span class="p">})</span>
+
+    <span class="c1"># 2) 같은 response 컨텍스트로 결과 제출
+</span>    <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">submit_tool_outputs</span><span class="p">(</span>
+        <span class="n">response_id</span><span class="o">=</span><span class="n">resp</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span>
+        <span class="n">tool_outputs</span><span class="o">=</span><span class="n">outputs</span>
+    <span class="p">)</span>
+
+<span class="c1"># 이후 resp가 완료될 때까지(=최종 답 생성) 필요하면 반복
+</span><span class="nf">print</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="sh">"</span><span class="s">output_text</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>이 “<strong>create → (필요 시) submit_tool_outputs → 완료</strong> ” 구조가 Responses의 표준 플로우입니다. 레퍼런스는 Responses API 문서에 정리되어 있어요. <a href="https://platform.openai.com/docs/api-reference/responses">OpenAI 플랫폼</a></p>
+</blockquote>
+
+<h2 id="4-스트리밍도-가능">4) 스트리밍도 가능</h2>
+
+<p>스트리밍을 켜면 <strong>생성 도중</strong> 툴 콜 이벤트를 받아서, 결과를 제출한 뒤 <strong>같은 세션이 이어집니다</strong> :</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">stream</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">,</span>
+    <span class="nb">input</span><span class="o">=</span><span class="sh">"</span><span class="s">서울 날씨 알려줘</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+    <span class="n">stream</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="c1"># 이벤트 타입에 따라 출력/툴콜 신호를 처리
+</span>    <span class="bp">...</span>
+</code></pre></div></div>
+
+<p>공식 가이드에 Responses 스트리밍 이벤트 흐름이 정리되어 있습니다. <a href="https://platform.openai.com/docs/guides/streaming-responses">OpenAI 플랫폼</a></p>
+
+<hr />
+
+<h2 id="메모자주-막히는-포인트">메모(자주 막히는 포인트)</h2>
+
+<ul>
+  <li>
+    <p><strong>vLLM 연동</strong> : vLLM이 <code class="language-plaintext highlighter-rouge">/v1/responses</code>와 해당 생명주기(툴 결과 제출)를 구현한 <strong>OpenAI-호환</strong> 빌드여야 합니다. Cookbook의 gpt-oss+vLLM 문서를 참고하세요. <a href="https://cookbook.openai.com/articles/gpt-oss/run-vllm">OpenAI Cookbook</a></p>
+  </li>
+  <li>
+    <p><strong>SDK 표면</strong> : <code class="language-plaintext highlighter-rouge">from openai import OpenAI</code> → <code class="language-plaintext highlighter-rouge">client.responses.create(...)</code> 가 <strong>권장 진입점</strong> 입니다(이전의 Chat Completions도 계속 지원되지만 신규는 Responses 권장). <a href="https://github.com/openai/openai-python">GitHub</a></p>
+  </li>
+</ul>
+
+<p>원하시면, <strong>여러 툴(예: RAG + 외부 API)</strong> 를 섞은 <strong>스트리밍 예제</strong>(툴콜 이벤트 파싱 포함)까지 바로 만들어 드릴게요.</p>
+
+<p class="chat--user">
+
+vLLM + GPT OSS 120B과 통신한다고 생각하고 1. 파일 리스트 조회 2. 파일 읽기 두 개 tool을 만들어서 작동하는 예시 만들어줘
+
+</p>
+
+<p>좋아요! 가정: <strong>vLLM + GPT-OSS 120B</strong> 를 OpenAI-호환 서버(예: <code class="language-plaintext highlighter-rouge">http://localhost:8000/v1</code>)로 띄워두고, 파이썬 <strong><code class="language-plaintext highlighter-rouge">openai</code> 패키지</strong>의 <strong>Responses API</strong> 로 통신합니다.<br />
+툴 2개 — <strong>파일 리스트 조회(<code class="language-plaintext highlighter-rouge">list_files</code>)</strong>, <strong>파일 읽기(<code class="language-plaintext highlighter-rouge">read_file</code>)</strong> — 를 정의하고, 모델이 툴을 부르면 결과를 <strong>같은 response 세션</strong> 에 제출해서 최종 답을 받는 <strong>엔드-투-엔드 예시</strong> 입니다.</p>
+
+<hr />
+
+<h1 id="step-by-step-예시-python">Step-by-step 예시 (Python)</h1>
+
+<blockquote>
+  <p>목적: 모델이 “프로젝트 폴더의 파일 목록을 보고, 특정 파일을 읽어 요약”하도록 <strong>툴 호출 → 툴 결과 제출 → 이어서 생성</strong> 흐름을 보여줍니다.
+```python</p>
+  <h1 id="pip-install-openai">pip install openai</h1>
+  <p>from openai import OpenAI
+from pathlib import Path
+import json
+import traceback</p>
+</blockquote>
+
+<p>###############################################################################</p>
+<h1 id="0-클라이언트-설정">0) 클라이언트 설정</h1>
+<h1 id="--vllmopenai-호환-서버로-붙는-경우-base_url과-api_key를-지정">- vLLM(OpenAI-호환 서버)로 붙는 경우: base_url과 api_key를 지정</h1>
+<h1 id="--openai-클라우드로-붙을-땐-base_url-제거하고-환경변수-openai_api_key-사용">- OpenAI 클라우드로 붙을 땐 base_url 제거하고, 환경변수 OPENAI_API_KEY 사용</h1>
+<p>###############################################################################
+client = OpenAI(
+    base_url="http://localhost:8000/v1",  # vLLM 주소
+    api_key="EMPTY"                        # 기본 vLLM 설정이라면 아무 값이나 OK
+)</p>
+
+<p>MODEL = "openai/gpt-oss-120b"  # vLLM에 서빙한 모델 이름</p>
+
+<p>###############################################################################</p>
+<h1 id="1-툴-구현부-실제-동작">1) 툴 구현부 (실제 동작)</h1>
+<h1 id="--root-아래만-접근-허용-간단한-샌드박스">- ROOT 아래만 접근 허용 (간단한 샌드박스)</h1>
+<h1 id="--텍스트-위주로-안전하게-읽기">- 텍스트 위주로 안전하게 읽기</h1>
+<p>###############################################################################
+ROOT = Path(".").resolve()  # 필요하면 작업 루트를 바꾸세요 (예: Path("/srv/workspace"))</p>
+
+<p>def _safe_resolve(rel_path: str) -&gt; Path:
+    p = (ROOT / rel_path).resolve()
+    # Python 3.9+의 is_relative_to 대체
+    if str(p).startswith(str(ROOT)):
+        return p
+    raise ValueError("Path traversal detected (outside ROOT).")</p>
+
+<p>def tool_list_files(dir: str = ".", glob: str = "*", max_results: int = 200):
+    try:
+        base = _safe_resolve(dir)
+        if not base.exists():
+            return {"ok": False, "error": f"Directory not found: {dir}"}
+        if not base.is_dir():
+            return {"ok": False, "error": f"Not a directory: {dir}"}</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    paths = []
+    # 깊이 제한 없이 rglob, 필요하면 변경
+    for p in base.rglob(glob):
+        if len(paths) &gt;= max_results:
+            break
+        # ROOT 내부만 허용
+        if str(p).startswith(str(ROOT)):
+            # 폴더는 제외하고 파일만 수집 (원하면 디렉터리도 포함 가능)
+            if p.is_file():
+                rel = str(p.relative_to(ROOT))
+                paths.append({
+                    "path": rel,
+                    "size": p.stat().st_size
+                })
+    return {"ok": True, "dir": str(Path(dir)), "glob": glob, "count": len(paths), "files": paths}
+except Exception as e:
+    return {"ok": False, "error": f"{type(e).__name__}: {e}"}
+</code></pre></div></div>
+
+<p>def tool_read_file(path: str, encoding: str = "utf-8", max_bytes: int = 64_000):
+    try:
+        p = _safe_resolve(path)
+        if not p.exists():
+            return {"ok": False, "error": f"File not found: {path}"}
+        if not p.is_file():
+            return {"ok": False, "error": f"Not a file: {path}"}</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    # 바이너리 과대응 방지: 텍스트로 시도
+    raw = p.read_bytes()[:max_bytes]
+    try:
+        text = raw.decode(encoding, errors="replace")
+    except Exception:
+        text = raw.decode("utf-8", errors="replace")
+    truncated = p.stat().st_size &gt; max_bytes
+    return {
+        "ok": True,
+        "path": str(p.relative_to(ROOT)),
+        "encoding": encoding,
+        "bytes_read": len(raw),
+        "truncated": truncated,
+        "content": text
+    }
+except Exception as e:
+    return {"ok": False, "error": f"{type(e).__name__}: {e}", "trace": traceback.format_exc()[:2000]}
+</code></pre></div></div>
+
+<p>###############################################################################</p>
+<h1 id="2-responses-api-툴-스펙json-schema">2) Responses API: 툴 스펙(JSON Schema)</h1>
+<p>###############################################################################
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "list_files",
+            "description": "프로젝트 루트(ROOT) 하위의 파일 목록을 조회합니다.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "dir":  {"type": "string", "description": "ROOT로부터의 상대 디렉터리 경로", "default": "."},
+                    "glob": {"type": "string", "description": "예: <em>.md, **/</em>.py", "default": "*"},
+                    "max_results": {"type": "integer", "minimum": 1, "maximum": 500, "default": 200}
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "read_file",
+            "description": "지정된 파일(텍스트)을 읽어 반환합니다.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "ROOT로부터의 상대 파일 경로"},
+                    "encoding": {"type": "string", "description": "기본 utf-8", "default": "utf-8"},
+                    "max_bytes": {"type": "integer", "description": "최대 읽기 바이트(기본 64KB)", "default": 64000}
+                },
+                "required": ["path"]
+            }
+        }
+    }
+]</p>
+
+<p>###############################################################################</p>
+<h1 id="3-툴-콜-디스패처">3) 툴 콜 디스패처</h1>
+<p>###############################################################################
+def dispatch_tool_call(call):
+    """
+    Responses의 tool_call을 실제 파이썬 함수에 매핑하고,
+    submit_tool_outputs용 {"tool_call_id": …, "output": "…"} 형태를 반환
+    """
+    f = call.function
+    name = f.name
+    # arguments는 문자열 JSON (모델이 생성)
+    args = json.loads(f.arguments or "{}")</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>try:
+    if name == "list_files":
+        result = tool_list_files(
+            dir=args.get("dir", "."),
+            glob=args.get("glob", "*"),
+            max_results=int(args.get("max_results", 200)),
+        )
+    elif name == "read_file":
+        result = tool_read_file(
+            path=args["path"],
+            encoding=args.get("encoding", "utf-8"),
+            max_bytes=int(args.get("max_bytes", 64_000)),
+        )
+    else:
+        result = {"ok": False, "error": f"Unknown tool: {name}"}
+except Exception as e:
+    result = {"ok": False, "error": f"{type(e).__name__}: {e}"}
+
+# output은 문자열이어야 하므로 JSON 직렬화
+return {"tool_call_id": call.id, "output": json.dumps(result, ensure_ascii=False)}
+</code></pre></div></div>
+
+<p>###############################################################################</p>
+<h1 id="4-실행-드라이버">4) 실행 드라이버</h1>
+<h1 id="--모델이-중간에-tool_call을-내보내면-실제로-호출하고">- 모델이 중간에 tool_call을 내보내면 실제로 호출하고</h1>
+<h1 id="같은-response_id로-결과를-제출하여-세션을-이어갑니다">같은 response_id로 결과를 제출하여 세션을 이어갑니다.</h1>
+<p>###############################################################################
+def run_session(user_task: str):
+    # 4-1) 첫 요청
+    resp = client.responses.create(
+        model=MODEL,
+        input=user_task,
+        tools=tools,
+        # (선택) system / instructions / temperature 등 필요 시 추가
+        # instructions="당신은 파일 도우미입니다. 필요한 경우 파일 목록을 조회하고 파일을 읽은 뒤, 유저가 알아보기 쉽게 요약하세요.",
+    )</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 4-2) 필요 시 툴 결과 제출 루프
+max_rounds = 5
+rounds = 0
+while getattr(resp, "status", None) == "requires_action" and rounds &lt; max_rounds:
+    rounds += 1
+    required = resp.required_action.submit_tool_outputs
+    tool_calls = required.tool_calls if required else []
+    outputs = []
+    for call in tool_calls:
+        if call.type == "function":
+            outputs.append(dispatch_tool_call(call))
+
+    resp = client.responses.submit_tool_outputs(
+        response_id=resp.id,
+        tool_outputs=outputs
+    )
+
+# 4-3) 최종 출력 (모델이 생성한 유저용 텍스트)
+print(resp.output_text)  # 필요시 resp를 그대로 반환해도 됨
+return resp
+</code></pre></div></div>
+
+<p>###############################################################################</p>
+<h1 id="5-데모-프롬프트">5) 데모 프롬프트</h1>
+<p>###############################################################################
+if <strong>name</strong> == "<strong>main</strong>":
+    # 예: "루트의 파일 목록을 보여주고, README나 가장 관련 있어 보이는 파일을 읽어 요약해줘."
+    task = (
+        "프로젝트 루트의 파일 목록을 확인하고, 문서성 파일(.md, .txt)을 우선으로 "
+        "하나 골라 읽어서 핵심을 5줄 내로 요약해줘. 한국어로 답변해줘."
+    )
+    run_session(task)
+```</p>
+
+<hr />
+
+<h2 id="어떻게-동작하나요-요점만">어떻게 동작하나요? (요점만)</h2>
+
+<ol>
+  <li>
+    <p><strong>툴 정의</strong> 를 <code class="language-plaintext highlighter-rouge">tools=[...]</code>로 Responses에 넘기면, 모델이 “파일이 필요하네?”라고 판단할 때 <strong><code class="language-plaintext highlighter-rouge">tool_call</code> 이벤트</strong>를 냅니다.</p>
+  </li>
+  <li>
+    <p>코드에서 그 요청을 받아 <strong>실제 함수(<code class="language-plaintext highlighter-rouge">tool_list_files</code>, <code class="language-plaintext highlighter-rouge">tool_read_file</code>) 실행</strong> → 결과를 문자열(JSON)로 만들어</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">client.responses.submit_tool_outputs(response_id=..., tool_outputs=[...])</code></strong> 로 <strong>같은 세션에 제출</strong> 합니다.</p>
+  </li>
+  <li>
+    <p>모델은 <strong>같은 response 컨텍스트</strong> 를 이어받아 후속 툴 호출 또는 <strong>최종 답</strong> 을 생성합니다.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="실전-팁">실전 팁</h2>
+
+<ul>
+  <li>
+    <p><strong>보안/안전</strong> : 예시처럼 루트 디렉터리를 정하고, <code class="language-plaintext highlighter-rouge">_safe_resolve</code>로 <strong>루트 바깥 접근을 차단</strong> 하세요.</p>
+  </li>
+  <li>
+    <p><strong>대용량 파일</strong> : <code class="language-plaintext highlighter-rouge">max_bytes</code>로 <strong>트렁케이션</strong>(부분 읽기) 전략을 쓰고, 모델에게 “길면 일부만 읽는다”고 알려주세요.</p>
+  </li>
+  <li>
+    <p><strong>결과 포맷</strong> : <code class="language-plaintext highlighter-rouge">output</code>은 <strong>문자열</strong> 이어야 합니다. (구조화가 필요하면 JSON 문자열로 넘긴 뒤, 모델이 파싱/요약하도록 유도)</p>
+  </li>
+  <li>
+    <p><strong>스트리밍</strong> : 실시간으로 <code class="language-plaintext highlighter-rouge">tool_call</code> 이벤트를 처리하려면 <code class="language-plaintext highlighter-rouge">stream=True</code>를 써서 이벤트 루프를 작성하면 됩니다. (원하면 스트리밍 버전도 만들어 드릴게요.)</p>
+  </li>
+</ul>
+
+<p>필요하면 위 예시를 <strong>여러 디렉터리 접근</strong> , <strong>파일 검색(키워드/RAG)</strong> , <strong>권한 레벨</strong> 까지 확장한 프로덕션 스캐폴드로 바로 확장해 드릴게요.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#llm" class="page__taxonomy-item p-category" rel="tag">llm</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-19T11:28:44+09:00">2025-10-19</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/llm/local-mcp/" class="pagination--pager" title="LLM Local MCP">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-19T11:28:50+09:00">2025-10-19</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/local-mcp/" rel="permalink">LLM Local MCP
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-17T19:56:32+09:00">2025-10-17</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/circuit/circuit-optimization-example/" rel="permalink">아날로그 회로 최적화 데모
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-17T15:03:52+09:00">2025-10-17</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/circuit/stateye/" rel="permalink">HSPICE StatEye 설정 방법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-16T19:49:25+09:00">2025-10-16</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
