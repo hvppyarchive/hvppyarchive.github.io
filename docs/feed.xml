@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-24T11:39:59+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-24T11:39:59+09:00</published><updated>2025-10-24T11:39:59+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-10-24T14:07:16+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-10-24T14:07:16+09:00</published><updated>2025-10-24T14:07:16+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">OpenAI 함수 호출 테스트</title><link href="https://hvppyarchive.github.io/llm/openai-function-call-examples/" rel="alternate" type="text/html" title="OpenAI 함수 호출 테스트" /><published>2025-10-24T11:39:52+09:00</published><updated>2025-10-24T11:39:52+09:00</updated><id>https://hvppyarchive.github.io/llm/openai-function-call-examples</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/openai-function-call-examples/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">OpenAI 함수 호출 테스트</title><link href="https://hvppyarchive.github.io/llm/openai-function-call-examples/" rel="alternate" type="text/html" title="OpenAI 함수 호출 테스트" /><published>2025-10-24T14:07:11+09:00</published><updated>2025-10-24T14:07:11+09:00</updated><id>https://hvppyarchive.github.io/llm/openai-function-call-examples</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/openai-function-call-examples/"><![CDATA[<p class="chat--user">
 
 openai package를 사용하는 테스트 코드 작성할거야. 목표: 2가지 모델에 대해 2가지 api type(completions, responses)에 대해 function calling 테스트를 하고 싶어. 총 4개 조합에 대해 설정할 수 있게 코드 작성 하자. 툴은 간단히 특정 폴더의 파일 조회, 특정 폴더의 파일 읽기 두 가지 툴을 구현할거야 2개 모델에 대한 엔드포인트, api 키, 모델명을 코드 내에서 설정할 수 있도록 할 것.
 
@@ -2385,7 +2385,742 @@ python test_16combos.py –models A –apis completions –structured on</p>
   </li>
 </ul>
 
-<p>원하면 contents를 “파일 전문”으로 바꾸는 옵션 스위치도 추가해줄 수 있어.</p>]]></content><author><name>hvppyarchive</name></author><category term="llm" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">OpenAI 함수 호출 테스트</title><link href="https://hvppyarchive.github.io/llm/openai-function-call-examples/" rel="alternate" type="text/html" title="OpenAI 함수 호출 테스트" /><published>2025-10-22T16:55:18+09:00</published><updated>2025-10-22T16:55:18+09:00</updated><id>https://hvppyarchive.github.io/llm/openai-function-call-examples</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/openai-function-call-examples/"><![CDATA[<p class="chat--user">
+<p>원하면 contents를 “파일 전문”으로 바꾸는 옵션 스위치도 추가해줄 수 있어.</p>
+
+<p class="chat--user">
+
+Completions(structured)에서 ValueError list_files_in_folder is not strict. Only <code class="language-plaintext highlighter-rouge">strict</code> function tools can be auto-parsed.
+
+</p>
+
+<p>좋은 피드백이야. 에러 원인은 chat.completions.parse를 사용할 때 툴이 strict 모드가 아니면 자동 파싱이 불가능해서야. 즉, structured 모드에서 함수 툴 정의에 strict=True가 반드시 들어가야 해.</p>
+
+<p>수정 방향 요약 단계별</p>
+
+<ol>
+  <li>
+    <p>tools_variant와 structured 여부에 따라 툴 JSON에 strict를 주입하는 헬퍼를 만든다.</p>
+  </li>
+  <li>
+    <p>Chat 스타일일 땐 tool["function"]["strict"]=True, Responses 스타일일 땐 tool["strict"]=True를 넣는다.</p>
+  </li>
+  <li>
+    <p>run_chat / run_responses에서 기존 정적 TOOLS 대신 이 헬퍼로 반환된 툴을 사용한다.</p>
+  </li>
+</ol>
+
+<p>아래 변경만 적용하면 돼. 나머지 로직은 그대로 둬도 동작한다.</p>
+
+<p>추가 함수 및 변경점</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">copy</span>
+
+<span class="k">def</span> <span class="nf">make_tools</span><span class="p">(</span><span class="n">tools_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">structured</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    tools_variant: </span><span class="sh">'</span><span class="s">chat</span><span class="sh">'</span><span class="s"> | </span><span class="sh">'</span><span class="s">responses</span><span class="sh">'</span><span class="s">
+    structured가 True면 strict 플래그를 주입한다.
+    </span><span class="sh">"""</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">CHAT_STYLE_TOOLS</span> <span class="k">if</span> <span class="n">tools_variant</span> <span class="o">==</span> <span class="sh">"</span><span class="s">chat</span><span class="sh">"</span> <span class="k">else</span> <span class="n">RESPONSES_STYLE_TOOLS</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="n">copy</span><span class="p">.</span><span class="nf">deepcopy</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">structured</span><span class="p">:</span>
+        <span class="c1"># Chat 스타일: "function" 블록 안에 strict
+</span>        <span class="k">if</span> <span class="n">tools_variant</span> <span class="o">==</span> <span class="sh">"</span><span class="s">chat</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">t</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">)</span> <span class="o">==</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span> <span class="ow">and</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+                    <span class="n">t</span><span class="p">[</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c1"># Responses 스타일: 최상위에 strict
+</span>        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">t</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">)</span> <span class="o">==</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span>
+                    <span class="n">t</span><span class="p">[</span><span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="n">tools</span>
+</code></pre></div></div>
+
+<p>run_chat 내부에서 툴 선택 부분 교체</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 기존
+# tools = CHAT_STYLE_TOOLS if tools_variant == "chat" else RESPONSES_STYLE_TOOLS
+# 변경
+</span><span class="n">tools</span> <span class="o">=</span> <span class="nf">make_tools</span><span class="p">(</span><span class="n">tools_variant</span><span class="p">,</span> <span class="n">structured</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>run_responses 내부에서도 동일하게 교체</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 기존
+# tools = RESPONSES_STYLE_TOOLS if tools_variant == "responses" else CHAT_STYLE_TOOLS
+# 변경
+</span><span class="n">tools</span> <span class="o">=</span> <span class="nf">make_tools</span><span class="p">(</span><span class="n">tools_variant</span><span class="p">,</span> <span class="n">structured</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>추가 참고</p>
+
+<ul>
+  <li>
+    <p>이 변경으로 Completions(structured) 뿐만 아니라 Responses(structured)에서도 일관되게 엄격 파싱이 보장돼.</p>
+  </li>
+  <li>
+    <p>plain 모드에선 strict가 없어도 되지만, 위 헬퍼는 structured일 때만 strict를 주입하므로 기존 동작을 해치지 않아.</p>
+  </li>
+  <li>
+    <p>tools JSON을 동적으로 주입하므로, 새 함수만 추가하고 두 곳 호출부만 바꾸면 끝나.</p>
+  </li>
+</ul>
+
+<p>이렇게 수정하면 “ValueError list_files_in_folder is not strict. Only <code class="language-plaintext highlighter-rouge">strict</code> function tools can be auto-parsed.” 에러는 사라지고 16개 조합 모두 정상적으로 순회할 수 있어.</p>
+
+<p class="chat--user">
+
+그래도 계속 에러가 나네. 일단 넘어가고 json scheme을 지정하는 방식은 동작을 잘 안하네 일반 json 모드를 켜보고 싶어. 총 3가지 sweep(no structured, json_mode, structured)로 실험해보자. 예시 responses 
+<code class="language-plaintext highlighter-rouge">
+we_did_not_specify_stop_tokens = True
+
+try:
+    response = client.responses.create(
+        model="gpt-3.5-turbo-0125",
+        input=[
+            {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+            {"role": "user", "content": "Who won the world series in 2020? Please respond in the format {winner: ...}"}
+        ],
+        text={"format": {"type": "json_object"}}
+    )
+
+    # Check if the conversation was too long for the context window, resulting in incomplete JSON 
+    if response.status == "incomplete" and response.incomplete_details.reason == "max_output_tokens":
+        # your code should handle this error case
+        pass
+
+    # Check if the OpenAI safety system refused the request and generated a refusal instead
+    if response.output[0].content[0].type == "refusal":
+        # your code should handle this error case
+        # In this case, the .content field will contain the explanation (if any) that the model generated for why it is refusing
+        print(response.output[0].content[0]["refusal"])
+
+    # Check if the model's output included restricted content, so the generation of JSON was halted and may be partial
+    if response.status == "incomplete" and response.incomplete_details.reason == "content_filter":
+        # your code should handle this error case
+        pass
+
+    if response.status == "completed":
+        # In this case the model has either successfully finished generating the JSON object according to your schema, or the model generated one of the tokens you provided as a "stop token"
+
+        if we_did_not_specify_stop_tokens:
+            # If you didn't specify any stop tokens, then the generation is complete and the content key will contain the serialized JSON object
+            # This will parse successfully and should now contain  "{"winner": "Los Angeles Dodgers"}"
+            print(response.output_text)
+        else:
+            # Check if the response.output_text ends with one of your stop tokens and handle appropriately
+            pass
+except Exception as e:
+    # Your code should handle errors here, for example a network error calling the API
+    print(e)
+</code>
+
+completions 
+<code class="language-plaintext highlighter-rouge">
+response = client.chat.completions.create(
+  model="gpt-4-1106-preview",
+  messages=[
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "LangChain은 무엇을 하는 라이브러리지? JSON으로 답해줘. JSON 키워드는 Description, Features, Usage로 해줘."}
+  ],
+  response_format = {'type':"json_object"}
+)
+</code>
+
+</p>
+
+<p>좋아. strict 기반의 JSON Schema 파싱은 접고, 세 모드로 스윕하도록 전체 스크립트를 업데이트했어.</p>
+
+<p>스윕 축: 2모델 × 2 API(completions/responses) × 2 Tools JSON(chat-style/responses-style) × 3 모드(plain, json_mode, structured) = 총 24조합.</p>
+
+<p>핵심</p>
+
+<ul>
+  <li>
+    <p>plain: 자유 출력. 전체 입력/출력 원본 JSON을 저장.</p>
+  </li>
+  <li>
+    <p>json_mode: 모델에게 “무조건 JSON”을 요구. 출력은 {"filename","contents"} 형식. 저장 시 result.json 생성.</p>
+
+    <ul>
+      <li>
+        <p>Chat Completions: response_format={'type': 'json_object'}</p>
+      </li>
+      <li>
+        <p>Responses: text={"format":{"type":"json_object"}}</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>structured: 이전처럼 parse 사용. 여전히 모델/SDK에 따라 strict 요구로 실패할 수도 있으니 try/except로 격리. 성공 시 result.json 생성.</p>
+  </li>
+  <li>
+    <p>Responses API는 툴 호출이 나오면 여러 번 호출되며 매 스텝 콘솔 출력. 콘솔은 색상으로 입력(CYAN), 툴 요청(YELLOW), 출력(GREEN) 구분.</p>
+  </li>
+  <li>
+    <p>모든 조합은 runs/타임스탬프/모델_API_tools_mode/ 폴더에 input.json, outputs.json 저장. json_mode/structured는 result.json 추가 저장.</p>
+  </li>
+  <li>
+    <p>에러는 조합별로만 출력하고 나머지 계속 진행.</p>
+  </li>
+</ul>
+
+<p>코드: test_24combos.py</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test_24combos.py
+# Python 3.10+
+# pip install --upgrade openai pydantic
+</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">import</span> <span class="n">argparse</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="c1"># ===== ANSI colors =====
+</span><span class="n">RESET</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[0m</span><span class="sh">"</span>
+<span class="n">CYAN</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[36m</span><span class="sh">"</span>      <span class="c1"># input
+</span><span class="n">YELLOW</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[33m</span><span class="sh">"</span>    <span class="c1"># tool
+</span><span class="n">GREEN</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[32m</span><span class="sh">"</span>     <span class="c1"># output
+</span><span class="n">RED</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\033</span><span class="s">[31m</span><span class="sh">"</span>       <span class="c1"># error
+</span>
+<span class="c1"># ===== Model configs =====
+</span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ModelConfig</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="n">MODELS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelConfig</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">A</span><span class="sh">"</span><span class="p">:</span> <span class="nc">ModelConfig</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">MODEL_A_NAME</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">gpt-4.1-mini</span><span class="sh">"</span><span class="p">),</span>
+        <span class="n">base_url</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">OPENAI_BASE_URL_A</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">https://api.openai.com/v1</span><span class="sh">"</span><span class="p">),</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">OPENAI_API_KEY_A</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">YOUR_KEY_FOR_MODEL_A</span><span class="sh">"</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="sh">"</span><span class="s">B</span><span class="sh">"</span><span class="p">:</span> <span class="nc">ModelConfig</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">MODEL_B_NAME</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">gpt-4o-mini</span><span class="sh">"</span><span class="p">),</span>
+        <span class="n">base_url</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">OPENAI_BASE_URL_B</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">https://api.openai.com/v1</span><span class="sh">"</span><span class="p">),</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">OPENAI_API_KEY_B</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">YOUR_KEY_FOR_MODEL_B</span><span class="sh">"</span><span class="p">),</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1"># ===== Local tools =====
+</span><span class="k">def</span> <span class="nf">list_files_in_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nf">sorted</span><span class="p">([</span>
+            <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="p">.</span><span class="nf">listdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isfile</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+        <span class="p">])</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">read_text_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sh">""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sh">""</span>
+
+<span class="k">def</span> <span class="nf">dispatch_tool</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">list_files_in_folder</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">result</span><span class="sh">"</span><span class="p">:</span> <span class="nf">list_files_in_folder</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">folder_path</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">))}</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">read_text_file</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">result</span><span class="sh">"</span><span class="p">:</span> <span class="nf">read_text_file</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">file_path</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">))}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Unknown tool: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+
+<span class="c1"># ===== Tools JSON (two shapes) =====
+</span><span class="n">CHAT_STYLE_TOOLS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">list_files_in_folder</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">List file names (not directories) inside a given folder path.</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="sh">"</span><span class="s">folder_path</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Absolute or relative folder path.</span><span class="sh">"</span><span class="p">}</span>
+                <span class="p">},</span>
+                <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">folder_path</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">read_text_file</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Read a UTF-8 text file and return its content.</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="sh">"</span><span class="s">file_path</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Absolute or relative file path.</span><span class="sh">"</span><span class="p">}</span>
+                <span class="p">},</span>
+                <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">file_path</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+
+<span class="n">RESPONSES_STYLE_TOOLS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">list_files_in_folder</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">List file names (not directories) inside a given folder path.</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">folder_path</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Absolute or relative folder path.</span><span class="sh">"</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">folder_path</span><span class="sh">"</span><span class="p">],</span>
+            <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">read_text_file</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Read a UTF-8 text file and return its content.</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">file_path</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Absolute or relative file path.</span><span class="sh">"</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">file_path</span><span class="sh">"</span><span class="p">],</span>
+            <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+
+<span class="c1"># ===== Structured JSON schema (optional) =====
+</span><span class="k">class</span> <span class="nc">TaskAnswer</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">contents</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="c1"># ===== Helpers =====
+</span><span class="k">def</span> <span class="nf">ensure_dirs</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span> <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">write_json</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="p">.</span><span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">now_id</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="k">return</span> <span class="n">time</span><span class="p">.</span><span class="nf">strftime</span><span class="p">(</span><span class="sh">"</span><span class="s">%Y%m%d-%H%M%S</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">print_section</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">color</span> <span class="o">+</span> <span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="s">[</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s">]</span><span class="sh">"</span> <span class="o">+</span> <span class="n">RESET</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">combo_label</span><span class="p">(</span><span class="n">model_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tools_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">model_key</span><span class="si">}</span><span class="s">_</span><span class="si">{</span><span class="n">api_type</span><span class="si">}</span><span class="s">_</span><span class="si">{</span><span class="n">tools_variant</span><span class="si">}</span><span class="s">_</span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="sh">"</span>
+
+<span class="k">def</span> <span class="nf">make_tools</span><span class="p">(</span><span class="n">tools_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">structured</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="c1"># structured에서 strict 문제를 피하기 위해 여기선 strict 주입을 끔
+</span>    <span class="c1"># (structured는 parse() 사용 시 여전히 실패할 수 있으므로 try/except로 감싼다)
+</span>    <span class="n">base</span> <span class="o">=</span> <span class="n">CHAT_STYLE_TOOLS</span> <span class="k">if</span> <span class="n">tools_variant</span> <span class="o">==</span> <span class="sh">"</span><span class="s">chat</span><span class="sh">"</span> <span class="k">else</span> <span class="n">RESPONSES_STYLE_TOOLS</span>
+    <span class="k">return</span> <span class="n">copy</span><span class="p">.</span><span class="nf">deepcopy</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+
+<span class="c1"># ===== Common parsing for Responses =====
+</span><span class="k">def</span> <span class="nf">_collect_function_calls_from_output</span><span class="p">(</span><span class="n">output</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="n">calls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">output</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="n">itype</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">itype</span> <span class="o">==</span> <span class="sh">"</span><span class="s">function_call</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span> <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">calls</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">call_id</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="sh">"</span><span class="s">call_id</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">:</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">{}})</span>
+        <span class="k">if</span> <span class="n">itype</span> <span class="o">==</span> <span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">inner</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">inner</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">inner</span><span class="p">:</span>
+                    <span class="n">nm</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}),</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">)</span> <span class="k">else</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                    <span class="n">args</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}),</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">,</span> <span class="p">{})</span>
+                    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                        <span class="k">try</span><span class="p">:</span> <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">calls</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">call_id</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">nm</span><span class="p">,</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">:</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">{}})</span>
+    <span class="k">return</span> <span class="n">calls</span>
+
+<span class="k">def</span> <span class="nf">_collect_text_from_output</span><span class="p">(</span><span class="n">output</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">texts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">output</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="k">if</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span> <span class="o">==</span> <span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]:</span>
+                <span class="k">if</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span> <span class="o">==</span> <span class="sh">"</span><span class="s">output_text</span><span class="sh">"</span><span class="p">:</span>
+                    <span class="n">texts</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span> <span class="o">==</span> <span class="sh">"</span><span class="s">output_text</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">texts</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">))</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">texts</span> <span class="k">if</span> <span class="n">t</span><span class="p">])</span>
+
+<span class="c1"># ===== Chat Completions runner =====
+</span><span class="k">def</span> <span class="nf">run_chat</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">ModelConfig</span><span class="p">,</span>
+    <span class="n">tools_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="c1"># "plain" | "json_mode" | "structured"
+</span>    <span class="n">user_task</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">run_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="nc">OpenAI</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">api_key</span><span class="p">)</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="nf">make_tools</span><span class="p">(</span><span class="n">tools_variant</span><span class="p">,</span> <span class="n">structured</span><span class="o">=</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">structured</span><span class="sh">"</span><span class="p">))</span>
+
+    <span class="n">system_msg</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sh">"</span><span class="s">You are a helpful assistant that uses tools when needed. </span><span class="sh">"</span>
+        <span class="sh">"</span><span class="s">Task: List files in ./samples, pick a text file, read it, and return a short 2-3 sentence summary. </span><span class="sh">"</span>
+        <span class="sh">"</span><span class="s">When asked to answer in JSON, reply only with an object: {</span><span class="se">\"</span><span class="s">filename</span><span class="se">\"</span><span class="s">: string, </span><span class="se">\"</span><span class="s">contents</span><span class="se">\"</span><span class="s">: string}.</span><span class="sh">"</span>
+    <span class="p">)</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">system</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">system_msg</span><span class="p">},</span>
+        <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">user_task</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="n">input_snapshot</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="n">messages</span><span class="p">.</span><span class="nf">copy</span><span class="p">(),</span> <span class="sh">"</span><span class="s">tools</span><span class="sh">"</span><span class="p">:</span> <span class="n">tools</span><span class="p">,</span> <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="n">mode</span><span class="p">}</span>
+    <span class="n">outputs_dump</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">입력(Chat Completions)</span><span class="sh">"</span><span class="p">,</span> <span class="n">CYAN</span><span class="p">,</span> <span class="n">input_snapshot</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">structured</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">completion</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+                <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+                <span class="n">response_format</span><span class="o">=</span><span class="n">TaskAnswer</span><span class="p">,</span>
+                <span class="n">tool_choice</span><span class="o">=</span><span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">completion</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">completion</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span>
+
+            <span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">guard</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+                <span class="n">guard</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">tool_msgs</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">.</span><span class="n">tool_calls</span><span class="p">:</span>
+                    <span class="n">fn_name</span> <span class="o">=</span> <span class="n">call</span><span class="p">.</span><span class="n">function</span><span class="p">.</span><span class="n">name</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">fn_args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">function</span><span class="p">.</span><span class="n">arguments</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">{}</span><span class="sh">"</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                        <span class="n">fn_args</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">툴 요청(Chat)</span><span class="sh">"</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">fn_name</span><span class="p">,</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">:</span> <span class="n">fn_args</span><span class="p">})</span>
+                    <span class="n">tool_output</span> <span class="o">=</span> <span class="nf">dispatch_tool</span><span class="p">(</span><span class="n">fn_name</span><span class="p">,</span> <span class="n">fn_args</span><span class="p">)</span>
+                    <span class="n">tool_msgs</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">fn_name</span><span class="p">,</span>
+                                      <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">tool_output</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">)})</span>
+                <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">msg</span><span class="p">.</span><span class="n">content</span> <span class="ow">or</span> <span class="sh">""</span><span class="p">,</span>
+                                 <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">tc</span><span class="p">.</span><span class="nf">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">.</span><span class="n">tool_calls</span><span class="p">]})</span>
+                <span class="n">messages</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">tool_msgs</span><span class="p">)</span>
+
+                <span class="n">completion</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span>
+                    <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span> <span class="n">response_format</span><span class="o">=</span><span class="n">TaskAnswer</span>
+                <span class="p">)</span>
+                <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">completion</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">completion</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span>
+
+            <span class="n">parsed</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="sh">"</span><span class="s">parsed</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">out_obj</span> <span class="o">=</span> <span class="n">parsed</span><span class="p">.</span><span class="nf">model_dump</span><span class="p">()</span> <span class="k">if</span> <span class="n">parsed</span> <span class="k">else</span> <span class="p">{</span><span class="sh">"</span><span class="s">filename</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">contents</span><span class="sh">"</span><span class="p">:</span> <span class="n">msg</span><span class="p">.</span><span class="n">content</span> <span class="ow">or</span> <span class="sh">""</span><span class="p">}</span>
+            <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력(Chat structured)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">out_obj</span><span class="p">)</span>
+            <span class="nf">write_json</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="sh">"</span><span class="s">result.json</span><span class="sh">"</span><span class="p">),</span> <span class="n">out_obj</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">RED</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="s">--- ERROR(Chat structured) ---</span><span class="sh">"</span> <span class="o">+</span> <span class="n">RESET</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="nf">repr</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">json_mode</span><span class="sh">"</span><span class="p">:</span>
+        <span class="c1"># Force JSON output
+</span>        <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+            <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+            <span class="n">tool_choice</span><span class="o">=</span><span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">json_object</span><span class="sh">"</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">resp</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span>
+        <span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">guard</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">guard</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">tool_msgs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">.</span><span class="n">tool_calls</span><span class="p">:</span>
+                <span class="n">fn_name</span> <span class="o">=</span> <span class="n">call</span><span class="p">.</span><span class="n">function</span><span class="p">.</span><span class="n">name</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">fn_args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">function</span><span class="p">.</span><span class="n">arguments</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">{}</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="n">fn_args</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">툴 요청(Chat)</span><span class="sh">"</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">fn_name</span><span class="p">,</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">:</span> <span class="n">fn_args</span><span class="p">})</span>
+                <span class="n">tool_output</span> <span class="o">=</span> <span class="nf">dispatch_tool</span><span class="p">(</span><span class="n">fn_name</span><span class="p">,</span> <span class="n">fn_args</span><span class="p">)</span>
+                <span class="n">tool_msgs</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">fn_name</span><span class="p">,</span>
+                                  <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">tool_output</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">)})</span>
+            <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">msg</span><span class="p">.</span><span class="n">content</span> <span class="ow">or</span> <span class="sh">""</span><span class="p">,</span>
+                             <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">tc</span><span class="p">.</span><span class="nf">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">.</span><span class="n">tool_calls</span><span class="p">]})</span>
+            <span class="n">messages</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">tool_msgs</span><span class="p">)</span>
+
+            <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+                <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">json_object</span><span class="sh">"</span><span class="p">},</span>
+            <span class="p">)</span>
+            <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">resp</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span>
+
+        <span class="c1"># Try to parse JSON
+</span>        <span class="n">result_obj</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result_obj</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">content</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">{}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">result_obj</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">filename</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">contents</span><span class="sh">"</span><span class="p">:</span> <span class="n">msg</span><span class="p">.</span><span class="n">content</span> <span class="ow">or</span> <span class="sh">""</span><span class="p">}</span>
+        <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력(Chat json_mode)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">result_obj</span><span class="p">)</span>
+        <span class="nf">write_json</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="sh">"</span><span class="s">result.json</span><span class="sh">"</span><span class="p">),</span> <span class="n">result_obj</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># plain
+</span>        <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span> <span class="n">tool_choice</span><span class="o">=</span><span class="sh">"</span><span class="s">auto</span><span class="sh">"</span>
+        <span class="p">)</span>
+        <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">resp</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span>
+        <span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">guard</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">guard</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">tool_msgs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">.</span><span class="n">tool_calls</span><span class="p">:</span>
+                <span class="n">fn_name</span> <span class="o">=</span> <span class="n">call</span><span class="p">.</span><span class="n">function</span><span class="p">.</span><span class="n">name</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">fn_args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">call</span><span class="p">.</span><span class="n">function</span><span class="p">.</span><span class="n">arguments</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">{}</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="n">fn_args</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">툴 요청(Chat)</span><span class="sh">"</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">fn_name</span><span class="p">,</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">:</span> <span class="n">fn_args</span><span class="p">})</span>
+                <span class="n">tool_output</span> <span class="o">=</span> <span class="nf">dispatch_tool</span><span class="p">(</span><span class="n">fn_name</span><span class="p">,</span> <span class="n">fn_args</span><span class="p">)</span>
+                <span class="n">tool_msgs</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">.</span><span class="nb">id</span><span class="p">,</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">fn_name</span><span class="p">,</span>
+                                  <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">tool_output</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">)})</span>
+            <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">msg</span><span class="p">.</span><span class="n">content</span> <span class="ow">or</span> <span class="sh">""</span><span class="p">,</span>
+                             <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">tc</span><span class="p">.</span><span class="nf">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">.</span><span class="n">tool_calls</span><span class="p">]})</span>
+            <span class="n">messages</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">tool_msgs</span><span class="p">)</span>
+
+            <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">completions</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">)</span>
+            <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">resp</span><span class="p">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span>
+
+        <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력(Chat plain)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span> <span class="n">msg</span><span class="p">.</span><span class="n">content</span><span class="p">})</span>
+
+    <span class="c1"># Save IO logs
+</span>    <span class="nf">write_json</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="sh">"</span><span class="s">input.json</span><span class="sh">"</span><span class="p">),</span> <span class="n">input_snapshot</span><span class="p">)</span>
+    <span class="nf">write_json</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="sh">"</span><span class="s">outputs.json</span><span class="sh">"</span><span class="p">),</span> <span class="n">outputs_dump</span><span class="p">)</span>
+
+<span class="c1"># ===== Responses runner =====
+</span><span class="k">def</span> <span class="nf">run_responses</span><span class="p">(</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">ModelConfig</span><span class="p">,</span>
+    <span class="n">tools_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="c1"># "plain" | "json_mode" | "structured"
+</span>    <span class="n">user_task</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">run_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="nc">OpenAI</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">api_key</span><span class="p">)</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="nf">make_tools</span><span class="p">(</span><span class="n">tools_variant</span><span class="p">,</span> <span class="n">structured</span><span class="o">=</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">structured</span><span class="sh">"</span><span class="p">))</span>
+
+    <span class="n">system_inst</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sh">"</span><span class="s">You are a helpful assistant that uses tools when needed. </span><span class="sh">"</span>
+        <span class="sh">"</span><span class="s">Task: List files in ./samples, pick a text file, read it, and return a short 2-3 sentence summary. </span><span class="sh">"</span>
+        <span class="sh">"</span><span class="s">If JSON is requested, reply only with an object: {</span><span class="se">\"</span><span class="s">filename</span><span class="se">\"</span><span class="s">: string, </span><span class="se">\"</span><span class="s">contents</span><span class="se">\"</span><span class="s">: string}.</span><span class="sh">"</span>
+    <span class="p">)</span>
+    <span class="n">input_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">system</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">system_inst</span><span class="p">},</span>
+        <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">user_task</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="n">input_snapshot</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">input</span><span class="sh">"</span><span class="p">:</span> <span class="n">input_list</span><span class="p">.</span><span class="nf">copy</span><span class="p">(),</span> <span class="sh">"</span><span class="s">tools</span><span class="sh">"</span><span class="p">:</span> <span class="n">tools</span><span class="p">,</span> <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="n">mode</span><span class="p">}</span>
+    <span class="n">outputs_dump</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">입력(Responses)</span><span class="sh">"</span><span class="p">,</span> <span class="n">CYAN</span><span class="p">,</span> <span class="n">input_snapshot</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">structured</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="nb">input</span><span class="o">=</span><span class="n">input_list</span><span class="p">,</span>
+                <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+                <span class="n">text_format</span><span class="o">=</span><span class="n">TaskAnswer</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+            <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력(Responses step 1)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+            <span class="n">input_list</span> <span class="o">+=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[])</span>
+
+            <span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">guard</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+                <span class="n">guard</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">calls</span> <span class="o">=</span> <span class="nf">_collect_function_calls_from_output</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">calls</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">calls</span><span class="p">:</span>
+                    <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">툴 요청(Responses)</span><span class="sh">"</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">],</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">]})</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="nf">dispatch_tool</span><span class="p">(</span><span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">],</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">])</span>
+                    <span class="n">input_list</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                        <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function_call_output</span><span class="sh">"</span><span class="p">,</span>
+                        <span class="sh">"</span><span class="s">call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">call_id</span><span class="sh">"</span><span class="p">],</span>
+                        <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+                    <span class="p">})</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span>
+                    <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">input_list</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="n">TaskAnswer</span>
+                <span class="p">)</span>
+                <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+                <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력(Responses next)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+                <span class="n">input_list</span> <span class="o">+=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[])</span>
+
+            <span class="n">parsed</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output_parsed</span><span class="sh">"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">out_obj</span> <span class="o">=</span> <span class="n">parsed</span><span class="p">.</span><span class="nf">model_dump</span><span class="p">()</span> <span class="k">if</span> <span class="n">parsed</span> <span class="k">else</span> <span class="p">{</span><span class="sh">"</span><span class="s">filename</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">contents</span><span class="sh">"</span><span class="p">:</span> <span class="nf">_collect_text_from_output</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]))}</span>
+            <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력 요약(Responses structured)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">out_obj</span><span class="p">)</span>
+            <span class="nf">write_json</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="sh">"</span><span class="s">result.json</span><span class="sh">"</span><span class="p">),</span> <span class="n">out_obj</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">RED</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="s">--- ERROR(Responses structured) ---</span><span class="sh">"</span> <span class="o">+</span> <span class="n">RESET</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="nf">repr</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">json_mode</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="nb">input</span><span class="o">=</span><span class="n">input_list</span><span class="p">,</span>
+            <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+            <span class="n">tool_choice</span><span class="o">=</span><span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">format</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">json_object</span><span class="sh">"</span><span class="p">}},</span>
+        <span class="p">)</span>
+        <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+        <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력(Responses step 1)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+        <span class="n">input_list</span> <span class="o">+=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[])</span>
+
+        <span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">guard</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">guard</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">calls</span> <span class="o">=</span> <span class="nf">_collect_function_calls_from_output</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">calls</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">calls</span><span class="p">:</span>
+                <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">툴 요청(Responses)</span><span class="sh">"</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">],</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">]})</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="nf">dispatch_tool</span><span class="p">(</span><span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">],</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">])</span>
+                <span class="n">input_list</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                    <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function_call_output</span><span class="sh">"</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">call_id</span><span class="sh">"</span><span class="p">],</span>
+                    <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+                <span class="p">})</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="nb">input</span><span class="o">=</span><span class="n">input_list</span><span class="p">,</span>
+                <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+                <span class="n">text</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">format</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">json_object</span><span class="sh">"</span><span class="p">}},</span>
+            <span class="p">)</span>
+            <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+            <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력(Responses next)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+            <span class="n">input_list</span> <span class="o">+=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[])</span>
+
+        <span class="c1"># Try to parse JSON text
+</span>        <span class="n">result_text</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">output_text</span> <span class="ow">or</span> <span class="sh">""</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result_obj</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">result_text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">result_obj</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">filename</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">contents</span><span class="sh">"</span><span class="p">:</span> <span class="n">result_text</span><span class="p">}</span>
+        <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력 요약(Responses json_mode)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">result_obj</span><span class="p">)</span>
+        <span class="nf">write_json</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="sh">"</span><span class="s">result.json</span><span class="sh">"</span><span class="p">),</span> <span class="n">result_obj</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># plain
+</span>        <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="nb">input</span><span class="o">=</span><span class="n">input_list</span><span class="p">,</span>
+            <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+            <span class="n">tool_choice</span><span class="o">=</span><span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+        <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력(Responses step 1)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+        <span class="n">input_list</span> <span class="o">+=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[])</span>
+
+        <span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">guard</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">guard</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">calls</span> <span class="o">=</span> <span class="nf">_collect_function_calls_from_output</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">calls</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">calls</span><span class="p">:</span>
+                <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">툴 요청(Responses)</span><span class="sh">"</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">],</span> <span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">]})</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="nf">dispatch_tool</span><span class="p">(</span><span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">],</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">])</span>
+                <span class="n">input_list</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                    <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function_call_output</span><span class="sh">"</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">call_id</span><span class="sh">"</span><span class="p">],</span>
+                    <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+                <span class="p">})</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">responses</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">input_list</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">)</span>
+            <span class="n">outputs_dump</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+            <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력(Responses next)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">model_dump_json</span><span class="p">()))</span>
+            <span class="n">input_list</span> <span class="o">+=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[])</span>
+
+        <span class="nf">print_section</span><span class="p">(</span><span class="sh">"</span><span class="s">출력 요약(Responses plain)</span><span class="sh">"</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span> <span class="nf">_collect_text_from_output</span><span class="p">(</span><span class="nf">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="sh">"</span><span class="s">output</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]))})</span>
+
+    <span class="c1"># Save IO logs
+</span>    <span class="nf">write_json</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="sh">"</span><span class="s">input.json</span><span class="sh">"</span><span class="p">),</span> <span class="n">input_snapshot</span><span class="p">)</span>
+    <span class="nf">write_json</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">run_dir</span><span class="p">,</span> <span class="sh">"</span><span class="s">outputs.json</span><span class="sh">"</span><span class="p">),</span> <span class="n">outputs_dump</span><span class="p">)</span>
+
+<span class="c1"># ===== 24-combo driver =====
+</span><span class="n">DEFAULT_TASK</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="sh">"</span><span class="s">테스트: ./samples 폴더의 파일 목록을 보여주고, 텍스트 파일이 있으면 하나를 골라 내용을 읽고 2~3문장으로 요약해줘. </span><span class="sh">"</span>
+    <span class="sh">"</span><span class="s">가능하다면 JSON으로 {</span><span class="se">\"</span><span class="s">filename</span><span class="se">\"</span><span class="s">: string, </span><span class="se">\"</span><span class="s">contents</span><span class="se">\"</span><span class="s">: string} 형태로 답해줘.</span><span class="sh">"</span>
+<span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">run_one</span><span class="p">(</span><span class="n">model_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tools_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user_task</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">base_runs_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">MODELS</span><span class="p">[</span><span class="n">model_key</span><span class="p">]</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="nf">combo_label</span><span class="p">(</span><span class="n">model_key</span><span class="p">,</span> <span class="n">api_type</span><span class="p">,</span> <span class="n">tools_variant</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+    <span class="n">run_dir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">base_runs_dir</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+    <span class="nf">ensure_dirs</span><span class="p">(</span><span class="n">run_dir</span><span class="p">)</span>
+
+    <span class="n">header</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[</span><span class="si">{</span><span class="n">api_type</span><span class="p">.</span><span class="nf">upper</span><span class="p">()</span><span class="si">}</span><span class="s">] model=</span><span class="si">{</span><span class="n">model_key</span><span class="si">}</span><span class="s">:</span><span class="si">{</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s"> tools=</span><span class="si">{</span><span class="n">tools_variant</span><span class="si">}</span><span class="s"> mode=</span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="sh">"</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span> <span class="o">+</span> <span class="sh">"</span><span class="s">=</span><span class="sh">"</span> <span class="o">*</span> <span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s"> </span><span class="si">{</span><span class="n">header</span><span class="si">}</span><span class="s"> </span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=</span><span class="sh">"</span> <span class="o">*</span> <span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">api_type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">completions</span><span class="sh">"</span><span class="p">:</span>
+            <span class="nf">run_chat</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">tools_variant</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">user_task</span><span class="p">,</span> <span class="n">run_dir</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">api_type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">responses</span><span class="sh">"</span><span class="p">:</span>
+            <span class="nf">run_responses</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">tools_variant</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">user_task</span><span class="p">,</span> <span class="n">run_dir</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">api_type must be </span><span class="sh">'</span><span class="s">completions</span><span class="sh">'</span><span class="s"> or </span><span class="sh">'</span><span class="s">responses</span><span class="sh">'"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">RED</span> <span class="o">+</span> <span class="sh">"</span><span class="se">\n</span><span class="s">--- ERROR ---</span><span class="sh">"</span> <span class="o">+</span> <span class="n">RESET</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="nf">repr</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="p">.</span><span class="nc">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">Run 24 combos: 2 models × 2 APIs × 2 tool JSONs × 3 modes.</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--task</span><span class="sh">"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">DEFAULT_TASK</span><span class="p">)</span>
+    <span class="n">parser</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--models</span><span class="sh">"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">A</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">B</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">both</span><span class="sh">"</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="sh">"</span><span class="s">both</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--apis</span><span class="sh">"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">completions</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">responses</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">both</span><span class="sh">"</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="sh">"</span><span class="s">both</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--tools</span><span class="sh">"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">chat</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">responses</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">both</span><span class="sh">"</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="sh">"</span><span class="s">both</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--modes</span><span class="sh">"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">plain</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">json_mode</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">structured</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">all</span><span class="sh">"</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="sh">"</span><span class="s">all</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="p">.</span><span class="nf">add_argument</span><span class="p">(</span><span class="sh">"</span><span class="s">--runs_dir</span><span class="sh">"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="sa">f</span><span class="sh">"</span><span class="s">./runs/</span><span class="si">{</span><span class="nf">now_id</span><span class="p">()</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="p">.</span><span class="nf">parse_args</span><span class="p">()</span>
+
+    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="sh">"</span><span class="s">./samples</span><span class="sh">"</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="nf">ensure_dirs</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">runs_dir</span><span class="p">)</span>
+
+    <span class="n">model_keys</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">A</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">B</span><span class="sh">"</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">models</span> <span class="o">==</span> <span class="sh">"</span><span class="s">both</span><span class="sh">"</span> <span class="k">else</span> <span class="p">[</span><span class="n">args</span><span class="p">.</span><span class="n">models</span><span class="p">]</span>
+    <span class="n">api_types</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">completions</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">responses</span><span class="sh">"</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">apis</span> <span class="o">==</span> <span class="sh">"</span><span class="s">both</span><span class="sh">"</span> <span class="k">else</span> <span class="p">[</span><span class="n">args</span><span class="p">.</span><span class="n">apis</span><span class="p">]</span>
+    <span class="n">tool_variants</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">chat</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">responses</span><span class="sh">"</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">tools</span> <span class="o">==</span> <span class="sh">"</span><span class="s">both</span><span class="sh">"</span> <span class="k">else</span> <span class="p">[</span><span class="n">args</span><span class="p">.</span><span class="n">tools</span><span class="p">]</span>
+    <span class="n">mode_list</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">plain</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">json_mode</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">structured</span><span class="sh">"</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">modes</span> <span class="o">==</span> <span class="sh">"</span><span class="s">all</span><span class="sh">"</span> <span class="k">else</span> <span class="p">[</span><span class="n">args</span><span class="p">.</span><span class="n">modes</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">mk</span> <span class="ow">in</span> <span class="n">model_keys</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">api</span> <span class="ow">in</span> <span class="n">api_types</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tv</span> <span class="ow">in</span> <span class="n">tool_variants</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">md</span> <span class="ow">in</span> <span class="n">mode_list</span><span class="p">:</span>
+                    <span class="nf">run_one</span><span class="p">(</span><span class="n">mk</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">tv</span><span class="p">,</span> <span class="n">md</span><span class="p">,</span> <span class="n">args</span><span class="p">.</span><span class="n">task</span><span class="p">,</span> <span class="n">args</span><span class="p">.</span><span class="n">runs_dir</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>사용 팁</p>
+
+<ul>
+  <li>
+    <p>json_mode가 가장 안정적으로 {"filename","contents"}를 뱉어 줄 거야. structured는 SDK/모델의 strict 정책에 따라 여전히 실패할 수 있지만, 스크립트는 개별 조합별로 에러를 삼키고 계속 진행한다.</p>
+  </li>
+  <li>
+    <p>모든 조합의 입력/출력(raw)을 저장해서 리그레션 비교가 가능해. json_mode/structured는 result.json을 따로 저장하므로 바로 사용할 수 있어.</p>
+  </li>
+  <li>
+    <p>필요하면 system 메시지의 지시를 수정해서 contents에 “요약” 대신 “원문 전체”를 넣도록 바꿀 수도 있어.</p>
+  </li>
+</ul>]]></content><author><name>hvppyarchive</name></author><category term="llm" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">OpenAI 함수 호출 테스트</title><link href="https://hvppyarchive.github.io/llm/openai-function-call-examples/" rel="alternate" type="text/html" title="OpenAI 함수 호출 테스트" /><published>2025-10-22T16:55:18+09:00</published><updated>2025-10-22T16:55:18+09:00</updated><id>https://hvppyarchive.github.io/llm/openai-function-call-examples</id><content type="html" xml:base="https://hvppyarchive.github.io/llm/openai-function-call-examples/"><![CDATA[<p class="chat--user">
 
 openai package를 사용하는 테스트 코드 작성할거야. 목표: 2가지 모델에 대해 2가지 api type(completions, responses)에 대해 function calling 테스트를 하고 싶어. 총 4개 조합에 대해 설정할 수 있게 코드 작성 하자. 툴은 간단히 특정 폴더의 파일 조회, 특정 폴더의 파일 읽기 두 가지 툴을 구현할거야 2개 모델에 대한 엔드포인트, api 키, 모델명을 코드 내에서 설정할 수 있도록 할 것.
 
