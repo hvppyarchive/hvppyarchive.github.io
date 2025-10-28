@@ -1,0 +1,723 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Python 데코레이터 설명 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="Python 데코레이터 설명">
+<meta property="og:url" content="https://hvppyarchive.github.io/python/python-decorator/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-28T16:53:51+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/python/python-decorator/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Python 데코레이터 설명">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-10-28T16:53:51+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/python/python-decorator/" itemprop="url">Python 데코레이터 설명
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-28T16:53:51+09:00">2025-10-28</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+python decorator 가 너무 헷갈려
+
+</p>
+
+<p>좋아, 데코레이터를 “마법”이 아니라 “함수로 함수를 꾸미는 평범한 기술”로 풀어서 볼게. 차근차근 따라가면 헷갈림이 사라진다.</p>
+
+<h1 id="1-한-문장-정의">1) 한 문장 정의</h1>
+
+<p>데코레이터는 “함수를 받아서 새로운 함수를 반환하는 함수”다. <code class="language-plaintext highlighter-rouge">@something</code>은 단지 설탕 문법(syntax sugar)이고, 실제로는 <code class="language-plaintext highlighter-rouge">func = something(func)</code>과 같다.</p>
+
+<h1 id="2-가장-작은-예제부터">2) 가장 작은 예제부터</h1>
+
+<p>먼저 아무 장식도 없는 함수.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span>
+</code></pre></div></div>
+
+<p>이제 이 함수를 받아 살짝 바꾸는 “데코레이터 함수”를 만든다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">shout_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>     <span class="c1"># 원래 함수 실행
+</span>        <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="nf">upper</span><span class="p">()</span>              <span class="c1"># 결과를 변형
+</span>    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<p>적용은 두 가지 방법이 있다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 방법 A: @ 문법
+</span><span class="nd">@shout_decorator</span>
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span>
+
+<span class="c1"># 방법 B: 수동 적용 (동치)
+</span><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span>
+<span class="n">greet</span> <span class="o">=</span> <span class="nf">shout_decorator</span><span class="p">(</span><span class="n">greet</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>이제 <code class="language-plaintext highlighter-rouge">greet("world")</code>는 "HELLO, WORLD"를 반환한다.</p>
+
+<p>핵심 포인트는 wrapper가 원본 함수를 감싸고 있다는 것.</p>
+
+<h1 id="3-꼭-쓰는-도구-functoolswraps">3) 꼭 쓰는 도구: functools.wraps</h1>
+
+<p>데코레이터를 쓰면 원래 함수의 이름, docstring이 wrapper로 바뀌어 버린다. 이를 바로잡는 게 <code class="language-plaintext highlighter-rouge">functools.wraps</code>.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">shout_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="nf">upper</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<p>이제 <code class="language-plaintext highlighter-rouge">greet.__name__</code>, <code class="language-plaintext highlighter-rouge">help(greet)</code> 등이 원본과 일치한다. 실무에선 wraps를 항상 쓴다고 생각하자.</p>
+
+<h1 id="4-인자가-있는-데코레이터">4) 인자가 있는 데코레이터</h1>
+
+<p>가끔 데코레이터 자체에도 옵션이 필요하다. 이때는 “함수를 만드는 함수”를 한 번 더 감싼다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">last</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">decorator</span>
+
+<span class="nd">@repeat</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ping</span><span class="p">():</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">ping</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>정신승리 포인트: <code class="language-plaintext highlighter-rouge">@repeat(3)</code>는 즉시 <code class="language-plaintext highlighter-rouge">repeat(3)</code>을 호출해 “진짜 데코레이터(decorator)”를 만든 다음 그게 <code class="language-plaintext highlighter-rouge">ping</code>을 감싼다.</p>
+
+<h1 id="5-적용-순서스택">5) 적용 순서(스택)</h1>
+
+<p>여러 데코레이터를 쌓으면, 코드에선 위에서 아래로 읽히지만 적용은 아래에서 위로 된다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@A</span>
+<span class="nd">@B</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">():</span> <span class="bp">...</span>
+</code></pre></div></div>
+
+<p>이는 <code class="language-plaintext highlighter-rouge">f = A(B(f))</code>와 같다. 즉 B가 먼저 감싸고, 그 다음 A가 감싼다.</p>
+
+<h1 id="6-자주-쓰는-패턴들">6) 자주 쓰는 패턴들</h1>
+
+<p>로그/타이밍</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">timeit</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="s"> took </span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<p>메모이제이션(이미 표준 라이브러리에 있음)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>권한 체크(개념 예시)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">require_role</span><span class="p">(</span><span class="n">role</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">user</span><span class="p">.</span><span class="n">roles</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">nope</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">decorator</span>
+</code></pre></div></div>
+
+<p>프로퍼티/정적/클래스 메서드(내장 데코레이터)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">s</span><span class="p">():</span> <span class="bp">...</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span> <span class="bp">...</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="n">self</span><span class="p">):</span> <span class="bp">...</span>
+</code></pre></div></div>
+
+<p>클래스 데코레이터(클래스를 받아 클래스/인스턴스를 돌려줌)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">add_repr</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s">=</span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="sh">"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">__dict__</span><span class="p">.</span><span class="nf">items</span><span class="p">())</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">cls</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="s">(</span><span class="si">{</span><span class="n">fields</span><span class="si">}</span><span class="s">)</span><span class="sh">"</span>
+    <span class="n">cls</span><span class="p">.</span><span class="n">__repr__</span> <span class="o">=</span> <span class="n">__repr__</span>
+    <span class="k">return</span> <span class="n">cls</span>
+
+<span class="nd">@add_repr</span>
+<span class="k">class</span> <span class="nc">Point</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span> <span class="n">self</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+</code></pre></div></div>
+
+<h1 id="7-비동기-함수-꾸미기중요-포인트">7) 비동기 함수 꾸미기(중요 포인트)</h1>
+
+<p><code class="language-plaintext highlighter-rouge">async def</code> 함수를 감쌀 땐 wrapper도 <code class="language-plaintext highlighter-rouge">async def</code>여야 await를 안전하게 전달할 수 있다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+
+<span class="k">def</span> <span class="nf">async_timeit</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_event_loop</span><span class="p">().</span><span class="nf">time</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>   <span class="c1"># await 잊지 말기
+</span>        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_event_loop</span><span class="p">().</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="s"> took </span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="p">.</span><span class="mi">4</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<p>동기/비동기 둘 다 지원하려면 오버로드하거나, 감싸기 전에 <code class="language-plaintext highlighter-rouge">asyncio.iscoroutinefunction(func)</code>로 분기한다.</p>
+
+<h1 id="8-흔한-함정들-체크리스트">8) 흔한 함정들 체크리스트</h1>
+
+<p>함수 시그니처 손실 문제: <code class="language-plaintext highlighter-rouge">wraps</code>로 메타데이터는 살리지만, 정교한 시그니처(IDE 인텔리센스)까지 유지하려면 <code class="language-plaintext highlighter-rouge">inspect.signature</code>를 쓰거나 <code class="language-plaintext highlighter-rouge">wrapt</code> 같은 라이브러리를 고려.</p>
+
+<p>인자 바인딩: wrapper는 보통 <code class="language-plaintext highlighter-rouge">*args, **kwargs</code>로 받아 원본에 그대로 전달한다. 특정 인자를 바꾸면 서프라이즈 발생.</p>
+
+<p>평가 시점: 데코레이터는 함수 정의 시점에 실행된다. 모듈 import만 해도 동작할 수 있다는 뜻. 사이드이펙트는 신중히.</p>
+
+<p>상태 보관: 카운터 같은 상태가 필요하면 <code class="language-plaintext highlighter-rouge">nonlocal</code> 변수나 <code class="language-plaintext highlighter-rouge">functools.partial</code>, 또는 클래스형 데코레이터를 쓴다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">counted</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">nonlocal</span> <span class="n">count</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">called </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s"> times</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<p>타입 힌트: 데코레이터는 타입 체커에 어려움을 준다. <code class="language-plaintext highlighter-rouge">typing.Callable</code>, <code class="language-plaintext highlighter-rouge">TypeVar</code>, <code class="language-plaintext highlighter-rouge">ParamSpec</code>, <code class="language-plaintext highlighter-rouge">Concatenate</code>를 적절히 쓰면 정적 분석 품질이 좋아진다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">ParamSpec</span>
+<span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="n">P</span> <span class="o">=</span> <span class="nc">ParamSpec</span><span class="p">(</span><span class="sh">"</span><span class="s">P</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="nc">TypeVar</span><span class="p">(</span><span class="sh">"</span><span class="s">R</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">log_calls</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">]:</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="p">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">calling</span><span class="sh">"</span><span class="p">,</span> <span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<h1 id="9-마음속-모델헷갈림-방지-요약">9) 마음속 모델(헷갈림 방지 요약)</h1>
+
+<p>함수는 1급 객체다. 즉, 숫자처럼 전달·반환할 수 있다. 데코레이터는 “함수를 입력으로 받아 함수를 출력하는 공장”이다. <code class="language-plaintext highlighter-rouge">@</code>는 그 공장을 짧게 부르는 표기다. wrapper가 원본 함수를 실행하기 전후로 무언가를 덧붙이거나, 결과를 바꾸거나, 실행 자체를 막을 수도 있다.</p>
+
+<h1 id="10-손에-익히는-미니-연습문제-5개">10) 손에 익히는 미니 연습문제 5개</h1>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">time.sleep</code>을 써서 어떤 함수의 실행 시간을 출력하는 <code class="language-plaintext highlighter-rouge">timeit</code> 데코레이터를 직접 작성.</p>
+  </li>
+  <li>
+    <p>실패하면 최대 3번까지 재시도하는 <code class="language-plaintext highlighter-rouge">retry(times=3, exceptions=(Exception,))</code> 데코레이터 작성.</p>
+  </li>
+  <li>
+    <p>순수 함수에 한해 간단한 캐시를 붙이는 <code class="language-plaintext highlighter-rouge">memoize</code> 데코레이터 작성(딕셔너리 키는 인자 튜플).</p>
+  </li>
+  <li>
+    <p>비동기 함수용 <code class="language-plaintext highlighter-rouge">async_retry</code> 버전 구현(await 필수).</p>
+  </li>
+  <li>
+    <p>접근 제한: 특정 환경변수(<code class="language-plaintext highlighter-rouge">APP_ENV=prod</code>)일 때만 함수를 실행하고 아니면 경고만 출력하는 데코레이터 작성.</p>
+  </li>
+</ol>
+
+<p>원하는 패턴이 있으면 그대로 구현 예시를 더 만들어 줄게.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#python" class="page__taxonomy-item p-category" rel="tag">python</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-28T16:53:51+09:00">2025-10-28</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/python/file-memory-cache/" class="pagination--pager" title="파일 캐시 패키지 추천">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-28T16:53:56+09:00">2025-10-28</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/file-memory-cache/" rel="permalink">파일 캐시 패키지 추천
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-28T13:03:49+09:00">2025-10-28</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/comfyui-llm-tool-call/" rel="permalink">ComfyUI LLM Tool Call
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-27T15:55:08+09:00">2025-10-27</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/openai-function-call-examples/" rel="permalink">ComfyUI LLM Tool Call
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-27T13:50:07+09:00">2025-10-27</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
