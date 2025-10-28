@@ -317,8 +317,12 @@
 <lastmod>2025-10-28T16:53:51+09:00</lastmod>
 </url>
 <url>
+<loc>https://hvppyarchive.github.io/llm/unified-mcp-interface/</loc>
+<lastmod>2025-10-28T20:16:40+09:00</lastmod>
+</url>
+<url>
 <loc>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/</loc>
-<lastmod>2025-10-28T16:53:56+09:00</lastmod>
+<lastmod>2025-10-28T20:16:45+09:00</lastmod>
 </url>
 <url>
 <loc>https://hvppyarchive.github.io/categories/</loc>
@@ -355,5 +359,8 @@
 </url>
 <url>
 <loc>https://hvppyarchive.github.io/page8/</loc>
+</url>
+<url>
+<loc>https://hvppyarchive.github.io/page9/</loc>
 </url>
 </urlset>
