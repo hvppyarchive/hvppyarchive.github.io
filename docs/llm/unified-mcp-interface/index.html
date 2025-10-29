@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-10-29T11:54:35+09:00">
+  <meta property="article:published_time" content="2025-10-29T13:03:08+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python MCP 연결 방법">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-10-29T11:54:35+09:00">
+    <meta itemprop="datePublished" content="2025-10-29T13:03:08+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-29T11:54:35+09:00">2025-10-29</time>
+        <time datetime="2025-10-29T13:03:08+09:00">2025-10-29</time>
       </span>
     
 
@@ -3601,6 +3601,471 @@ pip install mcp pydantic orjson "openai-agents[litellm]" requests</p>
 
 <p>이 구성은 “MCP 서버 정보를 있는 그대로 넘긴다”는 원칙을 지키면서, 서로 다른 에이전트들에 같은 정보를 재사용하도록 해준다. 필요한 프레임워크가 더 있으면 같은 패턴으로 어댑터를 20~30줄로 추가하면 된다.</p>
 
+<p class="chat--user">
+
+근데 MCP를 보니 그냥 툴만 있는게 아니라 Sampling, 사용자에게 물어보기, 프롬프트 등등 있잖아. 그걸 Chat이랑 연동할 수 있을까
+
+</p>
+
+<p>좋아, 핵심은 “MCP가 제공하는 건 툴만이 아니다”는 점을 전제로, Sampling(서버가 모델 호출을 위임), 사용자에게 물어보기(ask-user), 프롬프트/프롬프트 템플릿(list/get) 같은 채널을 Chat 루프에 붙이는 얇은 어댑터 레이어를 여기에 딱 만들어두는 거다. 래핑으로 툴로 바꾸지 않고, MCP 메타(프롬프트/샘플링/질의)를 그대로 전달·왕복시켜 결합한다.</p>
+
+<p>아래 설계와 스캐폴딩은 이전에 만든 “백엔드 갈아끼우기(Chat Completions or OpenAI Agents)” 구조를 유지하면서, MCP의 네 가지 면을 모두 연동한다.</p>
+
+<ol>
+  <li>
+    <p>툴: 기존과 동일, call_tool 라우팅</p>
+  </li>
+  <li>
+    <p>프롬프트: list_prompts/get_prompt를 통해 시스템/도우미 메시지 주입</p>
+  </li>
+  <li>
+    <p>사용자에게 물어보기: MCP가 사용자 입력을 요청하면, Chat UI에 질문을 띄우고 답을 다시 MCP에 돌려줌</p>
+  </li>
+  <li>
+    <p>샘플링: MCP 서버가 “모델 호출을 대신 해달라”고 요청하면, 현재 백엔드로 대리 샘플링 후 결과를 MCP에게 반환</p>
+  </li>
+</ol>
+
+<p>아래는 그대로 붙이는 최소 스캐폴딩이다. MCP SDK의 일부 API는 서버 구현/버전에 따라 차이가 있어서, 함수 존재 여부를 동적으로 체크하도록 방어코드를 넣었다.</p>
+
+<p>설치<br />
+pip install mcp pydantic orjson requests "openai-agents[litellm]"</p>
+
+<p>mcp_chat_bridge.py</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">orjson</span><span class="p">,</span> <span class="n">requests</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Awaitable</span>
+<span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="n">mcp.client.session</span> <span class="kn">import</span> <span class="n">ClientSession</span>
+<span class="kn">from</span> <span class="n">mcp.client.stdio</span> <span class="kn">import</span> <span class="n">StdioClientTransport</span><span class="p">,</span> <span class="n">StdioServerParameters</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="n">mcp.client.sse</span> <span class="kn">import</span> <span class="n">SSEClientTransport</span>
+    <span class="n">HAVE_SSE</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+    <span class="n">HAVE_SSE</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="c1">################################################################################
+# 공통: Chat 백엔드(두 가지 구현: OpenAI 호환 Chat Completions, OpenAI Agents)
+################################################################################
+</span>
+<span class="k">class</span> <span class="nc">ChatMessage</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">role</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">class</span> <span class="nc">ChatBackend</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">],</span> <span class="n">tools</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="nb">NotImplementedError</span>
+
+<span class="k">class</span> <span class="nc">OpenAIChatBackend</span><span class="p">(</span><span class="n">ChatBackend</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="sh">"</span><span class="s">/v1/chat/completions</span><span class="sh">"</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="p">.</span><span class="nf">rstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+    <span class="k">def</span> <span class="nf">_headers</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">content-type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">application/json</span><span class="sh">"</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">api_key</span><span class="p">:</span> <span class="n">h</span><span class="p">[</span><span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Bearer </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">api_key</span><span class="si">}</span><span class="sh">"</span>
+        <span class="k">return</span> <span class="n">h</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">],</span> <span class="n">tools</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="n">m</span><span class="p">.</span><span class="nf">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">tools</span><span class="p">:</span> <span class="n">payload</span><span class="p">[</span><span class="sh">"</span><span class="s">tools</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">tools</span><span class="p">;</span> <span class="n">payload</span><span class="p">[</span><span class="sh">"</span><span class="s">tool_choice</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">auto</span><span class="sh">"</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">base_url</span><span class="si">}{</span><span class="n">self</span><span class="p">.</span><span class="n">path</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">orjson</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">_headers</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">r</span><span class="p">.</span><span class="nf">raise_for_status</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span>
+
+<span class="c1"># 선택: OpenAI Agents를 백엔드로 쓰고 싶다면 이 어댑터를 사용
+</span><span class="kn">from</span> <span class="n">agents</span> <span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">Runner</span>
+<span class="kn">from</span> <span class="n">agents.model_settings</span> <span class="kn">import</span> <span class="n">ModelSettings</span>
+<span class="kn">from</span> <span class="n">agents.extensions.models.litellm_model</span> <span class="kn">import</span> <span class="n">LitellmModel</span>
+<span class="kn">from</span> <span class="n">agents</span> <span class="kn">import</span> <span class="n">FunctionTool</span>
+
+<span class="k">class</span> <span class="nc">AgentsBackend</span><span class="p">(</span><span class="n">ChatBackend</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_model</span> <span class="o">=</span> <span class="nc">LitellmModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">.</span><span class="nf">rstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">)</span> <span class="o">+</span> <span class="sh">"</span><span class="s">/v1</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_agent</span> <span class="o">=</span> <span class="nc">Agent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">LLMOnly</span><span class="sh">"</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">instructions</span><span class="o">=</span><span class="sh">""</span><span class="p">,</span> <span class="n">model_settings</span><span class="o">=</span><span class="nc">ModelSettings</span><span class="p">(</span><span class="n">tool_choice</span><span class="o">=</span><span class="sh">"</span><span class="s">none</span><span class="sh">"</span><span class="p">))</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">],</span> <span class="n">tools</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="c1"># 도구는 Agent에 등록하지 않고, 프롬프트 강제 포맷으로 tool_calls를 JSON으로 받는 전략도 가능
+</span>        <span class="n">prompt</span> <span class="o">=</span> <span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">([</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">m</span><span class="p">.</span><span class="n">role</span><span class="p">.</span><span class="nf">upper</span><span class="p">()</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">m</span><span class="p">.</span><span class="n">content</span><span class="si">}</span><span class="sh">"</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">])</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Runner</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_agent</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">developer_instructions</span><span class="o">=</span><span class="sh">"</span><span class="s">가능하면 JSON만 출력</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="n">out</span><span class="p">.</span><span class="n">final_output</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">:[{</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span><span class="n">txt</span><span class="p">}}]}</span>
+
+<span class="c1">################################################################################
+# MCP 연결: 여러 서버를 그대로 붙이고, 프롬프트/샘플링/질문을 브릿지
+################################################################################
+</span>
+<span class="k">class</span> <span class="nc">MCPServerCfg</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># "stdio" | "sse"
+</span>    <span class="n">command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">class</span> <span class="nc">MCPHandle</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">transport</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">ClientSession</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">transport</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="n">transport</span><span class="p">.</span><span class="nf">stop</span><span class="p">()</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">connect_mcp</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="n">MCPServerCfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MCPHandle</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="nc">StdioClientTransport</span><span class="p">(</span><span class="nc">StdioServerParameters</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">args</span> <span class="ow">or</span> <span class="p">[]))</span>
+    <span class="k">elif</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">HAVE_SSE</span><span class="p">:</span> <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">mcp.client.sse 모듈 필요</span><span class="sh">"</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="n">mcp.client.sse</span> <span class="kn">import</span> <span class="n">SSEClientTransport</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="nc">SSEClientTransport</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">headers</span> <span class="ow">or</span> <span class="p">{})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">unknown kind </span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">kind</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">tr</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="nc">ClientSession</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">sess</span><span class="p">.</span><span class="nf">initialize</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nc">MCPHandle</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">sess</span><span class="p">)</span>
+
+<span class="c1">################################################################################
+# 브릿지: MCP의 툴/프롬프트/ask-user/샘플링을 Chat 루프에 접속
+################################################################################
+</span>
+<span class="k">class</span> <span class="nc">MCPChatBridge</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="n">servers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MCPServerCfg</span><span class="p">],</span>
+        <span class="n">chat_backend</span><span class="p">:</span> <span class="n">ChatBackend</span><span class="p">,</span>
+        <span class="n">ask_user</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>     <span class="c1"># 사용자에게 질문 보여주고 응답 받는 콜백
+</span>        <span class="n">prompt_selector</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]]],</span> <span class="n">List</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">]]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">sampling_policy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>  <span class="c1"># 샘플링 옵션 정규화
+</span>    <span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfgs</span> <span class="o">=</span> <span class="n">servers</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">backend</span> <span class="o">=</span> <span class="n">chat_backend</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">ask_user</span> <span class="o">=</span> <span class="n">ask_user</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prompt_selector</span> <span class="o">=</span> <span class="n">prompt_selector</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">sampling_policy</span> <span class="o">=</span> <span class="n">sampling_policy</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">opts</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">:</span> <span class="n">opts</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">temperature</span><span class="sh">"</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)})</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MCPHandle</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">__aenter__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">cfgs</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">connect_mcp</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">[</span><span class="n">c</span><span class="p">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="k">return</span> <span class="n">self</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">__aexit__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">et</span><span class="p">,</span> <span class="n">ev</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">values</span><span class="p">()):</span>
+            <span class="k">await</span> <span class="n">h</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_list_all_tools</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]:</span>
+        <span class="n">tools</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="n">listed</span> <span class="o">=</span> <span class="k">await</span> <span class="n">h</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="nf">list_tools</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">listed</span><span class="p">.</span><span class="n">tools</span><span class="p">:</span>
+                <span class="n">tools</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                    <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">:</span><span class="si">{</span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span>
+                        <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">),</span>
+                        <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="sh">"</span><span class="s">input_schema</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{}})</span>
+                    <span class="p">}</span>
+                <span class="p">})</span>
+        <span class="k">return</span> <span class="n">tools</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_collect_prompts</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]]:</span>
+        <span class="c1"># 서버별 프롬프트 목록 취합. 세션에 list_prompts/get_prompt 가 없으면 건너뜀.
+</span>        <span class="n">collected</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">h</span><span class="p">.</span><span class="n">session</span><span class="p">,</span> <span class="sh">"</span><span class="s">list_prompts</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">h</span><span class="p">.</span><span class="n">session</span><span class="p">,</span> <span class="sh">"</span><span class="s">list_prompts</span><span class="sh">"</span><span class="p">)()</span>
+                    <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="c1"># 각 항목마다 get_prompt(name)로 템플릿/메시지 구성 요소를 가져올 수 있다는 가정(서버 구현마다 상이)
+</span>                    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="sh">"</span><span class="s">prompts</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]):</span>
+                        <span class="n">items</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">),</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)})</span>
+                    <span class="n">collected</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">items</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="k">continue</span>
+        <span class="k">return</span> <span class="n">collected</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_get_prompt_messages</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prompt_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">]:</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">[</span><span class="n">server</span><span class="p">]</span>
+        <span class="n">msgs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">h</span><span class="p">.</span><span class="n">session</span><span class="p">,</span> <span class="sh">"</span><span class="s">get_prompt</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">h</span><span class="p">.</span><span class="n">session</span><span class="p">,</span> <span class="sh">"</span><span class="s">get_prompt</span><span class="sh">"</span><span class="p">)(</span><span class="n">prompt_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="c1"># resp가 messages 비슷한 구조라고 가정하고 표준화
+</span>                <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">,</span> <span class="p">[]):</span>
+                    <span class="n">role</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">system</span><span class="sh">"</span><span class="p">)</span>
+                    <span class="n">content</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+                    <span class="n">msgs</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">ChatMessage</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">))</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">msgs</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_maybe_server_sampling</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">
+        MCP 서버가 </span><span class="sh">'</span><span class="s">샘플링 요구</span><span class="sh">'</span><span class="s">를 보내는 상황을 가정.
+        request = {</span><span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="s">:[...], </span><span class="sh">"</span><span class="s">params</span><span class="sh">"</span><span class="s">:{...}} 같은 형태를 정책에 맞춰 백엔드에 대리 호출
+        </span><span class="sh">"""</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">sampling_policy</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">params</span><span class="sh">"</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="c1"># request["messages"]는 OpenAI 포맷을 가정하고 그대로 전달
+</span>        <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="n">backend</span><span class="p">.</span><span class="nf">send</span><span class="p">([</span><span class="nc">ChatMessage</span><span class="p">(</span><span class="o">**</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">request</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])],</span> <span class="n">tools</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+        <span class="c1"># 필요하면 온전한 응답을 그대로 돌려주거나, 텍스트만 추출
+</span>        <span class="n">content</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">,[{}])[</span><span class="mi">0</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">,{}).</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">content</span><span class="p">,</span> <span class="sh">"</span><span class="s">raw</span><span class="sh">"</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">user_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># 1) 서버별 프롬프트 목록을 모아서 선택
+</span>        <span class="n">base_messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nc">ChatMessage</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">user_text</span><span class="p">)]</span>
+        <span class="n">prompt_catalog</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_collect_prompts</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">prompt_selector</span><span class="p">:</span>
+            <span class="c1"># prompt_selector는 {server:[{name,desc},...]}를 보고 초기 메시지(예: system 프롬프트들) 리스트를 반환
+</span>            <span class="n">injected</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">prompt_selector</span><span class="p">(</span><span class="n">prompt_catalog</span><span class="p">)</span>
+            <span class="n">base_messages</span> <span class="o">=</span> <span class="n">injected</span> <span class="o">+</span> <span class="n">base_messages</span>
+
+        <span class="c1"># 2) MCP 툴들을 OpenAI tools 포맷으로 그대로 넘김
+</span>        <span class="n">tools</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_list_all_tools</span><span class="p">()</span>
+
+        <span class="c1"># 3) 1차 모델 호출
+</span>        <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="n">backend</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">base_messages</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">,[{}])[</span><span class="mi">0</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">,{})</span>
+        <span class="n">base_messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">ChatMessage</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">msg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">)))</span>
+
+        <span class="c1"># 4) tool_calls 처리 루프 + ask-user + server-sampling 훅 예시
+</span>        <span class="c1"># 실제 ask/sampling 이벤트는 서버가 별도 툴로 노출하거나, resource/protocol 필드를 통해 트리거할 수 있다.
+</span>        <span class="c1"># 여기서는 관습적으로 이름을 잡아 예시를 보인다.
+</span>        <span class="k">while</span> <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+            <span class="n">tool_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">[</span><span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">]:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">]</span>  <span class="c1"># e.g., "files:read_csv" or "db:sql_summary" or "search:ask_user" 등
+</span>                <span class="n">args_raw</span> <span class="o">=</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">{}</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">{}</span><span class="sh">"</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">args_raw</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">_raw</span><span class="sh">"</span><span class="p">:</span> <span class="n">args_raw</span><span class="p">}</span>
+
+                <span class="c1"># 4-a) ask-user 패턴: 특정 서버가 사용자 입력을 받아달라고 하는 툴을 제공한다고 가정
+</span>                <span class="k">if</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">:ask_user</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">ask.</span><span class="sh">"</span><span class="p">):</span>
+                    <span class="n">question</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">question</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">추가 정보가 필요합니다. 입력해 주세요.</span><span class="sh">"</span><span class="p">)</span>
+                    <span class="n">user_answer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">ask_user</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
+                    <span class="n">tool_results</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                        <span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span>
+                        <span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span>
+                        <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                        <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">({</span><span class="sh">"</span><span class="s">answer</span><span class="sh">"</span><span class="p">:</span> <span class="n">user_answer</span><span class="p">})</span>
+                    <span class="p">})</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># 4-b) server-side sampling: 서버가 모델 호출을 위임하는 툴(예: server:sample)로 구현돼 있다고 가정
+</span>                <span class="k">if</span> <span class="n">name</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">:sample</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">sample.</span><span class="sh">"</span><span class="p">):</span>
+                    <span class="n">req</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">request</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:[</span><span class="n">m</span><span class="p">.</span><span class="nf">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">base_messages</span><span class="p">],</span> <span class="sh">"</span><span class="s">params</span><span class="sh">"</span><span class="p">:{}})</span>
+                    <span class="n">sampling_out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_maybe_server_sampling</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+                    <span class="n">tool_results</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                        <span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span>
+                        <span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span>
+                        <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                        <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">sampling_out</span><span class="p">)</span>
+                    <span class="p">})</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># 4-c) 일반 MCP 툴 호출
+</span>                <span class="k">if</span> <span class="sh">"</span><span class="s">:</span><span class="sh">"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="n">tool_results</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span><span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span><span class="n">name</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">({</span><span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">namespaced tool required</span><span class="sh">"</span><span class="p">})})</span>
+                    <span class="k">continue</span>
+                <span class="n">server</span><span class="p">,</span> <span class="n">tool</span> <span class="o">=</span> <span class="n">name</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">:</span><span class="sh">"</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">h</span><span class="p">:</span>
+                    <span class="n">tool_results</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span><span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span><span class="n">name</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">({</span><span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">unknown server</span><span class="sh">"</span><span class="p">})})</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">h</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="nf">call_tool</span><span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">{})</span>
+                    <span class="n">packed</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:[]}</span>
+                    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">res</span><span class="p">.</span><span class="n">content</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">c</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span> <span class="n">packed</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span><span class="n">c</span><span class="p">.</span><span class="n">text</span><span class="p">})</span>
+                        <span class="k">elif</span> <span class="n">c</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">json</span><span class="sh">"</span><span class="p">:</span> <span class="n">packed</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">json</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">json</span><span class="sh">"</span><span class="p">:</span><span class="n">c</span><span class="p">.</span><span class="n">json</span><span class="p">})</span>
+                        <span class="k">else</span><span class="p">:</span> <span class="n">packed</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="n">c</span><span class="p">.</span><span class="nb">type</span><span class="p">})</span>
+                    <span class="n">tool_results</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span><span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span><span class="n">name</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span><span class="n">orjson</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">packed</span><span class="p">).</span><span class="nf">decode</span><span class="p">()})</span>
+                <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">tool_results</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span><span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span><span class="n">name</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">({</span><span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span><span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)})})</span>
+
+            <span class="c1"># 4-d) 툴 결과 재주입
+</span>            <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">tool_results</span><span class="p">:</span>
+                <span class="n">base_messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">ChatMessage</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">tr</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">]))</span>
+                <span class="c1"># 일부 백엔드/모델은 tool 메시지에 name/tool_call_id를 요구하므로,
+</span>                <span class="c1"># OpenAIChatBackend를 직접 사용할 때는 messages에 dict 그대로 넣는 경로를 따로 두어도 된다.
+</span>
+            <span class="c1"># 4-e) 다음 턴 호출
+</span>            <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="n">backend</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">base_messages</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">,[{}])[</span><span class="mi">0</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">,{})</span>
+            <span class="n">base_messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">ChatMessage</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">msg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">)))</span>
+
+        <span class="c1"># 5) 최종 답변
+</span>        <span class="k">return</span> <span class="n">base_messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">content</span>
+</code></pre></div></div>
+
+<p>어떻게 쓰는가 예시</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="k">def</span> <span class="nf">ui_ask_user</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[QUESTION from MCP] </span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="c1"># 실제 앱/UI에서는 모달·입력창으로 구현
+</span>    <span class="k">return</span> <span class="nf">input</span><span class="p">(</span><span class="sh">"</span><span class="s">&gt; </span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">pick_prompts</span><span class="p">(</span><span class="n">prompt_catalog</span><span class="p">):</span>
+    <span class="c1"># prompt_catalog: {server: [{name,description}, ...]}
+</span>    <span class="c1"># 간단 예시: files 서버에 "analysis_default" 프롬프트가 있으면 불러와 system에 삽입
+</span>    <span class="c1"># 실제로는 bridge._get_prompt_messages(server, prompt_name)로 메시지를 받아 prepend
+</span>    <span class="k">return</span> <span class="p">[</span><span class="nc">ChatMessage</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="sh">"</span><span class="s">system</span><span class="sh">"</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="sh">"</span><span class="s">너는 조심스럽고 정확한 분석가다.</span><span class="sh">"</span><span class="p">)]</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">servers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nc">MCPServerCfg</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">files</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">npx</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">-y</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">@modelcontextprotocol/server-filesystem</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">./data</span><span class="sh">"</span><span class="p">]),</span>
+        <span class="nc">MCPServerCfg</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">db</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./servers/db/server.py</span><span class="sh">"</span><span class="p">]),</span>
+        <span class="c1"># MCPServerCfg(name="search", kind="sse", url="https://mcp.example.com/sse", headers={"Authorization":"Bearer X"}),
+</span>    <span class="p">]</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="nc">OpenAIChatBackend</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="sh">"</span><span class="s">http://localhost:8000</span><span class="sh">"</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">my-model</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="nc">MCPChatBridge</span><span class="p">(</span><span class="n">servers</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">ask_user</span><span class="o">=</span><span class="n">ui_ask_user</span><span class="p">,</span> <span class="n">prompt_selector</span><span class="o">=</span><span class="n">pick_prompts</span><span class="p">)</span> <span class="k">as</span> <span class="n">bridge</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">bridge</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="sh">"</span><span class="s">sales.csv를 분석하고, 필요한 추가 정보가 있으면 먼저 나에게 질문해줘</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== ANSWER ===</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>핵심 포인트 요약<br />
+샘플링. 서버가 “모델 호출을 대리해달라” 요청하면, 현재 연결된 Chat 백엔드로 그대로 라우팅해 결과를 돌려준다. 이렇게 하면 서버-주도 플로우까지 연동된다.<br />
+사용자에게 물어보기. MCP가 사용자 입력이 필요할 때를 툴 혹은 별도 시그널로 노출하는 패턴을 잡고, ask_user 콜백으로 Chat UI와 왕복한다. 러너를 두더라도 로직은 콜백 한 줄이다.<br />
+프롬프트. 서버별 프롬프트 레지스트리를 조회(list/get)해서 초기 system 메시지로 주입한다. 프롬프트가 파라미터화되어 있다면 get_prompt(name, **kwargs) 식으로 받아 메시지로 변환한다.<br />
+호환성. 같은 브릿지를 OpenAI Chat Completions, OpenAI Agents 어느 쪽에도 꽂을 수 있다. Agents를 백엔드로 쓸 땐 JSON 강제 출력 같은 프롬프트 전략을 써도 되고, 필요하면 Agents의 FunctionTool을 병행해서 ask-user나 sampling을 명시 툴로 노출하는 하이브리드도 가능하다.<br />
+3개 이상 서버. 서버 수에 상관없이 namespacing(server:tool) 룰을 유지하고, 프롬프트·질문·샘플링은 서버 라벨과 함께 로깅해 추적 가능성을 높인다. 서버별 타임아웃/동시성은 handle 단에서 개별 튜닝하는 게 안전하다.</p>
+
+<p>이렇게 하면 “툴로 래핑하지 않고”도 MCP의 넓은 표면적(툴·프롬프트·샘플링·유저질문)을 동일 Chat 경험에 자연스럽게 녹일 수 있다. 실제 네 서버에서 프롬프트/샘플링/ask가 어떤 엔드포인트/이벤트로 노출되는지 알려주면, 위 브릿지의 해당 함수만 너의 스펙에 딱 맞게 구체화해 줄 수 있다.</p>
+
+<p class="chat--user">
+
+아니 Elicitation이라고 따로 있는데
+
+</p>
+
+<p>맞아, MCP에는 “Elicitation(엘리시테이션)”이 따로 있다. 요지는 서버가 작업 도중 사용자에게 추가 정보를 표준 형식으로 요청할 수 있게 해주는 기능이고, 툴과는 별개의 채널이다. 결론부터 말하면 Chat 루프에 깔끔하게 연동할 수 있다. 아래처럼 “질문 라운드트립”을 브릿지에 끼우면 된다. 핵심 포인트와 최소 코드를 단계별로 정리한다.</p>
+
+<ol>
+  <li>
+    <p>개념 정리<br />
+Elicitation은 MCP 서버가 대화 도중 “사용자에게 이 정보 좀 받아줘”라고 요청하는 표준 메커니즘이다. 요청에는 프롬프트 문구와 함께 JSON 스키마가 따라오고, 클라이언트는 그 스키마에 맞게 사용자 입력을 받아 검증한 뒤 서버에 돌려준다. 2025-06-18 스펙에 정식 포함되었고, “툴 실행 중간에 끼어드는 질문”을 안전하고 구조화된 방식으로 다루려는 목적이다. <a href="https://modelcontextprotocol.io/specification/2025-06-18/client/elicitation?utm_source=chatgpt.com">Model Context Protocol+1</a></p>
+  </li>
+  <li>
+    <p>아키텍처 선택지<br />
+A. 프로토콜-네이티브 처리: MCP 클라이언트가 서버의 Elicitation 이벤트를 직접 수신해 UI로 띄우고 응답을 서버에 돌려준다. Chat 모델은 “최종 답변 생성”에 집중하고, 추가 정보 수집은 브릿지가 담당한다.<br />
+B. 모델-중개 처리: Elicitation을 “ask_user” 같은 툴로도 노출하는 서버가 있다면, 기존 tool_call 루프에 섞어 처리해도 된다. 하지만 권장되는 방식은 스펙에 맞춘 네이티브 처리다(질문·응답이 중첩 흐름에서도 안정적). <a href="https://modelcontextprotocol.io/specification/draft/client/elicitation?utm_source=chatgpt.com">Model Context Protocol</a></p>
+  </li>
+  <li>
+    <p>브릿지 확장 패턴<br />
+너의 기존 Chat 오케스트레이터/브릿지에 아래 훅 두 개만 더해주면 된다.<br />
+a) elicitation 이벤트 수신 → UI로 질문 띄우기 → JSON 스키마 검증 → 서버에 제출<br />
+b) 샘플링·프롬프트·툴 루프와 자연스럽게 공존하도록 순서 제어</p>
+  </li>
+</ol>
+
+<p>아래 코드는 “개념적으로 정확한 동작 흐름”을 보여주는 미니 스캐폴딩이다. MCP SDK의 세부 메서드명은 릴리스별로 다를 수 있으므로, 이벤트 구독/응답 부분은 네 SDK 버전에 맞춰 함수명만 치환하면 된다.</p>
+
+<p>설치<br />
+pip install mcp jsonschema orjson requests</p>
+
+<p>코드 스니펫: MCP Elicitation 브릿지 훅</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">json</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Awaitable</span>
+<span class="kn">import</span> <span class="n">orjson</span>
+<span class="kn">from</span> <span class="n">jsonschema</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">ValidationError</span>
+
+<span class="c1"># 가정: 이미 MCP 세션을 여러 개 열어놓았고, handles = {server: session} 형태로 보유
+# 또한 ask_user 콜백(UI 입력)과 chat_backend(네 Chat 또는 Agent 백엔드)가 있다.
+</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">handle_elicitation_loop</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">ask_user</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]):</span>
+    <span class="sh">"""</span><span class="s">
+    한 MCP 세션에 대해 서버가 보내는 Elicitation 요청을 처리하는 루프.
+    SDK마다 이벤트 수신 API 이름이 다를 수 있으므로, 아래 </span><span class="sh">'</span><span class="s">await session.next_elicitation()</span><span class="sh">'</span><span class="s">는
+    네가 쓰는 SDK의 실제 호출로 치환하면 된다.
+    </span><span class="sh">"""</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="p">.</span><span class="nf">next_elicitation</span><span class="p">()</span>  <span class="c1"># 예시: {"id": "...", "message": "날짜를 입력하세요", "schema": {...}}
+</span>        <span class="k">if</span> <span class="n">req</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">req</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">추가 정보가 필요합니다.</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">req</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">schema</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{}})</span>
+
+        <span class="c1"># UI에 질문 띄우고, 스키마에 맞는 dict로 응답 받기
+</span>        <span class="n">user_payload</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">ask_user</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+
+        <span class="c1"># 로컬에서 1차 검증(선택이지만 권장)
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="nf">validate</span><span class="p">(</span><span class="n">user_payload</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># 검증 실패 시 재질문
+</span>            <span class="n">user_payload</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">ask_user</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">입력 형식 오류: </span><span class="si">{</span><span class="n">e</span><span class="p">.</span><span class="n">message</span><span class="si">}</span><span class="se">\n</span><span class="s">다시 입력해 주세요.</span><span class="sh">"</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+            <span class="nf">validate</span><span class="p">(</span><span class="n">user_payload</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+
+        <span class="c1"># 서버에 제출(실제 API명/필드명은 SDK에 맞춰 치환)
+</span>        <span class="k">await</span> <span class="n">session</span><span class="p">.</span><span class="nf">submit_elicitation</span><span class="p">(</span><span class="n">req</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span> <span class="n">user_payload</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_chat_with_elicitation</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">handles</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">user_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ask_user</span><span class="p">):</span>
+    <span class="c1"># 1) 병행으로 각 세션의 elicitation 루프를 가동
+</span>    <span class="n">loops</span> <span class="o">=</span> <span class="p">[</span><span class="n">asyncio</span><span class="p">.</span><span class="nf">create_task</span><span class="p">(</span><span class="nf">handle_elicitation_loop</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">ask_user</span><span class="p">))</span> <span class="k">for</span> <span class="n">sess</span> <span class="ow">in</span> <span class="n">handles</span><span class="p">.</span><span class="nf">values</span><span class="p">()]</span>
+
+    <span class="c1"># 2) 모델 호출 루프(툴/프롬프트/샘플링 등 기존 처리와 동일)
+</span>    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">user_text</span><span class="p">}]</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 필요하면 MCP list_tools를 OpenAI tools 포맷으로 넣기
+</span>
+    <span class="c1"># 첫 턴
+</span>    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">backend</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">,[{}])[</span><span class="mi">0</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">,{})</span>
+    <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># tool_calls 처리(생략) + 중간에 서버가 elicitation을 보낼 수 있으므로, 다음 턴 전에 잠깐 yield
+</span>    <span class="c1"># ...
+</span>    <span class="c1"># 다음 턴 계속
+</span>    <span class="c1"># ...
+</span>
+    <span class="c1"># 3) 종료 시 elicitation 루프 정리
+</span>    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">loops</span><span class="p">:</span>
+        <span class="n">t</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="p">.</span><span class="n">CancelledError</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">t</span>
+</code></pre></div></div>
+
+<p>UI 입력 콜백 예시</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="k">def</span> <span class="nf">ask_user_via_console</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[MCP 질문] </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">요구 스키마: </span><span class="si">{</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">"</span><span class="s">&gt; JSON으로 응답: </span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="nf">ask_user_via_console</span><span class="p">(</span><span class="sh">"</span><span class="s">JSON 파싱 실패. 다시 입력해 주세요.</span><span class="sh">"</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</code></pre></div></div>
+
+<p>여기서 중요한 점<br />
+스키마 검증. 서버가 스키마를 제공하므로 클라이언트에서 jsonschema로 1차 검증을 돌리면 왕복 횟수와 오류가 줄어든다. 스펙이 권장하는 보안·프라이버시 정책도 함께 지켜라(민감정보 요구 금지 등). <a href="https://modelcontextprotocol.io/specification/2025-06-18/client/elicitation?utm_source=chatgpt.com">Model Context Protocol</a><br />
+중첩 가능성. Elicitation은 다른 MCP 기능(툴, 프롬프트, 샘플링) 안쪽에 중첩되어 등장할 수 있다. 그러므로 이벤트 루프를 Chat 루프와 병행 실행하는 패턴이 안전하다. <a href="https://modelcontextprotocol.io/specification/draft/client/elicitation?utm_source=chatgpt.com">Model Context Protocol</a><br />
+호환성. MCP를 직접 지원하는 클라이언트/에이전트(예: 일부 IDE, 일부 Agents SDK)는 Elicitation을 네이티브로 뜯어서 보여줄 예정이거나 이미 실험 중이다. 하지만 서버·SDK에 따라 이벤트/메서드명이 다르므로, 위 루프의 두 함수(next_elicitation, submit_elicitation) 위치만 실제 SDK 이름으로 바꾸면 된다. 개념과 흐름은 동일하다. <a href="https://github.com/anthropics/claude-code/issues/2799?utm_source=chatgpt.com">GitHub+1</a></p>
+
+<p>OpenAI Agents나 일반 Chat과의 결합 방식 요약<br />
+OpenAI Agents를 백엔드 모델로 쓸 때도 동일하다. “에이전트에게 MCP 서버를 그대로 넘겨서 에이전트가 툴 호출을 처리”하도록 둘 수도 있지만, Elicitation은 클라이언트(UI) 레벨의 사용자 상호작용이므로, 브릿지에서 이벤트를 수신해 UI와 왕복 후 결과를 서버에 전달하는 편이 제일 예측 가능하다.<br />
+일반 Chat Completions(with tools) 경로에서도 마찬가지다. 모델은 답변/계획에 집중시키고, 사용자 질문은 브릿지가 담당한다. 필요하면 Elicitation으로 수집된 값을 시스템/유저 메시지로도 주입해 다음 턴 답변 품질을 올릴 수 있다.</p>
+
+<p>실전 팁<br />
+서버 수가 3개 이상이면 서버 라벨을 질문 메시지에 명시해준다. 예: “[files] 어떤 디렉토리를 생성할까요?”.<br />
+민감정보 가드. 스펙이 금지하는 내용(비밀번호/토큰 등)은 브릿지에서 차단하고, 허용 목록만 통과시키는 것이 안전하다. <a href="https://modelcontextprotocol.io/specification/2025-06-18/client/elicitation?utm_source=chatgpt.com">Model Context Protocol</a><br />
+UX. 스키마에 enum/format을 적극 사용하게 서버 쪽에 권장하라. 클라이언트는 enum이면 드롭다운, format=email이면 이메일 입력 UI처럼 친화적으로 렌더링하기 쉽다. <a href="https://medium.com/data-science-collective/a-practical-guide-to-mcp-elicitation-with-fastapi-fastmcp-65f57fd91896?utm_source=chatgpt.com">Medium</a></p>
+
+<p>한 줄 결론<br />
+Elicitation은 MCP의 “인간-개입 표준 채널”이고, 툴과 별개로 Chat 루프에 깨끗하게 붙일 수 있다. 위 브릿지 훅 두 개만 넣으면, 모델-툴-사용자 삼자 협업이 안정적으로 돈다. 네가 쓰는 MCP Python SDK의 정확한 elicitation API 이름을 알려주면, next_elicitation/submit_elicitation 부분을 해당 버전에 딱 맞춰 즉시 치환해 준다.</p>
+
         
       </section>
 
@@ -3626,7 +4091,7 @@ pip install mcp pydantic orjson "openai-agents[litellm]" requests</p>
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-29T11:54:35+09:00">2025-10-29</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-29T13:03:08+09:00">2025-10-29</time></p>
 
       </footer>
 
@@ -3680,7 +4145,7 @@ pip install mcp pydantic orjson "openai-agents[litellm]" requests</p>
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-29T11:54:40+09:00">2025-10-29</time>
+        <time datetime="2025-10-29T13:03:13+09:00">2025-10-29</time>
       </span>
     
 
