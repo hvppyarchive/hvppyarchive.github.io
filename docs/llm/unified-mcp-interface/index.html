@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-10-29T13:03:08+09:00">
+  <meta property="article:published_time" content="2025-10-29T15:51:35+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python MCP 연결 방법">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-10-29T13:03:08+09:00">
+    <meta itemprop="datePublished" content="2025-10-29T15:51:35+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-29T13:03:08+09:00">2025-10-29</time>
+        <time datetime="2025-10-29T15:51:35+09:00">2025-10-29</time>
       </span>
     
 
@@ -4066,6 +4066,689 @@ UX. 스키마에 enum/format을 적극 사용하게 서버 쪽에 권장하라. 
 <p>한 줄 결론<br />
 Elicitation은 MCP의 “인간-개입 표준 채널”이고, 툴과 별개로 Chat 루프에 깨끗하게 붙일 수 있다. 위 브릿지 훅 두 개만 넣으면, 모델-툴-사용자 삼자 협업이 안정적으로 돈다. 네가 쓰는 MCP Python SDK의 정확한 elicitation API 이름을 알려주면, next_elicitation/submit_elicitation 부분을 해당 버전에 딱 맞춰 즉시 치환해 준다.</p>
 
+<p class="chat--user">
+
+근데 MCP Server 라고 클래스명을 하니깐 진짜 서버 같이 느껴져 다른 이름 없어? 이건 설정 값에 가까운거 같은데
+
+</p>
+
+<p>맞아, “MCPServer”라고 하면 네트워크 서버 프로세스를 직접 돌린다는 느낌이 강하다. 실제 네가 다루는 건 세션을 열 때 필요한 <strong>설정 정보(Descriptor, Config, Profile, Endpoint)</strong>에 가까워.</p>
+
+<p>보통 이런 경우 네이밍을 이렇게 바꿔 쓰면 더 자연스럽다.</p>
+
+<ul>
+  <li>
+    <p><strong>MCPServerConfig</strong> : 가장 직설적. 서버에 접속하는 데 필요한 설정값 묶음.</p>
+  </li>
+  <li>
+    <p><strong>MCPServerSpec</strong> : “사양/스펙”이라는 의미로, 서버를 기술하는 선언적 정보라는 뉘앙스.</p>
+  </li>
+  <li>
+    <p><strong>MCPServerProfile</strong> : 여러 환경(개발/운영/테스트)에서 쓰일 수 있는 “프로필”이라는 톤.</p>
+  </li>
+  <li>
+    <p><strong>MCPServerEndpoint</strong> : 특히 SSE/HTTP 주소처럼 원격 엔드포인트를 지칭할 때 적합.</p>
+  </li>
+  <li>
+    <p><strong>MCPConnectionConfig</strong> : 실제로는 연결 구성에 해당한다는 걸 분명히 함.</p>
+  </li>
+</ul>
+
+<p>네가 만든 UnifiedMCPConfig 같은 컨테이너 안에 들어갈 원소라면,</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MCPServerConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span> <span class="bp">...</span>
+</code></pre></div></div>
+
+<p>혹은 조금 더 가볍게</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MCPServerSpec</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span> <span class="bp">...</span>
+</code></pre></div></div>
+
+<p>정도가 가장 무난하다.</p>
+
+<p>정리하자면: <strong>서버(server)</strong>라는 단어 대신 <strong>Config / Spec / Endpoint / Profile</strong> 계열을 붙여주면 “실제 서버 객체”가 아니라 “접속 선언”이라는 의미가 명확해진다.</p>
+
+<p>너의 코드베이스에서 MCP 서버를 실제로 구동하는 책임이 아니라 <strong>연결 정보를 담는 데이터 모델</strong> 이라면, <code class="language-plaintext highlighter-rouge">MCPServerConfig</code>가 가장 안전한 선택이다.</p>
+
+<p>원한다면, 네가 지금 가지고 있는 클래스 정의를 내가 <code class="language-plaintext highlighter-rouge">MCPServerConfig</code> 식으로 리팩터링해서 전체 코드 스니펫을 다시 정리해줄 수도 있어.</p>
+
+<p class="chat--user">
+
+MCPSpec은 어때
+
+</p>
+
+<p>좋다. MCPSpec 괜찮다. 다만 “Spec”은 선언적·불변 설정이라는 뉘앙스를 주니, 런타임 상태(세션, 캐시, 동시성 제어)는 다른 이름에 두는 걸 추천한다. 정리하면 이렇게 쓰면 깔끔하다.</p>
+
+<p>권장 의미 구분</p>
+
+<ul>
+  <li>
+    <p>MCPSpec: 연결·인증·전송방식 같은 선언형 스펙. 직렬화 가능, 불변 취급.</p>
+  </li>
+  <li>
+    <p>MCPHandle 또는 MCPSession: MCPSpec을 바탕으로 실제 연결을 연 뒤 갖게 되는 런타임 객체.</p>
+  </li>
+  <li>
+    <p>MCPConfig: 여러 MCPSpec을 담는 컨테이너.</p>
+  </li>
+</ul>
+
+<p>작은 리팩터 예시</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="n">Kind</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">MCPSpec</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(...,</span> <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">사람과 모델이 보는 라벨</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">Kind</span>
+    <span class="c1"># stdio
+</span>    <span class="n">command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="c1"># sse/http
+</span>    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="c1"># 정책/힌트(스펙이므로 기본값만 보관)
+</span>    <span class="n">require_approval</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">never</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">always</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">never</span><span class="sh">"</span>
+    <span class="n">cache_tools_list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">max_concurrency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">request_timeout_sec</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
+
+<span class="k">class</span> <span class="nc">MCPConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">servers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MCPSpec</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">validate_topology</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">servers</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">!=</span> <span class="nf">len</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">names</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">duplicate names: </span><span class="si">{</span><span class="n">names</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">servers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="n">command</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: stdio requires command</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">kind</span><span class="si">}</span><span class="s"> requires url</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>런타임 분리 패턴</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">mcp.client.session</span> <span class="kn">import</span> <span class="n">ClientSession</span>
+<span class="kn">from</span> <span class="n">mcp.client.stdio</span> <span class="kn">import</span> <span class="n">StdioClientTransport</span><span class="p">,</span> <span class="n">StdioServerParameters</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+
+<span class="k">class</span> <span class="nc">MCPHandle</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">MCPSpec</span><span class="p">,</span> <span class="n">transport</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">ClientSession</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">transport</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="n">transport</span><span class="p">.</span><span class="nf">stop</span><span class="p">()</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">open_handle</span><span class="p">(</span><span class="n">spec</span><span class="p">:</span> <span class="n">MCPSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MCPHandle</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">spec</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="nc">StdioClientTransport</span><span class="p">(</span><span class="nc">StdioServerParameters</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">spec</span><span class="p">.</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">spec</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">spec</span><span class="p">.</span><span class="n">env</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">spec</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="n">mcp.client.sse</span> <span class="kn">import</span> <span class="n">SSEClientTransport</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="nc">SSEClientTransport</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">spec</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">spec</span><span class="p">.</span><span class="n">headers</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># 필요 시 http_streamable 등 추가
+</span>        <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">unsupported kind: </span><span class="si">{</span><span class="n">spec</span><span class="p">.</span><span class="n">kind</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">tr</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nc">ClientSession</span><span class="p">(</span><span class="n">tr</span><span class="p">);</span> <span class="k">await</span> <span class="n">s</span><span class="p">.</span><span class="nf">initialize</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nc">MCPHandle</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>어댑터에서의 사용 느낌</p>
+
+<ul>
+  <li>
+    <p>OpenAI Agents 어댑터: MCPSpec → MCPServerStdio/MCPServerSse 생성 시 그대로 넘김.</p>
+  </li>
+  <li>
+    <p>Anthropic 어댑터: MCPSpec(kind="sse"/"http_streamable")를 mcp_servers 페이로드로 직렬화.</p>
+  </li>
+</ul>
+
+<p>장단점 한줄 요약</p>
+
+<ul>
+  <li>
+    <p>MCPSpec은 “진짜 서버”가 아니라 “접속 선언”이라는 의도가 분명해져 오해가 줄고, 테스트·직렬화·버전관리도 쉬워진다.</p>
+  </li>
+  <li>
+    <p>세션·동시성 같은 런타임은 Handle/Session 쪽으로 분리되니 책임이 선명해진다.</p>
+  </li>
+</ul>
+
+<p>결론<br />
+MCPSpec 네이밍 채택 추천. 이미 만들어둔 코드에서 클래스명만 바꾸고, 핸들(세션) 계층을 분리하면 지금까지의 어댑터/브릿지 구조와도 잘 맞물린다.</p>
+
+<p class="chat--user">
+
+응 런타임 처리는 안할거야. MCPSpec // ToolSpec 이렇게 할까 하는데 MCPConfig // ToolConfig 이게 나으려나 어떻게 생각해
+
+</p>
+
+<p>좋아, 런타임은 안 다룬다고 했으니 이름은 “무슨 값을 선언·기술해 두는가”에만 맞추면 된다. 핵심은 Spec과 Config가 주는 뉘앙스 차이를 의도대로 쓰는 것.</p>
+
+<p>정의 요약<br />
+Spec: 인터페이스·스키마·불변에 가까운 선언. 엔드포인트, 툴 시그니처, JSON 스키마 같은 “계약서”.<br />
+Config: 실행 맥락에 맞춘 선택·오버레이. 어떤 Spec을 노출할지, 별칭, 기본 옵션, 켜기/끄기 같은 “정책”.</p>
+
+<p>권장 네이밍 매트릭스<br />
+단일 선언 단위<br />
+MCPSpec: MCP 접속 선언. kind, url/command, headers 같은 연결 스펙과 라벨, 태그 등.<br />
+ToolSpec: 툴 선언. name, description, parameters(JSON Schema), 위험도 플래그 등.</p>
+
+<p>컬렉션과 정책<br />
+MCPConfig: 여러 MCPSpec을 담고, 환경별로 enable/disable·라벨·승인정책 등 오버레이.<br />
+ToolConfig: 여러 ToolSpec에 대한 정책 오버레이와 노출 규칙(필터링, 별칭, 기본 파라미터 등).</p>
+
+<p>즉, MCPSpec // ToolSpec은 “순수 선언”, MCPConfig // ToolConfig는 “선택과 정책”으로 역할을 분리하면 깔끔하다.</p>
+
+<p>바로 쓸 수 있는 최소 모델 예시</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="n">Kind</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">MCPSpec</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(...,</span> <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">사람/모델이 볼 라벨, 네임스페이스 키</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">Kind</span>
+    <span class="c1"># stdio
+</span>    <span class="n">command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="c1"># sse/http
+</span>    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="c1"># 메타
+</span>    <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ToolSpec</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>                             <span class="c1"># 예: "files:read_csv" 또는 "local.math_eval"
+</span>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">any</span><span class="p">]</span>            <span class="c1"># JSON Schema
+</span>    <span class="n">server_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>      <span class="c1"># MCP 네임스페이스(예: "files"). 로컬 툴이면 None.
+</span>    <span class="n">risk_level</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">low</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">med</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">high</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">low</span><span class="sh">"</span>
+    <span class="n">default_dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MCPConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MCPSpec</span><span class="p">]</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>        <span class="c1"># name -&gt; on/off
+</span>    <span class="n">require_approval</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">never</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">always</span><span class="sh">"</span><span class="p">]]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">aliases</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>         <span class="c1"># name -&gt; alias for UI/LLM
+</span>    <span class="c1"># 간단 검증
+</span>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">specs</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">!=</span> <span class="nf">len</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">names</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">duplicate MCP names</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ToolConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ToolSpec</span><span class="p">]</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>        <span class="c1"># tool name -&gt; on/off
+</span>    <span class="n">aliases</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>         <span class="c1"># tool name -&gt; alias
+</span>    <span class="n">defaults</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">any</span><span class="p">]]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># tool name -&gt; default args
+</span>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">specs</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">!=</span> <span class="nf">len</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">names</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">duplicate tool names</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>어댑터는 “런타임 없이” 정적 변환만 하면 된다</p>
+
+<p>OpenAI Chat Completions tools 변환<br />
+ToolSpec → tools JSON으로 직렬화</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">tools_for_openai</span><span class="p">(</span><span class="n">tool_cfg</span><span class="p">:</span> <span class="n">ToolConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">any</span><span class="p">]]:</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tool_cfg</span><span class="p">.</span><span class="n">specs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tool_cfg</span><span class="p">.</span><span class="n">enabled</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">tool_cfg</span><span class="p">.</span><span class="n">enabled</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">tools</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+            <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">tool_cfg</span><span class="p">.</span><span class="n">aliases</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="n">description</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="n">parameters</span>
+            <span class="p">}</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">tools</span>
+</code></pre></div></div>
+
+<p>Anthropic Messages API용 MCP 서버 페이로드<br />
+MCPSpec → mcp_servers 항목으로 직렬화(SSE/HTTP 계열만)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mcp_servers_for_anthropic</span><span class="p">(</span><span class="n">mcp_cfg</span><span class="p">:</span> <span class="n">MCPConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">any</span><span class="p">]]:</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">mcp_cfg</span><span class="p">.</span><span class="n">specs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mcp_cfg</span><span class="p">.</span><span class="n">enabled</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">mcp_cfg</span><span class="p">.</span><span class="n">enabled</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">:</span>
+            <span class="c1"># Anthropic는 원격 URL 타입만 직접 붙일 수 있음
+</span>            <span class="k">continue</span>
+        <span class="n">out</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+            <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">mcp_cfg</span><span class="p">.</span><span class="n">aliases</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">authorization_token</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">s</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">tool_configuration</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">enabled</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">out</span>
+</code></pre></div></div>
+
+<p>OpenAI Agents Python SDK용 MCP 컨텍스트 매니저 생성<br />
+MCPSpec → SDK의 MCPServerSse/MCPServerStdio로 변환에 필요한 파라미터만 준비<br />
+런타임은 안 만들지만, 어댑터가 어느 클래스를 써야 하는지 결정할 수 있도록 정적 매핑만 책임지게 하면 된다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mcp_params_for_openai_agents</span><span class="p">(</span><span class="n">mcp_cfg</span><span class="p">:</span> <span class="n">MCPConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">any</span><span class="p">]]:</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">mcp_cfg</span><span class="p">.</span><span class="n">specs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mcp_cfg</span><span class="p">.</span><span class="n">enabled</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">mcp_cfg</span><span class="p">.</span><span class="n">enabled</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="sh">"</span><span class="s">params</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">command</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">command</span><span class="p">,</span> <span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="sh">"</span><span class="s">env</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">env</span><span class="p">}})</span>
+        <span class="k">elif</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="sh">"</span><span class="s">params</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">headers</span><span class="p">}})</span>
+        <span class="k">elif</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="sh">"</span><span class="s">params</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">headers</span><span class="p">}})</span>
+    <span class="k">return</span> <span class="n">params</span>
+</code></pre></div></div>
+
+<p>왜 이렇게 나누길 권하냐<br />
+MCPSpec / ToolSpec은 불변 계약서다. 코드 리뷰·버전 관리·테스트 더블 작성이 쉽다.<br />
+MCPConfig / ToolConfig는 환경별 설정과 정책을 담아 배포 파이프라인에서 바꿔치우기 좋다. 스테이징과 프로덕션을 오버레이로 구분하기 편하다.<br />
+추후 런타임을 붙이고 싶어도 모델이 흔들리지 않는다. Handle/Session은 별 파일에서 추가하면 된다.</p>
+
+<p>실무 팁<br />
+Spec에 version, tags, capabilities 같은 필드를 두면 나중에 필터링이 편하다(예: tag가 readonly인 MCP만 노출).<br />
+ToolSpec.parameters는 반드시 엄격하게(required, enum, format, min/max) 기입해 모델의 잘못된 호출을 줄인다.<br />
+Config의 aliases는 LLM 혼동을 줄이는 데 효과적이다. 네임스페이스가 긴 툴은 별칭을 짧고 명확하게.</p>
+
+<p>결론<br />
+네 목표가 선언값만 관리하는 거라면 MCPSpec // ToolSpec로 가는 게 맞다. 여기에 환경·정책을 얹는 용도로 MCPConfig // ToolConfig를 추가하면 운영 친화적이다. 한 줄 요약은 이거다.<br />
+Spec = 계약, Config = 선택과 정책.<br />
+둘 다 쓰되, 각자 역할을 분명히 나누자.</p>
+
+<p class="chat--user">
+
+근데 클래스명을 McpSpec MCPSpec 이거 계속 헷갈림 
+
+</p>
+
+<p>헷갈리는 게 정상이다. 파이썬에서 약어를 클래스명에 넣을 때 선택지는 두 가지뿐이다. 하나만 고르고 끝까지 일관하면 된다.</p>
+
+<p>권장 결론<br />
+McpSpec로 통일하자. 이유는 가독성(대문자 덩어리 줄임), 타이핑 편의, 그리고 파이썬 생태계에서 HttpServer, XmlParser처럼 약어를 단어 취급하는 관례가 널리 쓰이기 때문이다. 그러면 패밀리도 자연스럽게 McpConfig, McpEndpoint, McpHandle 같은 리듬이 된다.</p>
+
+<p>빠른 규칙 세트<br />
+클래스: McpSpec, McpConfig, McpToolSpec, McpToolConfig<br />
+모듈 파일: mcp_spec.py, mcp_config.py<br />
+변수/매개변수: mcp_spec, mcp_config<br />
+JSON 키: snake_case 면 "mcp_spec", camelCase면 "mcpSpec" (팀 컨벤션 하나만 선택)<br />
+상수: MCP_SPEC_DEFAULTS처럼 전부 대문자도 가능하지만 클래스명과 혼동되니 피하는 편이 좋다</p>
+
+<p>작게 맛보기 리팩터 스니펫</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># mcp_spec.py
+</span><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="n">Kind</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">McpSpec</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(...,</span> <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">라벨/네임스페이스</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">Kind</span>
+    <span class="n">command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">McpConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">McpSpec</span><span class="p">]</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">aliases</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">validate_topology</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">specs</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">!=</span> <span class="nf">len</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">names</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">duplicate MCP names</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">specs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="n">command</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: stdio requires command</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">kind</span><span class="si">}</span><span class="s"> requires url</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>레거시 호환이 필요하면 한 줄로 다리 걸어두면 된다</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 임시 호환(향후 제거 예정)
+</span><span class="k">class</span> <span class="nc">MCPSpec</span><span class="p">(</span><span class="n">McpSpec</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<p>만약 팀이 전통적인 “약어는 전부 대문자”를 고집한다면 MCPSpec로 가도 된다. 그 경우엔 문서·코드 전반에 동일 규칙을 강제하자. 예를 들어 클래스는 MCPSpec/MCPEndpoint, 변수는 mcp_spec, 파일은 mcp_spec.py처럼 “클래스만 ALLCAPS+CapWords, 나머진 snake_case”로 선을 긋는 식이다. 핵심은 혼용 금지다.</p>
+
+<p>한 줄 요약<br />
+파이썬 프로젝트라면 McpSpec 계열이 덜 헷갈리고 읽기 좋다. 팀 합의로 한 스타일만 박고, 클래스·모듈·변수·JSON 키에 같은 원칙을 반복 적용하면 혼란이 사라진다.</p>
+
+<p class="chat--user">
+
+StdioClientTransport랑 SSEClientTransport가 없다는ㄷ
+
+</p>
+
+<p>좋아, 이건 보통 다음 세 가지 경우 중 하나다. 차근차근 정리하고, 바로 쓸 수 있는 호환 셰임(shim) 코드까지 붙일게.</p>
+
+<ol>
+  <li>
+    <p>패키지/버전 문제<br />
+mcp Python SDK의 트랜스포트 경로가 버전별로 조금 달라서, 네 환경에선 <code class="language-plaintext highlighter-rouge">mcp.client.stdio</code> / <code class="language-plaintext highlighter-rouge">mcp.client.sse</code> 모듈이 없을 수 있다. 설치가 다르거나 구버전일 가능성이 높다.</p>
+  </li>
+  <li>
+    <p>선택적 의존성 미설치<br />
+SSE 트랜스포트는 선택(extra)로 분리된 경우가 있다. 즉, 기본 <code class="language-plaintext highlighter-rouge">pip install mcp</code>로는 SSE 클라이언트가 없고, 추가 의존성을 깔아야 한다.</p>
+  </li>
+  <li>
+    <p>다른 SDK를 보고 있다<br />
+이름이 비슷한 포크/래퍼(예: 예전 model-context-protocol 패키지)나 프록시 클라이언트를 깔아 두면 경로가 어긋난다.</p>
+  </li>
+</ol>
+
+<p>해결 순서 한 번에 끝내기<br />
+아래 명령으로 네 환경을 표준화해보자. 실패하면 바로 호환 셰임 코드가 뒤에 있다.</p>
+
+<p>1단계. 설치/업그레이드<br />
+pip install -U mcp<br />
+SSE까지 쓸 거면 아래 둘 중 환경에 맞게 하나를 시도<br />
+pip install -U "mcp[sse]"<br />
+또는<br />
+pip install -U httpx sse-starlette</p>
+
+<p>2단계. 버전·모듈 확인<br />
+python - «'PY'<br />
+import pkgutil, mcp, sys<br />
+print("mcp version:", getattr(mcp, "<strong>version</strong> ", "unknown"))<br />
+print("has mcp.client.stdio:", pkgutil.find_loader("mcp.client.stdio") is not None)<br />
+print("has mcp.client.sse:", pkgutil.find_loader("mcp.client.sse") is not None)<br />
+print("has mcp.transport.stdio:", pkgutil.find_loader("mcp.transport.stdio") is not None)<br />
+print("has mcp.transport.sse:", pkgutil.find_loader("mcp.transport.sse") is not None)<br />
+PY</p>
+
+<p>이제 어떤 경로가 있는지 알았으니, 호환 임포트 셰임으로 깔끔하게 처리하면 된다.</p>
+
+<p>호환 임포트 셰임(둘 중 있는 걸 자동으로 씀)<br />
+이 스니펫을 너의 공통 유틸에 넣고, 나머지 코드에선 항상 여기서 임포트한 클래스를 쓰면 경로 차이에 안 흔들린다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># mcp_compat.py
+</span><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="c1"># stdio
+</span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="n">mcp.client.stdio</span> <span class="kn">import</span> <span class="n">StdioClientTransport</span><span class="p">,</span> <span class="n">StdioServerParameters</span>  <span class="c1"># 신형 경로
+</span><span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="n">mcp.transport.stdio</span> <span class="kn">import</span> <span class="n">StdioClientTransport</span><span class="p">,</span> <span class="n">StdioServerParameters</span>  <span class="c1"># 구형/다른 빌드
+</span>    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">StdioClientTransport</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># type: ignore
+</span>        <span class="n">StdioServerParameters</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># type: ignore
+</span>
+<span class="c1"># sse
+</span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="n">mcp.client.sse</span> <span class="kn">import</span> <span class="n">SSEClientTransport</span>  <span class="c1"># 신형 경로
+</span><span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="n">mcp.transport.sse</span> <span class="kn">import</span> <span class="n">SSEClientTransport</span>  <span class="c1"># 구형/다른 빌드
+</span>    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="n">SSEClientTransport</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># type: ignore
+</span>
+<span class="k">def</span> <span class="nf">have_stdio</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">StdioClientTransport</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">StdioServerParameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">have_sse</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">SSEClientTransport</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>사용 예시(네 기존 코드 그대로, 단 임포트만 바꿈)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 기존: from mcp.client.stdio import StdioClientTransport, StdioServerParameters
+# 기존: from mcp.client.sse import SSEClientTransport
+</span><span class="kn">from</span> <span class="n">mcp_compat</span> <span class="kn">import</span> <span class="n">StdioClientTransport</span><span class="p">,</span> <span class="n">StdioServerParameters</span><span class="p">,</span> <span class="n">SSEClientTransport</span><span class="p">,</span> <span class="n">have_stdio</span><span class="p">,</span> <span class="n">have_sse</span>
+<span class="kn">from</span> <span class="n">mcp.client.session</span> <span class="kn">import</span> <span class="n">ClientSession</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">connect_stdio</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nf">have_stdio</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">STDIO transport가 이 환경에 없습니다. mcp 패키지 또는 버전을 확인하세요.</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">transport</span> <span class="o">=</span> <span class="nc">StdioClientTransport</span><span class="p">(</span><span class="nc">StdioServerParameters</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span> <span class="ow">or</span> <span class="p">[],</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span> <span class="ow">or</span> <span class="p">{}))</span>
+    <span class="k">await</span> <span class="n">transport</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="nc">ClientSession</span><span class="p">(</span><span class="n">transport</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">sess</span><span class="p">.</span><span class="nf">initialize</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">transport</span><span class="p">,</span> <span class="n">sess</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">connect_sse</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nf">have_sse</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">SSE transport가 이 환경에 없습니다. </span><span class="sh">'</span><span class="s">pip install </span><span class="se">\"</span><span class="s">mcp[sse]</span><span class="se">\"</span><span class="sh">'</span><span class="s"> 또는 httpx 계열을 설치하세요.</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">transport</span> <span class="o">=</span> <span class="nc">SSEClientTransport</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span> <span class="ow">or</span> <span class="p">{})</span>
+    <span class="k">await</span> <span class="n">transport</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="nc">ClientSession</span><span class="p">(</span><span class="n">transport</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">sess</span><span class="p">.</span><span class="nf">initialize</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">transport</span><span class="p">,</span> <span class="n">sess</span>
+</code></pre></div></div>
+
+<p>대체 경로가 모두 없다면<br />
+OpenAI Agents Python SDK의 내장 커넥터를 써서 트랜스포트 문제를 아예 우회할 수도 있다. 네가 “MCP 서버를 그대로 넘긴다” 전략을 쓰는 경우 특히 간단하다. 이 경로에선 파이썬에서 transport를 직접 임포트하지 않는다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">agents</span> <span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">Runner</span>
+<span class="kn">from</span> <span class="n">agents.mcp</span> <span class="kn">import</span> <span class="n">MCPServerStdio</span><span class="p">,</span> <span class="n">MCPServerSse</span>
+<span class="kn">from</span> <span class="n">agents.extensions.models.litellm_model</span> <span class="kn">import</span> <span class="n">LitellmModel</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_with_agents</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="nc">MCPServerStdio</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">files</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">command</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">npx</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">-y</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">@modelcontextprotocol/server-filesystem</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">./data</span><span class="sh">"</span><span class="p">]},</span>
+        <span class="n">cache_tools_list</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">files</span><span class="p">,</span> <span class="nc">MCPServerSse</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">search</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">https://mcp.example.com/sse</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">Bearer X</span><span class="sh">"</span><span class="p">}},</span>
+        <span class="n">cache_tools_list</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">search</span><span class="p">:</span>
+        <span class="n">agent</span> <span class="o">=</span> <span class="nc">Agent</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">pass-through</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="nc">LitellmModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">my-model</span><span class="sh">"</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="sh">"</span><span class="s">http://localhost:8000/v1</span><span class="sh">"</span><span class="p">),</span>
+            <span class="n">mcp_servers</span><span class="o">=</span><span class="p">[</span><span class="n">files</span><span class="p">,</span> <span class="n">search</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="nf">print</span><span class="p">((</span><span class="k">await</span> <span class="n">Runner</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="sh">"</span><span class="s">sales.csv 합계를 구해줘</span><span class="sh">"</span><span class="p">)).</span><span class="n">final_output</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>정리<br />
+StdioClientTransport / SSEClientTransport가 “없다”는 에러는 거의 항상 모듈 경로/버전 차이에서 온다. 위 셰임을 쓰면 코드 한 번으로 양쪽 경로를 자동 지원할 수 있고, 그래도 안 되면 Agents SDK의 내장 MCP 커넥터로 트랜스포트 계층을 통째로 맡겨 버리는 것도 깔끔한 해결책이다.</p>
+
+<p>계속 쓰는 스타일을 정리하자면</p>
+
+<ol>
+  <li>
+    <p>직접 SDK를 쓸 거면 mcp_compat.py 셰임으로 경로 차이를 흡수</p>
+  </li>
+  <li>
+    <p>빠른 통합이면 Agents SDK의 MCPServerStdio/MCPServerSse를 사용</p>
+  </li>
+</ol>
+
+<p>여기까지로 안 잡히면 네 <code class="language-plaintext highlighter-rouge">pip show mcp</code> 출력과 <code class="language-plaintext highlighter-rouge">python -c "import pkgutil; import mcp, sys; ..."</code> 결과를 알려줘. 그 정보로 정확한 임포트 경로를 딱 맞춰줄 수 있다.</p>
+
+<p class="chat--user">
+
+음 그냥 FastMcp 쓰는게 편할것 같네. FastMCP에서 config = { 'mcpServers': { "weather": {"url": "https://weather-api.example.com/mcp"}, "assistant": {"command": "python", "args": ["./assistant_servers.py"]} } } client = Client(config) 를 하면 바로 만들어 주는 것 같거든? 각각의 McpSpec에서 각각 한 줄을 만드는 함수 작성 + McpConfig에서 Config 자체를 만드는 함수 작성하면 좋을 것 같아.
+
+</p>
+
+<p>좋아, FastMCP를 기준으로 “스펙 → 한 줄”과 “스펙 모음 → 최종 config”를 자동 생성하는 얇은 레이어를 딱 만들어줄게. 네가 원하는 건 런타임이 아니라 선언값이니, McpSpec은 선언, McpConfig는 컬렉션+검증+직렬화만 맡는다.</p>
+
+<p>아래 코드는 그대로 붙여 쓰면 된다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># fastmcp_specs.py
+</span><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">field_validator</span>
+
+<span class="n">Kind</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">]</span>  <span class="c1"># FastMCP 관점: 원격(url) 또는 로컬(stdio)
+</span>
+<span class="k">class</span> <span class="nc">McpSpec</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(...,</span> <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">FastMCP에서 사용할 서버 라벨</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">Kind</span>
+    <span class="c1"># url 서버
+</span>    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="c1"># stdio 서버
+</span>    <span class="n">command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>           <span class="c1"># 선택: 필터링/문서화에 유용
+</span>    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>                       <span class="c1"># 선택: 사람 읽는 설명
+</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_name_non_empty</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="p">.</span><span class="nf">strip</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">name must be non-empty</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">to_fastmcp_entry</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">
+        FastMCP 설정의 </span><span class="sh">'</span><span class="s">한 줄</span><span class="sh">'</span><span class="s">을 만든다.
+        반환 예시:
+          {</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">https://...</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="s">: {...}}
+          {</span><span class="sh">"</span><span class="s">command</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="s">: [</span><span class="sh">"</span><span class="s">./server.py</span><span class="sh">"</span><span class="s">], </span><span class="sh">"</span><span class="s">env</span><span class="sh">"</span><span class="s">: {...}}
+        </span><span class="sh">"""</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">url</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: url kind requires url</span><span class="sh">"</span><span class="p">)</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">url</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">headers</span><span class="p">:</span>
+                <span class="n">entry</span><span class="p">[</span><span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">headers</span>
+            <span class="k">return</span> <span class="n">entry</span>
+
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">command</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: stdio kind requires command</span><span class="sh">"</span><span class="p">)</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">command</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">command</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">args</span><span class="p">:</span>
+                <span class="n">entry</span><span class="p">[</span><span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">args</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">env</span><span class="p">:</span>
+                <span class="n">entry</span><span class="p">[</span><span class="sh">"</span><span class="s">env</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">env</span>
+            <span class="k">return</span> <span class="n">entry</span>
+
+        <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: unknown kind </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">kind</span><span class="si">!r}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">McpConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">McpSpec</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">validate_topology</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">specs</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">!=</span> <span class="nf">len</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">names</span><span class="p">)):</span>
+            <span class="n">dupes</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">names</span><span class="p">.</span><span class="nf">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">}</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">duplicate spec names: </span><span class="si">{</span><span class="nf">sorted</span><span class="p">(</span><span class="n">dupes</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">specs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">url</span><span class="sh">"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: url is required for kind=</span><span class="sh">'</span><span class="s">url</span><span class="sh">'"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="n">command</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: command is required for kind=</span><span class="sh">'</span><span class="s">stdio</span><span class="sh">'"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_fastmcp_config</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">include_tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">exclude_tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">enable</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">name_alias</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sh">"""</span><span class="s">
+        FastMCP가 바로 먹는 dict를 만든다.
+        반환 예시:
+          {</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="s">: {</span><span class="sh">"</span><span class="s">weather</span><span class="sh">"</span><span class="s">: {...}, </span><span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="s">: {...}}}
+        옵션:
+          include_tags: 지정된 태그가 하나라도 있는 스펙만 포함
+          exclude_tags: 지정된 태그가 하나라도 있으면 제외
+          enable: {</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="s">: True/False} 형태의 on/off 오버라이드
+          name_alias: {</span><span class="sh">"</span><span class="s">original</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">alias</span><span class="sh">"</span><span class="s">} 키 변경(LLM/사람에게 보일 라벨 바꾸기)
+        </span><span class="sh">"""</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">validate_topology</span><span class="p">()</span>
+        <span class="n">servers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">specs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">include_tags</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">include_tags</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nf">set</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="n">tags</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">exclude_tags</span> <span class="ow">and</span> <span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">exclude_tags</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nf">set</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="n">tags</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">enable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">enable</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">key</span> <span class="o">=</span> <span class="n">name_alias</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">spec</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">name_alias</span> <span class="k">else</span> <span class="n">spec</span><span class="p">.</span><span class="n">name</span>
+            <span class="n">servers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec</span><span class="p">.</span><span class="nf">to_fastmcp_entry</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">:</span> <span class="n">servers</span><span class="p">}</span>
+
+    <span class="c1"># 편의: 체이닝 등록
+</span>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">McpSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">McpConfig</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">specs</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span>
+</code></pre></div></div>
+
+<p>간단 사용 예시</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 예시 1) 질문에서 준 config를 코드로 생성
+</span><span class="kn">from</span> <span class="n">fastmcp_specs</span> <span class="kn">import</span> <span class="n">McpSpec</span><span class="p">,</span> <span class="n">McpConfig</span>
+
+<span class="n">cfg</span> <span class="o">=</span> <span class="nc">McpConfig</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="p">[</span>
+    <span class="nc">McpSpec</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">weather</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="sh">"</span><span class="s">https://weather-api.example.com/mcp</span><span class="sh">"</span><span class="p">),</span>
+    <span class="nc">McpSpec</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./assistant_servers.py</span><span class="sh">"</span><span class="p">]),</span>
+<span class="p">])</span>
+
+<span class="n">fastmcp_config</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">.</span><span class="nf">to_fastmcp_config</span><span class="p">()</span>
+<span class="c1"># fastmcp_config == {
+#   "mcpServers": {
+#     "weather": {"url": "https://weather-api.example.com/mcp"},
+#     "assistant": {"command": "python", "args": ["./assistant_servers.py"]}
+#   }
+# }
+</span>
+<span class="c1"># FastMCP 클라이언트에 그대로 투입
+# from fastmcp import Client
+# client = Client(fastmcp_config)
+</span></code></pre></div></div>
+
+<p>태그/별칭/부분 사용 예시</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cfg</span> <span class="o">=</span> <span class="nc">McpConfig</span><span class="p">().</span><span class="nf">add</span><span class="p">(</span>
+    <span class="nc">McpSpec</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">weather</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="sh">"</span><span class="s">https://weather-api.example.com/mcp</span><span class="sh">"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">readonly</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">public</span><span class="sh">"</span><span class="p">])</span>
+<span class="p">).</span><span class="nf">add</span><span class="p">(</span>
+    <span class="nc">McpSpec</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">db</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./db_server.py</span><span class="sh">"</span><span class="p">],</span> <span class="n">env</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">MODE</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">prod</span><span class="sh">"</span><span class="p">},</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">write</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">internal</span><span class="sh">"</span><span class="p">])</span>
+<span class="p">).</span><span class="nf">add</span><span class="p">(</span>
+    <span class="nc">McpSpec</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./assistant_servers.py</span><span class="sh">"</span><span class="p">],</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">helper</span><span class="sh">"</span><span class="p">])</span>
+<span class="p">)</span>
+
+<span class="c1"># 읽기 전용만 포함하고, weather를 public-weather로 라벨링
+</span><span class="n">fastmcp_config</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">.</span><span class="nf">to_fastmcp_config</span><span class="p">(</span>
+    <span class="n">include_tags</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">readonly</span><span class="sh">"</span><span class="p">],</span>
+    <span class="n">name_alias</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">weather</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">public-weather</span><span class="sh">"</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="c1"># 결과:
+# {"mcpServers": {"public-weather": {"url": "https://weather-api.example.com/mcp"}}}
+</span></code></pre></div></div>
+
+<p>검증 포인트 요약</p>
+
+<ol>
+  <li>
+    <p>McpSpec.to_fastmcp_entry가 “url”과 “stdio” 케이스를 각각 한 줄로 생성한다.</p>
+  </li>
+  <li>
+    <p>McpConfig.to_fastmcp_config가 필터링과 on/off, 별칭을 지원한다.</p>
+  </li>
+  <li>
+    <p>FastMCP의 Client(config) 호출에 바로 넣을 수 있는 구조를 만든다.</p>
+  </li>
+</ol>
+
+<p>확장 아이디어<br />
+headers, env에 비밀값이 들어가면 McpConfig에서 별도 시크릿 소스로 병합하는 훅을 추가해도 좋다.<br />
+테넌트별로 enable dict를 바꾸는 것만으로 동일 스펙에서 다른 배포 구성을 만들 수 있다.<br />
+나중에 Elicitation/Prompt 같은 메타가 필요하면 McpSpec에 meta: Dict[str, Any] 정도를 추가해도 직렬화 흐름엔 영향이 없다.</p>
+
+<p>이렇게 두면 “각각의 McpSpec에서 각각 한 줄”과 “McpConfig에서 최종 config”가 둘 다 한 번에 해결된다.</p>
+
         
       </section>
 
@@ -4091,7 +4774,7 @@ Elicitation은 MCP의 “인간-개입 표준 채널”이고, 툴과 별개로 
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-29T13:03:08+09:00">2025-10-29</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-29T15:51:35+09:00">2025-10-29</time></p>
 
       </footer>
 
@@ -4145,7 +4828,7 @@ Elicitation은 MCP의 “인간-개입 표준 채널”이고, 툴과 별개로 
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-29T13:03:13+09:00">2025-10-29</time>
+        <time datetime="2025-10-29T15:51:41+09:00">2025-10-29</time>
       </span>
     
 
