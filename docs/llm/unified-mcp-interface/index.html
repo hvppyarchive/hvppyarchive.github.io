@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-10-29T15:51:35+09:00">
+  <meta property="article:published_time" content="2025-10-29T16:22:58+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python MCP 연결 방법">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-10-29T15:51:35+09:00">
+    <meta itemprop="datePublished" content="2025-10-29T16:22:58+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-29T15:51:35+09:00">2025-10-29</time>
+        <time datetime="2025-10-29T16:22:58+09:00">2025-10-29</time>
       </span>
     
 
@@ -4749,6 +4749,406 @@ headers, env에 비밀값이 들어가면 McpConfig에서 별도 시크릿 소�
 
 <p>이렇게 두면 “각각의 McpSpec에서 각각 한 줄”과 “McpConfig에서 최종 config”가 둘 다 한 번에 해결된다.</p>
 
+<p class="chat--user">
+
+아 그런데 config가 없으면 어떻게 되지?
+
+</p>
+
+<p>좋은 포인트다. “config가 없을 때”는 두 가지를 분리해서 생각하면 깔끔하다.</p>
+
+<ol>
+  <li>FastMCP Client 레벨에서의 기대 동작<br />
+일반적으로 Client는 최소한 {"mcpServers": {}} 형태의 딕셔너리를 기대한다. 완전히 None이거나 키가 없으면 내부에서 KeyError/TypeError 류가 날 가능성이 높다. 안전하게 가려면 다음을 지키자.</li>
+</ol>
+
+<ul>
+  <li>
+    <p>비어 있어도 된다: 빈 설정은 곧 “연결된 MCP 서버 없음”이니, Client는 뜨지만 툴은 없다.</p>
+  </li>
+  <li>
+    <p>키는 반드시 있어야 한다: {"mcpServers": {}} 형태를 보장하자.</p>
+  </li>
+  <li>
+    <p>잘못된 형태는 막자: 문자열이나 리스트 같은 타입이 들어가면 바로 예외를 던지게 하자.</p>
+  </li>
+</ul>
+
+<ol>
+  <li>네 선언 계층(McpSpec / McpConfig)에서의 방어 전략<br />
+런타임을 다루지 않기로 했으니, 선언-직렬화 단계에서 다음의 fallbacks를 두면 실전에서 편하다.</li>
+</ol>
+
+<ul>
+  <li>
+    <p>config가 None이면 빈 구조로 만들어 준다.</p>
+  </li>
+  <li>
+    <p>mcpServers 키가 없으면 생성해 준다.</p>
+  </li>
+  <li>
+    <p>specs가 비어 있으면 빈 딕셔너리를 넣되, 로거 경고를 남긴다.</p>
+  </li>
+  <li>
+    <p>환경변수나 기본 파일 경로에서 자동으로 끌어오는 선택지를 둔다(있으면 사용, 없으면 빈 dict).</p>
+  </li>
+</ul>
+
+<p>아래 헬퍼를 넣으면 실수해도 안전하게 동작한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># fastmcp_guard.py
+</span><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">os</span>
+
+<span class="c1"># 이전에 만든 선언 모델이라고 가정
+# from fastmcp_specs import McpSpec, McpConfig
+</span>
+<span class="k">def</span> <span class="nf">ensure_fastmcp_config</span><span class="p">(</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">specs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="sh">"</span><span class="s">McpSpec</span><span class="sh">"</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>     <span class="c1"># 문자열 인용은 순환 import 회피용
+</span>    <span class="n">env_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">FASTMCP_SERVERS_JSON</span><span class="sh">"</span><span class="p">,</span>       <span class="c1"># 옵션: {"weather":{"url":"..."}, "assistant":{...}} 형태
+</span>    <span class="n">file_env_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">FASTMCP_CONFIG_PATH</span><span class="sh">"</span>    <span class="c1"># 옵션: JSON 파일 경로
+</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    1순위: 명시 config
+    2순위: specs → {</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="s">: {...}} 직렬화
+    3순위: 환경변수에서 로드
+    4순위: 빈 설정으로 폴백
+    항상 {</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="s">: dict} 형태를 보장한다.
+    </span><span class="sh">"""</span>
+    <span class="c1"># 1) 명시 config
+</span>    <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="nc">TypeError</span><span class="p">(</span><span class="sh">"</span><span class="s">config must be a dict or None</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="c1"># 부분 설정만 온 경우 보완
+</span>            <span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">:</span> <span class="nf">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)}</span> <span class="k">if</span> <span class="n">config</span> <span class="k">else</span> <span class="p">{</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="nc">TypeError</span><span class="p">(</span><span class="sh">"</span><span class="s">config[</span><span class="sh">'</span><span class="s">mcpServers</span><span class="sh">'</span><span class="s">] must be a dict</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span>
+
+    <span class="c1"># 2) specs → 직렬화
+</span>    <span class="k">if</span> <span class="n">specs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="n">fastmcp_specs</span> <span class="kn">import</span> <span class="n">McpConfig</span>  <span class="c1"># 지역 임포트로 순환 참조 회피
+</span>        <span class="n">cfg</span> <span class="o">=</span> <span class="nc">McpConfig</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">specs</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">cfg</span><span class="p">.</span><span class="nf">to_fastmcp_config</span><span class="p">()</span>
+
+    <span class="c1"># 3) 환경변수: 파일 경로 우선
+</span>    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="n">file_env_var</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">path</span> <span class="ow">and</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="c1"># 파일이 {"mcpServers":{...}} 형태이거나 {"weather":{...}} 같은 맵일 수도 있음
+</span>        <span class="k">if</span> <span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">TypeError</span><span class="p">(</span><span class="sh">"</span><span class="s">file config[</span><span class="sh">'</span><span class="s">mcpServers</span><span class="sh">'</span><span class="s">] must be a dict</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
+        <span class="k">raise</span> <span class="nc">TypeError</span><span class="p">(</span><span class="sh">"</span><span class="s">file config must be a dict</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="n">env_var</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+        <span class="k">if</span> <span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">TypeError</span><span class="p">(</span><span class="sh">"</span><span class="s">env config[</span><span class="sh">'</span><span class="s">mcpServers</span><span class="sh">'</span><span class="s">] must be a dict</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
+        <span class="k">raise</span> <span class="nc">TypeError</span><span class="p">(</span><span class="sh">"</span><span class="s">env config must be a dict</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># 4) 최종 폴백: 빈 설정
+</span>    <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">:</span> <span class="p">{}}</span>
+</code></pre></div></div>
+
+<p>즉시 사용 예시</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 1) config가 None인 상황
+</span><span class="kn">from</span> <span class="n">fastmcp_guard</span> <span class="kn">import</span> <span class="n">ensure_fastmcp_config</span>
+<span class="c1"># from fastmcp import Client
+</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="nf">ensure_fastmcp_config</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>  <span class="c1"># {"mcpServers": {}}
+# client = Client(cfg)  # 툴 없이 실행
+</span>
+<span class="c1"># 2) McpSpec만 있고 config가 없는 상황
+</span><span class="kn">from</span> <span class="n">fastmcp_specs</span> <span class="kn">import</span> <span class="n">McpSpec</span>
+<span class="n">specs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nc">McpSpec</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">weather</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="sh">"</span><span class="s">https://weather-api.example.com/mcp</span><span class="sh">"</span><span class="p">),</span>
+    <span class="nc">McpSpec</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./assistant_servers.py</span><span class="sh">"</span><span class="p">]),</span>
+<span class="p">]</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="nf">ensure_fastmcp_config</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="n">specs</span><span class="p">)</span>
+<span class="c1"># client = Client(cfg)
+</span>
+<span class="c1"># 3) 환경변수로만 공급하는 상황
+# export FASTMCP_SERVERS_JSON='{"weather":{"url":"https://weather-api.example.com/mcp"}}'
+</span><span class="n">cfg</span> <span class="o">=</span> <span class="nf">ensure_fastmcp_config</span><span class="p">()</span>
+<span class="c1"># client = Client(cfg)
+</span></code></pre></div></div>
+
+<p>운영 팁 한 줄 요약<br />
+빈 설정은 허용하되 형태는 항상 보장하자. 즉, 최소 {"mcpServers": {}}를 만들어서 Client가 안정적으로 뜨게 하고, 실제 서버 없으면 “툴 없음” 상태로만 동작하게 하는 게 제일 안전하다. 필요하면 ensure_fastmcp_config 내부에 로깅을 넣어 “현재 MCP 서버 0개” 같은 경고를 남기면 실수도 빨리 잡힌다.</p>
+
+<p class="chat--user">
+
+이렇게 만든 FastMcp Client의 툴과 내가 만든 일반 ToolSpec을 둘 다 고려해서 chat completions 호출 -&gt; 그 후 요청하는 함수 실행을 만들고 싶어 async with Client(cfg) as client: client.list_tools() # mcp tool 반환 client.call_tool(함수명, 인자) 이렇게 쓸 수 있어. fastmcp는 이 두 가지를 어떻게 하면 잘 쓰게 할 수 있을까
+
+</p>
+
+<p>좋아. 목표는 FastMCP의 툴들과 네가 직접 정의한 일반 ToolSpec들을 “하나의 툴 세트”처럼 묶어서 Chat Completions with tools를 돌리고, 모델이 요청한 tool_calls를 각각 알맞은 실행기로 라우팅하는 것. 아래 스캐폴딩은 그대로 붙여서 돌아가도록 설계했다.</p>
+
+<p>핵심 아이디어</p>
+
+<ol>
+  <li>
+    <p>FastMCP의 client.list_tools() 결과를 OpenAI tools 포맷으로 정규화하고 이름에 접두사 mcp:를 붙인다.</p>
+  </li>
+  <li>
+    <p>네 로컬 ToolSpec들도 같은 포맷으로 직렬화한다.</p>
+  </li>
+  <li>
+    <p>Chat Completions 첫 호출에 두 종류 툴을 모두 넣는다.</p>
+  </li>
+  <li>
+    <p>tool_calls 루프에서 이름이 mcp:면 client.call_tool로, 아니면 LocalToolRegistry 핸들러로 실행한다.</p>
+  </li>
+</ol>
+
+<p>코드</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># unified_fastmcp_chat.py
+</span><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">orjson</span><span class="p">,</span> <span class="n">requests</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Awaitable</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<span class="c1">###############################################################################
+# 0) 로컬 ToolSpec 정의(한 번만 구현해서 공통 사용)
+###############################################################################
+</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ToolSpec</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span>
+
+<span class="k">class</span> <span class="nc">LocalToolRegistry</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ToolSpec</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">ToolSpec</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">spec</span><span class="p">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">duplicate tool: </span><span class="si">{</span><span class="n">spec</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">[</span><span class="n">spec</span><span class="p">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolSpec</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">list_openai_tools</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">.</span><span class="nf">values</span><span class="p">():</span>
+            <span class="n">out</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="n">description</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="n">parameters</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+<span class="c1">###############################################################################
+# 1) FastMCP → OpenAI tools 정규화
+###############################################################################
+</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">mcp_tools_for_openai</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">mcp:</span><span class="sh">"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="sh">"""</span><span class="s">
+    FastMCP client.list_tools()를 호출해 OpenAI tools 포맷으로 변환.
+    각 이름에는 </span><span class="sh">'</span><span class="s">mcp:</span><span class="sh">'</span><span class="s"> 접두사를 붙여 로컬 툴과 충돌을 방지.
+    FastMCP 툴 메타는 다음 필드를 가진다고 가정: name, description, parameters(JSON Schema)
+    </span><span class="sh">"""</span>
+    <span class="n">mcp_tools</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="nf">list_tools</span><span class="p">()</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">mcp_tools</span><span class="p">:</span>
+        <span class="n">tools</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+            <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">t</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">),</span>
+                <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{}})</span>
+            <span class="p">}</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">tools</span>
+
+<span class="k">def</span> <span class="nf">is_mcp_tool</span><span class="p">(</span><span class="n">tool_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">mcp:</span><span class="sh">"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">tool_name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">strip_mcp_prefix</span><span class="p">(</span><span class="n">tool_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">mcp:</span><span class="sh">"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">tool_name</span><span class="p">[</span><span class="nf">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">):]</span> <span class="k">if</span> <span class="n">tool_name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="k">else</span> <span class="n">tool_name</span>
+
+<span class="c1">###############################################################################
+# 2) Chat Completions 호출 러너(두 툴 세트를 한꺼번에 노출)
+###############################################################################
+</span>
+<span class="k">class</span> <span class="nc">ChatCompletionsRunner</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="sh">"</span><span class="s">/v1/chat/completions</span><span class="sh">"</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="p">.</span><span class="nf">rstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+
+    <span class="k">def</span> <span class="nf">_headers</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">content-type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">application/json</span><span class="sh">"</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">api_key</span><span class="p">:</span>
+            <span class="n">h</span><span class="p">[</span><span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Bearer </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">api_key</span><span class="si">}</span><span class="sh">"</span>
+        <span class="k">return</span> <span class="n">h</span>
+
+    <span class="k">def</span> <span class="nf">_post</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">base_url</span><span class="si">}{</span><span class="n">self</span><span class="p">.</span><span class="n">path</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">orjson</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">_headers</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+        <span class="n">r</span><span class="p">.</span><span class="nf">raise_for_status</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+        <span class="n">local_registry</span><span class="p">:</span> <span class="n">LocalToolRegistry</span><span class="p">,</span>
+        <span class="n">fastmcp_client</span><span class="p">,</span>
+        <span class="n">expose</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">mcp:</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">max_rounds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># 1) 툴 카탈로그 합치기
+</span>        <span class="n">mcp_tools</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">mcp_tools_for_openai</span><span class="p">(</span><span class="n">fastmcp_client</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="n">local_tools</span> <span class="o">=</span> <span class="n">local_registry</span><span class="p">.</span><span class="nf">list_openai_tools</span><span class="p">()</span>
+        <span class="n">all_tools</span> <span class="o">=</span> <span class="n">local_tools</span> <span class="o">+</span> <span class="n">mcp_tools</span>
+        <span class="k">if</span> <span class="n">expose</span><span class="p">:</span>
+            <span class="n">all_tools</span> <span class="o">=</span> <span class="nf">expose</span><span class="p">(</span><span class="n">all_tools</span><span class="p">)</span>  <span class="c1"># 턴별 소출 정책(선택)
+</span>
+        <span class="c1"># 2) 1차 모델 호출
+</span>        <span class="n">data</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_post</span><span class="p">({</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">,</span> <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="n">messages</span><span class="p">,</span> <span class="sh">"</span><span class="s">tools</span><span class="sh">"</span><span class="p">:</span> <span class="n">all_tools</span><span class="p">,</span> <span class="sh">"</span><span class="s">tool_choice</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">})</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 3) tool_calls 루프
+</span>        <span class="n">rounds</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">msg</span> <span class="ow">and</span> <span class="n">rounds</span> <span class="o">&lt;</span> <span class="n">max_rounds</span><span class="p">:</span>
+            <span class="n">rounds</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">[</span><span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">]:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">]</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">{}</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">{}</span><span class="sh">"</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">_raw</span><span class="sh">"</span><span class="p">:</span> <span class="n">raw</span><span class="p">}</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nf">is_mcp_tool</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">):</span>
+                        <span class="c1"># FastMCP 경로
+</span>                        <span class="n">mcp_name</span> <span class="o">=</span> <span class="nf">strip_mcp_prefix</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fastmcp_client</span><span class="p">.</span><span class="nf">call_tool</span><span class="p">(</span><span class="n">mcp_name</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+                        <span class="n">content</span> <span class="o">=</span> <span class="n">orjson</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">decode</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># 로컬 툴 경로
+</span>                        <span class="n">spec</span> <span class="o">=</span> <span class="n">local_registry</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">spec</span><span class="p">.</span><span class="nf">handler</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+                        <span class="n">content</span> <span class="o">=</span> <span class="n">orjson</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">).</span><span class="nf">decode</span><span class="p">()</span>
+                <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">content</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">({</span><span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)})</span>
+
+                <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                    <span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span>
+                    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">content</span>
+                <span class="p">})</span>
+
+            <span class="c1"># 다음 턴
+</span>            <span class="n">data</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_post</span><span class="p">({</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">,</span> <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="n">messages</span><span class="p">})</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">]</span>
+            <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">msg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+
+<span class="c1">###############################################################################
+# 3) 사용 예시
+###############################################################################
+</span>
+<span class="c1"># 예시 로컬 툴 구현
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">math_eval</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="n">expr</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">expr</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">expr</span> <span class="ow">or</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">expr</span> <span class="k">if</span> <span class="n">ch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="sh">"</span><span class="s">0123456789+-*/(). </span><span class="sh">"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">expr must contain only digits and + - * / ( )</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="nf">eval</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">__builtins__</span><span class="sh">"</span><span class="p">:</span> <span class="p">{}},</span> <span class="p">{})</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">value</span><span class="sh">"</span><span class="p">:</span> <span class="n">val</span><span class="p">}</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># 0) FastMCP 클라이언트 준비
+</span>    <span class="c1"># from fastmcp import Client
+</span>    <span class="n">cfg</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">mcpServers</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">weather</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">https://weather-api.example.com/mcp</span><span class="sh">"</span><span class="p">},</span>
+            <span class="sh">"</span><span class="s">assistant</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">command</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">./assistant_servers.py</span><span class="sh">"</span><span class="p">]}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1"># async with Client(cfg) as client:
+</span>    <span class="c1">#     ...
+</span>
+    <span class="c1"># 데모를 위해 간이 더미 클라이언트를 흉내내자. 실제로는 fastmcp.Client를 사용.
+</span>    <span class="k">class</span> <span class="nc">DummyFastMCP</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">__aenter__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span> <span class="k">return</span> <span class="n">self</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">__aexit__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">et</span><span class="p">,</span> <span class="n">ev</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span> <span class="k">pass</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">list_tools</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+            <span class="c1"># 이름은 서버 네임스페이스를 포함해주면 LLM이 더 잘 고른다
+</span>            <span class="k">return</span> <span class="p">[</span>
+                <span class="p">{</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">weather:get_forecast</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">도시/날짜별 일기예보</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">city</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span><span class="sh">"</span><span class="s">date</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">format</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">date</span><span class="sh">"</span><span class="p">}},</span> <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:[</span><span class="sh">"</span><span class="s">city</span><span class="sh">"</span><span class="p">]</span>
+                <span class="p">}},</span>
+                <span class="p">{</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">assistant:read_csv_sum</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">CSV 합계 계산</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">}},</span> <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:[</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">]</span>
+                <span class="p">}}</span>
+            <span class="p">]</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">call_tool</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+            <span class="c1"># 여기서는 결과 형태만 맞춰준다
+</span>            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span> <span class="sh">"</span><span class="s">result</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">demo-result</span><span class="sh">"</span><span class="p">}</span>
+
+    <span class="c1"># 1) 로컬 툴 레지스트리
+</span>    <span class="n">local</span> <span class="o">=</span> <span class="nc">LocalToolRegistry</span><span class="p">()</span>
+    <span class="n">local</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="nc">ToolSpec</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">local.math_eval</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">안전 사칙연산</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">expr</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">}},</span><span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:[</span><span class="sh">"</span><span class="s">expr</span><span class="sh">"</span><span class="p">],</span><span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">},</span>
+        <span class="n">handler</span><span class="o">=</span><span class="n">math_eval</span>
+    <span class="p">))</span>
+
+    <span class="c1"># 2) 러너
+</span>    <span class="n">runner</span> <span class="o">=</span> <span class="nc">ChatCompletionsRunner</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="sh">"</span><span class="s">http://localhost:8000</span><span class="sh">"</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">my-model</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># 3) 통합 실행
+</span>    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">system</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">필요한 도구만 호출한다. 파괴적 작업은 dry_run 우선.</span><span class="sh">"</span><span class="p">},</span>
+        <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">assistant:read_csv_sum으로 data/sales.csv 합계를 구하고, local.math_eval로 (100+23)도 계산해줘</span><span class="sh">"</span><span class="p">}</span>
+    <span class="p">]</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="nc">DummyFastMCP</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">runner</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span> <span class="n">local_registry</span><span class="o">=</span><span class="n">local</span><span class="p">,</span> <span class="n">fastmcp_client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">=== FINAL ===</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>운영 포인트<br />
+이름 규칙을 고정하자. mcp: 접두사로 FastMCP에서 온 툴을 표시하면 충돌을 방지하고 라우팅이 단순해진다. FastMCP 쪽 툴 이름에 이미 server:tool 형태가 들어가 있어도 상관없다. 최종 노출명은 mcp:server:tool처럼 되지만 LLM이 의외로 잘 고른다.<br />
+툴 소출을 넣자. expose 콜백으로 턴별로 필요한 서브셋만 tools에 담으면 선택 오류와 지연이 줄어든다.<br />
+결과 포맷을 통일하자. tool role 메시지 content는 항상 JSON 문자열로 넣는 게 후속 라운드에서 안정적이다.<br />
+에러는 JSON으로. 실행기 에러도 {"error": "…"}로 통일해 모델이 복구 플랜을 세우기 좋게 만든다.</p>
+
+<p>이 구조면 FastMCP가 제공하는 툴과 네 로컬 ToolSpec을 동시에 들고, 표준 Chat Completions 루프에서 자연스럽게 섞어 쓸 수 있다. 필요한 경우 expose 정책, 이름 별칭, 기본 인자 주입 같은 정책 훅을 runner.run의 인자로 얹어 확장하면 된다.</p>
+
         
       </section>
 
@@ -4774,7 +5174,7 @@ headers, env에 비밀값이 들어가면 McpConfig에서 별도 시크릿 소�
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-29T15:51:35+09:00">2025-10-29</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-29T16:22:58+09:00">2025-10-29</time></p>
 
       </footer>
 
@@ -4828,7 +5228,7 @@ headers, env에 비밀값이 들어가면 McpConfig에서 별도 시크릿 소�
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-29T15:51:41+09:00">2025-10-29</time>
+        <time datetime="2025-10-29T16:23:05+09:00">2025-10-29</time>
       </span>
     
 
