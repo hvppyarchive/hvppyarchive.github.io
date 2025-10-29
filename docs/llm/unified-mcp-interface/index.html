@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-10-29T11:22:51+09:00">
+  <meta property="article:published_time" content="2025-10-29T11:54:35+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python MCP 연결 방법">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-10-29T11:22:51+09:00">
+    <meta itemprop="datePublished" content="2025-10-29T11:54:35+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-29T11:22:51+09:00">2025-10-29</time>
+        <time datetime="2025-10-29T11:54:35+09:00">2025-10-29</time>
       </span>
     
 
@@ -2781,6 +2781,826 @@ MCP 세션은 MCPHandle.close로 명시 종료한다. 여러 Agent나 여러 러
 
 <p>이제 “툴 구현은 한 번만” 쓰고, Agents와 Chat Completions 어디서든 동일하게 돌아간다. 필요한 경우 expose(툴 소출) 정책이나 권한 게이트를 registry 레벨에서 필터링 훅으로 추가하면 된다.</p>
 
+<p class="chat--user">
+
+흠 차라리 MCP에 대한 정보를 따로 받고 에이전트에게 알아서 처리하는게 나을까? 이러너 레이어를 내가 직접 만드는것보다?
+
+</p>
+
+<p>짚고 가자. “MCP 정보를 에이전트에게 그대로 넘겨서 알아서 쓰게 할지” vs “네가 러너 레이어(오케스트레이터)를 직접 만들어 통제할지”는 트레이드오프다. 한쪽이 항상 더 낫지는 않다. 아래를 기준으로 선택하면 된다.</p>
+
+<p>선택 기준 요약<br />
+에이전트가 MCP를 직접 다루게 한다<br />
+장점: 설정이 단순하고 빠르다. SDK가 세션 관리, 툴 호출, 반환 형식 등을 알아서 처리한다. 호스티드/원격 MCP는 코드 없이 붙이기 쉽다. <a href="https://openai.github.io/openai-agents-python/mcp/?utm_source=chatgpt.com">openai.github.io+1</a><br />
+단점: 턴별 툴 소출(Selective exposure), 고급 승인 흐름, 로깅 표준화, 네임스페이스 규칙, 재시도·서킷브레이커 같은 “플랫폼 공통 정책”을 세밀하게 넣기 어렵다. 모델이 많은 툴을 동시에 보게 되면 호출 혼선이 늘어난다. <a href="https://platform.openai.com/docs/guides/function-calling?utm_source=chatgpt.com">OpenAI Platform+1</a></p>
+
+<p>직접 러너(오케스트레이터)를 둔다<br />
+장점: 툴 노출·권한·에러 처리·관측성을 전부 네가 표준화할 수 있다. 여러 채팅 백엔드(Agents, 일반 Chat Completions, 사내 엔진)를 같은 규약으로 꿰매 쓸 수 있다.<br />
+단점: 네가 세션 풀, 라우팅, 재시도, 포맷 강제(JSON만 출력 등)를 구현·유지해야 한다.</p>
+
+<p>권장 결론<br />
+운영 기준이 빡빡하다면(권한 분리, 승인, 로그, 복구 전략, 비용/지연 관리), 지금까지 만든 얇은 러너를 유지하되 백엔드는 갈아끼우는 방식이 적합하다. 반대로 빠른 초기 통합·PoC, 공개 원격 MCP만 쓰는 경우에는 에이전트가 MCP를 직접 다루게 하는 구성이 가볍다. 둘을 섞는 하이브리드도 가능하다. 즉, 저위험·읽기 전용 MCP는 에이전트가 직접, 고위험 MCP는 러너를 통해서만 노출.</p>
+
+<p>둘 중 하나를 고른 뒤 바로 쓸 수 있게, 실제 사용 스니펫을 2개 붙인다.</p>
+
+<p>에이전트가 MCP를 직접 다루는 최소 예시<br />
+여기서는 OpenAI Agents Python SDK에 여러 MCP 서버를 그대로 넘긴다. 모델은 OpenAI 호환 REST로 노출된 커스텀 엔드포인트를 쓴다(LiteLLM 래퍼).<br />
+주의: 에이전트에 툴을 모두 노출하면 혼선이 생길 수 있으니, 필요하면 툴 필터·승인 옵션을 병행하라.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">agents</span> <span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">Runner</span>
+<span class="kn">from</span> <span class="n">agents.extensions.models.litellm_model</span> <span class="kn">import</span> <span class="n">LitellmModel</span>
+<span class="kn">from</span> <span class="n">agents.mcp</span> <span class="kn">import</span> <span class="n">MCPServerStdio</span><span class="p">,</span> <span class="n">MCPServerSse</span>  <span class="c1"># SDK 내장 MCP 커넥터
+</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="nc">MCPServerStdio</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">files</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">command</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">npx</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">-y</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">@modelcontextprotocol/server-filesystem</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">./data</span><span class="sh">"</span><span class="p">]},</span>
+        <span class="n">cache_tools_list</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">files_server</span><span class="p">,</span> <span class="nc">MCPServerSse</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">search</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">https://your-mcp.example/sse</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Bearer X</span><span class="sh">"</span><span class="p">}},</span>
+        <span class="n">cache_tools_list</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">search_server</span><span class="p">:</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="nc">LitellmModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">your-model</span><span class="sh">"</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="sh">"</span><span class="s">http://localhost:8000/v1</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="n">agent</span> <span class="o">=</span> <span class="nc">Agent</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">AgentManagedMCP</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">instructions</span><span class="o">=</span><span class="sh">"</span><span class="s">필요한 MCP 툴만 선택해서 호출한다. 파괴적 작업은 dry_run을 우선한다.</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">mcp_servers</span><span class="o">=</span><span class="p">[</span><span class="n">files_server</span><span class="p">,</span> <span class="n">search_server</span><span class="p">],</span>  <span class="c1"># 포인트: MCP 정보를 그대로 넘김
+</span>        <span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Runner</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="sh">"</span><span class="s">data 폴더에서 sales.csv 총합을 구하고, 검색 서버로 관련 리포트를 찾아 요약해줘</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">final_output</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>일반 Chat Completions(with tools)에 바로 붙이는 최소 예시<br />
+여기서는 MCP 정보를 직접 넘기지 않고, MCP가 노출한 툴들을 OpenAI “tools” 포맷으로 변환해서 모델에게 보여준다. 모델의 tool_calls를 받으면 네가 call_tool을 실행한다. 이 경로는 러너가 얇게나마 필요하지만, 너가 이미 가진 통일 인터페이스(단일 ToolRegistry + handler 재사용)를 유지하기 좋다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">requests</span>
+<span class="kn">from</span> <span class="n">mcp.client.session</span> <span class="kn">import</span> <span class="n">ClientSession</span>
+<span class="kn">from</span> <span class="n">mcp.client.stdio</span> <span class="kn">import</span> <span class="n">StdioClientTransport</span><span class="p">,</span> <span class="n">StdioServerParameters</span>
+
+<span class="n">BASE</span> <span class="o">=</span> <span class="sh">"</span><span class="s">http://localhost:8000/v1</span><span class="sh">"</span>
+<span class="n">MODEL</span> <span class="o">=</span> <span class="sh">"</span><span class="s">your-model</span><span class="sh">"</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">list_mcp_tools_as_openai_tools</span><span class="p">():</span>
+    <span class="n">transport</span> <span class="o">=</span> <span class="nc">StdioClientTransport</span><span class="p">(</span><span class="nc">StdioServerParameters</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">npx</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">-y</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">@modelcontextprotocol/server-filesystem</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">./data</span><span class="sh">"</span><span class="p">]))</span>
+    <span class="k">await</span> <span class="n">transport</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="nc">ClientSession</span><span class="p">(</span><span class="n">transport</span><span class="p">);</span> <span class="k">await</span> <span class="n">session</span><span class="p">.</span><span class="nf">initialize</span><span class="p">()</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">listed</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="p">.</span><span class="nf">list_tools</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">listed</span><span class="p">.</span><span class="n">tools</span><span class="p">:</span>
+        <span class="n">tools</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+            <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">files:</span><span class="si">{</span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">),</span>
+                <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="sh">"</span><span class="s">input_schema</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{}})</span>
+            <span class="p">}</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">session</span><span class="p">,</span> <span class="n">tools</span>  <span class="c1"># session은 뒤에서 call_tool에 사용
+</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">session</span><span class="p">,</span> <span class="n">tools</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">list_mcp_tools_as_openai_tools</span><span class="p">()</span>
+
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">system</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">필요한 툴만 호출한다.</span><span class="sh">"</span><span class="p">},</span>
+        <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">files 서버 툴로 sales.csv 합계를 구해줘</span><span class="sh">"</span><span class="p">}</span>
+    <span class="p">]</span>
+
+    <span class="c1"># 1차 요청
+</span>    <span class="n">data</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">BASE</span><span class="si">}</span><span class="s">/chat/completions</span><span class="sh">"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">MODEL</span><span class="p">,</span> <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="n">messages</span><span class="p">,</span> <span class="sh">"</span><span class="s">tools</span><span class="sh">"</span><span class="p">:</span> <span class="n">tools</span><span class="p">,</span> <span class="sh">"</span><span class="s">tool_choice</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">).</span><span class="nf">json</span><span class="p">()</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">];</span> <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">[</span><span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">]:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">]</span>            <span class="c1"># e.g., files:read
+</span>            <span class="n">server</span><span class="p">,</span> <span class="n">tool</span> <span class="o">=</span> <span class="n">name</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">:</span><span class="sh">"</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">{}</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">{}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="c1"># MCP 실행
+</span>            <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="p">.</span><span class="nf">call_tool</span><span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+            <span class="c1"># 표준화하여 툴 메시지로 재주입
+</span>            <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                <span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">({</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:[</span><span class="nf">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="sh">"</span><span class="s">__dict__</span><span class="sh">"</span><span class="p">,{})</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">res</span><span class="p">.</span><span class="n">content</span><span class="p">]})</span>
+            <span class="p">})</span>
+
+        <span class="c1"># 2차 요청
+</span>        <span class="n">data2</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">BASE</span><span class="si">}</span><span class="s">/chat/completions</span><span class="sh">"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">MODEL</span><span class="p">,</span> <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="n">messages</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">).</span><span class="nf">json</span><span class="p">()</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">data2</span><span class="p">[</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">])</span>
+
+    <span class="k">await</span> <span class="n">session</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">session</span><span class="p">.</span><span class="n">_transport</span><span class="p">.</span><span class="nf">stop</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>언제 “에이전트에게 맡기기”가 유리한가<br />
+MCP 서버가 전부 원격·공개이고, 권한 경계가 단순하며, 툴 수가 많지 않고, 빠르게 결과를 내야 할 때. SDK가 세션·호출을 대신 관리하므로 개발 비용이 낮다. OpenAI Agents SDK의 MCP 가이드는 이 경로를 기본으로 상정한다. <a href="https://openai.github.io/openai-agents-python/mcp/?utm_source=chatgpt.com">openai.github.io</a></p>
+
+<p>언제 “직접 오케스트레이션”이 유리한가<br />
+툴이 많고 성격이 다양해서 턴별 소출이 필요할 때, 실패·재시도·백오프 같은 SRE 룰을 도입해야 할 때, 감사 로그와 승인 플로우가 필요한 조직 환경일 때. 이때는 네가 만든 ToolRegistry/handler 단일화 구조가 유지보수에 유리하다. 모델/플랫폼을 바꿀 때도 백엔드만 교체하면 된다. OpenAI 표준 함수콜 루프는 문서의 권장 패턴이며, 이 위에 정책을 얹기 쉽다. <a href="https://platform.openai.com/docs/guides/function-calling?api-mode=chat&amp;utm_source=chatgpt.com">OpenAI Platform+1</a></p>
+
+<p>하이브리드 팁<br />
+저위험·읽기 전용 MCP는 에이전트 직결로 빨리 붙이고, 고위험(쓰기/삭제/결제/배포) MCP는 러너 경유 툴로만 노출한다. 에이전트 쪽에는 해당 툴을 숨겨 두고, 러너가 승인된 요청만 대리 호출한다. 이 구성이 현업에서 가장 에러율·사고율이 낮고, 초기 속도도 빠르다.</p>
+
+<p>마지막 체크리스트<br />
+툴 과적재를 피하려면 툴 노출 수를 턴당 8~12개 수준에서 시작하자.<br />
+namespacing은 server:tool 패턴을 고정해 충돌을 막자.<br />
+input_schema를 엄격하게(required, enum, format) 잡아 잘못된 arguments를 줄이자.<br />
+MCP 세션은 자동 종료가 아니므로 종료 훅을 두거나 컨텍스트 매니저를 사용하자.<br />
+세션 공유는 가능하지만 권한·동시성·생명주기 규칙을 먼저 정해둬야 한다.</p>
+
+<p>원한다면 지금 네 실제 MCP 서버 목록과 위험도(읽기/쓰기), 그리고 사용 중인 모델 엔드포인트를 알려줘. 위 스니펫을 네 환경에 맞게 바로 돌아가도록 깔끔하게 커스터마이즈해주겠다.</p>
+
+<p class="chat--user">
+
+MCP가 3개 이상들어왔을 때 처리에 대해 알려줘. 그리고 OpenAI Agent 말고 다른 Agent도 있어. 1. MCP에 관한 정보를 통일되게 다룰 수 있는 클래스가 필요해. 2. 1에서 만든 정보를 각각의 Agent에 맞게 Adapt를 해줄 수 있는 얇은 클래스나 함수가 필요할 것 같아.
+
+</p>
+
+<p>좋아. “MCP 서버가 3개 이상”일 때 흔들리지 않게 돌리는 구조를 딱 두 층으로 깔끔하게 나눠줄게.</p>
+
+<ol>
+  <li>
+    <p>MCP 정보를 “완전히 통일된 포맷”으로 다루는 허브 클래스</p>
+  </li>
+  <li>
+    <p>그 통일 포맷을 각 에이전트별로 얇게 변환하는 어댑터들</p>
+  </li>
+</ol>
+
+<p>한 번의 구현으로 OpenAI Agents, 일반 Chat Completions(with tools), 그리고 다른 프레임워크(원하면 LangChain/Autogen 등)까지 같은 툴 구현을 재사용할 수 있다. 아래 스캐폴딩은 그대로 복붙해서 시작해도 된다.</p>
+
+<p>설치<br />
+pip install "openai-agents[litellm]" mcp pydantic orjson requests</p>
+
+<p>mcp_unified_adapters.py</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">uuid</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">import</span> <span class="n">orjson</span><span class="p">,</span> <span class="n">requests</span>
+
+<span class="c1"># =========================
+# 0) 통일된 툴 스펙/레지스트리
+# =========================
+</span>
+<span class="n">ToolHandler</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span>
+
+<span class="k">class</span> <span class="nc">UnifiedToolSpec</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>                 <span class="c1"># 예: "files:read_csv" or "local.math_eval"
+</span>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>  <span class="c1"># JSON Schema
+</span>    <span class="n">handler</span><span class="p">:</span> <span class="n">ToolHandler</span>        <span class="c1"># 모든 백엔드에서 재사용되는 실제 실행 로직
+</span>
+<span class="k">class</span> <span class="nc">ToolRegistry</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">UnifiedToolSpec</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">UnifiedToolSpec</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">spec</span><span class="p">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">duplicated tool: </span><span class="si">{</span><span class="n">spec</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">[</span><span class="n">spec</span><span class="p">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UnifiedToolSpec</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">UnifiedToolSpec</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_m</span><span class="p">.</span><span class="nf">values</span><span class="p">())</span>
+
+<span class="c1"># =========================
+# 1) MCP 허브(3개+ 서버 안정 운용)
+# =========================
+</span>
+<span class="c1"># a) 설정과 핸들
+</span><span class="kn">from</span> <span class="n">mcp.client.session</span> <span class="kn">import</span> <span class="n">ClientSession</span>
+<span class="kn">from</span> <span class="n">mcp.client.stdio</span> <span class="kn">import</span> <span class="n">StdioClientTransport</span><span class="p">,</span> <span class="n">StdioServerParameters</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="n">mcp.client.sse</span> <span class="kn">import</span> <span class="n">SSEClientTransport</span>
+    <span class="n">HAVE_SSE</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+    <span class="n">HAVE_SSE</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="k">class</span> <span class="nc">MCPServerCfg</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>                  <span class="c1"># 네임스페이스
+</span>    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>                  <span class="c1"># "stdio" | "sse"
+</span>    <span class="n">command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="c1"># 선택: 동시성 제한 등
+</span>    <span class="n">max_concurrency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">request_timeout_sec</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
+
+<span class="k">class</span> <span class="nc">MCPHandle</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">transport</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">ClientSession</span><span class="p">,</span> <span class="n">max_concurrency</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">transport</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">sema</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nc">Semaphore</span><span class="p">(</span><span class="n">max_concurrency</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="n">transport</span><span class="p">.</span><span class="nf">stop</span><span class="p">()</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+<span class="c1"># b) MCP 허브: 3개 이상 서버를 연결·통일 스펙으로 변환·실행 라우팅
+</span><span class="k">class</span> <span class="nc">MCPHub</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">servers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MCPServerCfg</span><span class="p">]):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfgs</span> <span class="o">=</span> <span class="n">servers</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MCPHandle</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_registry</span> <span class="o">=</span> <span class="nc">ToolRegistry</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_ready</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">cfgs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cfg</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">transport</span> <span class="o">=</span> <span class="nc">StdioClientTransport</span><span class="p">(</span><span class="nc">StdioServerParameters</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">args</span> <span class="ow">or</span> <span class="p">[]))</span>
+            <span class="k">elif</span> <span class="n">cfg</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">HAVE_SSE</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">mcp.client.sse 모듈이 필요합니다.</span><span class="sh">"</span><span class="p">)</span>
+                <span class="n">transport</span> <span class="o">=</span> <span class="nc">SSEClientTransport</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">cfg</span><span class="p">.</span><span class="n">headers</span> <span class="ow">or</span> <span class="p">{})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">unknown kind: </span><span class="si">{</span><span class="n">cfg</span><span class="p">.</span><span class="n">kind</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">transport</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="nc">ClientSession</span><span class="p">(</span><span class="n">transport</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">session</span><span class="p">.</span><span class="nf">initialize</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">[</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nc">MCPHandle</span><span class="p">(</span><span class="n">cfg</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">transport</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">cfg</span><span class="p">.</span><span class="n">max_concurrency</span><span class="p">,</span> <span class="n">cfg</span><span class="p">.</span><span class="n">request_timeout_sec</span><span class="p">)</span>
+
+        <span class="c1"># list_tools를 모두 긁어 통일 스펙으로 등록(네임스페이스: server:tool)
+</span>        <span class="k">for</span> <span class="n">server</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="n">listed</span> <span class="o">=</span> <span class="k">await</span> <span class="n">h</span><span class="p">.</span><span class="n">session</span><span class="p">.</span><span class="nf">list_tools</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">listed</span><span class="p">.</span><span class="n">tools</span><span class="p">:</span>
+                <span class="n">namespaced</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">server</span><span class="si">}</span><span class="s">:</span><span class="si">{</span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span>
+                <span class="n">params</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="sh">"</span><span class="s">input_schema</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{}})</span>
+                <span class="n">desc</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">MCP </span><span class="si">{</span><span class="n">namespaced</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+                <span class="k">async</span> <span class="k">def</span> <span class="nf">_handler</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">_server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span> <span class="n">_tool</span><span class="o">=</span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="p">):</span>
+                    <span class="c1"># 동시성 보호 + 타임아웃
+</span>                    <span class="k">async</span> <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">[</span><span class="n">_server</span><span class="p">].</span><span class="n">sema</span><span class="p">:</span>
+                        <span class="n">coro</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">[</span><span class="n">_server</span><span class="p">].</span><span class="n">session</span><span class="p">.</span><span class="nf">call_tool</span><span class="p">(</span><span class="n">_tool</span><span class="p">,</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">{})</span>
+                        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">[</span><span class="n">_server</span><span class="p">].</span><span class="n">timeout</span><span class="p">)</span>
+                    <span class="n">packed</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="p">[]}</span>
+                    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">res</span><span class="p">.</span><span class="n">content</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">c</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span>
+                            <span class="n">packed</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span> <span class="n">c</span><span class="p">.</span><span class="n">text</span><span class="p">})</span>
+                        <span class="k">elif</span> <span class="n">c</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">json</span><span class="sh">"</span><span class="p">:</span>
+                            <span class="n">packed</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">json</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">json</span><span class="sh">"</span><span class="p">:</span> <span class="n">c</span><span class="p">.</span><span class="n">json</span><span class="p">})</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">packed</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="n">c</span><span class="p">.</span><span class="nb">type</span><span class="p">})</span>
+                    <span class="k">return</span> <span class="n">packed</span>
+
+                <span class="n">self</span><span class="p">.</span><span class="n">_registry</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="nc">UnifiedToolSpec</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">namespaced</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">_handler</span>
+                <span class="p">))</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">_ready</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">registry</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolRegistry</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">_ready</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">MCPHub.start() 호출 전입니다.</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_registry</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">values</span><span class="p">()):</span>
+            <span class="k">await</span> <span class="n">h</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_ready</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="c1"># =========================
+# 2) 공통 로컬 툴(선택)
+# =========================
+</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">math_eval</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="n">expr</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">expr</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">expr</span> <span class="ow">or</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">expr</span> <span class="k">if</span> <span class="n">ch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="sh">"</span><span class="s">0123456789+-*/(). </span><span class="sh">"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">expr must contain only digits and + - * / ( )</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="nf">eval</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">__builtins__</span><span class="sh">"</span><span class="p">:</span> <span class="p">{}},</span> <span class="p">{})</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">value</span><span class="sh">"</span><span class="p">:</span> <span class="n">val</span><span class="p">}</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+
+<span class="k">def</span> <span class="nf">local_tools</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">UnifiedToolSpec</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="nc">UnifiedToolSpec</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">local.math_eval</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">안전 사칙연산 계산기</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="p">{</span>
+                <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">expr</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">}},</span>
+                <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:[</span><span class="sh">"</span><span class="s">expr</span><span class="sh">"</span><span class="p">],</span>
+                <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span>
+            <span class="p">},</span>
+            <span class="n">handler</span><span class="o">=</span><span class="n">math_eval</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+
+<span class="c1"># =========================
+# 3) 어댑터 레이어(얇게)
+# =========================
+</span>
+<span class="c1"># 3-a) OpenAI Agents Python SDK(FunctionTool) 어댑터
+</span><span class="kn">from</span> <span class="n">agents</span> <span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">Runner</span><span class="p">,</span> <span class="n">FunctionTool</span>
+<span class="kn">from</span> <span class="n">agents.extensions.models.litellm_model</span> <span class="kn">import</span> <span class="n">LitellmModel</span>
+
+<span class="k">def</span> <span class="nf">to_agents_function_tools</span><span class="p">(</span><span class="n">reg</span><span class="p">:</span> <span class="n">ToolRegistry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FunctionTool</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">spec</span><span class="p">:</span> <span class="n">UnifiedToolSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FunctionTool</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">on_invoke</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">args_json</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">args_json</span><span class="p">)</span> <span class="k">if</span> <span class="n">args_json</span> <span class="k">else</span> <span class="p">{}</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">_raw</span><span class="sh">"</span><span class="p">:</span> <span class="n">args_json</span><span class="p">}</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">spec</span><span class="p">.</span><span class="nf">handler</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">orjson</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">out</span><span class="p">).</span><span class="nf">decode</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nc">FunctionTool</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">spec</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">spec</span><span class="p">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="n">params_json_schema</span><span class="o">=</span><span class="n">spec</span><span class="p">.</span><span class="n">parameters</span><span class="p">,</span>
+            <span class="n">on_invoke_tool</span><span class="o">=</span><span class="n">on_invoke</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nf">wrap</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">reg</span><span class="p">.</span><span class="nf">list</span><span class="p">()]</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_with_agents</span><span class="p">(</span><span class="n">reg</span><span class="p">:</span> <span class="n">ToolRegistry</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">model_impl</span> <span class="o">=</span> <span class="nc">LitellmModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">.</span><span class="nf">rstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">)</span> <span class="o">+</span> <span class="sh">"</span><span class="s">/v1</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="nc">Agent</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">UnifiedAgent</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">instructions</span><span class="o">=</span><span class="sh">"</span><span class="s">필요할 때만 툴을 호출하고, 파괴적 작업은 dry_run을 우선한다.</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model_impl</span><span class="p">,</span>
+        <span class="n">tools</span><span class="o">=</span><span class="nf">to_agents_function_tools</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Runner</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">prompt</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">final_output</span><span class="p">)</span>
+
+<span class="c1"># 3-b) OpenAI 호환 Chat Completions(with tools) 어댑터
+</span><span class="k">class</span> <span class="nc">ChatCompletionsRunner</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="sh">"</span><span class="s">/v1/chat/completions</span><span class="sh">"</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="p">.</span><span class="nf">rstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+
+    <span class="k">def</span> <span class="nf">_headers</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">content-type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">application/json</span><span class="sh">"</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">api_key</span><span class="p">:</span>
+            <span class="n">h</span><span class="p">[</span><span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Bearer </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">api_key</span><span class="si">}</span><span class="sh">"</span>
+        <span class="k">return</span> <span class="n">h</span>
+
+    <span class="k">def</span> <span class="nf">_tools_json</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">reg</span><span class="p">:</span> <span class="n">ToolRegistry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="p">[{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:{</span>
+            <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="n">description</span><span class="p">,</span> <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="n">parameters</span>
+        <span class="p">}}</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">reg</span><span class="p">.</span><span class="nf">list</span><span class="p">()]</span>
+
+    <span class="k">def</span> <span class="nf">_post</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">base_url</span><span class="si">}{</span><span class="n">self</span><span class="p">.</span><span class="n">path</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">orjson</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">_headers</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">r</span><span class="p">.</span><span class="nf">raise_for_status</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">reg</span><span class="p">:</span> <span class="n">ToolRegistry</span><span class="p">,</span> <span class="n">system</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">system</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">system</span><span class="p">},</span>
+            <span class="p">{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">user</span><span class="p">},</span>
+        <span class="p">]</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_post</span><span class="p">({</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">,</span> <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="n">messages</span><span class="p">,</span> <span class="sh">"</span><span class="s">tools</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_tools_json</span><span class="p">(</span><span class="n">reg</span><span class="p">),</span> <span class="sh">"</span><span class="s">tool_choice</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">})</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">];</span> <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">[</span><span class="sh">"</span><span class="s">tool_calls</span><span class="sh">"</span><span class="p">]:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">]</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">arguments</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">{}</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">{}</span><span class="sh">"</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">_raw</span><span class="sh">"</span><span class="p">:</span> <span class="n">raw</span><span class="p">}</span>
+                <span class="n">spec</span> <span class="o">=</span> <span class="n">reg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">spec</span><span class="p">.</span><span class="nf">handler</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+                <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                    <span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">tool</span><span class="sh">"</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">tool_call_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">call</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span>
+                    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">orjson</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">out</span><span class="p">).</span><span class="nf">decode</span><span class="p">()</span>
+                <span class="p">})</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_post</span><span class="p">({</span><span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">,</span> <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="n">messages</span><span class="p">})</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">"</span><span class="s">choices</span><span class="sh">"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">];</span> <span class="n">messages</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">msg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">,</span><span class="sh">""</span><span class="p">)</span>
+
+<span class="c1"># 3-c) 다른 에이전트(예: LangChain Tool)로의 얇은 어댑터(옵션)
+# 필요하면 이런 형태로 추가:
+</span><span class="k">def</span> <span class="nf">to_langchain_tools</span><span class="p">(</span><span class="n">reg</span><span class="p">:</span> <span class="n">ToolRegistry</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="n">langchain.tools</span> <span class="kn">import</span> <span class="n">StructuredTool</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">reg</span><span class="p">.</span><span class="nf">list</span><span class="p">():</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">t</span><span class="p">.</span><span class="nf">handler</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">tools</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">StructuredTool</span><span class="p">.</span><span class="nf">from_function</span><span class="p">(</span>
+            <span class="n">coroutine</span><span class="o">=</span><span class="n">_run</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="s">:</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">__</span><span class="sh">"</span><span class="p">),</span>  <span class="c1"># 프레임워크 명명 규칙 맞추기
+</span>            <span class="n">description</span><span class="o">=</span><span class="n">t</span><span class="p">.</span><span class="n">description</span>
+            <span class="c1"># schema는 프레임워크별로 별도 지정 가능
+</span>        <span class="p">))</span>
+    <span class="k">return</span> <span class="n">tools</span>
+
+<span class="c1"># =========================
+# 4) 3개+ MCP 서버 포함 실행 예시
+# =========================
+</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># a) MCP 서버 3개 이상 선언
+</span>    <span class="n">servers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nc">MCPServerCfg</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">files</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">npx</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">-y</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">@modelcontextprotocol/server-filesystem</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">./data</span><span class="sh">"</span><span class="p">]),</span>
+        <span class="nc">MCPServerCfg</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">db</span><span class="sh">"</span><span class="p">,</span>    <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./servers/db/server.py</span><span class="sh">"</span><span class="p">]),</span>
+        <span class="c1"># 공개/원격이면 SSE 가능(모듈 설치 필요)
+</span>        <span class="c1"># MCPServerCfg(name="search", kind="sse", url="https://mcp.example.com/sse", headers={"Authorization": "Bearer X"}),
+</span>    <span class="p">]</span>
+
+    <span class="n">hub</span> <span class="o">=</span> <span class="nc">MCPHub</span><span class="p">(</span><span class="n">servers</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">hub</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">reg</span> <span class="o">=</span> <span class="n">hub</span><span class="p">.</span><span class="nf">registry</span><span class="p">()</span>
+
+        <span class="c1"># 로컬(일반) 툴도 같은 레지스트리에 추가
+</span>        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nf">local_tools</span><span class="p">():</span>
+            <span class="n">reg</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="c1"># 노출 과적재 방지 팁(선택): 필요할 때만 서브셋을 뽑아 다른 레지스트리에 복사해도 됨
+</span>        <span class="c1"># 여기서는 전체를 그대로 사용
+</span>
+        <span class="c1"># A) OpenAI Agents 경로
+</span>        <span class="k">await</span> <span class="nf">run_with_agents</span><span class="p">(</span>
+            <span class="n">reg</span><span class="o">=</span><span class="n">reg</span><span class="p">,</span>
+            <span class="n">base_url</span><span class="o">=</span><span class="sh">"</span><span class="s">http://localhost:8000</span><span class="sh">"</span><span class="p">,</span>  <span class="c1"># OpenAI 호환 엔드포인트
+</span>            <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">my-model</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">prompt</span><span class="o">=</span><span class="sh">"</span><span class="s">files 서버로 sales.csv 합계를 구하고, local.math_eval로 100+23 계산도 해줘</span><span class="sh">"</span>
+        <span class="p">)</span>
+
+        <span class="c1"># B) Chat Completions 경로
+</span>        <span class="n">runner</span> <span class="o">=</span> <span class="nc">ChatCompletionsRunner</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="sh">"</span><span class="s">http://localhost:8000</span><span class="sh">"</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">my-model</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">runner</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span>
+            <span class="n">reg</span><span class="o">=</span><span class="n">reg</span><span class="p">,</span>
+            <span class="n">system</span><span class="o">=</span><span class="sh">"</span><span class="s">필요할 때만 툴을 호출한다. 파괴적 작업은 dry_run을 우선한다.</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">user</span><span class="o">=</span><span class="sh">"</span><span class="s">db 서버 요약 툴로 고객별 구매 합계를 요약하고, 수치 검증은 local.math_eval로 2*(50+5) 계산해줘</span><span class="sh">"</span>
+        <span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">hub</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>핵심 설계 포인트 정리<br />
+MCP가 3개 이상이어도 MCPHub가 모든 세션을 들고 있고, list_tools를 네임스페이스(server:tool)로 묶어 하나의 ToolRegistry에 올린다. 실행도 같은 handler를 통해 라우팅되므로 구현이 한 번뿐이다.<br />
+어댑터 레이어는 얇다. Agents(FunctionTool 리스트 생성), Chat Completions(tools JSON 생성), LangChain 등 아무 프레임워크나 20~30줄 내로 붙는다.<br />
+동시성·타임아웃을 MCPHandle에 통합했다. 서버마다 max_concurrency와 timeout을 다르게 줄 수 있다.<br />
+세션 종료는 MCPHub.close에서 일괄 처리한다. 자동 종료에 기대지 않는다.</p>
+
+<p>3개 이상 서버일 때 실전 운영 팁<br />
+툴 소출: 턴별로 필요한 서브셋만 노출하면 툴 선택 오류가 급감한다. 간단한 키워드 룰부터 시작해도 효과가 크다.<br />
+네임스페이스: server:tool을 고정하고, description에도 서버명을 반복 표기하면 혼동이 줄어든다.<br />
+스키마 엄격화: required, enum, format을 가능한 한 많이 넣자. arguments 파싱 오류가 줄어든다.<br />
+관측성: handler에서 입력/출력/지연을 JSONL로 로깅하면 후속 최적화가 쉬워진다.<br />
+고위험 툴: parameters에 dry_run(boolean, default true)와 confirm 문자열을 추가해 모델이 자체로 안전 절차를 밟게 하자.</p>
+
+<p>이 스캐폴딩이면 MCP 정보를 한 번만 수집·정규화하고, 어떤 에이전트든 어댑터만 갈아끼워 재사용할 수 있다. 필요하면 expose(툴 소출) 전략 함수와 세션 풀(여러 프로세스/서비스 간 공유)을 덧대서 팀 표준 플랫폼으로 굳히면 된다.</p>
+
+<p class="chat--user">
+
+아니 mcp 서버는 그대로 넘길거야 툴로 내가 래핑 안할거야
+
+</p>
+
+<p>좋아. “MCP 서버는 그대로 넘긴다(툴로 래핑 안 함)”를 전제로, 여러 개(3개 이상) MCP를 한꺼번에 다루는 통일 정보 클래스와 각 에이전트별 얇은 어댑터를 만들어줄게. 핵심은 툴 레벨 래핑이 아니라, MCP 서버 메타(연결 방식·자격증명·네임라벨)를 그대로 전달하는 것이다.</p>
+
+<p>아래 스캐폴딩은 세 파트다.</p>
+
+<ol>
+  <li>
+    <p>UnifiedMCPConfig: MCP 서버 정보를 통일된 포맷으로 보관·검증.</p>
+  </li>
+  <li>
+    <p>Adapters: 이 정보를 각 에이전트 SDK에 맞게 그대로 투사.<br />
+2-1) OpenAI Agents Python SDK용 어댑터<br />
+2-2) Anthropic Messages API(MCP connector)용 어댑터<br />
+2-3) MCP 미지원 프레임워크용 “프로토콜 유지” 대안: 합성 프록시 서버(선택). 툴로 감싸지 않고, 하나의 MCP 서버로 프록시 제공.</p>
+  </li>
+</ol>
+
+<p>추가로 3개 이상 서버일 때의 수명주기, 동시성, 공유 전략까지 포함했다.</p>
+
+<p>설치<br />
+pip install mcp pydantic orjson "openai-agents[litellm]" requests</p>
+
+<p>unified_mcp_pass_through.py</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="n">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">HttpUrl</span><span class="p">,</span> <span class="n">field_validator</span>
+<span class="kn">import</span> <span class="n">orjson</span>
+
+<span class="c1"># 1) 통일 포맷: MCP 서버 정보를 “그대로” 담아 에이전트로 전달하기 위한 모델
+</span>
+<span class="n">Kind</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">]</span>  <span class="c1"># 필요시 확장
+</span>
+<span class="k">class</span> <span class="nc">UnifiedMCPServer</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(...,</span> <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">에이전트에서 보일 서버 라벨(네임스페이스)</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">Kind</span>
+    <span class="c1"># stdio
+</span>    <span class="n">command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="c1"># sse/http
+</span>    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nc">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="c1"># 공통 옵션
+</span>    <span class="n">require_approval</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">never</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">always</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">never</span><span class="sh">"</span>
+    <span class="n">cache_tools_list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">max_concurrency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">request_timeout_sec</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">non_empty</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="p">.</span><span class="nf">strip</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">name must be non-empty</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+<span class="k">class</span> <span class="nc">UnifiedMCPConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">servers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UnifiedMCPServer</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">validate_topology</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">servers</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">!=</span> <span class="nf">len</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">names</span><span class="p">)):</span>
+            <span class="n">dup</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">names</span><span class="p">.</span><span class="nf">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">duplicate server names: </span><span class="si">{</span><span class="n">dup</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">servers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">no MCP servers provided</span><span class="sh">"</span><span class="p">)</span>
+        <span class="c1"># 최소 가드: stdio면 command 필수, sse면 url 필수
+</span>        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">servers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="n">command</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: stdio requires command</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">kind</span><span class="si">}</span><span class="s"> requires url</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># 2) 어댑터들
+# 2-1) OpenAI Agents Python SDK 어댑터: 그대로 mcp_servers에 꽂는 팩토리
+</span>
+<span class="kn">from</span> <span class="n">agents.mcp</span> <span class="kn">import</span> <span class="n">MCPServerStdio</span><span class="p">,</span> <span class="n">MCPServerSse</span><span class="p">,</span> <span class="n">MCPServerStreamableHttp</span>
+<span class="kn">from</span> <span class="n">agents</span> <span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">Runner</span>
+<span class="kn">from</span> <span class="n">agents.extensions.models.litellm_model</span> <span class="kn">import</span> <span class="n">LitellmModel</span>
+<span class="kn">from</span> <span class="n">agents.model_settings</span> <span class="kn">import</span> <span class="n">ModelSettings</span>
+
+<span class="k">class</span> <span class="nc">OpenAIAgentsMCPAdapter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">UnifiedMCPConfig</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+
+    <span class="k">def</span> <span class="nf">build_context_managers</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">cms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="n">servers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">cms</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">MCPServerStdio</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">command</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">command</span><span class="p">,</span> <span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="sh">"</span><span class="s">env</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">env</span><span class="p">},</span>
+                    <span class="n">cache_tools_list</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">cache_tools_list</span><span class="p">,</span>
+                    <span class="n">max_concurrency</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">max_concurrency</span><span class="p">,</span>
+                    <span class="n">request_timeout_sec</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">request_timeout_sec</span><span class="p">,</span>
+                <span class="p">))</span>
+            <span class="k">elif</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">cms</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">MCPServerSse</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">headers</span><span class="p">},</span>
+                    <span class="n">cache_tools_list</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">cache_tools_list</span><span class="p">,</span>
+                    <span class="n">max_concurrency</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">max_concurrency</span><span class="p">,</span>
+                    <span class="n">request_timeout_sec</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">request_timeout_sec</span><span class="p">,</span>
+                    <span class="n">require_approval</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">require_approval</span><span class="p">,</span>
+                <span class="p">))</span>
+            <span class="k">elif</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">http_streamable</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">cms</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nc">MCPServerStreamableHttp</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="sh">"</span><span class="s">headers</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">headers</span><span class="p">},</span>
+                    <span class="n">cache_tools_list</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">cache_tools_list</span><span class="p">,</span>
+                    <span class="n">max_concurrency</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">max_concurrency</span><span class="p">,</span>
+                    <span class="n">request_timeout_sec</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">request_timeout_sec</span><span class="p">,</span>
+                    <span class="n">require_approval</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">require_approval</span><span class="p">,</span>
+                <span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">unknown kind </span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">kind</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cms</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run_once</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">validate_topology</span><span class="p">()</span>
+        <span class="n">cms</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">build_context_managers</span><span class="p">()</span>
+        <span class="c1"># 여러 context manager를 한 번에 열기
+</span>        <span class="k">async</span> <span class="k">with</span> <span class="nc">AsyncExitStackGroup</span><span class="p">(</span><span class="n">cms</span><span class="p">)</span> <span class="k">as</span> <span class="n">opened</span><span class="p">:</span>
+            <span class="n">agent</span> <span class="o">=</span> <span class="nc">Agent</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">PassThroughMCPAgent</span><span class="sh">"</span><span class="p">,</span>
+                <span class="n">instructions</span><span class="o">=</span><span class="sh">"</span><span class="s">MCP 서버의 툴을 안전하게 사용한다. 파괴적 작업은 dry_run을 우선한다.</span><span class="sh">"</span><span class="p">,</span>
+                <span class="n">model</span><span class="o">=</span><span class="nc">LitellmModel</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">.</span><span class="nf">rstrip</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">)</span> <span class="o">+</span> <span class="sh">"</span><span class="s">/v1</span><span class="sh">"</span><span class="p">),</span>
+                <span class="n">mcp_servers</span><span class="o">=</span><span class="n">opened</span><span class="p">,</span>                             <span class="c1"># 포인트: 서버를 '그대로' 넘김
+</span>                <span class="n">model_settings</span><span class="o">=</span><span class="nc">ModelSettings</span><span class="p">(</span><span class="n">tool_choice</span><span class="o">=</span><span class="sh">"</span><span class="s">auto</span><span class="sh">"</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Runner</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">prompt</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">out</span><span class="p">.</span><span class="n">final_output</span>
+
+<span class="c1"># 여러 async context manager를 묶어 여닫는 유틸
+</span><span class="k">class</span> <span class="nc">AsyncExitStackGroup</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cms</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cms</span> <span class="o">=</span> <span class="n">cms</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">opened</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">__aenter__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cm</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">cms</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">opened</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="k">await</span> <span class="n">cm</span><span class="p">.</span><span class="nf">__aenter__</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">opened</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">__aexit__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="c1"># 역순으로 안전 종료
+</span>        <span class="k">for</span> <span class="n">cm</span> <span class="ow">in</span> <span class="nf">reversed</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">cms</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">cm</span><span class="p">.</span><span class="nf">__aexit__</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+<span class="c1"># 2-2) Anthropic Messages API(MCP connector) 어댑터: payload만 만들어 반환
+# 주의: 여기서는 실제 호출까지 하지 않고, mcp_servers JSON을 만들어 돌려준다.
+# 너는 이 JSON을 바로 API 바디에 넣으면 된다.
+</span>
+<span class="k">class</span> <span class="nc">AnthropicMCPAdapter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">UnifiedMCPConfig</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+
+    <span class="k">def</span> <span class="nf">to_messages_payload</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="nf">validate_topology</span><span class="p">()</span>
+        <span class="n">mcp_servers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="n">servers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">:</span>
+                <span class="c1"># Anthropic 커넥터는 원격만 직접 붙이는 패턴이 일반적이므로, stdio는 보통 불가.
+</span>                <span class="c1"># 필요하면 너의 서버를 HTTP로 노출해야 한다.
+</span>                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="s">: Anthropic payload는 stdio를 직접 전달할 수 없다. HTTP/SSE로 전환 필요</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mcp_servers</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                    <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">url</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">authorization_token</span><span class="sh">"</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">s</span><span class="p">.</span><span class="n">headers</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">authorization</span><span class="sh">"</span><span class="p">),</span>
+                    <span class="sh">"</span><span class="s">tool_configuration</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">enabled</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+                <span class="p">})</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">model</span><span class="sh">"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">max_tokens</span><span class="sh">"</span><span class="p">:</span> <span class="n">max_tokens</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">messages</span><span class="sh">"</span><span class="p">:</span> <span class="p">[{</span><span class="sh">"</span><span class="s">role</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">user_text</span><span class="p">}],</span>
+            <span class="sh">"</span><span class="s">mcp_servers</span><span class="sh">"</span><span class="p">:</span> <span class="n">mcp_servers</span><span class="p">,</span>
+        <span class="p">}</span>
+
+<span class="c1"># 2-3) MCP 미지원 프레임워크를 위한 “프로토콜 유지” 대안: 합성 프록시(선택)
+# 툴 래핑 없이, 여러 상류 MCP를 하나의 '가짜 MCP 서버'로 노출.
+# 에이전트는 MCP 한 대만 본다. 내부에서 list_tools/ call_tool를 서버별로 프록시.
+# 간단 버전(개념 코드): 실제 MCP 서버 스펙에 맞춘 완성 서버는 별도 구현 필요.
+</span>
+<span class="k">class</span> <span class="nc">CompositeMCPProxy</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    아이디어: upstream 여러 MCP 세션에 붙어, 외부에는 단일 MCP 서버처럼 동작.
+    - list_tools: 모든 upstream에서 툴을 긁어 namespaced 이름(server:tool)으로 합쳐 반환
+    - call_tool: </span><span class="sh">"</span><span class="s">server:tool</span><span class="sh">"</span><span class="s">을 파싱해 해당 upstream에 위임
+    이 클래스 자체는 프로토콜 처리(transport)는 생략하고, 콜백 형태만 제공.
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">UnifiedMCPConfig</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="c1"># upstream 연결만 담당(프록시 서버로 공개하려면 별도 transport/서버 구현 필요)
+</span>        <span class="kn">from</span> <span class="n">mcp.client.session</span> <span class="kn">import</span> <span class="n">ClientSession</span>
+        <span class="kn">from</span> <span class="n">mcp.client.stdio</span> <span class="kn">import</span> <span class="n">StdioClientTransport</span><span class="p">,</span> <span class="n">StdioServerParameters</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="n">mcp.client.sse</span> <span class="kn">import</span> <span class="n">SSEClientTransport</span>
+            <span class="n">HAVE_SSE</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">HAVE_SSE</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">cfg</span><span class="p">.</span><span class="n">servers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="nc">StdioClientTransport</span><span class="p">(</span><span class="nc">StdioServerParameters</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">env</span> <span class="ow">or</span> <span class="p">{}))</span>
+            <span class="k">elif</span> <span class="n">s</span><span class="p">.</span><span class="n">kind</span> <span class="o">==</span> <span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">HAVE_SSE</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">mcp.client.sse 필요</span><span class="sh">"</span><span class="p">)</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="nc">SSEClientTransport</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">headers</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># 필요하면 streamable-http 등 추가
+</span>                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">unsupported kind for proxy: </span><span class="si">{</span><span class="n">s</span><span class="p">.</span><span class="n">kind</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">tr</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+            <span class="n">sess</span> <span class="o">=</span> <span class="nc">ClientSession</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">sess</span><span class="p">.</span><span class="nf">initialize</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">[</span><span class="n">s</span><span class="p">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">transport</span><span class="sh">"</span><span class="p">:</span> <span class="n">tr</span><span class="p">,</span> <span class="sh">"</span><span class="s">session</span><span class="sh">"</span><span class="p">:</span> <span class="n">sess</span><span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">list_all_tools</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="n">listed</span> <span class="o">=</span> <span class="k">await</span> <span class="n">h</span><span class="p">[</span><span class="sh">"</span><span class="s">session</span><span class="sh">"</span><span class="p">].</span><span class="nf">list_tools</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">listed</span><span class="p">.</span><span class="n">tools</span><span class="p">:</span>
+                <span class="n">merged</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">:</span><span class="si">{</span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span>
+                    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">),</span>
+                    <span class="sh">"</span><span class="s">input_schema</span><span class="sh">"</span><span class="p">:</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="sh">"</span><span class="s">input_schema</span><span class="sh">"</span><span class="p">,</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">})</span>
+                <span class="p">})</span>
+        <span class="k">return</span> <span class="n">merged</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">namespaced</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">server</span><span class="p">,</span> <span class="n">tool</span> <span class="o">=</span> <span class="n">namespaced</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="s">:</span><span class="sh">"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">sess</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">[</span><span class="n">server</span><span class="p">][</span><span class="sh">"</span><span class="s">session</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sess</span><span class="p">.</span><span class="nf">call_tool</span><span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="n">packed</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">res</span><span class="p">.</span><span class="n">content</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">packed</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span> <span class="n">c</span><span class="p">.</span><span class="n">text</span><span class="p">})</span>
+            <span class="k">elif</span> <span class="n">c</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">json</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">packed</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">json</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">json</span><span class="sh">"</span><span class="p">:</span> <span class="n">c</span><span class="p">.</span><span class="n">json</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">packed</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">].</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="n">c</span><span class="p">.</span><span class="nb">type</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">packed</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nf">list</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">items</span><span class="p">()):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">h</span><span class="p">[</span><span class="sh">"</span><span class="s">session</span><span class="sh">"</span><span class="p">].</span><span class="nf">close</span><span class="p">()</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">h</span><span class="p">[</span><span class="sh">"</span><span class="s">transport</span><span class="sh">"</span><span class="p">].</span><span class="nf">stop</span><span class="p">()</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">handles</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+
+<span class="c1"># 3) 사용 예시
+</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo_openai_agents</span><span class="p">():</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="nc">UnifiedMCPConfig</span><span class="p">(</span><span class="n">servers</span><span class="o">=</span><span class="p">[</span>
+        <span class="nc">UnifiedMCPServer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">files</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">npx</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">-y</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">@modelcontextprotocol/server-filesystem</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">./data</span><span class="sh">"</span><span class="p">]),</span>
+        <span class="nc">UnifiedMCPServer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">db</span><span class="sh">"</span><span class="p">,</span>    <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">stdio</span><span class="sh">"</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="sh">"</span><span class="s">python</span><span class="sh">"</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./servers/db/server.py</span><span class="sh">"</span><span class="p">]),</span>
+        <span class="nc">UnifiedMCPServer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">search</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span>  <span class="n">url</span><span class="o">=</span><span class="sh">"</span><span class="s">https://mcp.example.com/sse</span><span class="sh">"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">Bearer X</span><span class="sh">"</span><span class="p">}),</span>
+    <span class="p">])</span>
+    <span class="n">adapter</span> <span class="o">=</span> <span class="nc">OpenAIAgentsMCPAdapter</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">adapter</span><span class="p">.</span><span class="nf">run_once</span><span class="p">(</span>
+        <span class="n">base_url</span><span class="o">=</span><span class="sh">"</span><span class="s">http://localhost:8000</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">my-model</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">prompt</span><span class="o">=</span><span class="sh">"</span><span class="s">files와 db, search MCP를 적절히 사용해 sales.csv의 통찰을 요약해줘</span><span class="sh">"</span>
+    <span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">demo_anthropic_payload</span><span class="p">():</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="nc">UnifiedMCPConfig</span><span class="p">(</span><span class="n">servers</span><span class="o">=</span><span class="p">[</span>
+        <span class="nc">UnifiedMCPServer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">search</span><span class="sh">"</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="sh">"</span><span class="s">https://mcp.example.com/sse</span><span class="sh">"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">Bearer X</span><span class="sh">"</span><span class="p">}),</span>
+        <span class="nc">UnifiedMCPServer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">git</span><span class="sh">"</span><span class="p">,</span>    <span class="n">kind</span><span class="o">=</span><span class="sh">"</span><span class="s">sse</span><span class="sh">"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="sh">"</span><span class="s">https://mcp.git.example/sse</span><span class="sh">"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">Bearer Y</span><span class="sh">"</span><span class="p">}),</span>
+    <span class="p">])</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="nc">AnthropicMCPAdapter</span><span class="p">(</span><span class="n">cfg</span><span class="p">).</span><span class="nf">to_messages_payload</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="sh">"</span><span class="s">claude-3-7-sonnet</span><span class="sh">"</span><span class="p">,</span> <span class="n">user_text</span><span class="o">=</span><span class="sh">"</span><span class="s">두 MCP를 활용해서 리포트를 만들어줘</span><span class="sh">"</span>
+    <span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">orjson</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="n">orjson</span><span class="p">.</span><span class="n">OPT_INDENT_2</span><span class="p">).</span><span class="nf">decode</span><span class="p">())</span>
+
+<span class="c1"># 메인
+</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="n">asyncio</span>
+    <span class="kn">from</span> <span class="n">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">demo_openai_agents</span><span class="p">())</span>
+    <span class="k">with</span> <span class="nf">suppress</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+        <span class="nf">demo_anthropic_payload</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>어떻게 쓰면 되나 단계별 요약</p>
+
+<ol>
+  <li>
+    <p>UnifiedMCPConfig에 3개 이상 MCP 서버를 그대로 나열한다. stdio면 command/args, sse면 url/headers만 채우면 된다.</p>
+  </li>
+  <li>
+    <p>OpenAI Agents를 쓸 때는 OpenAIAgentsMCPAdapter로 context manager들을 만들어 Agent(mcp_servers=[…])에 꽂는다. 이 흐름은 MCP 툴을 “래핑하지 않고” 서버 정보를 그대로 전달한다.</p>
+  </li>
+  <li>
+    <p>Anthropic Messages API를 쓸 때는 AnthropicMCPAdapter가 messages.create 바디에 넣을 mcp_servers JSON을 생성해준다. stdio는 원격 공개가 아니면 바로 붙일 수 없으니 SSE/HTTP로 노출해야 한다.</p>
+  </li>
+  <li>
+    <p>MCP 미지원 프레임워크에는 CompositeMCPProxy 같은 방식으로 “MCP 프로토콜은 유지”한 채 합성 서버를 하나 띄우는 선택지가 있다. 이건 툴 래핑이 아니라 “MCP 서버를 하나 더 제공”하는 방식이라 네 조건과 어긋나지 않는다.</p>
+  </li>
+</ol>
+
+<p>3개 이상 서버에서의 실무 체크<br />
+툴 과적재 방지. Agent에 넘길 때 서버를 전부 주되, 모델 프롬프트에 “이런 작업에는 files만, 요약은 db만” 같은 지침을 한 줄 넣는 것만으로도 혼선이 줄어든다.<br />
+세션/자원 관리. OpenAI Agents 어댑터는 context manager가 종료 시 자동 정리를 수행한다. Anthropic 경로는 원격 서버이므로 별도 세션 정리는 필요 없다.<br />
+권한 경계. 서로 다른 테넌트나 위험도를 가진 MCP는 서버 라벨을 명확히 구분하고, require_approval 옵션을 “always/auto”로 둔다(Hosted/원격에서 의미 있음).<br />
+동시성·타임아웃. 서버별 max_concurrency, request_timeout_sec를 다르게 주어 병목을 피한다.</p>
+
+<p>이 구성은 “MCP 서버 정보를 있는 그대로 넘긴다”는 원칙을 지키면서, 서로 다른 에이전트들에 같은 정보를 재사용하도록 해준다. 필요한 프레임워크가 더 있으면 같은 패턴으로 어댑터를 20~30줄로 추가하면 된다.</p>
+
         
       </section>
 
@@ -2806,7 +3626,7 @@ MCP 세션은 MCPHandle.close로 명시 종료한다. 여러 Agent나 여러 러
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-29T11:22:51+09:00">2025-10-29</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-29T11:54:35+09:00">2025-10-29</time></p>
 
       </footer>
 
@@ -2860,7 +3680,7 @@ MCP 세션은 MCPHandle.close로 명시 종료한다. 여러 Agent나 여러 러
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-10-29T11:22:57+09:00">2025-10-29</time>
+        <time datetime="2025-10-29T11:54:40+09:00">2025-10-29</time>
       </span>
     
 
