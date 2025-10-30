@@ -1,0 +1,602 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>ComfyUI 타입 색상 추가 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="ComfyUI 타입 색상 추가">
+<meta property="og:url" content="https://hvppyarchive.github.io/comfyui/comfyui-connection-color/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-30T16:07:05+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/comfyui/comfyui-connection-color/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="ComfyUI 타입 색상 추가">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-10-30T16:07:05+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/comfyui/comfyui-connection-color/" itemprop="url">ComfyUI 타입 색상 추가
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-30T16:07:05+09:00">2025-10-30</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+ComfyUI 에서 내가 만든 타입에 색깔을 넣을 순 없나
+
+</p>
+
+<p>가능해요. “내가 만든 타입(예: MYTYPE)”의 링크 색을 정해두면, 그 타입으로 들어오고 나가는 연결선이 원하는 색으로 보입니다. 핵심은 프런트엔드(LiteGraph 캔버스) 쪽의 “타입→색상” 매핑을 추가하는 겁니다.</p>
+
+<p>아래 순서대로 하면 됩니다.</p>
+
+<ol>
+  <li>
+    <p>파이썬 노드에서 타입 이름 정하기<br />
+커스텀 노드의 RETURN_TYPES / INPUT_TYPES 등에 사용할 문자열이 실제 타입 이름이 됩니다. 예: RETURN_TYPES = ("MYTYPE",). 이 문자열이 프런트엔드에서도 색상 키로 쓰입니다. 타입 문자열과 링크 색은 LiteGraph가 타입별로 구분합니다. <a href="https://docs.comfy.org/development/core-concepts/nodes?utm_source=chatgpt.com">ComfyUI</a></p>
+  </li>
+  <li>
+    <p>프런트엔드 확장 스크립트 만들기<br />
+ComfyUI는 브라우저에서 실행될 때 작은 JS 확장(extension)을 자동 로드할 수 있습니다. 여기에 “타입→색상” 매핑을 추가합니다. 확장은 docs의 ComfyNode/JS 하이재킹 가이드가 안내하는 app.registerExtension 패턴을 쓰면 깔끔합니다. <a href="https://docs.comfy.org/custom-nodes/js/javascript_objects_and_hijacking?utm_source=chatgpt.com">ComfyUI</a></p>
+  </li>
+</ol>
+
+<p>예시: ComfyUI/web/extensions/mytype-colors.js 파일을 만들고 아래처럼 작성합니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// ComfyUI 0.7대 LiteGraph 기준 예시
+app.registerExtension({
+  name: "mytype.color.map",
+  setup() {
+    const LGC = LGraphCanvas; // LiteGraph 캔버스
+    // 연결선(활성/비활성) 색상을 타입 문자열 키로 지정
+    LGC.default_connection_color_byType = {
+      ...(LGC.default_connection_color_byType || {}),
+      "MYTYPE": "#a26bff"   // 원하는 HEX
+    };
+    LGC.default_connection_color_byTypeOff = {
+      ...(LGC.default_connection_color_byTypeOff || {}),
+      "MYTYPE": "#5b3a9a"   // 비활성(꺼짐) 상태일 때 어두운 톤
+    };
+    // 색상 변경 후 캔버스 다시 그리기
+    if (app?.graph?.canvas) app.graph.canvas.setDirty(true, true);
+  }
+});
+</code></pre></div></div>
+
+<p>LiteGraph는 타입 문자열별 기본 연결선 색을 default_connection_color_byType / default_connection_color_byTypeOff 두 객체에서 찾습니다. 이 두 맵에 키를 추가하면 됩니다. 이 방법은 LiteGraph에 직접 물어본 답과 동일한 메커니즘을 씁니다. <a href="https://stackoverflow.com/questions/78543805/how-do-i-change-the-color-of-a-slot?utm_source=chatgpt.com">Stack Overflow</a></p>
+
+<ol>
+  <li>브라우저 새로고침<br />
+ComfyUI를 재시작하거나 브라우저를 새로고침하면, 이제 MYTYPE 타입 링크가 지정한 색으로 보입니다.</li>
+</ol>
+
+<p>추가 팁</p>
+
+<p>• 노드 카드(헤더) 배경색은 타입 색과 별개입니다. 헤더 배경은 테마/팔레트(설정의 Appearance)나 CSS로 바꿀 수 있지만, “데이터 타입” 링크 색은 위처럼 타입 매핑을 손대야 바뀝니다. 팔레트만 바꾸면 “색이 더 잘 보이게” 되는 경우가 있으나, 타입별 고유색을 새로 정의하는 건 아닙니다. <a href="https://docs.comfy.org/interface/appearance?utm_source=chatgpt.com">ComfyUI+1</a></p>
+
+<p>• ComfyUI는 커스텀 LiteGraph 빌드를 씁니다. 버전마다 내부 경로가 약간 다를 수 있지만, 공개 패키지 설명에서도 ComfyUI가 수정된 litegraph를 사용한다고 명시되어 있어 위 패턴이 안정적입니다. <a href="https://www.npmjs.com/package/%40comfyorg/litegraph/v/0.7.42?utm_source=chatgpt.com">Npm</a></p>
+
+<p>• 코드로 헤더 색까지 강제하고 싶다면 node.color / node.bgcolor 같은 LiteGraph 속성도 건드릴 수 있습니다. 다만 워크플로 전반의 일관성을 생각하면 “링크(타입) 색은 타입-맵으로, 전체 테마는 팔레트/스타일로” 나누는 편이 유지보수에 유리합니다. 관련 JS 훅은 Comfy의 JS 오브젝트/하이재킹 문서가 출발점으로 좋습니다. <a href="https://docs.comfy.org/custom-nodes/js/javascript_objects_and_hijacking?utm_source=chatgpt.com">ComfyUI</a></p>
+
+<p>정리하면, 파이썬 쪽에서 타입 문자열을 하나 정해 쓰고, 프런트엔드 확장으로 LGraphCanvas.default_connection_color_byType(및 Off)에 그 문자열 키를 원하는 색으로 추가하세요. 그러면 그 타입의 입출력 링크가 지정한 색으로 깔끔하게 표시됩니다. 다음으로는 여러 커스텀 타입을 쓰는 워크플로에서 색 팔레트를 체계적으로 정리해 두면, 복잡한 그래프도 한눈에 읽히는 “시각적 문법”이 됩니다.</p>
+
+<p class="chat--user">
+
+위에 임포트 같은건 따로 안해도 되나
+
+</p>
+
+<p>아니요. 따로 임포트할 거 없습니다.</p>
+
+<p>왜냐면 ComfyUI가 브라우저에서 이미 필요한 것들을 전역으로 올려둡니다. 확장 스크립트를 <code class="language-plaintext highlighter-rouge">web/extensions/*.js</code>에 두고 <code class="language-plaintext highlighter-rouge">app.registerExtension({...})</code>를 쓰면, 내부에서 <code class="language-plaintext highlighter-rouge">app</code>(ComfyUI 앱 객체)와 <code class="language-plaintext highlighter-rouge">LGraphCanvas</code>(LiteGraph 캔버스)가 자동으로 보입니다. 그래서 추가 임포트 없이 바로 맵을 건드릴 수 있습니다.</p>
+
+<p>정리해두면 이렇게 됩니다.</p>
+
+<ol>
+  <li>
+    <p>JS 쪽<br />
+파일 위치: <code class="language-plaintext highlighter-rouge">ComfyUI/web/extensions/mytype-colors.js</code><br />
+코드 안에서 따로 <code class="language-plaintext highlighter-rouge">import</code> 안 해도 됨. <code class="language-plaintext highlighter-rouge">app</code>과 <code class="language-plaintext highlighter-rouge">LGraphCanvas</code>는 전역. <code class="language-plaintext highlighter-rouge">registerExtension</code>이 로딩 타이밍도 책임져줘서 “먼저 로드됐나?” 걱정도 줄어듭니다.</p>
+  </li>
+  <li>
+    <p>파이썬 노드 쪽<br />
+색상 매핑을 위해 별도의 임포트 필요 없음. 커스텀 노드 클래스에서 <code class="language-plaintext highlighter-rouge">RETURN_TYPES = ("MYTYPE",)</code> 같은 타입 문자열을 평소처럼 정의하면 끝. 색상은 JS 확장에서 타입 문자열 키로 매핑합니다.</p>
+  </li>
+  <li>
+    <p>재시작/새로고침<br />
+파일을 넣은 뒤 ComfyUI 재시작 또는 브라우저 새로고침만 하면 반영됩니다. 캐시가 끼면 강력 새고침 정도면 충분합니다.</p>
+  </li>
+</ol>
+
+<p>예시 스니펫(임포트 없음):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+app.registerExtension({
+  name: "mytype.color.map",
+  setup() {
+    const LGC = LGraphCanvas;
+    LGC.default_connection_color_byType = {
+      ...(LGC.default_connection_color_byType || {}),
+      "MYTYPE": "#a26bff"
+    };
+    LGC.default_connection_color_byTypeOff = {
+      ...(LGC.default_connection_color_byTypeOff || {}),
+      "MYTYPE": "#5b3a9a"
+    };
+    if (app?.graph?.canvas) app.graph.canvas.setDirty(true, true);
+  }
+});
+</code></pre></div></div>
+
+<p>주의할 점 몇 가지만 덧붙이면 더 탄탄해집니다.<br />
+• 파일 위치가 맞아야 자동 로드됩니다. 다른 경로를 쓰면 직접 로더에 등록해야 해요.<br />
+• TypeScript로 작성한다면 “전역 <code class="language-plaintext highlighter-rouge">app</code>, <code class="language-plaintext highlighter-rouge">LGraphCanvas</code>”에 대한 타입 선언만 추가하면 됩니다. JS라면 그냥 넘어가도 됩니다.<br />
+• 만약 브라우저 콘솔에서 즉석 실행한다면 <code class="language-plaintext highlighter-rouge">window.app</code>, <code class="language-plaintext highlighter-rouge">window.LGraphCanvas</code>로 접근하세요.</p>
+
+<p>한 줄 결론: 기본 설치 그대로라면 임포트는 전혀 필요 없습니다. 타입 문자열만 맞추고, 확장 스크립트에서 전역 객체를 살짝 손대면 링크 색상 커스터마이징이 깔끔하게 동작합니다.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#comfyui" class="page__taxonomy-item p-category" rel="tag">comfyui</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-30T16:07:05+09:00">2025-10-30</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/llm/npx-command-line-config/" class="pagination--pager" title="npx 설정 변경 방법">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-30T16:07:11+09:00">2025-10-30</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/npx-command-line-config/" rel="permalink">npx 설정 변경 방법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-30T13:40:18+09:00">2025-10-30</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/unified-mcp-interface/" rel="permalink">Python MCP 연결 방법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-30T09:53:10+09:00">2025-10-30</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/unified-mcp-interface/" rel="permalink">Python MCP 연결 방법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-29T16:22:58+09:00">2025-10-29</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
