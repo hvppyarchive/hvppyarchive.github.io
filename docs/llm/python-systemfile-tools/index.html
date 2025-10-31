@@ -1,0 +1,1312 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Python Tool 작성 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="Python Tool 작성">
+<meta property="og:url" content="https://hvppyarchive.github.io/llm/python-systemfile-tools/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-31T11:43:50+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/llm/python-systemfile-tools/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Python Tool 작성">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-10-31T11:43:50+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/llm/python-systemfile-tools/" itemprop="url">Python Tool 작성
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-31T11:43:50+09:00">2025-10-31</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+Python Tool 작성을 해보자. OpenAI Agent에서 사용할 Tool을 만들고 싶어. 너가 만들어준 Tool에 agents.function_tool decorator를 붙일거니깐 내부 documentation과 Annotation이 된 상태로 되면 좋겠어. 그런데 root 폴더는 자체적으로 root_dir 로 지정을 해서 그에 따라 만들어서 나가게 하고 싶어. File System 관련 툴들 - list_files - read_file - save_file 만 일단 만들어줘. 
+
+</p>
+
+<p>좋아. 아래는 OpenAI Agent에서 바로 쓸 수 있게 <code class="language-plaintext highlighter-rouge">@agents.function_tool</code> 데코레이터를 붙인, 루트 디렉터리를 고정해서 동작하는 파일 시스템 툴 3종 세트야. 경로 탈출(<code class="language-plaintext highlighter-rouge">..</code>)을 막고, 바이너리/텍스트 모두 안전하게 다룰 수 있도록 설계했어.</p>
+
+<p>간단한 설계 요약 (한 줄씩):</p>
+
+<ol>
+  <li>
+    <p>모듈 전역의 <code class="language-plaintext highlighter-rouge">ROOT_DIR</code>로 작업 루트를 고정하고, 모든 입출력은 여기에 상대 경로로만 접근.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">_resolve_safe()</code>에서 <code class="language-plaintext highlighter-rouge">Path.resolve()</code>로 정규화한 뒤 <code class="language-plaintext highlighter-rouge">is_relative_to</code>로 루트 내 경로인지 검증.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">list_files</code>는 재귀/글롭/숨김파일 포함 여부, 최대 개수 제한을 제공.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">read_file</code>은 텍스트 또는 바이너리(베이스64) 반환을 선택 가능. 파일 크기 상한(<code class="language-plaintext highlighter-rouge">max_bytes</code>)으로 과도한 읽기 방지.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">save_file</code>은 텍스트/베이스64 쓰기, 상위 폴더 자동 생성, 덮어쓰기 가드 제공.</p>
+  </li>
+  <li>
+    <p>모든 함수는 풍부한 타입 힌트와 독스트링을 포함하고, JSON 직렬화 가능한 결과를 반환.</p>
+  </li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="n">base64</span>
+<span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="c1"># 이 모듈이 불리는 시점에 기본 root 설정 (필요하면 set_root_dir로 재설정)
+</span><span class="n">ROOT_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">.</span><span class="nf">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="sh">"</span><span class="s">agent_root</span><span class="sh">"</span>
+<span class="n">ROOT_DIR</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">set_root_dir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    루트 디렉터리를 설정한다. 모든 툴은 이 디렉터리 하위에서만 동작한다.
+
+    Parameters
+    ----------
+    path : str | Path
+        작업 루트로 사용할 디렉터리 경로.
+
+    Returns
+    -------
+    str
+        정규화된 루트 디렉터리의 절대 경로 문자열.
+    </span><span class="sh">"""</span>
+    <span class="k">global</span> <span class="n">ROOT_DIR</span>
+    <span class="n">ROOT_DIR</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="nf">expanduser</span><span class="p">().</span><span class="nf">resolve</span><span class="p">()</span>
+    <span class="n">ROOT_DIR</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">relpath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    루트 디렉터리 내부의 안전한 절대 경로를 계산한다.
+    경로 탈출(../ 등)을 방지하기 위해 resolve 후 ROOT_DIR 하위인지 검사한다.
+    </span><span class="sh">"""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">ROOT_DIR</span> <span class="o">/</span> <span class="nc">Path</span><span class="p">(</span><span class="n">relpath</span><span class="p">)).</span><span class="nf">expanduser</span><span class="p">().</span><span class="nf">resolve</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Python 3.9+: Path.is_relative_to 지원. 미지원 환경 대비 수동 체크.
+</span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_relative_to</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">):</span>  <span class="c1"># type: ignore[attr-defined]
+</span>            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">Path escapes ROOT_DIR</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">AttributeError</span><span class="p">:</span>
+        <span class="c1"># 수동 구현
+</span>        <span class="k">if</span> <span class="n">ROOT_DIR</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p</span><span class="p">.</span><span class="n">parents</span> <span class="ow">and</span> <span class="n">p</span> <span class="o">!=</span> <span class="n">ROOT_DIR</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">Path escapes ROOT_DIR</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">FileEntry</span><span class="p">:</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="p">]</span>
+    <span class="n">size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="sh">"</span><span class="s">FileEntry</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span> <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">()</span> <span class="k">else</span> <span class="sh">"</span><span class="s">file</span><span class="sh">"</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">stat</span><span class="p">().</span><span class="n">st_size</span> <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_file</span><span class="p">()</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="nc">FileEntry</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)),</span> <span class="nb">type</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># ===== OpenAI Agent Tool Definitions =====
+# 프레임워크에 따라 import 경로가 다를 수 있음. 예:
+# from openai import agents
+# 여기서는 사용자가 말한 데코레이터 이름을 그대로 쓴다.
+</span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="n">openai</span> <span class="kn">import</span> <span class="n">agents</span>  <span class="c1"># type: ignore
+</span><span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>  <span class="c1"># 런타임 환경에서 데코레이터가 없을 수 있으니 대체 정의
+</span>    <span class="k">class</span> <span class="nc">_NoopDecorator</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">function_tool</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">fn</span>
+            <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="n">agents</span> <span class="o">=</span> <span class="nf">_NoopDecorator</span><span class="p">()</span>  <span class="c1"># type: ignore
+</span>
+<span class="nd">@agents.function_tool</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">list_files</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+        <span class="sh">"</span><span class="s">루트 디렉터리(root_dir) 기준으로 파일/폴더 목록을 가져온다. </span><span class="sh">"</span>
+        <span class="sh">"</span><span class="s">재귀 탐색, 글롭 패턴, 숨김파일 포함 여부, 최대 개수 제한을 지원한다.</span><span class="sh">"</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">list_files</span><span class="p">(</span>
+    <span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">glob</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">include_hidden</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">max_items</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    파일/폴더 목록 조회.
+
+    Parameters
+    ----------
+    relative_path : str, default=</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="s">
+        ROOT_DIR 기준 시작 경로.
+    glob : str | None, default=None
+        글롭 패턴 (예: </span><span class="sh">"</span><span class="s">*.py</span><span class="sh">"</span><span class="s">). None이면 전체.
+    recursive : bool, default=True
+        하위 폴더 재귀 탐색 여부.
+    include_hidden : bool, default=False
+        점(.)으로 시작하는 숨김 항목 포함 여부.
+    max_items : int | None, default=None
+        반환 항목 최대 개수. None이면 제한 없음.
+
+    Returns
+    -------
+    dict
+        {
+          </span><span class="sh">"</span><span class="s">root</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">&lt;ROOT_DIR&gt;</span><span class="sh">"</span><span class="s">,
+          </span><span class="sh">"</span><span class="s">base</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">&lt;relative_path&gt;</span><span class="sh">"</span><span class="s">,
+          </span><span class="sh">"</span><span class="s">count</span><span class="sh">"</span><span class="s">: &lt;int&gt;,
+          </span><span class="sh">"</span><span class="s">entries</span><span class="sh">"</span><span class="s">: [{</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">...</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">file|dir</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="s">: &lt;int|null&gt;}, ...]
+        }
+
+    Notes
+    -----
+    - 모든 경로는 ROOT_DIR 하위로 제한된다.
+    - 경로 탈출이 감지되면 ValueError를 발생시킨다.
+    </span><span class="sh">"""</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">relative_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">base</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">root</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">base</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">relative_path</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">count</span><span class="sh">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">entries</span><span class="sh">"</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="sh">"</span><span class="s">warning</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Base path does not exist.</span><span class="sh">"</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="c1"># 후보 경로 이터레이션
+</span>    <span class="k">def</span> <span class="nf">iter_paths</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">glob</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">**/</span><span class="si">{</span><span class="n">glob</span><span class="si">}</span><span class="sh">"</span> <span class="k">if</span> <span class="n">recursive</span> <span class="k">else</span> <span class="n">glob</span>
+            <span class="k">yield</span> <span class="k">from</span> <span class="n">base</span><span class="p">.</span><span class="nf">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="k">from</span> <span class="n">base</span><span class="p">.</span><span class="nf">rglob</span><span class="p">(</span><span class="sh">"</span><span class="s">*</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="k">from</span> <span class="n">base</span><span class="p">.</span><span class="nf">iterdir</span><span class="p">()</span>
+
+    <span class="n">entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FileEntry</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nf">iter_paths</span><span class="p">():</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">include_hidden</span> <span class="ow">and</span> <span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">base</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="k">continue</span>
+        <span class="c1"># ROOT_DIR 범위 재확인 (심볼릭 링크 등 대비)
+</span>        <span class="n">safe_p</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">))</span>
+        <span class="n">entries</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">FileEntry</span><span class="p">.</span><span class="nf">from_path</span><span class="p">(</span><span class="n">safe_p</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">max_items</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">max_items</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">root</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">),</span>
+        <span class="sh">"</span><span class="s">base</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">relative_path</span><span class="p">)),</span>
+        <span class="sh">"</span><span class="s">count</span><span class="sh">"</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span>
+        <span class="sh">"</span><span class="s">entries</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="nf">asdict</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">],</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="nd">@agents.function_tool</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">read_file</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+        <span class="sh">"</span><span class="s">루트 디렉터리(root_dir) 기준 경로의 파일을 읽는다. </span><span class="sh">"</span>
+        <span class="sh">"</span><span class="s">텍스트(encoding 사용) 또는 바이너리(Base64) 모드로 반환할 수 있다.</span><span class="sh">"</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span>
+    <span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">max_bytes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    파일 읽기.
+
+    Parameters
+    ----------
+    relative_path : str
+        ROOT_DIR 기준 파일 경로.
+    mode : {</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="s">}, default=</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="s">
+        </span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="s">는 문자열로 반환(encoding 사용), </span><span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="s">는 Base64 문자열로 반환.
+    encoding : str, default=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="s">
+        텍스트 모드에서 사용할 인코딩.
+    max_bytes : int | None, default=2*1024*1024
+        읽기 최대 바이트. None이면 제한 없음.
+
+    Returns
+    -------
+    dict
+        텍스트 모드:
+          {</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">...</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="s">: &lt;int&gt;, </span><span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">&lt;str&gt;</span><span class="sh">"</span><span class="s">}
+        바이너리 모드:
+          {</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">...</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="s">: &lt;int&gt;, </span><span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">content_b64</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">&lt;str&gt;</span><span class="sh">"</span><span class="s">}
+
+    Raises
+    ------
+    FileNotFoundError
+        대상 파일이 없을 때.
+    IsADirectoryError
+        디렉터리를 읽으려 할 때.
+    ValueError
+        경로 탈출 등 보안 위반.
+    </span><span class="sh">"""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">relative_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="nc">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">File not found: </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="nc">IsADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Path is a directory: </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">stat</span><span class="p">().</span><span class="n">st_size</span>
+    <span class="k">if</span> <span class="n">max_bytes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="n">max_bytes</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">File too large (</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s"> bytes) &gt; max_bytes=</span><span class="si">{</span><span class="n">max_bytes</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)),</span> <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span> <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">content</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">read_bytes</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)),</span>
+            <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">content_b64</span><span class="sh">"</span><span class="p">:</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64encode</span><span class="p">(</span><span class="n">data</span><span class="p">).</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">ascii</span><span class="sh">"</span><span class="p">),</span>
+        <span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">mode must be </span><span class="sh">'</span><span class="s">text</span><span class="sh">'</span><span class="s"> or </span><span class="sh">'</span><span class="s">binary</span><span class="sh">'"</span><span class="p">)</span>
+
+<span class="nd">@agents.function_tool</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">save_file</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+        <span class="sh">"</span><span class="s">루트 디렉터리(root_dir) 기준 경로에 파일을 저장한다. </span><span class="sh">"</span>
+        <span class="sh">"</span><span class="s">텍스트(encoding) 또는 Base64 바이너리를 지원하고, </span><span class="sh">"</span>
+        <span class="sh">"</span><span class="s">덮어쓰기/상위 경로 자동 생성 옵션을 제공한다.</span><span class="sh">"</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">save_file</span><span class="p">(</span>
+    <span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">content</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">content_b64</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">create_parents</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    파일 저장.
+
+    Parameters
+    ----------
+    relative_path : str
+        ROOT_DIR 기준 저장 경로.
+    content : str | None, default=None
+        텍스트 모드에서 저장할 문자열. mode=</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="s">일 때 필요.
+    content_b64 : str | None, keyword-only, default=None
+        바이너리 모드에서 저장할 Base64 문자열. mode=</span><span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="s">일 때 필요.
+    mode : {</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="s">}, default=</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="s">
+        저장 모드.
+    encoding : str, default=</span><span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="s">
+        텍스트 모드 인코딩.
+    overwrite : bool, default=False
+        True면 기존 파일을 덮어쓴다. False면 기존 파일이 있으면 예외 발생.
+    create_parents : bool, default=True
+        상위 디렉터리를 자동 생성할지 여부.
+
+    Returns
+    -------
+    dict
+        {</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">...</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="s">: &lt;int&gt;, </span><span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">text|binary</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">created</span><span class="sh">"</span><span class="s">: &lt;bool&gt;, </span><span class="sh">"</span><span class="s">overwrote</span><span class="sh">"</span><span class="s">: &lt;bool&gt;}
+
+    Raises
+    ------
+    IsADirectoryError
+        디렉터리 경로에 파일을 쓰려 할 때.
+    FileExistsError
+        overwrite=False이고 파일이 이미 존재할 때.
+    ValueError
+        잘못된 모드/입력 또는 경로 탈출 등 보안 위반.
+    </span><span class="sh">"""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">relative_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="nc">IsADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Path is a directory: </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">create_parents</span><span class="p">:</span>
+        <span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">created</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nc">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">File already exists (overwrite=False): </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">content is required when mode=</span><span class="sh">'</span><span class="s">text</span><span class="sh">'"</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">content_b64</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">content_b64 is required when mode=</span><span class="sh">'</span><span class="s">binary</span><span class="sh">'"</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">content_b64</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="sh">"</span><span class="s">ascii</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">write_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">mode must be </span><span class="sh">'</span><span class="s">text</span><span class="sh">'</span><span class="s"> or </span><span class="sh">'</span><span class="s">binary</span><span class="sh">'"</span><span class="p">)</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">stat</span><span class="p">().</span><span class="n">st_size</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">ROOT_DIR</span><span class="p">)),</span>
+        <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">created</span><span class="sh">"</span><span class="p">:</span> <span class="n">created</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">overwrote</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="ow">not</span> <span class="n">created</span><span class="p">),</span>
+    <span class="p">}</span>
+
+<span class="c1"># 사용 예시 (Agent 외부 초기화 코드)
+# set_root_dir("./workspace")  # 필요 시 루트 디렉터리 지정
+# list_files(relative_path=".", glob="*.py", recursive=True)
+# save_file("docs/readme.txt", content="hello", overwrite=True)
+# read_file("docs/readme.txt", mode="text")
+</span></code></pre></div></div>
+
+<p>연동 팁:</p>
+
+<ul>
+  <li>
+    <p>에이전트 시작 시점에 <code class="language-plaintext highlighter-rouge">set_root_dir("/desired/root")</code>를 한 번 호출해 루트 고정.</p>
+  </li>
+  <li>
+    <p>보안상 모든 외부 입력 경로는 위 3개 툴의 <code class="language-plaintext highlighter-rouge">relative_path</code>에 그대로 넣지 말고, 꼭 이 툴 안에서 <code class="language-plaintext highlighter-rouge">_resolve_safe</code>가 검증하도록 유지.</p>
+  </li>
+  <li>
+    <p>큰 파일을 다룬다면 <code class="language-plaintext highlighter-rouge">read_file(max_bytes=None)</code>처럼 상한을 조절하되, 에이전트 정책에 맞춰 적절한 제한을 두는 게 안전하다.</p>
+  </li>
+</ul>
+
+<p>다음으로 원하면, 삭제/이동/복사 같은 추가 툴이나 파일 잠금, 트랜잭션성 저장(임시 파일로 쓰고 원자적 교체)도 확장해줄 수 있어.</p>
+
+<p class="chat--user">
+
+음 이런 형식이야. 너가 찾아볼 줄 알았지. from agents import function_tool @function_tool def get_weather(city: str) -&gt; str: """returns weather info for the specified city.""" return f"The weather in {city} is sunny" 그런데 루트를 함수로 입력 받고 그에 따른 툴을 리턴하면 잘 동작할까? 예를 들어 def get_systemfile_tools(root_dir: str): def list_files(…): f"root dir: {root_dir} …" … def save_file(…): return [list_files, save_file, …]
+
+</p>
+
+<p>가능해. 함수가 클로저로 <code class="language-plaintext highlighter-rouge">root_dir</code>를 캡처해서 툴로 내려가도, 에이전트가 “파이썬 콜러블을 호출”만 하면 문제없다. 다만 몇 가지 현실적 주의점이 있다.</p>
+
+<p>핵심 포인트 먼저 정리</p>
+
+<ol>
+  <li>
+    <p>대부분의 런타임(단일 프로세스, 인메모리)은 클로저 툴을 잘 지원한다.</p>
+  </li>
+  <li>
+    <p>멀티프로세스/원격 실행(예: 프로세스 간 큐, 서버리스 워커)에서는 “피클/직렬화 가능한 최상위 함수”를 요구할 수 있다. 그땐 클로저 대신 <code class="language-plaintext highlighter-rouge">functools.partial</code>이나 클래스 바인딩 패턴이 안전하다.</p>
+  </li>
+  <li>
+    <p>데코레이터는 정의 시점에 적용된다. 팩토리 내부에서 “데코레이터를 함수처럼 호출”해 적용하면 된다.</p>
+  </li>
+</ol>
+
+<p>아래는 네가 제시한 스타일에 맞춘 최소-의존성 구현이다. <code class="language-plaintext highlighter-rouge">from agents import function_tool</code> 가정, <code class="language-plaintext highlighter-rouge">get_systemfile_tools(root_dir)</code>가 안전 경로 검증까지 포함한 3개 툴(list_files, read_file, save_file)을 만들어 리스트로 반환한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="n">base64</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="n">agents</span> <span class="kn">import</span> <span class="n">function_tool</span>  <span class="c1"># 사용자 환경의 데코레이터
+</span>
+<span class="c1"># ===== 내부 유틸 =====
+</span>
+<span class="k">def</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">relpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    root 하위의 안전한 절대 경로 생성. 경로 탈출 방지.
+    </span><span class="sh">"""</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="nf">resolve</span><span class="p">()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">relpath</span><span class="p">).</span><span class="nf">expanduser</span><span class="p">().</span><span class="nf">resolve</span><span class="p">()</span>
+    <span class="c1"># Path.is_relative_to: 3.9+ 지원. 하위 호환 수동 체크
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>  <span class="c1"># type: ignore[attr-defined]
+</span>            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">Path escapes root_dir</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">AttributeError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p</span><span class="p">.</span><span class="n">parents</span> <span class="ow">and</span> <span class="n">p</span> <span class="o">!=</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">Path escapes root_dir</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span>
+
+<span class="c1"># ===== 툴 팩토리 =====
+</span>
+<span class="k">def</span> <span class="nf">get_systemfile_tools</span><span class="p">(</span><span class="n">root_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    지정한 root_dir를 기준으로 동작하는 파일 시스템 툴 3종을 생성해 반환한다.
+    반환 값은 에이전트에 그대로 등록 가능한 데코레이트된 함수 리스트.
+    </span><span class="sh">"""</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">root_dir</span><span class="p">).</span><span class="nf">expanduser</span><span class="p">().</span><span class="nf">resolve</span><span class="p">()</span>
+    <span class="n">root</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># --- list_files ---------------------------------------------------------
+</span>    <span class="k">def</span> <span class="nf">_list_files_impl</span><span class="p">(</span>
+        <span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">glob</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">include_hidden</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">max_items</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">
+        루트(root_dir) 기준으로 파일/폴더 목록을 가져온다.
+        글롭 패턴, 재귀 탐색, 숨김 포함 여부, 최대 개수 제한을 지원한다.
+        </span><span class="sh">"""</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">base</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">root</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">root</span><span class="p">),</span>
+                <span class="sh">"</span><span class="s">base</span><span class="sh">"</span><span class="p">:</span> <span class="n">relative_path</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">count</span><span class="sh">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">entries</span><span class="sh">"</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="sh">"</span><span class="s">warning</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Base path does not exist.</span><span class="sh">"</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">iter_paths</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">glob</span><span class="p">:</span>
+                <span class="n">pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">**/</span><span class="si">{</span><span class="n">glob</span><span class="si">}</span><span class="sh">"</span> <span class="k">if</span> <span class="n">recursive</span> <span class="k">else</span> <span class="n">glob</span>
+                <span class="k">yield</span> <span class="k">from</span> <span class="n">base</span><span class="p">.</span><span class="nf">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="k">from</span> <span class="n">base</span><span class="p">.</span><span class="nf">rglob</span><span class="p">(</span><span class="sh">"</span><span class="s">*</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="k">from</span> <span class="n">base</span><span class="p">.</span><span class="nf">iterdir</span><span class="p">()</span>
+
+        <span class="n">entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nf">iter_paths</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">base</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_hidden</span> <span class="ow">and</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">safe</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)))</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">safe</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)),</span>
+                <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span> <span class="k">if</span> <span class="n">safe</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">()</span> <span class="k">else</span> <span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">safe</span><span class="p">.</span><span class="nf">stat</span><span class="p">().</span><span class="n">st_size</span> <span class="k">if</span> <span class="n">safe</span><span class="p">.</span><span class="nf">is_file</span><span class="p">()</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">entries</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">max_items</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">max_items</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">root</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">root</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">base</span><span class="sh">"</span><span class="p">:</span> <span class="n">relative_path</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">count</span><span class="sh">"</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">entries</span><span class="sh">"</span><span class="p">:</span> <span class="n">entries</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="n">list_files</span> <span class="o">=</span> <span class="nf">function_tool</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">list_files</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">root_dir 기준으로 파일/폴더 목록을 가져온다. 글롭/재귀/숨김/최대개수 옵션 지원.</span><span class="sh">"</span>
+    <span class="p">)(</span><span class="n">_list_files_impl</span><span class="p">)</span>
+
+    <span class="c1"># --- read_file ----------------------------------------------------------
+</span>    <span class="k">def</span> <span class="nf">_read_file_impl</span><span class="p">(</span>
+        <span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">max_bytes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">
+        파일 읽기. 텍스트(encoding) 또는 바이너리(Base64) 모드 선택.
+        파일 크기 상한(max_bytes)으로 과도한 읽기 방지.
+        </span><span class="sh">"""</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">File not found: </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">IsADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Path is a directory: </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="n">size</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">stat</span><span class="p">().</span><span class="n">st_size</span>
+        <span class="k">if</span> <span class="n">max_bytes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="n">max_bytes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">File too large (</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s">) &gt; max_bytes=</span><span class="si">{</span><span class="n">max_bytes</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)),</span>
+                <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">p</span><span class="p">.</span><span class="nf">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">read_bytes</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)),</span>
+                <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">content_b64</span><span class="sh">"</span><span class="p">:</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64encode</span><span class="p">(</span><span class="n">data</span><span class="p">).</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">ascii</span><span class="sh">"</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">mode must be </span><span class="sh">'</span><span class="s">text</span><span class="sh">'</span><span class="s"> or </span><span class="sh">'</span><span class="s">binary</span><span class="sh">'"</span><span class="p">)</span>
+
+    <span class="n">read_file</span> <span class="o">=</span> <span class="nf">function_tool</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">read_file</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">root_dir 기준 경로의 파일을 읽는다. 텍스트 또는 Base64 바이너리 반환.</span><span class="sh">"</span>
+    <span class="p">)(</span><span class="n">_read_file_impl</span><span class="p">)</span>
+
+    <span class="c1"># --- save_file ----------------------------------------------------------
+</span>    <span class="k">def</span> <span class="nf">_save_file_impl</span><span class="p">(</span>
+        <span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">content</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">content_b64</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">create_parents</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">
+        파일 저장. 텍스트(content) 또는 Base64(content_b64) 지원.
+        overwrite와 상위 경로 자동 생성(create_parents) 옵션 제공.
+        </span><span class="sh">"""</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">IsADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Path is a directory: </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">create_parents</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">created</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">File already exists (overwrite=False): </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">content is required when mode=</span><span class="sh">'</span><span class="s">text</span><span class="sh">'"</span><span class="p">)</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">content_b64</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">content_b64 is required when mode=</span><span class="sh">'</span><span class="s">binary</span><span class="sh">'"</span><span class="p">)</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">write_bytes</span><span class="p">(</span><span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">content_b64</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="sh">"</span><span class="s">ascii</span><span class="sh">"</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">mode must be </span><span class="sh">'</span><span class="s">text</span><span class="sh">'</span><span class="s"> or </span><span class="sh">'</span><span class="s">binary</span><span class="sh">'"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)),</span>
+            <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">p</span><span class="p">.</span><span class="nf">stat</span><span class="p">().</span><span class="n">st_size</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">created</span><span class="sh">"</span><span class="p">:</span> <span class="n">created</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">overwrote</span><span class="sh">"</span><span class="p">:</span> <span class="p">(</span><span class="ow">not</span> <span class="n">created</span><span class="p">),</span>
+        <span class="p">}</span>
+
+    <span class="n">save_file</span> <span class="o">=</span> <span class="nf">function_tool</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">save_file</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">root_dir 기준 경로에 파일을 저장한다. 텍스트/바이너리, 덮어쓰기, 상위 폴더 생성 지원.</span><span class="sh">"</span>
+    <span class="p">)(</span><span class="n">_save_file_impl</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">list_files</span><span class="p">,</span> <span class="n">read_file</span><span class="p">,</span> <span class="n">save_file</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>사용 예시</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tools</span> <span class="o">=</span> <span class="nf">get_systemfile_tools</span><span class="p">(</span><span class="sh">"</span><span class="s">./workspace</span><span class="sh">"</span><span class="p">)</span>
+<span class="c1"># 에이전트 초기화 시 등록
+# agent = Agent(tools=tools)  # 프레임워크에 맞게 등록
+</span>
+<span class="c1"># 또는 직접 호출도 가능(내부적으로 root="./workspace"로 고정됨)
+</span><span class="nf">print</span><span class="p">(</span><span class="n">tools</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">relative_path</span><span class="o">=</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="sh">"</span><span class="s">*.py</span><span class="sh">"</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>클로저 툴의 현실적 주의사항과 대안</p>
+
+<ul>
+  <li>
+    <p>워커 프로세스가 별도에서 툴을 로드해야 하는 아키텍처라면 클로저가 직렬화되지 않아 실패할 수 있다. 이 경우 두 가지 대안이 안전하다.</p>
+
+    <ol>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">functools.partial</code> 패턴: 최상위 함수에 <code class="language-plaintext highlighter-rouge">root</code> 인자를 두고, <code class="language-plaintext highlighter-rouge">partial(fn, root=my_root)</code>로 바인딩한 뒤 그 partial에 데코레이터를 씌우거나, 데코레이터가 “함수처럼 호출 가능”하다면 팩토리에서 <code class="language-plaintext highlighter-rouge">function_tool(...)(partial(...))</code>로 등록.</p>
+      </li>
+      <li>
+        <p>클래스 패턴: <code class="language-plaintext highlighter-rouge">class FS:</code> 안에 <code class="language-plaintext highlighter-rouge">__init__(root)</code>로 상태를 들고, 최상위 래퍼 함수를 만들어 <code class="language-plaintext highlighter-rouge">fs = FS(root)</code>의 메서드를 호출하게 래핑. 이 래퍼만 데코레이트해 등록하면 직렬화 제약을 피하기 쉽다.</p>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<p>지금 제공한 구현은 가장 간결한 클로저-팩토리 버전이다. 만약 네 런타임이 멀티프로세스 직렬화를 요구한다면, 위 대안 패턴으로 바로 바꿔줄 수도 있다.</p>
+
+<p class="chat--user">
+
+function_tool이 자동으로 첫줄을 description으로 만드는데 그걸 f string으로 만들고 싶다는거지
+
+</p>
+
+<p>좋아. 핵심은 “데코레이터가 첫 줄 docstring을 읽는 타이밍 전에, 함수의 __doc__을 동적으로 채워넣기”야. 파이썬에서 함수 정의 블록 맨 처음의 문자열 리터럴은 컴파일 시 고정되지만, 런타임에 <code class="language-plaintext highlighter-rouge">fn.__doc__</code>을 다시 할당하는 건 가능하다. 그러니 팩토리에서 클로저를 만들고, 그 함수들의 <code class="language-plaintext highlighter-rouge">__doc__</code>을 f-string 결과로 대입한 다음, <code class="language-plaintext highlighter-rouge">function_tool</code>을 “데코레이터처럼 호출”해서 적용하면 된다. 포인트는 “docstring 수정 → function_tool 적용”의 순서.</p>
+
+<p>아래는 동작하는 패턴을 단계별로 풀어쓴 코드다.</p>
+
+<ol>
+  <li>
+    <p>클로저로 root_dir를 캡처</p>
+  </li>
+  <li>
+    <p>내부 함수의 원본 docstring은 포맷용 플레이스홀더를 둔다</p>
+  </li>
+  <li>
+    <p>정의가 끝난 뒤 <code class="language-plaintext highlighter-rouge">.__doc__ = f"...{root_dir}..."</code> 또는 <code class="language-plaintext highlighter-rouge">.format(root=root_dir)</code>로 주입</p>
+  </li>
+  <li>
+    <p>마지막에 <code class="language-plaintext highlighter-rouge">function_tool(...)</code>로 래핑해서 리턴</p>
+  </li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="n">base64</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="n">agents</span> <span class="kn">import</span> <span class="n">function_tool</span>
+
+<span class="k">def</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">relpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="nf">resolve</span><span class="p">()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">relpath</span><span class="p">).</span><span class="nf">expanduser</span><span class="p">().</span><span class="nf">resolve</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>  <span class="c1"># py3.9+
+</span>            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">Path escapes root_dir</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">AttributeError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p</span><span class="p">.</span><span class="n">parents</span> <span class="ow">and</span> <span class="n">p</span> <span class="o">!=</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">Path escapes root_dir</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span>
+
+<span class="k">def</span> <span class="nf">get_systemfile_tools</span><span class="p">(</span><span class="n">root_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    root_dir를 캡처한 파일 시스템 툴들을 만들고, docstring의 첫 줄을 동적으로 채운 뒤 function_tool로 래핑해 반환한다.
+    </span><span class="sh">"""</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">root_dir</span><span class="p">).</span><span class="nf">expanduser</span><span class="p">().</span><span class="nf">resolve</span><span class="p">()</span>
+    <span class="n">root</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># --- list_files ---------------------------------------------------------
+</span>    <span class="k">def</span> <span class="nf">_list_files_impl</span><span class="p">(</span>
+        <span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">glob</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">include_hidden</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">max_items</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">List files under {root}: glob/recursive/hidden/max_items supported.</span><span class="sh">"""</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">base</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">root</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">root</span><span class="p">),</span>
+                <span class="sh">"</span><span class="s">base</span><span class="sh">"</span><span class="p">:</span> <span class="n">relative_path</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">count</span><span class="sh">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">entries</span><span class="sh">"</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="sh">"</span><span class="s">warning</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">Base path does not exist.</span><span class="sh">"</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">iter_paths</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">glob</span><span class="p">:</span>
+                <span class="n">pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">**/</span><span class="si">{</span><span class="n">glob</span><span class="si">}</span><span class="sh">"</span> <span class="k">if</span> <span class="n">recursive</span> <span class="k">else</span> <span class="n">glob</span>
+                <span class="k">yield</span> <span class="k">from</span> <span class="n">base</span><span class="p">.</span><span class="nf">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="k">from</span> <span class="n">base</span><span class="p">.</span><span class="nf">rglob</span><span class="p">(</span><span class="sh">"</span><span class="s">*</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="k">from</span> <span class="n">base</span><span class="p">.</span><span class="nf">iterdir</span><span class="p">()</span>
+
+        <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nf">iter_paths</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">base</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_hidden</span> <span class="ow">and</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">.</span><span class="sh">"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">safe</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)))</span>
+            <span class="n">items</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+                <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">safe</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)),</span>
+                <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span> <span class="k">if</span> <span class="n">safe</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">()</span> <span class="k">else</span> <span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">safe</span><span class="p">.</span><span class="nf">stat</span><span class="p">().</span><span class="n">st_size</span> <span class="k">if</span> <span class="n">safe</span><span class="p">.</span><span class="nf">is_file</span><span class="p">()</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="p">})</span>
+            <span class="k">if</span> <span class="n">max_items</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">max_items</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">root</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">root</span><span class="p">),</span> <span class="sh">"</span><span class="s">base</span><span class="sh">"</span><span class="p">:</span> <span class="n">relative_path</span><span class="p">,</span> <span class="sh">"</span><span class="s">count</span><span class="sh">"</span><span class="p">:</span> <span class="nf">len</span><span class="p">(</span><span class="n">items</span><span class="p">),</span> <span class="sh">"</span><span class="s">entries</span><span class="sh">"</span><span class="p">:</span> <span class="n">items</span><span class="p">}</span>
+
+    <span class="c1"># docstring 첫 줄을 동적으로 주입
+</span>    <span class="n">_list_files_impl</span><span class="p">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">List files under </span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s">: glob/recursive/hidden/max_items supported.</span><span class="se">\n</span><span class="sh">"</span> <span class="o">+</span> <span class="p">(</span>
+        <span class="n">_list_files_impl</span><span class="p">.</span><span class="n">__doc__</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">_list_files_impl</span><span class="p">.</span><span class="n">__doc__</span> <span class="k">else</span> <span class="sh">""</span>
+    <span class="p">)</span>
+    <span class="n">list_files</span> <span class="o">=</span> <span class="nf">function_tool</span><span class="p">(</span><span class="n">_list_files_impl</span><span class="p">)</span>  <span class="c1"># 이 시점에 첫 줄을 읽어 description으로 사용
+</span>
+    <span class="c1"># --- read_file ----------------------------------------------------------
+</span>    <span class="k">def</span> <span class="nf">_read_file_impl</span><span class="p">(</span>
+        <span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">max_bytes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Read a file from {root}: return text or Base64 binary with size guard.</span><span class="sh">"""</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">File not found: </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">IsADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Path is a directory: </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="n">size</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">stat</span><span class="p">().</span><span class="n">st_size</span>
+        <span class="k">if</span> <span class="n">max_bytes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="n">max_bytes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">File too large (</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s">) &gt; max_bytes=</span><span class="si">{</span><span class="n">max_bytes</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)),</span> <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span> <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">:</span> <span class="n">p</span><span class="p">.</span><span class="nf">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)}</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">read_bytes</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)),</span>
+                <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">content_b64</span><span class="sh">"</span><span class="p">:</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64encode</span><span class="p">(</span><span class="n">data</span><span class="p">).</span><span class="nf">decode</span><span class="p">(</span><span class="sh">"</span><span class="s">ascii</span><span class="sh">"</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">mode must be </span><span class="sh">'</span><span class="s">text</span><span class="sh">'</span><span class="s"> or </span><span class="sh">'</span><span class="s">binary</span><span class="sh">'"</span><span class="p">)</span>
+
+    <span class="n">_read_file_impl</span><span class="p">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Read a file from </span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s">: return text or Base64 binary with size guard.</span><span class="se">\n</span><span class="sh">"</span> <span class="o">+</span> <span class="p">(</span>
+        <span class="n">_read_file_impl</span><span class="p">.</span><span class="n">__doc__</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">_read_file_impl</span><span class="p">.</span><span class="n">__doc__</span> <span class="k">else</span> <span class="sh">""</span>
+    <span class="p">)</span>
+    <span class="n">read_file</span> <span class="o">=</span> <span class="nf">function_tool</span><span class="p">(</span><span class="n">_read_file_impl</span><span class="p">)</span>
+
+    <span class="c1"># --- save_file ----------------------------------------------------------
+</span>    <span class="k">def</span> <span class="nf">_save_file_impl</span><span class="p">(</span>
+        <span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">content</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">content_b64</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">utf-8</span><span class="sh">"</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">create_parents</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sh">"""</span><span class="s">Save a file under {root}: text/binary, overwrite and parent creation options.</span><span class="sh">"""</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nf">_resolve_safe</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">IsADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Path is a directory: </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">create_parents</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">existed</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">exists</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">existed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">FileExistsError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">File already exists (overwrite=False): </span><span class="si">{</span><span class="n">relative_path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">content is required when mode=</span><span class="sh">'</span><span class="s">text</span><span class="sh">'"</span><span class="p">)</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="sh">"</span><span class="s">binary</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">content_b64</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">content_b64 is required when mode=</span><span class="sh">'</span><span class="s">binary</span><span class="sh">'"</span><span class="p">)</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">write_bytes</span><span class="p">(</span><span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">content_b64</span><span class="p">.</span><span class="nf">encode</span><span class="p">(</span><span class="sh">"</span><span class="s">ascii</span><span class="sh">"</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sh">"</span><span class="s">mode must be </span><span class="sh">'</span><span class="s">text</span><span class="sh">'</span><span class="s"> or </span><span class="sh">'</span><span class="s">binary</span><span class="sh">'"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">)),</span>
+            <span class="sh">"</span><span class="s">size</span><span class="sh">"</span><span class="p">:</span> <span class="n">p</span><span class="p">.</span><span class="nf">stat</span><span class="p">().</span><span class="n">st_size</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">created</span><span class="sh">"</span><span class="p">:</span> <span class="ow">not</span> <span class="n">existed</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">overwrote</span><span class="sh">"</span><span class="p">:</span> <span class="n">existed</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="n">_save_file_impl</span><span class="p">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Save a file under </span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s">: text/binary, overwrite and parent creation options.</span><span class="se">\n</span><span class="sh">"</span> <span class="o">+</span> <span class="p">(</span>
+        <span class="n">_save_file_impl</span><span class="p">.</span><span class="n">__doc__</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">_save_file_impl</span><span class="p">.</span><span class="n">__doc__</span> <span class="k">else</span> <span class="sh">""</span>
+    <span class="p">)</span>
+    <span class="n">save_file</span> <span class="o">=</span> <span class="nf">function_tool</span><span class="p">(</span><span class="n">_save_file_impl</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">list_files</span><span class="p">,</span> <span class="n">read_file</span><span class="p">,</span> <span class="n">save_file</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>이 패턴의 이유와 주의점 정리</p>
+
+<ol>
+  <li>
+    <p>대부분의 <code class="language-plaintext highlighter-rouge">function_tool</code> 구현은 “래핑 시점”에 <code class="language-plaintext highlighter-rouge">fn.__doc__</code>의 첫 줄을 읽어 description으로 씀. 따라서 반드시 docstring을 바꾼 뒤에 <code class="language-plaintext highlighter-rouge">function_tool(fn)</code>을 호출해야 한다.</p>
+  </li>
+  <li>
+    <p>데코레이터 구문 <code class="language-plaintext highlighter-rouge">@function_tool</code>를 함수 정의 위에 바로 붙이면, 데코레이터가 먼저 실행되므로 그 뒤의 <code class="language-plaintext highlighter-rouge">__doc__</code> 주입이 반영되지 않는다. 지금처럼 “call-style 데코레이션”으로 해결한다.</p>
+  </li>
+  <li>
+    <p>f-string을 함수 본문 첫 줄 리터럴에 직접 쓸 수는 없다. 대신 런타임에 <code class="language-plaintext highlighter-rouge">__doc__</code>에 f-string 결과를 대입하거나, 템플릿 문자열을 두고 <code class="language-plaintext highlighter-rouge">.format(root=root_dir)</code>로 치환하면 된다.</p>
+  </li>
+  <li>
+    <p>만약 네 <code class="language-plaintext highlighter-rouge">function_tool</code>이 description 인자를 직접 받는다면 더 간단히 <code class="language-plaintext highlighter-rouge">function_tool(description=f"...{root}...")(fn)</code>로 끝낼 수 있다. 하지만 “첫 줄 docstring 자동 사용” 규약을 유지하려면 지금 방식이 가장 호환성이 좋다.</p>
+  </li>
+</ol>
+
+<p>확장 팁</p>
+
+<ul>
+  <li>
+    <p>첫 줄 외에 상세 도움말을 계속 남기고 싶으면, 원래 docstring을 읽어 두고 첫 줄만 덮어쓴 뒤 나머지를 이어붙이는 지금 방식을 쓰면 된다.</p>
+  </li>
+  <li>
+    <p>직렬화가 필요한 환경에서는 이 클로저를 최상위 함수+<code class="language-plaintext highlighter-rouge">functools.partial</code>로 바꿔도 동일한 방식으로 <code class="language-plaintext highlighter-rouge">__doc__</code> 주입 후 래핑이 가능하다.</p>
+  </li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#llm" class="page__taxonomy-item p-category" rel="tag">llm</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-10-31T11:43:50+09:00">2025-10-31</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/comfyui/comfyui-connection-color/" class="pagination--pager" title="ComfyUI 타입 색상 추가">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-31T11:43:56+09:00">2025-10-31</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comfyui/comfyui-connection-color/" rel="permalink">ComfyUI 타입 색상 추가
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-30T16:07:05+09:00">2025-10-30</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/npx-command-line-config/" rel="permalink">npx 설정 변경 방법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-30T13:40:18+09:00">2025-10-30</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/unified-mcp-interface/" rel="permalink">Python MCP 연결 방법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-10-30T09:53:10+09:00">2025-10-30</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
