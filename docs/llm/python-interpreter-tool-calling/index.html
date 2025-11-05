@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-11-05T15:33:14+09:00">
+  <meta property="article:published_time" content="2025-11-05T17:49:25+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python 코드 실행 Tool Calling">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-11-05T15:33:14+09:00">
+    <meta itemprop="datePublished" content="2025-11-05T17:49:25+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T15:33:14+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T17:49:25+09:00">2025-11-05</time>
       </span>
     
 
@@ -4684,6 +4684,1034 @@ print(</span><span class="sh">"</span><span class="s">counter:</span><span class
 
 <p>이걸 바로 네 vLLM/Agents SDK 툴로 감싸면 “세션 유지형 파이썬 인터프리터”를 깔끔하게 쓸 수 있다.</p>
 
+<p class="chat--user">
+
+좀 헷갈려 code1은 두 번째 open 부분에서 에러가 나잖아? 근데 바로 아래의 Except 코드에서 그걸 잡아야할 것 같은데 이건 returncode 1이 뜨네. 의도한 동작인가
+
+</p>
+
+<p>의도한 동작은 아니다. 그 <code class="language-plaintext highlighter-rouge">returncode=1</code>은 “잡히지 않은 예외가 있었음”을 뜻해. 지금 케이스는 두 번째 금지 쓰기(try/except로 감싼 부분)가 아니라, 그 위의 첫 번째 허용 쓰기 <code class="language-plaintext highlighter-rouge">open("out/ok.txt","w")</code>가 감사 훅에 의해 막혀서 예외가 바깥으로 튄 가능성이 높다.</p>
+
+<p>왜 막히냐면 내가 준 데모에서 <code class="language-plaintext highlighter-rouge">cwd="./work"</code>로 커널을 시작했는데 <code class="language-plaintext highlighter-rouge">write_paths=["./work/out"]</code>를 그대로 넘겼다. 자식은 먼저 <code class="language-plaintext highlighter-rouge">chdir("./work")</code>를 하고, 그 다음에 <code class="language-plaintext highlighter-rouge">write_paths</code>를 realpath로 절대화한다. 상대경로를 현재 작업디렉터리에 붙이니 <code class="language-plaintext highlighter-rouge">./work/out</code> → <code class="language-plaintext highlighter-rouge">/…/work/work/out</code>이 되어 버려서, 실제로 쓰려는 <code class="language-plaintext highlighter-rouge">out/ok.txt</code>(<code class="language-plaintext highlighter-rouge">/…/work/out/ok.txt</code>)와 경로가 불일치한다. 그래서 첫 번째 open이 PermissionError로 실패하고, 그건 try/except로 감싸지 않았으니 rc=1이 된 것.</p>
+
+<p>해결은 둘 중 하나로 깔끔히 끝난다.</p>
+
+<p>옵션 A: 항상 절대경로로 넘기기</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span>
+    <span class="n">write_paths</span><span class="o">=</span><span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./work/out</span><span class="sh">"</span><span class="p">)],</span>  <span class="c1"># 절대경로로 넘김
+</span>    <span class="n">cwd</span><span class="o">=</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">,</span>
+    <span class="c1"># ...
+</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>옵션 B: 커널 안에서 cwd 기준으로 경로를 정규화하도록 패치<br />
+_kernel_proc에서 chdir 한 “직후”에 read/write 경로를 현재 CWD 기준으로 절대화하면 된다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># _kernel_proc 내부, chdir(cwd) 한 다음에 추가
+</span><span class="k">def</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">lst</span> <span class="ow">or</span> <span class="p">[]):</span>
+        <span class="n">out</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span> <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isabs</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">else</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">(),</span> <span class="n">p</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="n">read_paths</span>  <span class="o">=</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">read_paths</span><span class="p">)</span>
+<span class="n">write_paths</span> <span class="o">=</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">write_paths</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>그리고 데모 호출은 이렇게 바꾸면 헷갈림이 없다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span>
+    <span class="n">write_paths</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">out</span><span class="sh">"</span><span class="p">],</span>    <span class="c1"># cwd 기준 상대경로
+</span>    <span class="n">cwd</span><span class="o">=</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">,</span>
+    <span class="c1"># ...
+</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>점검 팁<br />
+stderr에 첫 번째 open에 대한 <code class="language-plaintext highlighter-rouge">[AUDIT] blocked: event=open path=…/work/out/ok.txt …</code>가 찍혀 있으면 내가 설명한 경로 불일치가 원인이다. 위 패치(혹은 절대경로 전달) 이후에는 첫 번째 쓰기가 통과하고, 두 번째 금지 쓰기는 try/except에 잡혀서 <code class="language-plaintext highlighter-rouge">returncode</code>가 0으로 내려간다.</p>
+
+<p class="chat--user">
+
+아 오케이 좀 헷갈린
+
+</p>
+
+<p>괜찮아, 경로가 섞이면 누구나 헷갈려. 핵심만 다시 정리할게.</p>
+
+<p>정리</p>
+
+<ol>
+  <li>
+    <p>커널 시작 시 cwd를 바꾸면, write_paths 같은 상대경로는 새 cwd 기준으로 절대화해줘야 한다.</p>
+  </li>
+  <li>
+    <p>절대경로로 넘기면 안전하고, 상대경로로 넘기고 싶으면 커널 안에서 chdir 이후에 절대화하면 된다.</p>
+  </li>
+  <li>
+    <p>첫 번째 open이 허용 경로 밖으로 인식되면 try/except에 안 걸린 예외가 떠서 returncode=1이 된다.</p>
+  </li>
+</ol>
+
+<p>빠른 해결 두 가지<br />
+옵션 A: 항상 절대경로로 넘기기</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span>
+    <span class="n">cwd</span><span class="o">=</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">write_paths</span><span class="o">=</span><span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./work/out</span><span class="sh">"</span><span class="p">)],</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>옵션 B: 커널 내부에서 절대화 패치(권장)<br />
+_kernel_proc에서 chdir(cwd) 바로 뒤에 아래 유틸을 넣어주면, 상대경로를 새 cwd 기준으로 정규화해준다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">lst</span> <span class="ow">or</span> <span class="p">[]):</span>
+        <span class="n">out</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span> <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isabs</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">else</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">p</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="n">read_paths</span>  <span class="o">=</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">read_paths</span><span class="p">)</span>
+<span class="n">write_paths</span> <span class="o">=</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">write_paths</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>그 다음 시작할 때는 직관적으로</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span><span class="n">cwd</span><span class="o">=</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">,</span> <span class="n">write_paths</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">out</span><span class="sh">"</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>동작 체크</p>
+
+<ol>
+  <li>
+    <p>첫 실행에서 out/ok.txt 쓰기가 성공해야 하고</p>
+  </li>
+  <li>
+    <p>금지 쓰기 시도는 stderr에 [AUDIT] blocked…가 찍히면서 try/except로 잡혀야 하며</p>
+  </li>
+  <li>
+    <p>returncode는 0으로 내려와야 정상.</p>
+  </li>
+</ol>
+
+<p>필요하면 위 패치 반영한 전체 파일도 묶어 줄게.</p>
+
+<p class="chat--user">
+
+좋아 이제 PersistentKernel을 이용해서 llm tool calling용 툴을 만들어보자. 단일 코드 실행 -&gt; 일회용 툴 콜링용 세션 유지 세션 코드 실행 -&gt; 세션 유지용 코드 실행
+
+</p>
+
+<p>좋아. PersistentKernel을 그대로 활용해서 “일회성 실행”과 “세션 유지 실행” 두 가지 툴을 바로 쓸 수 있게 묶어준다. 설정(Config)은 서버 코드에서만 하고, LLM에는 절대 노출하지 않는다. LLM이 호출할 수 있는 건 다음 다섯 개뿐이다.</p>
+
+<ol>
+  <li>
+    <p>python_execute_once(code, timeout_sec?, cwd_rel?)</p>
+  </li>
+  <li>
+    <p>python_session_start(session_id, timeout_sec?, cwd_rel?)</p>
+  </li>
+  <li>
+    <p>python_session_execute(session_id, code, timeout_sec?)</p>
+  </li>
+  <li>
+    <p>python_session_reset(session_id)</p>
+  </li>
+  <li>
+    <p>python_session_shutdown(session_id)</p>
+  </li>
+</ol>
+
+<p>아래 한 파일로 붙여 넣으면 된다. 이전에 만든 persistent_kernel_async.py가 같은 디렉터리에 있다고 가정한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># persistent_kernel_tools.py
+# 요구: Python 3.8+, 같은 폴더에 persistent_kernel_async.py 존재
+</span><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">threading</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="n">persistent_kernel_async</span> <span class="kn">import</span> <span class="n">PersistentKernel</span><span class="p">,</span> <span class="n">run_user_code_mp_async</span>
+
+<span class="c1"># ===================== 서버 전용 정책(LLM 비노출) =====================
+# 운영자가 직접 채움. LLM에 노출 금지.
+</span><span class="n">READ_PATHS_DEFAULT</span>  <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./data_ro</span><span class="sh">"</span><span class="p">)]</span>   <span class="c1"># 읽기 허용 루트(하위 포함)
+</span><span class="n">WRITE_PATHS_DEFAULT</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./sandbox</span><span class="sh">"</span><span class="p">)]</span>   <span class="c1"># 쓰기 허용 루트(하위 포함)
+</span><span class="n">DEFAULT_CWD</span>         <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">)</span>        <span class="c1"># 커널의 시작 CWD
+</span><span class="n">BLOCK_SUBPROC</span>       <span class="o">=</span> <span class="bp">True</span>
+<span class="n">BLOCK_NET</span>           <span class="o">=</span> <span class="bp">False</span>
+<span class="n">SANITIZE_ENV</span>        <span class="o">=</span> <span class="bp">True</span>
+<span class="n">ALLOWED_ENV_KEYS</span>    <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">PATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">PYTHONPATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">HOME</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TMPDIR</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">WRITE_PATHS_DEFAULT</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">DEFAULT_CWD</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># ===================== 유틸 =====================
+</span><span class="k">def</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">paths</span> <span class="ow">or</span> <span class="p">[]):</span>
+        <span class="n">out</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span> <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isabs</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">else</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">p</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">_resolve_cwd_rel</span><span class="p">(</span><span class="n">cwd_rel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cwd_rel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="c1"># 상대 경로는 기본 CWD 기준으로 절대화
+</span>    <span class="n">target</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">DEFAULT_CWD</span><span class="p">,</span> <span class="n">cwd_rel</span><span class="p">))</span>
+    <span class="c1"># 안전: 쓰기/읽기 허용 루트들 하위로만
+</span>    <span class="n">allowed_roots</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="nf">_abslist</span><span class="p">(</span><span class="n">READ_PATHS_DEFAULT</span><span class="p">)</span> <span class="o">+</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">WRITE_PATHS_DEFAULT</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">DEFAULT_CWD</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nf">any</span><span class="p">(</span><span class="n">target</span> <span class="o">==</span> <span class="n">r</span> <span class="ow">or</span> <span class="n">target</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">allowed_roots</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">cwd_rel outside allowed roots: </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">target</span>
+
+<span class="c1"># ===================== 세션 레지스트리 =====================
+</span><span class="k">class</span> <span class="nc">KernelRegistry</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_kernels</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PersistentKernel</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_locks</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">threading</span><span class="p">.</span><span class="n">Lock</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_global_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Lock</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_or_start</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cwd_rel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PersistentKernel</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_global_lock</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_kernels</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">_locks</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">_locks</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Lock</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_locks</span><span class="p">[</span><span class="n">sid</span><span class="p">]:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_kernels</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="nc">PersistentKernel</span><span class="p">()</span>
+                    <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span>
+                        <span class="n">read_paths</span><span class="o">=</span><span class="n">READ_PATHS_DEFAULT</span><span class="p">,</span>
+                        <span class="n">write_paths</span><span class="o">=</span><span class="n">WRITE_PATHS_DEFAULT</span><span class="p">,</span>
+                        <span class="n">cwd</span><span class="o">=</span><span class="nf">_resolve_cwd_rel</span><span class="p">(</span><span class="n">cwd_rel</span><span class="p">)</span> <span class="ow">or</span> <span class="n">DEFAULT_CWD</span><span class="p">,</span>
+                        <span class="n">block_subprocess</span><span class="o">=</span><span class="n">BLOCK_SUBPROC</span><span class="p">,</span>
+                        <span class="n">block_network</span><span class="o">=</span><span class="n">BLOCK_NET</span><span class="p">,</span>
+                        <span class="n">sanitize_env</span><span class="o">=</span><span class="n">SANITIZE_ENV</span><span class="p">,</span>
+                        <span class="n">allowed_env_keys</span><span class="o">=</span><span class="n">ALLOWED_ENV_KEYS</span><span class="p">,</span>
+                        <span class="n">startup_timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">self</span><span class="p">.</span><span class="n">_kernels</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="k">return</span> <span class="n">k</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_kernels</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">session not found</span><span class="sh">"</span><span class="p">}</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">reset</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_kernels</span><span class="p">.</span><span class="nf">pop</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">session not found</span><span class="sh">"</span><span class="p">}</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">shutdown</span><span class="p">()</span>
+
+<span class="n">REGISTRY</span> <span class="o">=</span> <span class="nc">KernelRegistry</span><span class="p">()</span>
+
+<span class="c1"># ===================== LLM 툴 구현(핸들러) =====================
+# 1) 단일 코드 실행(세션 없음, 즉시 프로세스 생성→실행→종료)
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">tool_python_execute_once</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">]</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">cwd_rel</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">cwd_rel</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># 선택
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">run_user_code_mp_async</span><span class="p">(</span>
+            <span class="n">code</span><span class="p">,</span>
+            <span class="n">read_paths</span><span class="o">=</span><span class="n">READ_PATHS_DEFAULT</span><span class="p">,</span>
+            <span class="n">write_paths</span><span class="o">=</span><span class="n">WRITE_PATHS_DEFAULT</span><span class="p">,</span>
+            <span class="n">cwd</span><span class="o">=</span><span class="nf">_resolve_cwd_rel</span><span class="p">(</span><span class="n">cwd_rel</span><span class="p">)</span> <span class="ow">or</span> <span class="n">DEFAULT_CWD</span><span class="p">,</span>
+            <span class="n">allow_read_anywhere</span><span class="o">=</span><span class="nf">bool</span><span class="p">(</span><span class="ow">not</span> <span class="n">READ_PATHS_DEFAULT</span><span class="p">),</span>  <span class="c1"># 읽기 루트 없으면 어디든 읽기 허용
+</span>            <span class="n">timeout_sec</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="n">block_subprocess</span><span class="o">=</span><span class="n">BLOCK_SUBPROC</span><span class="p">,</span>
+            <span class="n">block_network</span><span class="o">=</span><span class="n">BLOCK_NET</span><span class="p">,</span>
+            <span class="n">sanitize_env</span><span class="o">=</span><span class="n">SANITIZE_ENV</span><span class="p">,</span>
+            <span class="n">allowed_env_keys</span><span class="o">=</span><span class="n">ALLOWED_ENV_KEYS</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[TOOL_ERROR] </span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+
+<span class="c1"># 2) 세션 시작
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">tool_python_session_start</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">sid</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">]</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">cwd_rel</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">cwd_rel</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">REGISTRY</span><span class="p">.</span><span class="nf">get_or_start</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">cwd_rel</span><span class="o">=</span><span class="n">cwd_rel</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">:</span> <span class="n">sid</span><span class="p">}</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+
+<span class="c1"># 3) 세션 코드 실행
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">tool_python_session_execute</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">sid</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">];</span> <span class="n">code</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">];</span> <span class="n">timeout</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="k">await</span> <span class="n">REGISTRY</span><span class="p">.</span><span class="nf">get_or_start</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">aexec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[TOOL_ERROR] </span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+
+<span class="c1"># 4) 세션 리셋
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">tool_python_session_reset</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">sid</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">]</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">REGISTRY</span><span class="p">.</span><span class="nf">reset</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+
+<span class="c1"># 5) 세션 종료
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">tool_python_session_shutdown</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">sid</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">]</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">REGISTRY</span><span class="p">.</span><span class="nf">shutdown</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+
+<span class="c1"># ===================== 툴 스키마(JSON; LLM에 노출) =====================
+</span><span class="n">python_execute_once_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">python_execute_once</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">단일 파이썬 코드 조각을 샌드박스에서 실행하고 stdout/stderr만 반환.</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">integer</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="sh">"</span><span class="s">minimum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">maximum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">60</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">cwd_rel</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">커널 시작 CWD 기준 상대경로(허용 루트 하위만).</span><span class="sh">"</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">python_session_start_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">python_session_start</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">세션 유지형 커널을 시작한다(이미 있으면 성공으로 취급).</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">integer</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="sh">"</span><span class="s">minimum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">maximum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">60</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">cwd_rel</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">세션 시작 시 상대 CWD(옵션).</span><span class="sh">"</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">python_session_execute_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">python_session_execute</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">세션 유지형 커널에서 코드를 실행하고 stdout/stderr를 반환.</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">integer</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="sh">"</span><span class="s">minimum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">maximum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">60</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">python_session_reset_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">python_session_reset</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">세션의 전역 상태를 지운다(globals 재생성).</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">python_session_shutdown_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">python_session_shutdown</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">세션 유지형 커널을 종료한다.</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># ===================== 동기 어댑터(프레임워크에 맞게 선택적으로 사용) =====================
+</span><span class="k">def</span> <span class="nf">run_tool_sync</span><span class="p">(</span><span class="n">tool_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">프레임워크가 sync만 지원하면 사용. 내부에서 이벤트 루프를 관리.</span><span class="sh">"""</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_runner</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">tool_name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">python_execute_once</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">tool_python_execute_once</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tool_name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">python_session_start</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">tool_python_session_start</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tool_name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">python_session_execute</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">tool_python_session_execute</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tool_name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">python_session_reset</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">tool_python_session_reset</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tool_name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">python_session_shutdown</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">tool_python_session_shutdown</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">unknown tool: </span><span class="si">{</span><span class="n">tool_name</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+        <span class="c1"># 이미 루프가 있다면 상위에서 await하도록 디자인하는 것이 바람직
+</span>        <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">run_tool_sync called inside event loop</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">RuntimeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">_runner</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>LLM에게 알려줄 사용 규칙(간단)</p>
+
+<ul>
+  <li>
+    <p>단발 작업이면 python_execute_once를 호출하라. 결과는 returncode/stdout/stderr만 본다.</p>
+  </li>
+  <li>
+    <p>상태를 써야 하면 python_session_start → python_session_execute를 반복 호출하라. 필요하면 python_session_reset으로 상태를 초기화하고, 끝나면 python_session_shutdown으로 닫아라.</p>
+  </li>
+  <li>
+    <p>파일은 서버에서 허용한 폴더 하위에서만 쓸 수 있다. 금지 시도는 stderr에 [AUDIT]로 어떤 경로/연산이 막혔는지 기록된다.</p>
+  </li>
+  <li>
+    <p>cwd_rel은 선택이며, 세션 시작 시 한 번만 지정하는 걸 권장한다.</p>
+  </li>
+</ul>
+
+<p>프레임워크에 연결</p>
+
+<ul>
+  <li>
+    <p>OpenAI Agents SDK나 vLLM function-calling에는 위 “tool 스키마”들(python_execute_once_tool 등)을 등록한다.</p>
+  </li>
+  <li>
+    <p>툴 콜이 들어오면 name과 arguments를 받아서 run_tool_sync(name, args)로 돌린 결과를 다시 LLM에게 전달하면 된다.</p>
+  </li>
+</ul>
+
+<p>경로 혼동 방지 팁</p>
+
+<ul>
+  <li>
+    <p>운영자가 READ_PATHS_DEFAULT/WRITE_PATHS_DEFAULT/DEFAULT_CWD를 절대경로로 채워두면 가장 깔끔하다.</p>
+  </li>
+  <li>
+    <p>cwd_rel은 DEFAULT_CWD 기준 상대경로로만 받고, 허용 루트(READ/WRITE/DEFAULT_CWD) 하위가 아니면 거부한다.</p>
+  </li>
+</ul>
+
+<p>이렇게 붙이면 “일회성 실행”과 “기억 유지 커널 실행”을 같은 정책 아래에서 깔끔하게 제공할 수 있다.</p>
+
+<p class="chat--user">
+
+그런 의문은 좀 있어. 세션을 유지하는게 필요할까?
+
+</p>
+
+<p>좋은 의문이야. “세션 유지형 커널(지속 프로세스)”이 정말 필요한가를 용도별로 딱 갈라보자.</p>
+
+<ol>
+  <li>세션이 주는 이득</li>
+</ol>
+
+<ul>
+  <li>
+    <p>반복 비용 절감: 큰 데이터·모델·라이브러리를 한 번 로드하고 계속 씀. 예) 1 GB 벡터 DB, 대형 ML 모델, 느린 초기화가 있는 툴.</p>
+  </li>
+  <li>
+    <p>탐색형 작업: 한 번 만든 변수·함수를 이어가며 점진적으로 코드를 보강. EDA, 시뮬레이션, 디버깅 루프에 유리.</p>
+  </li>
+  <li>
+    <p>도구의 워밍업 유지: JIT 컴파일, 캐시(토큰화 캐시, 정규식 컴파일 등)를 다시 안 해도 됨.</p>
+  </li>
+  <li>
+    <p>인터랙티브 UX: “방금 만든 df를 그래프로 바꿔” 같은 후속 명령이 자연스러움.</p>
+  </li>
+</ul>
+
+<ol>
+  <li>세션의 비용·리스크</li>
+</ol>
+
+<ul>
+  <li>
+    <p>재현성 하락: 숨은 상태 때문에 같은 코드가 매번 동일하게 안 돌 수도 있음.</p>
+  </li>
+  <li>
+    <p>메모리 누수/오염: LLM이 만든 전역이 쌓이다가 성능 저하. 상태 “독”이 남으면 계속 실패.</p>
+  </li>
+  <li>
+    <p>보안·통제 어려움: 상태가 길게 남을수록 정책 위반 탐지가 늦어짐. 세션별 CWD/경로 정책을 늘 점검해야 함.</p>
+  </li>
+  <li>
+    <p>운영 부담: 세션 수명, TTL, 정리 시점, 동시성, 장애 복구 등을 관리해야 함.</p>
+  </li>
+</ul>
+
+<ol>
+  <li>결론 요약: 전형적인 선택 기준</li>
+</ol>
+
+<ul>
+  <li>
+    <p>일회성 계산·변환·리포트처럼 “같은 입력 → 같은 출력”이면 세션 불필요(일회용 실행 권장).</p>
+  </li>
+  <li>
+    <p>대용량 초기화가 반복되거나, 다단계 실험·EDA처럼 “맥락을 잇는” 흐름이면 세션이 이득.</p>
+  </li>
+  <li>
+    <p>둘 다 쓰고, 기본값은 일회용. 다음 조건이면 자동으로 세션으로 승격하는 전략이 깔끔함.</p>
+
+    <ul>
+      <li>
+        <p>연속 호출 간 같은 사용자·같은 작업 스레드에서 2회 이상 후속 지시가 들어옴.</p>
+      </li>
+      <li>
+        <p>코드가 “앞에서 만든 객체/파일/변수”를 참조.</p>
+      </li>
+      <li>
+        <p>초기화 비용이 임계치(예: 300 ms 또는 메모리 200 MB 이상) 넘는 라이브러리 감지.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<ol>
+  <li>현실적인 운영 권장안</li>
+</ol>
+
+<ul>
+  <li>
+    <p>기본: python_execute_once만 사용. 빠르고 재현성 높음.</p>
+  </li>
+  <li>
+    <p>필요 시만 세션: python_session_start/execute를 노출하되, 서버 정책으로 아래처럼 안전 레일을 깐다.</p>
+
+    <ul>
+      <li>
+        <p>idle_timeout(예: 5분), hard_ttl(예: 30분), max_sessions_per_user(예: 2).</p>
+      </li>
+      <li>
+        <p>세션당 메모리·파일 크기 rlimit, 쓰기 경로는 write_paths만.</p>
+      </li>
+      <li>
+        <p>reset과 shutdown을 LLM에 명시적으로 가르치고, 실패 시 자동 reset.</p>
+      </li>
+      <li>
+        <p>로그에 [AUDIT] 라인(막힌 파일·커맨드·사유)과 리소스 사용량을 함께 남김.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<ol>
+  <li>“세션 없이도 기억하기” 대안</li>
+</ol>
+
+<ul>
+  <li>
+    <p>파일 기반 상태: 일회용 실행마다 허용된 write_paths에만 아티팩트(.npz/.parquet/.pt) 저장 → 다음 호출에서 경로만 넘겨 재사용. 세션 없이도 80%의 “기억”을 충족.</p>
+  </li>
+  <li>
+    <p>선택 직렬화: 매우 제한된 화이트리스트 타입만 자동 저장/복원(dict[str→ndarray/DataFrame/float/int])해서 “의미 있는 최소 상태”만 이어 받기. 프로세스는 매번 새로 띄워 재현성 유지.</p>
+  </li>
+</ul>
+
+<ol>
+  <li>적용 팁(당장 쓸 설정)</li>
+</ol>
+
+<ul>
+  <li>
+    <p>오늘 구조에서 기본값을 이렇게 두면 균형이 좋다.</p>
+
+    <ul>
+      <li>
+        <p>default_mode=“once”, session_mode는 명시 opt-in</p>
+      </li>
+      <li>
+        <p>session idle_timeout=300s, hard_ttl=1800s</p>
+      </li>
+      <li>
+        <p>state persistence는 “파일로만” 허용(피클 전역 저장은 금지)</p>
+      </li>
+      <li>
+        <p>read_paths는 넉넉히, write_paths는 최소로</p>
+      </li>
+      <li>
+        <p>네트워크 차단 기본 On, 필요 시만 임시 해제</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>요약하면, 세션은 “속도와 편의”를 사고 “재현성과 단순성”을 판다. LLM 에이전트에서 실수 방지가 우선이면 일회용을 기본으로, 대형 초기화나 인터랙티브 루프가 필요할 때만 세션을 열고 TTL·리밋으로 다스리는 하이브리드가 가장 안정적이다. 다음 단계로는 너의 툴 레이어에서 기본을 once로 두고, 특정 규칙에 맞으면 session_start를 자동 제안하도록 넣으면 된다.</p>
+
+<p class="chat--user">
+
+일단 툴로는 일회용 세션만 지원해보자
+
+</p>
+
+<p>좋아. “일회용 세션만” 지원하는 LLM 툴을 깔끔하게 정리했다. 설정은 서버 쪽에만 두고, LLM에는 오직 코드와 타임아웃(+선택적 cwd 상대경로)만 노출한다. 파일/서브프로세스(옵션으로 네트워크)는 감사 훅으로 제어하고, 차단 사유를 stderr에 구체적으로 남긴다.</p>
+
+<p>아래 파일 하나로 끝난다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># oneoff_tool.py
+# Python 3.8+ / 외부 의존성 없음
+</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
+<span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">io</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">traceback</span><span class="p">,</span> <span class="n">contextlib</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="c1"># ============== 서버측 정책(LLM 비노출) ==============
+</span><span class="n">READ_PATHS_DEFAULT</span>  <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./data_ro</span><span class="sh">"</span><span class="p">)]</span>    <span class="c1"># 읽기 허용 루트(하위 포함). []면 어디든 읽기 허용
+</span><span class="n">WRITE_PATHS_DEFAULT</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./sandbox</span><span class="sh">"</span><span class="p">)]</span>    <span class="c1"># 쓰기 허용 루트(하위 포함). []면 전부 차단
+</span><span class="n">DEFAULT_CWD</span>         <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">)</span>         <span class="c1"># 시작 작업 디렉터리
+</span><span class="n">BLOCK_SUBPROC</span>       <span class="o">=</span> <span class="bp">True</span>                              <span class="c1"># 서브프로세스 차단
+</span><span class="n">BLOCK_NET</span>           <span class="o">=</span> <span class="bp">False</span>                             <span class="c1"># 필요 시 True
+</span><span class="n">SANITIZE_ENV</span>        <span class="o">=</span> <span class="bp">True</span>                              <span class="c1"># 환경변수 최소화
+</span><span class="n">ALLOWED_ENV_KEYS</span>    <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">PATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">PYTHONPATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">HOME</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TMPDIR</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">DEFAULT_CWD</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">WRITE_PATHS_DEFAULT</span><span class="p">:</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># ============== 내부: 감사 훅 설치 ==============
+</span><span class="k">def</span> <span class="nf">_install_guard</span><span class="p">(</span><span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                   <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                   <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                   <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                   <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+    <span class="n">wp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+
+    <span class="k">def</span> <span class="nf">_real</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span> <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">roots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nf">_real</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="n">r</span> <span class="ow">or</span> <span class="n">path</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">_audit</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">os.open</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">write</span> <span class="o">=</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="ow">in</span> <span class="n">mode</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="p">))</span> <span class="ow">or</span> \
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">O_WRONLY</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_RDWR</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_CREAT</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_TRUNC</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_APPEND</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">write</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> mode=</span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s"> flags=</span><span class="si">{</span><span class="n">flags</span><span class="si">}</span><span class="s"> reason=write-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="nf">if </span><span class="p">(</span><span class="ow">not</span> <span class="n">write</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">allow_read_anywhere</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rp</span> <span class="o">+</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=read-not-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">os.rename</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.replace</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">src</span><span class="p">,</span> <span class="n">dst</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nf">_under_any</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">wp</span><span class="p">)</span> <span class="ow">and</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">wp</span><span class="p">)):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> src=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">src</span><span class="p">)</span><span class="si">}</span><span class="s"> dst=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=op-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">os.remove</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.unlink</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.mkdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.makedirs</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.rmdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.chmod</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=op-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">block_subprocess</span> <span class="ow">and</span> <span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">subprocess.</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">==</span> <span class="sh">"</span><span class="s">os.system</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span> <span class="n">cmd</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="n">cmd</span> <span class="o">=</span> <span class="sh">"</span><span class="s">&lt;unknown&gt;</span><span class="sh">"</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> cmd=</span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s"> reason=subprocess-disabled</span><span class="sh">"</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">block_network</span> <span class="ow">and</span> <span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">socket.</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> reason=network-disabled</span><span class="sh">"</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">sys</span><span class="p">.</span><span class="nf">addaudithook</span><span class="p">(</span><span class="n">_audit</span><span class="p">)</span>
+
+<span class="c1"># ============== 내부: 자식 워커(일회용) ==============
+</span><span class="k">def</span> <span class="nf">_child_once_worker</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                       <span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                       <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                       <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                       <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                       <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                       <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                       <span class="n">sanitize_env</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                       <span class="n">allowed_env_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                       <span class="n">result_q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">stdout_buf</span><span class="p">,</span> <span class="n">stderr_buf</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="nc">StringIO</span><span class="p">(),</span> <span class="n">io</span><span class="p">.</span><span class="nc">StringIO</span><span class="p">()</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cwd</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">sanitize_env</span><span class="p">:</span>
+            <span class="n">keep</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="n">allowed_env_keys</span> <span class="ow">or</span> <span class="p">[</span><span class="sh">"</span><span class="s">PATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">PYTHONPATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">HOME</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TMPDIR</span><span class="sh">"</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nf">list</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keep</span><span class="p">:</span>
+                    <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+        <span class="nf">_install_guard</span><span class="p">(</span><span class="n">read_paths</span><span class="p">,</span> <span class="n">write_paths</span><span class="p">,</span> <span class="n">allow_read_anywhere</span><span class="p">,</span>
+                       <span class="n">block_subprocess</span><span class="o">=</span><span class="n">block_subprocess</span><span class="p">,</span> <span class="n">block_network</span><span class="o">=</span><span class="n">block_network</span><span class="p">)</span>
+
+        <span class="c1"># 옵션: 리소스 한도
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="n">resource</span>
+            <span class="n">resource</span><span class="p">.</span><span class="nf">setrlimit</span><span class="p">(</span><span class="n">resource</span><span class="p">.</span><span class="n">RLIMIT_CPU</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+            <span class="n">resource</span><span class="p">.</span><span class="nf">setrlimit</span><span class="p">(</span><span class="n">resource</span><span class="p">.</span><span class="n">RLIMIT_FSIZE</span><span class="p">,</span> <span class="p">(</span><span class="mi">200</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">,)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">__name__</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">}</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stdout</span><span class="p">(</span><span class="n">stdout_buf</span><span class="p">),</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stderr</span><span class="p">(</span><span class="n">stderr_buf</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nf">exec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="n">rc</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[ERROR] exception while executing user code:</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[ERROR] sandbox init/exec failed: </span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">stderr_buf</span><span class="p">)</span>
+        <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">stderr_buf</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">result_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="n">rc</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="n">stdout_buf</span><span class="p">.</span><span class="nf">getvalue</span><span class="p">(),</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="n">stderr_buf</span><span class="p">.</span><span class="nf">getvalue</span><span class="p">()})</span>
+
+<span class="k">def</span> <span class="nf">_run_once_blocking</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                       <span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                       <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                       <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                       <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                       <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                       <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                       <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                       <span class="n">sanitize_env</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                       <span class="n">allowed_env_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">mp</span><span class="p">.</span><span class="nf">get_context</span><span class="p">(</span><span class="sh">"</span><span class="s">spawn</span><span class="sh">"</span><span class="p">)</span>   <span class="c1"># 부모 전역 노출 방지
+</span>    <span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="nc">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="nc">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_child_once_worker</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">code</span><span class="p">,</span> <span class="n">read_paths</span><span class="p">,</span> <span class="n">write_paths</span><span class="p">,</span> <span class="n">cwd</span><span class="p">,</span> <span class="n">allow_read_anywhere</span><span class="p">,</span>
+        <span class="n">block_subprocess</span><span class="p">,</span> <span class="n">block_network</span><span class="p">,</span> <span class="n">sanitize_env</span><span class="p">,</span> <span class="n">allowed_env_keys</span><span class="p">,</span> <span class="n">q</span>
+    <span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">();</span> <span class="n">result</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">q</span><span class="p">.</span><span class="nf">empty</span><span class="p">():</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">get</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_alive</span><span class="p">():</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="n">p</span><span class="p">.</span><span class="n">exitcode</span> <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="n">exitcode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span>
+                      <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">[ERROR] child exited unexpectedly</span><span class="sh">"</span><span class="p">}</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span> <span class="o">&gt;</span> <span class="n">timeout_sec</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">();</span> <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">124</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[TIMEOUT] exceeded </span><span class="si">{</span><span class="n">timeout_sec</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">}</span>
+        <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_alive</span><span class="p">():</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">();</span> <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="ow">or</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">[ERROR] no result</span><span class="sh">"</span><span class="p">}</span>
+
+<span class="c1"># ============== 공개 API: 일회용 실행(비동기) ==============
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">run_user_code_once_async</span><span class="p">(</span>
+    <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">cwd_rel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    별도 프로세스에서 코드 조각을 한 번 실행하고 stdout/stderr만 반환.
+    - cwd_rel: DEFAULT_CWD 기준 상대경로. 허용 루트 밖이면 거부.
+    </span><span class="sh">"""</span>
+    <span class="c1"># cwd 결정 및 경로 정규화
+</span>    <span class="n">allowed_roots</span> <span class="o">=</span> <span class="nf">set</span><span class="p">([</span><span class="n">DEFAULT_CWD</span><span class="p">]</span> <span class="o">+</span> <span class="n">READ_PATHS_DEFAULT</span> <span class="o">+</span> <span class="n">WRITE_PATHS_DEFAULT</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cwd_rel</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">DEFAULT_CWD</span><span class="p">,</span> <span class="n">cwd_rel</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">any</span><span class="p">(</span><span class="n">target</span> <span class="o">==</span> <span class="n">r</span> <span class="ow">or</span> <span class="n">target</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">allowed_roots</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[TOOL_ERROR] cwd_rel outside allowed roots: </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+        <span class="n">cwd</span> <span class="o">=</span> <span class="n">target</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cwd</span> <span class="o">=</span> <span class="n">DEFAULT_CWD</span>
+
+    <span class="n">allow_read_anywhere</span> <span class="o">=</span> <span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">READ_PATHS_DEFAULT</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span>
+        <span class="bp">None</span><span class="p">,</span>
+        <span class="n">_run_once_blocking</span><span class="p">,</span>
+        <span class="n">code</span><span class="p">,</span>
+        <span class="n">READ_PATHS_DEFAULT</span><span class="p">,</span>
+        <span class="n">WRITE_PATHS_DEFAULT</span><span class="p">,</span>
+        <span class="n">cwd</span><span class="p">,</span>
+        <span class="n">allow_read_anywhere</span><span class="p">,</span>
+        <span class="n">timeout_sec</span><span class="p">,</span>
+        <span class="n">BLOCK_SUBPROC</span><span class="p">,</span>
+        <span class="n">BLOCK_NET</span><span class="p">,</span>
+        <span class="n">SANITIZE_ENV</span><span class="p">,</span>
+        <span class="n">ALLOWED_ENV_KEYS</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># ============== LLM 툴 스키마와 핸들러 ==============
+</span><span class="n">python_execute_once_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">python_execute_once</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">일회성 파이썬 코드 조각을 샌드박스에서 실행하고 stdout/stderr만 반환합니다.</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">integer</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="sh">"</span><span class="s">minimum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">maximum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">60</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">cwd_rel</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">기본 작업 디렉터리(DEFAULT_CWD) 기준 상대경로</span><span class="sh">"</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tool_python_execute_once</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="nf">run_user_code_once_async</span><span class="p">(</span>
+            <span class="n">args</span><span class="p">[</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">],</span>
+            <span class="n">cwd_rel</span><span class="o">=</span><span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">cwd_rel</span><span class="sh">"</span><span class="p">),</span>
+            <span class="n">timeout_sec</span><span class="o">=</span><span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[TOOL_ERROR] </span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+
+<span class="c1"># 동기 어댑터(프레임워크가 sync만 지원할 때 선택)
+</span><span class="k">def</span> <span class="nf">run_tool_sync</span><span class="p">(</span><span class="n">tool_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_runner</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">tool_name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">python_execute_once</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">tool_python_execute_once</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">unknown tool</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">run_tool_sync called in running loop</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">RuntimeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">_runner</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>연결 방법 요약</p>
+
+<ol>
+  <li>
+    <p>서버에서 READ_PATHS_DEFAULT, WRITE_PATHS_DEFAULT, DEFAULT_CWD 등 정책만 세팅한다. 이 값들은 LLM에 절대 노출하지 않는다.</p>
+  </li>
+  <li>
+    <p>에이전트 런타임에 툴 정의로 python_execute_once_tool을 등록한다.</p>
+  </li>
+  <li>
+    <p>툴 콜이 들어오면 tool_python_execute_once를 await해서 결과 딕셔너리(returncode/stdout/stderr)를 모델에 재피드한다.</p>
+  </li>
+  <li>
+    <p>경로 혼동을 막으려면 정책 경로들은 애초에 절대경로로 두는 게 가장 깔끔하고, LLM에는 cwd_rel만 선택적으로 허용한다.</p>
+  </li>
+</ol>
+
+<p>운용 팁</p>
+
+<ul>
+  <li>
+    <p>금지된 파일·연산·커맨드는 stderr에 [AUDIT] 라인으로 이유와 함께 남는다.</p>
+  </li>
+  <li>
+    <p>대량 병렬이 필요하면 _run_once_blocking을 ProcessPoolExecutor로 바꾸거나 동시 실행 세마포어만 얹으면 된다.</p>
+  </li>
+  <li>
+    <p>나중에 세션형이 필요해지면, 이 구조 위에 PersistentKernel을 얹어도 인터페이스는 바뀌지 않는다.</p>
+  </li>
+</ul>
+
+<p class="chat--user">
+
+기존 만든 PersistentKernel은 활용하는게 좋을거 같은데
+
+</p>
+
+<p>좋아. “일회용 툴만 지원”은 유지하되, 내부 엔진은 PersistentKernel을 그대로 써서 실행-정리까지 한 번에 태우는 래퍼를 만들자. 나중에 세션형으로 확장할 때 바뀌는 건 툴 바인딩이 아니라 정책뿐이 되도록.</p>
+
+<p>아래 파일 하나로 끝난다. 핵심은 EphemeralKernelRunner.run_once가 PersistentKernel을 즉시 띄우고(a.start), 코드 실행(aexec), 결과 회수 후 즉시 종료(shutdown)하는 패턴이다. 상단의 READ_PATHS_DEFAULT/WRITE_PATHS_DEFAULT/DEFAULT_CWD만 운영자가 세팅하고, LLM에는 code, timeout_sec, cwd_rel만 노출한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># oneoff_with_persistent_kernel.py
+# 요구: Python 3.8+, 같은 폴더에 persistent_kernel_async.py가 있어야 함
+</span><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="n">persistent_kernel_async</span> <span class="kn">import</span> <span class="n">PersistentKernel</span>  <span class="c1"># 앞서 만든 커널 구현
+</span>
+<span class="c1"># ===================== 서버 정책(LLM 비노출) =====================
+</span><span class="n">READ_PATHS_DEFAULT</span>  <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./data_ro</span><span class="sh">"</span><span class="p">)]</span>   <span class="c1"># 읽기 허용 루트(하위 포함). []면 어디든 읽기 허용
+</span><span class="n">WRITE_PATHS_DEFAULT</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./sandbox</span><span class="sh">"</span><span class="p">)]</span>   <span class="c1"># 쓰기 허용 루트(하위 포함). []면 전부 차단
+</span><span class="n">DEFAULT_CWD</span>         <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">)</span>        <span class="c1"># 커널 시작 CWD
+</span><span class="n">BLOCK_SUBPROC</span>       <span class="o">=</span> <span class="bp">True</span>
+<span class="n">BLOCK_NET</span>           <span class="o">=</span> <span class="bp">False</span>
+<span class="n">SANITIZE_ENV</span>        <span class="o">=</span> <span class="bp">True</span>
+<span class="n">ALLOWED_ENV_KEYS</span>    <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">PATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">PYTHONPATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">HOME</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TMPDIR</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">DEFAULT_CWD</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">WRITE_PATHS_DEFAULT</span><span class="p">:</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span> <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isabs</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">else</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">p</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">_resolve_cwd_rel</span><span class="p">(</span><span class="n">cwd_rel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cwd_rel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">DEFAULT_CWD</span><span class="p">,</span> <span class="n">cwd_rel</span><span class="p">))</span>
+    <span class="n">allowed_roots</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="nf">_abslist</span><span class="p">(</span><span class="n">READ_PATHS_DEFAULT</span><span class="p">)</span> <span class="o">+</span> <span class="nf">_abslist</span><span class="p">(</span><span class="n">WRITE_PATHS_DEFAULT</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">DEFAULT_CWD</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nf">any</span><span class="p">(</span><span class="n">target</span> <span class="o">==</span> <span class="n">r</span> <span class="ow">or</span> <span class="n">target</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">allowed_roots</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">cwd_rel outside allowed roots: </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">target</span>
+
+<span class="c1"># ===================== 일회용 실행 러너 =====================
+</span><span class="k">class</span> <span class="nc">EphemeralKernelRunner</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run_once</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cwd_rel</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nc">PersistentKernel</span><span class="p">()</span>
+        <span class="c1"># 커널 시작: 여기서 세션은 만들어지지만 이 호출 안에서만 쓰고 곧바로 종료한다.
+</span>        <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span>
+            <span class="n">read_paths</span><span class="o">=</span><span class="n">READ_PATHS_DEFAULT</span><span class="p">,</span>
+            <span class="n">write_paths</span><span class="o">=</span><span class="n">WRITE_PATHS_DEFAULT</span><span class="p">,</span>
+            <span class="n">cwd</span><span class="o">=</span><span class="nf">_resolve_cwd_rel</span><span class="p">(</span><span class="n">cwd_rel</span><span class="p">)</span> <span class="ow">or</span> <span class="n">DEFAULT_CWD</span><span class="p">,</span>
+            <span class="n">allow_read_anywhere</span><span class="o">=</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">READ_PATHS_DEFAULT</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">block_subprocess</span><span class="o">=</span><span class="n">BLOCK_SUBPROC</span><span class="p">,</span>
+            <span class="n">block_network</span><span class="o">=</span><span class="n">BLOCK_NET</span><span class="p">,</span>
+            <span class="n">sanitize_env</span><span class="o">=</span><span class="n">SANITIZE_ENV</span><span class="p">,</span>
+            <span class="n">allowed_env_keys</span><span class="o">=</span><span class="n">ALLOWED_ENV_KEYS</span><span class="p">,</span>
+            <span class="n">startup_timeout</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># 코드 실행
+</span>            <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">aexec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_sec</span><span class="p">)</span>
+            <span class="c1"># res = {"returncode": int, "stdout": str, "stderr": str}
+</span>            <span class="k">return</span> <span class="n">res</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># 항상 종료(세션 유지 없음)
+</span>            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">shutdown</span><span class="p">()</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+<span class="c1"># ===================== LLM 툴 스키마 및 핸들러 =====================
+</span><span class="n">python_execute_once_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">python_execute_once</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">일회성 파이썬 코드 조각을 PersistentKernel 기반 샌드박스에서 실행하고 stdout/stderr만 반환합니다.</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">integer</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="sh">"</span><span class="s">minimum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">maximum</span><span class="sh">"</span><span class="p">:</span> <span class="mi">60</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">cwd_rel</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">기본 작업 디렉터리(DEFAULT_CWD) 기준 상대경로(허용 루트 밖이면 거부).</span><span class="sh">"</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">_runner</span> <span class="o">=</span> <span class="nc">EphemeralKernelRunner</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tool_python_execute_once</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">cwd_rel</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">cwd_rel</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">_runner</span><span class="p">.</span><span class="nf">run_once</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">cwd_rel</span><span class="o">=</span><span class="n">cwd_rel</span><span class="p">,</span> <span class="n">timeout_sec</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[TOOL_ERROR] </span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+
+<span class="c1"># 동기 어댑터(프레임워크가 sync만 지원할 때 선택)
+</span><span class="k">def</span> <span class="nf">run_tool_sync</span><span class="p">(</span><span class="n">tool_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_runner_main</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">tool_name</span> <span class="o">==</span> <span class="sh">"</span><span class="s">python_execute_once</span><span class="sh">"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="nf">tool_python_execute_once</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">unknown tool: </span><span class="si">{</span><span class="n">tool_name</span><span class="si">}</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">run_tool_sync called inside event loop</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">RuntimeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">_runner_main</span><span class="p">())</span>
+
+<span class="c1"># =============== 간단 데모 ===============
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="n">demo</span> <span class="o">=</span> <span class="sa">r</span><span class="sh">"""</span><span class="s">
+import os, sys, subprocess
+print(</span><span class="sh">"</span><span class="s">CWD:</span><span class="sh">"</span><span class="s">, os.getcwd())
+open(</span><span class="sh">"</span><span class="s">out_demo.txt</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">).write(</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="s">)  # WRITE_PATHS_DEFAULT 하위여야 통과
+try:
+    subprocess.check_output([</span><span class="sh">"</span><span class="s">echo</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">hi</span><span class="sh">"</span><span class="s">])
+except Exception as e:
+    print(</span><span class="sh">"</span><span class="s">blocked subproc:</span><span class="sh">"</span><span class="s">, type(e).__name__)
+print(</span><span class="sh">"</span><span class="s">done</span><span class="sh">"</span><span class="s">)
+</span><span class="sh">"""</span>
+        <span class="c1"># 데모용: write_paths에 DEFAULT_CWD를 넣었거나, DEFAULT_CWD/out_demo.txt가 WRITE_PATHS_DEFAULT 안에 있어야 함
+</span>        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">tool_python_execute_once</span><span class="p">({</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">:</span> <span class="n">demo</span><span class="p">,</span> <span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="sh">"</span><span class="s">cwd_rel</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">})</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span> <span class="o">==</span> <span class="sh">"</span><span class="s">win32</span><span class="sh">"</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
+        <span class="n">mp</span><span class="p">.</span><span class="nf">freeze_support</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>동작 흐름 요약</p>
+
+<ol>
+  <li>
+    <p>LLM이 python_execute_once를 호출하면 EphemeralKernelRunner가 PersistentKernel을 즉시 띄운다.</p>
+  </li>
+  <li>
+    <p>커널은 감사 훅이 설치된 샌드박스 상태로 code를 exec하고 stdout/stderr만 반환한다.</p>
+  </li>
+  <li>
+    <p>실행 직후 반드시 shutdown하므로 세션은 남지 않는다. 세션 유지가 필요해지면 이 러너 대신 아까 만든 PersistentKernel 툴셋을 그대로 노출하면 된다.</p>
+  </li>
+</ol>
+
+<p>경로 혼동 방지 팁<br />
+DEFAULT_CWD, READ_PATHS_DEFAULT, WRITE_PATHS_DEFAULT는 모두 절대경로로 두는 게 가장 깔끔하다. LLM에 노출되는 cwd_rel은 DEFAULT_CWD 기준 상대경로만 받으며, 허용 루트 밖이면 거부한다.</p>
+
         
       </section>
 
@@ -4709,7 +5737,7 @@ print(</span><span class="sh">"</span><span class="s">counter:</span><span class
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T15:33:14+09:00">2025-11-05</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T17:49:25+09:00">2025-11-05</time></p>
 
       </footer>
 
@@ -4763,7 +5791,7 @@ print(</span><span class="sh">"</span><span class="s">counter:</span><span class
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T15:33:20+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T17:49:31+09:00">2025-11-05</time>
       </span>
     
 
