@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-11-05T12:51:13+09:00">
+  <meta property="article:published_time" content="2025-11-05T14:20:13+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python 코드 실행 Tool Calling">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-11-05T12:51:13+09:00">
+    <meta itemprop="datePublished" content="2025-11-05T14:20:13+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T12:51:13+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T14:20:13+09:00">2025-11-05</time>
       </span>
     
 
@@ -2092,6 +2092,1005 @@ landlock 패키지에 PathBeneath라는 게 없대. 그리고 Config는 유저�
 
 <p>원하는 방향으로 더 촘촘한 RW 비트 제어가 필요한 순간이 오면 두 가지 루트가 있어. 첫째, landrun을 커널 앞단 래퍼로 덮어씌우기(도커 아님). 둘째, 작은 ctypes 뼈대에 커널 매뉴얼의 LANDLOCK_ACCESS_FS_* 비트를 그대로 넣는 저수준 바인딩. 어느 쪽이든 연결해 줄 수 있어.</p>
 
+<p class="chat--user">
+
+좀 이상해. rw 컨트롤은 어디서해
+
+</p>
+
+<p>핵심만 콕 집어 말할게. RW 컨트롤은 “툴 레이어”가 아니라 “세션 프로세스가 뜨는 순간 커널에 Landlock 룰을 올리는 곳”에서 한다. 즉,</p>
+
+<p>1단계(네가 직접 하는 Config): 읽기 전용 디렉터리(ro_dirs)와 읽기/쓰기 디렉터리(rw_dir)를 정한다.<br />
+2단계(세션 부팅 시점): 해당 세션 프로세스 안에서 landlock_create_ruleset → landlock_add_rule(각 경로에 권한 마스크 지정) → landlock_restrict_self를 호출한다. 이때 ro_dirs에는 읽기 마스크, rw_dir에는 읽기+쓰기 마스크를 준다.<br />
+3단계(실행 중): LLM은 copy_to_sandbox로 파일을 rw_dir 아래에 들여와서만 저장·수정하게 하고, 샌드박스 밖 쓰기 시도는 커널이 거부한다.</p>
+
+<p>아래는 실제로 “어디서 어떻게 RW를 강제하는지”가 드러나는 최소 헬퍼다. PyPI의 고수준 landlock 래퍼가 per-path 권한 비트를 안 열어줄 때를 대비해 ctypes로 커널 UAPI를 직접 호출한다. x86_64의 기본 syscall 번호를 쓰되, liblandlock.so가 있으면 그걸 우선 사용한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># landlock_helper.py
+</span><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">util</span>
+
+<span class="c1"># x86_64 기본값. 다른 아키텍처면 번호가 다를 수 있다.
+</span><span class="n">__NR_landlock_create_ruleset</span> <span class="o">=</span> <span class="mi">444</span>
+<span class="n">__NR_landlock_add_rule</span>       <span class="o">=</span> <span class="mi">445</span>
+<span class="n">__NR_landlock_restrict_self</span>  <span class="o">=</span> <span class="mi">446</span>
+
+<span class="c1"># 커널 UAPI 비트 (없는 비트는 0으로 처리)
+</span><span class="k">class</span> <span class="nc">Access</span><span class="p">:</span>
+    <span class="n">READ_FILE</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span>
+    <span class="n">WRITE_FILE</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+    <span class="n">READ_DIR</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span>
+    <span class="n">REMOVE_DIR</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span>
+    <span class="n">REMOVE_FILE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span>
+    <span class="n">MAKE_CHAR</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span>
+    <span class="n">MAKE_DIR</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span>
+    <span class="n">MAKE_REG</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span>
+    <span class="n">MAKE_SOCK</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span>
+    <span class="n">MAKE_FIFO</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span>
+    <span class="n">MAKE_BLOCK</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">10</span>
+    <span class="n">MAKE_SYM</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">11</span>
+    <span class="c1"># ABI v2+
+</span>    <span class="n">REFER</span>       <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">13</span>
+    <span class="c1"># ABI v3+
+</span>    <span class="n">TRUNCATE</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">14</span>
+    <span class="n">EXECUTE</span>     <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">12</span>  <span class="c1"># 있으면 사용
+</span>
+<span class="c1"># struct landlock_path_beneath_attr
+</span><span class="k">class</span> <span class="nc">path_beneath_attr</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="sh">"</span><span class="s">allowed_access</span><span class="sh">"</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">c_uint64</span><span class="p">),</span>
+        <span class="p">(</span><span class="sh">"</span><span class="s">parent_fd</span><span class="sh">"</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">c_int</span><span class="p">),</span>
+    <span class="p">]</span>
+
+<span class="n">libc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="p">.</span><span class="nc">CDLL</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="nf">find_library</span><span class="p">(</span><span class="sh">"</span><span class="s">c</span><span class="sh">"</span><span class="p">),</span> <span class="n">use_errno</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_syscall</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">libc</span><span class="p">.</span><span class="nf">syscall</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="nf">c_long</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">get_errno</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="nc">OSError</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="nf">strerror</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">r</span>
+
+<span class="k">def</span> <span class="nf">_best_effort_mask</span><span class="p">(</span><span class="o">*</span><span class="n">names</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">|=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">Access</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">m</span>
+
+<span class="k">def</span> <span class="nf">_open_ro_dir</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">O_PATH</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_CLOEXEC</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">apply_landlock_rw</span><span class="p">(</span><span class="n">ro_dirs</span><span class="p">,</span> <span class="n">rw_dir</span><span class="p">):</span>
+    <span class="c1"># 1) 어떤 FS 권한을 다룰지 커널에 알리기(handled_access_fs)
+</span>    <span class="n">handled</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="sh">"</span><span class="s">READ_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">WRITE_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">READ_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">REMOVE_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">REMOVE_FILE</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">MAKE_CHAR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_REG</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_SOCK</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_FIFO</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_BLOCK</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_SYM</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">REFER</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TRUNCATE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">EXECUTE</span><span class="sh">"</span>
+    <span class="p">]:</span>
+        <span class="n">handled</span> <span class="o">|=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">Access</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># landlock_create_ruleset(attr=NULL, size=0, flags=0)로 ABI 쿼리할 수도 있지만,
+</span>    <span class="c1"># 여기선 간단화: 바로 ruleset 생성 (size=8바이트 마스크 전송)
+</span>    <span class="k">class</span> <span class="nc">ruleset_attr</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="n">Structure</span><span class="p">):</span>
+        <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="sh">"</span><span class="s">handled_access_fs</span><span class="sh">"</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">c_uint64</span><span class="p">)]</span>
+    <span class="n">attr</span> <span class="o">=</span> <span class="nf">ruleset_attr</span><span class="p">(</span><span class="n">handled_access_fs</span><span class="o">=</span><span class="n">handled</span><span class="p">)</span>
+    <span class="n">ruleset_fd</span> <span class="o">=</span> <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_create_ruleset</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">byref</span><span class="p">(</span><span class="n">attr</span><span class="p">),</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># 2) 읽기 전용 마스크와 읽기/쓰기 마스크 구성
+</span>    <span class="n">read_mask</span>  <span class="o">=</span> <span class="nf">_best_effort_mask</span><span class="p">(</span><span class="sh">"</span><span class="s">READ_FILE</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">READ_DIR</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">EXECUTE</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">write_mask</span> <span class="o">=</span> <span class="nf">_best_effort_mask</span><span class="p">(</span>
+        <span class="sh">"</span><span class="s">READ_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">READ_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">WRITE_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_REG</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">REMOVE_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">REMOVE_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">REFER</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TRUNCATE</span><span class="sh">"</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 3) ro_dirs에 읽기 규칙 추가
+</span>    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">ro_dirs</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isdir</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nf">_open_ro_dir</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">attr_pb</span> <span class="o">=</span> <span class="nf">path_beneath_attr</span><span class="p">(</span><span class="n">allowed_access</span><span class="o">=</span><span class="n">read_mask</span><span class="p">,</span> <span class="n">parent_fd</span><span class="o">=</span><span class="n">fd</span><span class="p">)</span>
+            <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_add_rule</span><span class="p">,</span> <span class="n">ruleset_fd</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">byref</span><span class="p">(</span><span class="n">attr_pb</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># 1 = LANDLOCK_RULE_PATH_BENEATH
+</span>        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+
+    <span class="c1"># 4) rw_dir에 읽기+쓰기 규칙 추가
+</span>    <span class="n">rw_dir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">rw_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">rw_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="nf">_open_ro_dir</span><span class="p">(</span><span class="n">rw_dir</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">attr_pb</span> <span class="o">=</span> <span class="nf">path_beneath_attr</span><span class="p">(</span><span class="n">allowed_access</span><span class="o">=</span><span class="n">write_mask</span><span class="p">,</span> <span class="n">parent_fd</span><span class="o">=</span><span class="n">fd</span><span class="p">)</span>
+        <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_add_rule</span><span class="p">,</span> <span class="n">ruleset_fd</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">byref</span><span class="p">(</span><span class="n">attr_pb</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+
+    <span class="c1"># 5) 현재 스레드에 규칙 적용(자식 프로세스에 상속됨)
+</span>    <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_restrict_self</span><span class="p">,</span> <span class="n">ruleset_fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">close</span><span class="p">(</span><span class="n">ruleset_fd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<p>이제 RW 컨트롤이 “정확히 어디서” 이뤄지는지 보이게 연결하면 끝이다.</p>
+
+<ol>
+  <li>
+    <p>네가 직접 Config할 때<br />
+ro_dirs와 rw_dir를 정하고, 세션 프로세스를 띄우기 직전 또는 세션 프로세스 내부 초기화에서 apply_landlock_rw(ro_dirs, rw_dir)를 호출한다. 여기서 ro_dirs에는 read_mask, rw_dir에는 write_mask를 커널에 등록한다. 이 지점이 RW 컨트롤의 본진이다.</p>
+  </li>
+  <li>
+    <p>세션 유지 구조에 붙일 때<br />
+KernelBackend라면 커널 기동 직후 첫 셀에서 아래 한 줄을 주입하거나, 아예 커널 프로세스의 entrypoint에서 호출한다.</p>
+  </li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 커널 첫 셀
+</span><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">from</span> <span class="n">landlock_helper</span> <span class="kn">import</span> <span class="n">apply_landlock_rw</span>
+<span class="nf">apply_landlock_rw</span><span class="p">(</span>
+    <span class="n">ro_dirs</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="sh">"</span><span class="s">RO_DIRS</span><span class="sh">"</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">pathsep</span><span class="p">),</span>
+    <span class="n">rw_dir</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="sh">"</span><span class="s">RW_DIR</span><span class="sh">"</span><span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>SubprocessBackend라면 자식 프로세스가 부팅되자마자 같은 함수를 호출한 뒤 코드 실행 루프에 진입한다.</p>
+
+<ol>
+  <li>툴 레이어에서의 역할 정리<br />
+툴은 RW를 “결정”하지 않는다. 툴은 그저 copy_to_sandbox로 파일을 rw_dir 아래로 옮기고, python_execute로 실행할 뿐이다. RW 정책은 위의 apply_landlock_rw가 커널에 고정시킨다. 따라서 temp.py가 rw_dir 밖을 쓰려 하면 커널이 EACCES로 거부한다. 읽기는 ro_dirs에서만 허용된다. allow_world_read 같은 편의 옵션을 쓰면 읽기 범위를 넓힐 수 있지만, 쓰기 권한은 여전히 rw_dir로만 묶인다.</li>
+</ol>
+
+<p>정리하면, RW 컨트롤은 landlock_helper.apply_landlock_rw 안의 두 군데에서 동시에 걸린다. ro_dirs에 read_mask 규칙을 추가하는 부분, rw_dir에 write_mask 규칙을 추가하는 부분. 툴은 그 정책을 존중할 뿐이고, LLM에게는 이 설정을 절대 노출하지 않는다.</p>
+
+<p class="chat--user">
+
+def apply_landlock(self, policy: FsPolicy): if self._applied: return rs = Ruleset() # 기본: 전부 금지, allow로만 허용 if policy.allow_world_read: rs.allow("/") # 모든 경로 읽기 허용(“완벽한 샌드박스 불필요” 요구일 때 편의용) else: for p in policy.ro_roots: rs.allow(p) # rw_root는 LLM에게 copy_to_sandbox 통해서만 파일을 두게 한다. # 패키지 API가 경로별 쓰기 비트를 노출하지 않는 경우가 있어, # 쓰기는 원칙적으로 차단하고, 커널이 허용하는 한에서만 rw_root 내 조작을 시도한다. # (패키지 업데이트로 per-path write 옵션이 생기면 여기서 조건부로 허용 추가) rs.apply() # 현재 스레드 및 자식 프로세스에 영구 적용 self._applied = True self.policy = policy 이 코드에서 rw policy를 적용해야하는거 아니야?
+
+</p>
+
+<p>맞아. 그 코드 그대로면 rw_root에 “쓰기 허용”이 전혀 적용되지 않아. Ruleset().allow()만 쓰면 경로 허용 여부 정도만 다루고, 경로별 권한 비트(READ/WRITE/TRUNCATE 등)를 지정하지 못해 쓰기 정책을 커널에 못 박지 못해. 그래서 이 지점에서 RW 마스크를 커널에 정확히 등록해야 한다.</p>
+
+<p>실제로 RW 정책을 적용하는 방법은 두 가지다.</p>
+
+<ol>
+  <li>
+    <p>정확모드(권장): 커널 UAPI를 ctypes로 직접 호출해서 ro_dirs에는 읽기 마스크, rw_dir에는 읽기+쓰기 마스크를 넣는다.</p>
+  </li>
+  <li>
+    <p>임시 대안: high-level 래퍼만으로는 per-path write 비트를 못 주니, rw 컨트롤을 커널이 아닌 툴 레이어(몽키패치/audit hook)에서 “소프트”로 막는다. 이건 의도하신 “도커 없이도 꽤 안전”에 못 미친다.</p>
+  </li>
+</ol>
+
+<p>아래는 1) 정확모드로, 네 메서드에 딱 들어갈 패치다.</p>
+
+<p>간단 헬퍼(한 파일로 두고 import 해서 쓰면 됨)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># landlock_helper.py
+</span><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">util</span>
+
+<span class="n">__NR_landlock_create_ruleset</span> <span class="o">=</span> <span class="mi">444</span>
+<span class="n">__NR_landlock_add_rule</span>       <span class="o">=</span> <span class="mi">445</span>
+<span class="n">__NR_landlock_restrict_self</span>  <span class="o">=</span> <span class="mi">446</span>
+
+<span class="k">class</span> <span class="nc">Access</span><span class="p">:</span>
+    <span class="n">READ_FILE</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span>
+    <span class="n">WRITE_FILE</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+    <span class="n">READ_DIR</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span>
+    <span class="n">REMOVE_DIR</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span>
+    <span class="n">REMOVE_FILE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span>
+    <span class="n">MAKE_CHAR</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span>
+    <span class="n">MAKE_DIR</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span>
+    <span class="n">MAKE_REG</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span>
+    <span class="n">MAKE_SOCK</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span>
+    <span class="n">MAKE_FIFO</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span>
+    <span class="n">MAKE_BLOCK</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">10</span>
+    <span class="n">MAKE_SYM</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">11</span>
+    <span class="n">EXECUTE</span>     <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">12</span>     <span class="c1"># 있으면 사용
+</span>    <span class="n">REFER</span>       <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">13</span>     <span class="c1"># ABI v2+
+</span>    <span class="n">TRUNCATE</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">14</span>     <span class="c1"># ABI v3+
+</span>
+<span class="k">class</span> <span class="nc">path_beneath_attr</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="sh">"</span><span class="s">allowed_access</span><span class="sh">"</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">c_uint64</span><span class="p">),</span> <span class="p">(</span><span class="sh">"</span><span class="s">parent_fd</span><span class="sh">"</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">c_int</span><span class="p">)]</span>
+
+<span class="n">libc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="p">.</span><span class="nc">CDLL</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="nf">find_library</span><span class="p">(</span><span class="sh">"</span><span class="s">c</span><span class="sh">"</span><span class="p">),</span> <span class="n">use_errno</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_syscall</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">libc</span><span class="p">.</span><span class="nf">syscall</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="nf">c_long</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">get_errno</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="nc">OSError</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="nf">strerror</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">r</span>
+
+<span class="k">def</span> <span class="nf">_mask</span><span class="p">(</span><span class="o">*</span><span class="n">names</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">|=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">Access</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">m</span>
+
+<span class="k">def</span> <span class="nf">_open_path_only</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">O_PATH</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_CLOEXEC</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">apply_landlock_rw</span><span class="p">(</span><span class="n">ro_dirs</span><span class="p">,</span> <span class="n">rw_dir</span><span class="p">):</span>
+    <span class="c1"># 1) ruleset 생성: 어떤 FS 권한을 다룰지 커널에 통보
+</span>    <span class="n">handled</span> <span class="o">=</span> <span class="nf">_mask</span><span class="p">(</span>
+        <span class="sh">"</span><span class="s">READ_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">WRITE_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">READ_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">REMOVE_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">REMOVE_FILE</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">MAKE_CHAR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_REG</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_SOCK</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_FIFO</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_BLOCK</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_SYM</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">EXECUTE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">REFER</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TRUNCATE</span><span class="sh">"</span>
+    <span class="p">)</span>
+    <span class="k">class</span> <span class="nc">ruleset_attr</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="n">Structure</span><span class="p">):</span>
+        <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="sh">"</span><span class="s">handled_access_fs</span><span class="sh">"</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">c_uint64</span><span class="p">)]</span>
+    <span class="n">rs_attr</span> <span class="o">=</span> <span class="nf">ruleset_attr</span><span class="p">(</span><span class="n">handled_access_fs</span><span class="o">=</span><span class="n">handled</span><span class="p">)</span>
+    <span class="n">rs_fd</span> <span class="o">=</span> <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_create_ruleset</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">byref</span><span class="p">(</span><span class="n">rs_attr</span><span class="p">),</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">sizeof</span><span class="p">(</span><span class="n">rs_attr</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># 2) 읽기와 쓰기 마스크
+</span>    <span class="n">read_mask</span>  <span class="o">=</span> <span class="nf">_mask</span><span class="p">(</span><span class="sh">"</span><span class="s">READ_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">READ_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">EXECUTE</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">write_mask</span> <span class="o">=</span> <span class="nf">_mask</span><span class="p">(</span><span class="sh">"</span><span class="s">READ_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">READ_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">WRITE_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">MAKE_REG</span><span class="sh">"</span><span class="p">,</span>
+                       <span class="sh">"</span><span class="s">REMOVE_FILE</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">REMOVE_DIR</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">REFER</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TRUNCATE</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># 3) 읽기 전용 경로들
+</span>    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ro_dirs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isdir</span><span class="p">(</span><span class="n">d</span><span class="p">):</span> 
+            <span class="k">continue</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nf">_open_path_only</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_add_rule</span><span class="p">,</span> <span class="n">rs_fd</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nf">path_beneath_attr</span><span class="p">(</span><span class="n">read_mask</span><span class="p">,</span> <span class="n">fd</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># 1 = PATH_BENEATH
+</span>        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+
+    <span class="c1"># 4) 쓰기 허용 루트
+</span>    <span class="n">rw_dir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">rw_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">rw_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="nf">_open_path_only</span><span class="p">(</span><span class="n">rw_dir</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_add_rule</span><span class="p">,</span> <span class="n">rs_fd</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nf">path_beneath_attr</span><span class="p">(</span><span class="n">write_mask</span><span class="p">,</span> <span class="n">fd</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+
+    <span class="c1"># 5) 현재 스레드에 적용(자식 상속)
+</span>    <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_restrict_self</span><span class="p">,</span> <span class="n">rs_fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">close</span><span class="p">(</span><span class="n">rs_fd</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>네 기존 메서드 교체본</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sandbox_config.py
+</span><span class="kn">from</span> <span class="n">landlock_helper</span> <span class="kn">import</span> <span class="n">apply_landlock_rw</span>
+
+<span class="k">def</span> <span class="nf">apply_landlock</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">policy</span><span class="p">:</span> <span class="n">FsPolicy</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_applied</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="c1"># ro_roots, rw_root를 커널에 정확히 등록
+</span>    <span class="nf">apply_landlock_rw</span><span class="p">(</span><span class="n">policy</span><span class="p">.</span><span class="n">ro_roots</span><span class="p">,</span> <span class="n">policy</span><span class="p">.</span><span class="n">rw_root</span><span class="p">)</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">_applied</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">policy</span> <span class="o">=</span> <span class="n">policy</span>
+    <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">rw_root</span><span class="sh">"</span><span class="p">:</span> <span class="n">policy</span><span class="p">.</span><span class="n">rw_root</span><span class="p">,</span> <span class="sh">"</span><span class="s">ro_roots</span><span class="sh">"</span><span class="p">:</span> <span class="n">policy</span><span class="p">.</span><span class="n">ro_roots</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>이 변경으로 “RW 컨트롤을 정확히 어디서 하느냐”가 분명해진다.</p>
+
+<ul>
+  <li>
+    <p>ro_roots에는 읽기 전용 비트만, rw_root에는 읽기+쓰기 비트를 커널에 고정한다.</p>
+  </li>
+  <li>
+    <p>이후 temp.py가 rw_root 밖에 쓰려 하면 커널이 EACCES로 거부하고, ro_roots 밖의 경로는 아예 읽기도 거부된다(너가 ro_roots를 얼마나 넓게 잡느냐에 따라 다름).</p>
+  </li>
+  <li>
+    <p>ro_roots와 rw_root가 겹칠 수 있는데, Landlock은 허용 비트를 합집합으로 보므로 rw_root 하위에선 쓰기가 열리고, 그 밖에선 닫힌다. 운영상 문제 없다.</p>
+  </li>
+</ul>
+
+<p>간단 동작 확인</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 설정 단계(LLM 비노출)
+</span><span class="n">cfg</span> <span class="o">=</span> <span class="nc">FsPolicy</span><span class="p">(</span><span class="n">ro_roots</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">/usr</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">/home/you/data</span><span class="sh">"</span><span class="p">],</span> <span class="n">rw_root</span><span class="o">=</span><span class="sh">"</span><span class="s">/home/you/sbx</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">SANDBOX</span><span class="p">.</span><span class="nf">apply_landlock</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+<span class="c1"># 테스트
+</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">/etc/hosts</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">).</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="p">)</span>           <span class="c1"># → PermissionError (쓰기 거부)
+</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">/home/you/data/df.csv</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">).</span><span class="nf">read</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># → OK (읽기 허용)
+</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">/home/you/sbx/out.txt</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">).</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># → OK (rw_root 쓰기 허용)
+</span></code></pre></div></div>
+
+<p>만약 환경 제약으로 위 syscall 방식이 불가하거나 커널 ABI가 낮으면, apply_landlock에서 예외를 받아 “소프트 가드로 폴백”하도록 분기하면 된다. 그래도 질문의 요지였던 “이 코드에서 rw policy를 적용해야 하는가?”에 답하자면, 그렇다. 바로 이 apply_landlock에서 커널에 rw_root용 쓰기 권한 마스크를 명시적으로 추가해야 한다.</p>
+
+<p class="chat--user">
+
+아 점점 쓸데 없이 복잡해지는 것 같은데; 정신 차리고 제대로 해보자. 일단 /user/abc 는 읽기 가능 /user/abc/test 안에는 쓰기 가능한 landlock을 하는 가장 간단한 코드 줘봐. 테스트 라인 포함해서 
+
+</p>
+
+<p>원하는 딱 그거. 리눅스 5.13+ (x86_64 가정)에서 <code class="language-plaintext highlighter-rouge">/user/abc</code>는 읽기만, <code class="language-plaintext highlighter-rouge">/user/abc/test</code>는 쓰기까지 허용하는 가장 단순한 파이썬 스크립트다. 테스트까지 포함했다. 외부 라이브러리 불필요, ctypes로 커널 UAPI 직접 호출한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">util</span>
+
+<span class="c1"># x86_64용 landlock syscall 번호
+</span><span class="n">__NR_landlock_create_ruleset</span> <span class="o">=</span> <span class="mi">444</span>
+<span class="n">__NR_landlock_add_rule</span>       <span class="o">=</span> <span class="mi">445</span>
+<span class="n">__NR_landlock_restrict_self</span>  <span class="o">=</span> <span class="mi">446</span>
+
+<span class="c1"># 권한 비트 (커널 uapi/linux/landlock.h)
+</span><span class="k">class</span> <span class="nc">FS</span><span class="p">:</span>
+    <span class="n">EXECUTE</span>     <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span>
+    <span class="n">WRITE_FILE</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+    <span class="n">READ_FILE</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span>
+    <span class="n">READ_DIR</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span>
+    <span class="n">REMOVE_DIR</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span>
+    <span class="n">REMOVE_FILE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span>
+    <span class="n">MAKE_CHAR</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span>
+    <span class="n">MAKE_DIR</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span>
+    <span class="n">MAKE_REG</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span>
+    <span class="n">MAKE_SOCK</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span>
+    <span class="n">MAKE_FIFO</span>   <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">10</span>
+    <span class="n">MAKE_BLOCK</span>  <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">11</span>
+    <span class="n">MAKE_SYM</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">12</span>
+    <span class="n">REFER</span>       <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">13</span>   <span class="c1"># ABI v2+
+</span>    <span class="n">TRUNCATE</span>    <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">14</span>   <span class="c1"># ABI v3+
+</span>
+<span class="n">LANDLOCK_RULE_PATH_BENEATH</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">libc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="p">.</span><span class="nc">CDLL</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="nf">find_library</span><span class="p">(</span><span class="sh">"</span><span class="s">c</span><span class="sh">"</span><span class="p">),</span> <span class="n">use_errno</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_syscall</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">libc</span><span class="p">.</span><span class="nf">syscall</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="nf">c_long</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">get_errno</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="nc">OSError</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="nf">strerror</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">r</span>
+
+<span class="k">class</span> <span class="nc">ruleset_attr</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="sh">"</span><span class="s">handled_access_fs</span><span class="sh">"</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">c_uint64</span><span class="p">)]</span>
+
+<span class="k">class</span> <span class="nc">path_beneath_attr</span><span class="p">(</span><span class="n">ctypes</span><span class="p">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="sh">"</span><span class="s">allowed_access</span><span class="sh">"</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">c_uint64</span><span class="p">),</span>
+        <span class="p">(</span><span class="sh">"</span><span class="s">parent_fd</span><span class="sh">"</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="n">c_int</span><span class="p">),</span>
+    <span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">_open_dir_path_only</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">O_PATH</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_CLOEXEC</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_try_create_ruleset</span><span class="p">(</span><span class="n">handled_mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">attr</span> <span class="o">=</span> <span class="nf">ruleset_attr</span><span class="p">(</span><span class="n">handled_access_fs</span><span class="o">=</span><span class="n">handled_mask</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_create_ruleset</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">byref</span><span class="p">(</span><span class="n">attr</span><span class="p">),</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">apply_landlock_read_ro_write_rw</span><span class="p">(</span><span class="n">ro_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rw_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">ro_dir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">ro_dir</span><span class="p">)</span>
+    <span class="n">rw_dir</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">rw_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">rw_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># 가능한 최대 비트로 시도 → 안 되면 v3(=TRUNCATE) 제외 → 그래도 안 되면 REFER도 제외
+</span>    <span class="n">handled_all</span> <span class="o">=</span> <span class="p">(</span><span class="n">FS</span><span class="p">.</span><span class="n">EXECUTE</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">WRITE_FILE</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">READ_FILE</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">READ_DIR</span> <span class="o">|</span>
+                   <span class="n">FS</span><span class="p">.</span><span class="n">REMOVE_DIR</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">REMOVE_FILE</span> <span class="o">|</span>
+                   <span class="n">FS</span><span class="p">.</span><span class="n">MAKE_CHAR</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">MAKE_DIR</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">MAKE_REG</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">MAKE_SOCK</span> <span class="o">|</span>
+                   <span class="n">FS</span><span class="p">.</span><span class="n">MAKE_FIFO</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">MAKE_BLOCK</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">MAKE_SYM</span> <span class="o">|</span>
+                   <span class="n">FS</span><span class="p">.</span><span class="n">REFER</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">TRUNCATE</span><span class="p">)</span>
+    <span class="n">masks</span> <span class="o">=</span> <span class="p">[</span><span class="n">handled_all</span><span class="p">,</span>
+             <span class="n">handled_all</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">FS</span><span class="p">.</span><span class="n">TRUNCATE</span><span class="p">,</span>
+             <span class="n">handled_all</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">FS</span><span class="p">.</span><span class="n">TRUNCATE</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">FS</span><span class="p">.</span><span class="n">REFER</span><span class="p">]</span>
+    <span class="n">rs_fd</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">last_err</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">rs_fd</span> <span class="o">=</span> <span class="nf">_try_create_ruleset</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">last_err</span> <span class="o">=</span> <span class="n">e</span>
+    <span class="k">if</span> <span class="n">rs_fd</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">last_err</span> <span class="ow">or</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">landlock_create_ruleset failed</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="n">read_mask</span>  <span class="o">=</span> <span class="p">(</span><span class="n">FS</span><span class="p">.</span><span class="n">READ_FILE</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">READ_DIR</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">EXECUTE</span><span class="p">)</span>
+    <span class="n">write_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">FS</span><span class="p">.</span><span class="n">READ_FILE</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">READ_DIR</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">WRITE_FILE</span> <span class="o">|</span>
+                  <span class="n">FS</span><span class="p">.</span><span class="n">MAKE_DIR</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">MAKE_REG</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">REMOVE_FILE</span> <span class="o">|</span> <span class="n">FS</span><span class="p">.</span><span class="n">REMOVE_DIR</span> <span class="o">|</span>
+                  <span class="p">(</span><span class="n">FS</span><span class="p">.</span><span class="n">REFER</span> <span class="nf">if </span><span class="p">(</span><span class="n">handled_all</span> <span class="o">&amp;</span> <span class="n">FS</span><span class="p">.</span><span class="n">REFER</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span>
+                  <span class="p">(</span><span class="n">FS</span><span class="p">.</span><span class="n">TRUNCATE</span> <span class="nf">if </span><span class="p">(</span><span class="n">handled_all</span> <span class="o">&amp;</span> <span class="n">FS</span><span class="p">.</span><span class="n">TRUNCATE</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="c1"># 읽기 전용: /user/abc
+</span>    <span class="n">fd_ro</span> <span class="o">=</span> <span class="nf">_open_dir_path_only</span><span class="p">(</span><span class="n">ro_dir</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ro_rule</span> <span class="o">=</span> <span class="nf">path_beneath_attr</span><span class="p">(</span><span class="n">allowed_access</span><span class="o">=</span><span class="n">read_mask</span><span class="p">,</span> <span class="n">parent_fd</span><span class="o">=</span><span class="n">fd_ro</span><span class="p">)</span>
+        <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_add_rule</span><span class="p">,</span> <span class="n">rs_fd</span><span class="p">,</span> <span class="n">LANDLOCK_RULE_PATH_BENEATH</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">byref</span><span class="p">(</span><span class="n">ro_rule</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">close</span><span class="p">(</span><span class="n">fd_ro</span><span class="p">)</span>
+
+    <span class="c1"># 읽기/쓰기 허용: /user/abc/test
+</span>    <span class="n">fd_rw</span> <span class="o">=</span> <span class="nf">_open_dir_path_only</span><span class="p">(</span><span class="n">rw_dir</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rw_rule</span> <span class="o">=</span> <span class="nf">path_beneath_attr</span><span class="p">(</span><span class="n">allowed_access</span><span class="o">=</span><span class="n">write_mask</span><span class="p">,</span> <span class="n">parent_fd</span><span class="o">=</span><span class="n">fd_rw</span><span class="p">)</span>
+        <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_add_rule</span><span class="p">,</span> <span class="n">rs_fd</span><span class="p">,</span> <span class="n">LANDLOCK_RULE_PATH_BENEATH</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">.</span><span class="nf">byref</span><span class="p">(</span><span class="n">rw_rule</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">close</span><span class="p">(</span><span class="n">fd_rw</span><span class="p">)</span>
+
+    <span class="c1"># 현재 스레드(프로세스)에 적용. 이후 자식 프로세스에도 상속됨.
+</span>    <span class="nf">_syscall</span><span class="p">(</span><span class="n">__NR_landlock_restrict_self</span><span class="p">,</span> <span class="n">rs_fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">close</span><span class="p">(</span><span class="n">rs_fd</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">ro</span> <span class="o">=</span> <span class="sh">"</span><span class="s">/user/abc</span><span class="sh">"</span>
+    <span class="n">rw</span> <span class="o">=</span> <span class="sh">"</span><span class="s">/user/abc/test</span><span class="sh">"</span>
+
+    <span class="c1"># 테스트 준비: 디렉터리와 읽기용 파일 생성(제한 걸기 전)
+</span>    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">ro</span><span class="p">,</span> <span class="sh">"</span><span class="s">readonly.txt</span><span class="sh">"</span><span class="p">),</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s">hello</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Applying Landlock: RO =</span><span class="sh">"</span><span class="p">,</span> <span class="n">ro</span><span class="p">,</span> <span class="sh">"</span><span class="s">RW =</span><span class="sh">"</span><span class="p">,</span> <span class="n">rw</span><span class="p">)</span>
+    <span class="nf">apply_landlock_read_ro_write_rw</span><span class="p">(</span><span class="n">ro</span><span class="p">,</span> <span class="n">rw</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Landlock applied.</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># 테스트 1: ro 디렉터리 쓰기 → 실패해야 함
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">ro</span><span class="p">,</span> <span class="sh">"</span><span class="s">should_fail.txt</span><span class="sh">"</span><span class="p">),</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s">nope</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[FAIL] wrote to RO dir (unexpected)</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[OK] RO write blocked:</span><span class="sh">"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+    <span class="c1"># 테스트 2: rw 디렉터리 쓰기 → 성공해야 함
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok.txt</span><span class="sh">"</span><span class="p">),</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s">works</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[OK] RW write succeeded</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[FAIL] RW write blocked:</span><span class="sh">"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+    <span class="c1"># 테스트 3: ro 파일 읽기 → 성공해야 함
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">ro</span><span class="p">,</span> <span class="sh">"</span><span class="s">readonly.txt</span><span class="sh">"</span><span class="p">),</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[OK] RO read:</span><span class="sh">"</span><span class="p">,</span> <span class="n">f</span><span class="p">.</span><span class="nf">readline</span><span class="p">().</span><span class="nf">strip</span><span class="p">())</span>
+    <span class="k">except</span> <span class="nb">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[FAIL] RO read blocked:</span><span class="sh">"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">linux</span><span class="sh">"</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Linux 전용입니다.</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>설명 요약</p>
+
+<ul>
+  <li>
+    <p>이 스크립트는 현재 프로세스에만 제약을 건다. 한 번 적용되면 해제 불가, 자식 프로세스에 상속된다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">/user/abc</code>는 READ_FILE/READ_DIR(+EXECUTE)만, <code class="language-plaintext highlighter-rouge">/user/abc/test</code>는 READ/WRITE/CREATE/REMOVE(+가능하면 REFER/TRUNCATE)까지 허용한다.</p>
+  </li>
+  <li>
+    <p>x86_64 기준 syscall 번호를 썼다. 다른 아키텍처면 번호가 다를 수 있다.</p>
+  </li>
+  <li>
+    <p>커널이 낮아 TRUNCATE/REFER를 지원하지 않으면 자동으로 빼고 재시도한다.</p>
+  </li>
+</ul>
+
+<p class="chat--user">
+
+python landlock 패키지 쓰는거보다 ctype로 하는게 더 낫나?
+
+</p>
+
+<p>짧게 정리하면 “무엇을 통제하느냐”에 따라 선택이 갈린다.</p>
+
+<ol>
+  <li>ctypes 직접 호출이 나은 경우</li>
+</ol>
+
+<ul>
+  <li>
+    <p>경로별 권한 비트(READ_FILE/READ_DIR/WRITE_FILE/MAKE__/REMOVE__ /REFER/TRUNCATE 등)를 정확히 지정해야 할 때</p>
+  </li>
+  <li>
+    <p>패키지 래퍼가 원하는 기능(예: rw 전용 디렉터리)까지 노출하지 않거나 버전마다 API가 달라 흔들릴 때</p>
+  </li>
+  <li>
+    <p>지금처럼 “/user/abc는 읽기만, /user/abc/test는 쓰기까지” 같은 세밀한 정책이 필수일 때</p>
+  </li>
+</ul>
+
+<p>장점: 커널 UAPI를 그대로 쓰므로 원하는 동작을 1:1로 구현 가능, 예측 가능성 높음<br />
+단점: 아키텍처별 syscall 번호, ABI 호환성(REFER/TRUNCATE 지원 여부) 처리 등 주변 코드가 필요</p>
+
+<ol>
+  <li>PyPI landlock 패키지가 나은 경우</li>
+</ol>
+
+<ul>
+  <li>
+    <p>“읽기만 허용할 루트 몇 개 + 기본은 차단” 같은 단순 모델이면 충분할 때</p>
+  </li>
+  <li>
+    <p>유지보수 용이성, 가독성, 배포 편의성을 우선할 때</p>
+  </li>
+  <li>
+    <p>커널 기능 추가(ABI v2/v3)까지 세밀 제어가 굳이 필요 없을 때</p>
+  </li>
+</ul>
+
+<p>장점: 코드 간단, 포터블, 업데이트 시 따라가면 됨<br />
+단점: 래퍼가 노출하는 추상화 한계 때문에 per-path 쓰기 권한을 정확히 다루지 못할 수 있음</p>
+
+<p>현실적인 권장</p>
+
+<ul>
+  <li>
+    <p>네 요구(RO 디렉터리와 RW 디렉터리를 분리)라면 ctypes로 얇은 헬퍼를 두는 쪽이 깔끔하다. 이미 제공한 50~80줄짜리 helper를 모듈화하면 끝이다. 그 위에 “설정은 네가 직접, LLM에는 노출 금지” 원칙만 지키면 된다.</p>
+  </li>
+  <li>
+    <p>유지보수 부담을 줄이고 싶다면 하이브리드로 가자. 우선 PyPI 패키지로 “읽기 허용 루트”만 잡고, “쓰기 허용 루트”만 ctypes로 추가 규칙을 넣는 방식도 가능하다. 즉, 간단한 건 래퍼에 맡기고, 꼭 필요한 부분만 커널 UAPI로 보강.</p>
+  </li>
+</ul>
+
+<p>결론</p>
+
+<ul>
+  <li>
+    <p>세밀한 RW 컨트롤이 필요하면 ctypes가 더 낫다.</p>
+  </li>
+  <li>
+    <p>단순 접근제어와 운영 편의가 우선이면 패키지가 더 낫다.</p>
+  </li>
+  <li>
+    <p>너의 현재 설계(세션 유지 + 명시적 RW 분리)는 ctypes 미니 헬퍼가 가장 직관적이고, LLM 툴 레이어와도 잘 맞는다.</p>
+  </li>
+</ul>
+
+<p class="chat--user">
+
+아 redhat 8.10은 그런게 안 되네. 그냥 pure 파이썬으로 간단하게 되는 패키지 없나? 해커가 작정하고 하면 뚫릴수도 있지만 LLM이 그런 동작을 안한다고 가정하고
+
+</p>
+
+<p>가능한 한 단순하게 갈게. RHEL 8.10에서 Landlock 안 된다면 “완벽 보안” 대신 실수 방지용 가벼운 가드가 현실적이다. 순수 파이썬만으로도 다음 정도는 막을 수 있다.</p>
+
+<ol>
+  <li>
+    <p>sys.addaudithook로 파일 열기(open) 이벤트에서 “쓰기 의도”를 가로채기</p>
+  </li>
+  <li>
+    <p>os/builtins/pathlib의 쓰기 계열 호출을 몽키패치해 우회 시도 최소화</p>
+  </li>
+  <li>
+    <p>옵션으로 subprocess/네트워크 차단</p>
+  </li>
+</ol>
+
+<p>audit hook은 파이썬 3.8+에서 표준이며 open 이벤트는 경로, 모드, 플래그를 넘겨준다. 이걸로 “쓰기 의도”를 정밀하게 잡아낼 수 있다. 다만 감사용 훅이지 하드한 보안 경계는 아니라는 점은 공식적으로도 명시돼 있다(그래도 이번 목표에는 충분히 유용). <a href="https://docs.python.org/3/library/audit_events.html?utm_source=chatgpt.com">Python documentation+2</a></p>
+
+<p>아래는 바로 복붙해 쓸 수 있는 “순수 파이썬 미니 패키지” 코드와 테스트다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># lite_fs_guard.py
+# 순수 파이썬 가드: 쓰기는 write_root 아래만 허용, 읽기는 기본 전체 허용(옵션으로 제한 가능)
+</span>
+<span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">builtins</span><span class="p">,</span> <span class="n">pathlib</span>
+
+<span class="k">class</span> <span class="nc">LiteFSGuard</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">write_root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">read_allow</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                 <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                 <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">write_root</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">write_root</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">read_allow</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">read_allow</span> <span class="ow">or</span> <span class="p">[])]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">allow_read_anywhere</span> <span class="o">=</span> <span class="n">allow_read_anywhere</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">block_subprocess</span> <span class="o">=</span> <span class="n">block_subprocess</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">block_network</span> <span class="o">=</span> <span class="n">block_network</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">write_root</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_installed</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="c1"># 원본 함수 백업
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_orig</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="p">:</span> <span class="n">builtins</span><span class="p">.</span><span class="nb">open</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">os_open</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="nb">open</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">rename</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">rename</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">replace</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">remove</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">remove</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">unlink</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">unlink</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">mkdir</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">mkdir</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">makedirs</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">makedirs</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">rmdir</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">rmdir</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">chmod</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">chmod</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">path_open</span><span class="sh">"</span><span class="p">:</span> <span class="n">pathlib</span><span class="p">.</span><span class="n">Path</span><span class="p">.</span><span class="nb">open</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">os_system</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">system</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_in_write_root</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">rp</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rp</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">write_root</span> <span class="ow">or</span> <span class="n">rp</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">write_root</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_is_read_allowed</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">allow_read_anywhere</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="n">rp</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">rp</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="nf">any</span><span class="p">(</span><span class="n">rp</span> <span class="o">==</span> <span class="n">r</span> <span class="ow">or</span> <span class="n">rp</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">read_allow</span><span class="p">)</span>
+
+    <span class="c1"># --------- audit hook ----------
+</span>    <span class="k">def</span> <span class="nf">_audit</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="o">==</span> <span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="p">:</span>
+            <span class="c1"># args: path, mode, flags (문서화됨)
+</span>            <span class="c1"># https://docs.python.org/3/library/audit_events.html
+</span>            <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">write_intent</span> <span class="o">=</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="ow">in</span> <span class="n">mode</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="p">))</span> <span class="ow">or</span> \
+                <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">O_WRONLY</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_CREAT</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_TRUNC</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_APPEND</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">write_intent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Write restricted to </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">write_root</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">write_intent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_is_read_allowed</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Read not allowed here: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">self</span><span class="p">.</span><span class="n">block_subprocess</span> <span class="ow">and</span> <span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">subprocess.</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">==</span> <span class="sh">"</span><span class="s">os.system</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Subprocess disabled by LiteFSGuard</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">self</span><span class="p">.</span><span class="n">block_network</span> <span class="ow">and</span> <span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">socket.</span><span class="sh">"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Network disabled by LiteFSGuard</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># --------- monkey patches (소프트 가드) ----------
+</span>    <span class="k">def</span> <span class="nf">_patches</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">open_guard</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">write_intent</span> <span class="o">=</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="ow">in</span> <span class="n">mode</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">write_intent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Write restricted to </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">write_root</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="nb">file</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">write_intent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_is_read_allowed</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Read not allowed here: </span><span class="si">{</span><span class="nb">file</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="p">](</span><span class="nb">file</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">os_open_guard</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">write_intent</span> <span class="o">=</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">O_WRONLY</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_CREAT</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_TRUNC</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_APPEND</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">write_intent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Write restricted to </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">write_root</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="nb">file</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">write_intent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_is_read_allowed</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Read not allowed here: </span><span class="si">{</span><span class="nb">file</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">os_open</span><span class="sh">"</span><span class="p">](</span><span class="nb">file</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">rename_guard</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">dst</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Rename restricted within write_root</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">rename</span><span class="sh">"</span><span class="p">](</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">replace_guard</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">dst</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Replace restricted within write_root</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">](</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">remove_guard</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Delete restricted within write_root</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">remove</span><span class="sh">"</span><span class="p">](</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">unlink_guard</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Unlink restricted within write_root</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">unlink</span><span class="sh">"</span><span class="p">](</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">mkdir_guard</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Mkdir restricted within write_root</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">mkdir</span><span class="sh">"</span><span class="p">](</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">makedirs_guard</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Makedirs restricted within write_root</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">makedirs</span><span class="sh">"</span><span class="p">](</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">rmdir_guard</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Rmdir restricted within write_root</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">rmdir</span><span class="sh">"</span><span class="p">](</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">chmod_guard</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Chmod restricted within write_root</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">chmod</span><span class="sh">"</span><span class="p">](</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">path_open_guard</span><span class="p">(</span><span class="n">self_path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">mode</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">write_intent</span> <span class="o">=</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="ow">in</span> <span class="n">mode</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="p">))</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">self_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">write_intent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_in_write_root</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Write restricted to </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">write_root</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">write_intent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="nf">_is_read_allowed</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Read not allowed here: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_orig</span><span class="p">[</span><span class="sh">"</span><span class="s">path_open</span><span class="sh">"</span><span class="p">](</span><span class="n">self_path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">builtins</span><span class="p">.</span><span class="nb">open</span> <span class="o">=</span> <span class="n">open_guard</span>
+        <span class="n">os</span><span class="p">.</span><span class="nb">open</span> <span class="o">=</span> <span class="n">os_open_guard</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">rename</span> <span class="o">=</span> <span class="n">rename_guard</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">replace</span> <span class="o">=</span> <span class="n">replace_guard</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">remove</span> <span class="o">=</span> <span class="n">remove_guard</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">unlink</span> <span class="o">=</span> <span class="n">unlink_guard</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">mkdir</span> <span class="o">=</span> <span class="n">mkdir_guard</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">makedirs</span> <span class="o">=</span> <span class="n">makedirs_guard</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">rmdir</span> <span class="o">=</span> <span class="n">rmdir_guard</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">chmod</span> <span class="o">=</span> <span class="n">chmod_guard</span>
+        <span class="n">pathlib</span><span class="p">.</span><span class="n">Path</span><span class="p">.</span><span class="nb">open</span> <span class="o">=</span> <span class="n">path_open_guard</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">block_subprocess</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="n">system</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="p">()).</span><span class="nf">throw</span><span class="p">(</span><span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">os.system disabled</span><span class="sh">"</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_installed</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">sys</span><span class="p">.</span><span class="nf">addaudithook</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_audit</span><span class="p">)</span>  <span class="c1"># 3.8+ 표준 훅: 이벤트 목록은 공식 표 참조
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">_patches</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_installed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[lite-fs-guard] active. write_root=</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">write_root</span><span class="si">}</span><span class="s">, read_anywhere=</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">allow_read_anywhere</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>간단 테스트 스크립트</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test_lite_fs_guard.py
+</span><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">from</span> <span class="n">lite_fs_guard</span> <span class="kn">import</span> <span class="n">LiteFSGuard</span>
+
+<span class="n">WRITE_ROOT</span> <span class="o">=</span> <span class="sh">"</span><span class="s">/tmp/sbx</span><span class="sh">"</span>
+<span class="n">guard</span> <span class="o">=</span> <span class="nc">LiteFSGuard</span><span class="p">(</span><span class="n">write_root</span><span class="o">=</span><span class="n">WRITE_ROOT</span><span class="p">,</span>
+                    <span class="n">allow_read_anywhere</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>   <span class="c1"># 어디든 읽기 허용
+</span>                    <span class="n">block_subprocess</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>      <span class="c1"># 원하면 False
+</span>                    <span class="n">block_network</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>        <span class="c1"># 원하면 True
+</span><span class="n">guard</span><span class="p">.</span><span class="nf">install</span><span class="p">()</span>
+
+<span class="c1"># 준비
+</span><span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">WRITE_ROOT</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">try write to /etc/hosts (should fail)</span><span class="sh">"</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">/etc/hosts</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">).</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s"># nope</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">FAIL: wrote to /etc/hosts</span><span class="sh">"</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">OK:</span><span class="sh">"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">try write to write_root (should pass)</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">open</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">WRITE_ROOT</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok.txt</span><span class="sh">"</span><span class="p">),</span> <span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">).</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s">hello</span><span class="se">\n</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">OK: wrote to</span><span class="sh">"</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">WRITE_ROOT</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok.txt</span><span class="sh">"</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">try read from /etc/hosts (should pass)</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">/etc/hosts</span><span class="sh">"</span><span class="p">).</span><span class="nf">read</span><span class="p">().</span><span class="nf">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>이 접근은 어디까지나 “실수 방지용”이다. 핵심 포인트만 다시 적는다.</p>
+
+<ul>
+  <li>
+    <p>sys.addaudithook는 표준이며 open 이벤트(path, mode, flags)를 준다. 여기서 정확히 쓰기 의도를 판별할 수 있다. <a href="https://docs.python.org/3/library/audit_events.html?utm_source=chatgpt.com">Python documentation</a></p>
+  </li>
+  <li>
+    <p>audit hook은 감사용이므로 완전한 보안 경계는 아니다. 하지만 이번 전제(LLM이 악의적 동작을 하지 않는다고 가정)에서는 충분히 실용적이다. <a href="https://github.com/python/cpython/issues/87604?utm_source=chatgpt.com">GitHub</a></p>
+  </li>
+  <li>
+    <p>더 강한 격리가 필요하면 도커·랜드락·AppArmor 같은 OS 레벨이 답이지만, Red Hat 8.10 제약이라면 위 가드가 가장 단순한 “순수 파이썬 80/20 해법”이다.</p>
+  </li>
+  <li>
+    <p>참고로 언어 제한만 필요한 경우 RestrictedPython 같은 도구도 있지만 파일시스템 격리를 제공하는 건 아니다. pyfakefs는 테스트용 가짜 FS이지 보안 격리가 아니다. codejail은 AppArmor가 필요해서 이번 조건에 맞지 않는다. <a href="https://restrictedpython.readthedocs.io/?utm_source=chatgpt.com">restrictedpython.readthedocs.io+3</a></p>
+  </li>
+</ul>
+
+<p>다음 스텝으로, 이 가드를 너의 커널 세션(또는 서브프로세스) 시작 직후에 한 번 설치하도록 넣으면 된다. 세션 유지/일회성 모두 동일하게 동작한다.</p>
+
+<p class="chat--user">
+
+#!/usr/bin/python3.8 #-<em>- coding: utf-8 -</em>- ## QUEST FOR A PYTHON SANDBOX: # 1. You design an script where an exec() command is ran. # 2. The code ran by exec() is supplied by your opponent, trying e.g. to # write something to the './forbidden.txt' file or access # forbidden_object. Your opponent has # full knowledge of the outer script (no security through obscurity). # There should be no trick to break the sandbox whatsoever. Crashing # the subprocess Cpython does not count. # 3. The exec()uted code should however allow as large subset of Python # capabilities as possible, including interaction with variables/ # functions/objects in the outer script, if and only if they are # explicitly listed as accessible. # 4. Elegant, fast, dependency-frugal solution is also appreciated. # 5. The outer script writes something to the './allowed.txt' file # in the end. user_command = """import sys ## Useful code on the figure import numpy x = numpy.linspace(0,10) y = numpy.sin(x) fig.get_axes()[0].plot(x, y) ## Malicious wannabe exploits follow for l in ().<strong>class</strong>.<strong>base</strong>.<strong>subclasses</strong>(): if l.<strong>name</strong> == '<strong>code</strong>': print(l) ## SANDBOXED: has access to the sandboxed python subprocess only, in line with our intention ## to provide Python environment as-rich-as-possible exec("[ i for i in ().<strong>class</strong>.<strong>base</strong>.<strong>subclasses</strong>() if i.<strong>name</strong> == 'code']<a href="0, 0, 0, 5, 8, 0, b'hello world', (), (), ()," title="', '', 0, b'">0</a>") ## TEST #fig = numpy.array([666]) ## TODO: unexpected class type of returned objects should be detected after being returned from the sandbox #class SpoofFigure(matplotlib.pyplot.Figure): # def savefig(self): print("Malicious action") ## SANDBOXED: modified class won't be serialized if not defined in a module - can not get out of sandbox #fig = SpoofFig() #import XXX ## UNCLEAR: could some compiled module circumwent the file access hook? Which OS calls should be forbidden, too? ## See https://docs.python.org/3/library/audit_events.html to find them. #open('forbidden','w').write('pwned by l33t h4xx0rz') ## SANDBOXED: fails to write on disk thanks to the audit hook #fig.savefig('forbidden.png') ## SANDBOXED: audit hook applies to all python code #forbidden_object.access() ## SANDBOXED: no access to the forbidden object from the outer scope conn.send([fig]) ## all results can be safely passed (unless it is of custom class etc.) """ ## Prepare the testing example import matplotlib.pyplot as plt fig, ax = plt.subplots(nrows=1, ncols=1) ## the user's code will plot here allowed_objects = [fig] ## no other data exposed to the exec()uted script ## —————- The sandbox implementation follows, not to be changed ——————– def sandbox2020(code, allowed_objects): def ran_in_subprocess(conn): from sys import addaudithook def block_mischief(event,arg): if type(event) != str: raise # Security note: Well-designed objects can be passed to this function that could expose the top-level namespace # (through catching error and reading sys.exc_info()[2].tb_frame.f_back.f_globals). This should not enable modifying # variables outside the multiprocessing sandbox, but could give access to some internal sandbox variables. This function # thus should not refer to any 'lock variables'. It is safer to check the results in the main thread. if event=='open' and type(arg[1])==str and arg[1]!='r': print('\taudit:', event, arg) raise IOError('file write forbidden') if event.split('.')[0] in ['subprocess', 'shutil', 'winreg']: print('\taudit:', event, arg) raise IOError('potentially dangerous, filesystem-accessing functions forbidden') addaudithook(block_mischief) del(block_mischief) ## No way to remove or circumwent audit hooks from python. No access to this function. sandbox_locals['conn'] = conn # automatically add the communication pipe to objects accessible from the sandbox exec(user_command, sandbox_locals) print('len sandbox locals after', len(sandbox_locals)) conn.close() from multiprocessing import Process, Pipe parent_conn, child_conn = Pipe() p = Process(target=ran_in_subprocess, args=(child_conn,)) p.start() ## NOTE: The sandbox is probably safe against file writing, as well as against access into the main process. ## Yet the objects returned from it as results could have been manipulated. Asserting the output objects to be ## of expected data types is an extra safety measure. But be careful whenever your main program flow is ## controlled by the returned objects' attributes, e.g. file paths could change. return parent_conn.recv() p.join() ## Run the sandbox! sandbox_locals = dict((key, value) for key,value in locals().items() if value in allowed_objects) # copy.deepcopy() ## are all obj safely serialized? fig_result = sandbox2020(user_command, sandbox_locals) ## Demonstrate that the main process is not affected open('./allowed.txt','w').write('legally saved file from the main process') print(type(fig_result) == type(fig)) fig_result.savefig('allowed.png') 이런 코드는 어때
+
+</p>
+
+<p>좋은 출발이야. 다만 지금 코드는 “쓰기 의도” 판별이 부정확하고, os 계열 조작·서브프로세스·네트워크가 그대로 열려 있어 실수 방지라는 목표에도 살짝 모자라. 구조는 유지하되, 최소한만 손봐서 안전성과 예측가능성을 올린 패치안을 줄게.</p>
+
+<p>핵심 문제 요약</p>
+
+<ol>
+  <li>
+    <p>audit 훅의 open 검사: mode가 'r'이 아니면 전부 쓰기라고 가정하고 있는데, 'rb', 'r+', 'a', 'x' 등과 flags까지 모두 봐야 한다. os.open()도 잡아야 한다.</p>
+  </li>
+  <li>
+    <p>파일 조작류: rename/replace/remove/unlink/mkdir/makedirs/rmdir 같은 조작 이벤트를 막아야 샌드박스 밖 훼손을 피할 수 있다.</p>
+  </li>
+  <li>
+    <p>subprocess와 os.system, socket 계열은 명시 차단이 필요하다.</p>
+  </li>
+  <li>
+    <p>타임아웃과 join 누락: recv() 대기 중 교착, 무한루프 방지 필요. p.join(timeout) 후 미응답이면 종료.</p>
+  </li>
+  <li>
+    <p>인자 전달 혼선: sandbox2020(…, allowed_objects) 인자를 쓰지 않고 전역 sandbox_locals를 닫아 사용하고 있다. 함수 인자를 사용하도록 정리.</p>
+  </li>
+</ol>
+
+<p>아래는 네 코드에 최소 변경만 가한 드롭인 패치다. 동작은 그대로이고, 샌드박스 안에서의 파일 쓰기는 현재 작업 디렉터리 기준으로 “./sandbox/” 하위에서만 허용하도록 했다. 필요하면 WRITE_ROOT를 바꿔.</p>
+
+<p>수정본 전체</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/python3.8
+#-*- coding: utf-8 -*-
+</span>
+<span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="n">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">WRITE_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./sandbox</span><span class="sh">"</span><span class="p">)</span>   <span class="c1"># 샌드박스 내에서만 쓰기 허용
+</span><span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">WRITE_ROOT</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">user_command</span> <span class="o">=</span> <span class="sh">"""</span><span class="s">import sys, os, numpy
+x = numpy.linspace(0,10)
+y = numpy.sin(x)
+fig.get_axes()[0].plot(x, y)
+
+# 시도: 금지 영역 쓰기
+try:
+    open(</span><span class="sh">'</span><span class="s">./forbidden.txt</span><span class="sh">'</span><span class="s">,</span><span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="s">).write(</span><span class="sh">'</span><span class="s">nope</span><span class="sh">'</span><span class="s">)
+except Exception as e:
+    print(</span><span class="sh">'</span><span class="s">forbidden write blocked:</span><span class="sh">'</span><span class="s">, type(e).__name__)
+
+# 시도: 허용 영역 쓰기
+open(os.path.join(os.environ[</span><span class="sh">'</span><span class="s">WRITE_ROOT</span><span class="sh">'</span><span class="s">], </span><span class="sh">'</span><span class="s">ok.txt</span><span class="sh">'</span><span class="s">),</span><span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="s">).write(</span><span class="sh">'</span><span class="s">ok</span><span class="sh">'</span><span class="s">)
+
+# 결과 전달
+conn.send([fig])
+</span><span class="sh">"""</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="nf">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">allowed_objects</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">fig</span><span class="sh">"</span><span class="p">:</span> <span class="n">fig</span><span class="p">}</span>   <span class="c1"># exec에 노출할 것만 명시
+</span>
+<span class="k">def</span> <span class="nf">sandbox2020</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">allowed_globals</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">timeout_sec</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="n">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Pipe</span>
+
+    <span class="k">def</span> <span class="nf">ran_in_subprocess</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">allowed</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">pathlib</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="sh">'</span><span class="s">WRITE_ROOT</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">WRITE_ROOT</span><span class="sh">'</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="sh">"</span><span class="s">./sandbox</span><span class="sh">"</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">_in_write_root</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="n">rp</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">wr</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="sh">'</span><span class="s">WRITE_ROOT</span><span class="sh">'</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">rp</span> <span class="o">==</span> <span class="n">wr</span> <span class="ow">or</span> <span class="n">rp</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">wr</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_audit</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+            <span class="c1"># open / os.open: (path, mode, flags)
+</span>            <span class="k">if</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">os.open</span><span class="sh">"</span><span class="p">):</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span>
+                <span class="n">flags</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="n">write</span> <span class="o">=</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="ow">in</span> <span class="n">mode</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="p">))</span> <span class="ow">or</span> \
+                        <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">O_WRONLY</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_CREAT</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_TRUNC</span> <span class="o">|</span> <span class="n">os</span><span class="p">.</span><span class="n">O_APPEND</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">write</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">_in_write_root</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Write restricted to </span><span class="si">{</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="sh">'</span><span class="s">WRITE_ROOT</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+            <span class="c1"># 파일 조작류
+</span>            <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">os.rename</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.replace</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.remove</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.unlink</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.mkdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.makedirs</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.rmdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.chmod</span><span class="sh">"</span><span class="p">):</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nf">_in_write_root</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">FS op restricted to </span><span class="si">{</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="sh">'</span><span class="s">WRITE_ROOT</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+            <span class="c1"># 서브프로세스/시스템 호출
+</span>            <span class="k">elif</span> <span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">subprocess.</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">==</span> <span class="sh">"</span><span class="s">os.system</span><span class="sh">"</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Subprocess disabled</span><span class="sh">"</span><span class="p">)</span>
+
+            <span class="c1"># 네트워크(원하면 주석 해제)
+</span>            <span class="c1"># elif event.startswith("socket."):
+</span>            <span class="c1">#     raise PermissionError("Network disabled")
+</span>
+        <span class="n">sys</span><span class="p">.</span><span class="nf">addaudithook</span><span class="p">(</span><span class="n">_audit</span><span class="p">)</span>
+
+        <span class="c1"># exec용 전역 딕셔너리 구성
+</span>        <span class="n">g</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">__builtins__</span><span class="sh">"</span><span class="p">:</span> <span class="n">__builtins__</span><span class="p">}</span>
+        <span class="n">g</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">allowed</span><span class="p">)</span>
+        <span class="n">g</span><span class="p">[</span><span class="sh">"</span><span class="s">conn</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn</span>
+
+        <span class="c1"># 실행
+</span>        <span class="nf">exec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+
+        <span class="n">conn</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+
+    <span class="n">parent_conn</span><span class="p">,</span> <span class="n">child_conn</span> <span class="o">=</span> <span class="nc">Pipe</span><span class="p">(</span><span class="n">duplex</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">ran_in_subprocess</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">child_conn</span><span class="p">,</span> <span class="n">allowed_globals</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+
+    <span class="c1"># 결과 수신 대기 + 타임아웃
+</span>    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">parent_conn</span><span class="p">.</span><span class="nf">poll</span><span class="p">(</span><span class="mf">0.05</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">parent_conn</span><span class="p">.</span><span class="nf">recv</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span> <span class="o">&gt;</span> <span class="n">timeout_sec</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">()</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">TimeoutError</span><span class="p">(</span><span class="sh">"</span><span class="s">sandbox execution timed out</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="c1"># 샌드박스 실행
+</span><span class="n">result_list</span> <span class="o">=</span> <span class="nf">sandbox2020</span><span class="p">(</span><span class="n">user_command</span><span class="p">,</span> <span class="n">allowed_objects</span><span class="p">)</span>
+
+<span class="c1"># 메인 프로세스는 정상 동작
+</span><span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">./allowed.txt</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="p">).</span><span class="nf">write</span><span class="p">(</span><span class="sh">'</span><span class="s">legally saved file from the main process</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># 결과 확인
+</span><span class="n">fig_result</span> <span class="o">=</span> <span class="n">result_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">same type:</span><span class="sh">"</span><span class="p">,</span> <span class="nf">type</span><span class="p">(</span><span class="n">fig_result</span><span class="p">)</span> <span class="o">==</span> <span class="nf">type</span><span class="p">(</span><span class="n">fig_result</span><span class="p">))</span>
+<span class="n">fig_result</span><span class="p">.</span><span class="nf">savefig</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">WRITE_ROOT</span><span class="p">,</span> <span class="sh">'</span><span class="s">allowed.png</span><span class="sh">'</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">done</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>설명과 운용 팁</p>
+
+<ol>
+  <li>
+    <p>WRITE_ROOT 안에서만 쓰기 허용: open/os.open에서 mode/flags를 모두 검사해 쓰기 의도를 잡고, 조작성 작업(삭제/이동/생성 등)은 경로가 WRITE_ROOT 내부일 때만 허용했다.</p>
+  </li>
+  <li>
+    <p>읽기는 어디서나 가능하게 남겨두었고, 필요하면 _audit의 open 분기에서 읽기도 allowlist로 제한할 수 있다.</p>
+  </li>
+  <li>
+    <p>subprocess, os.system 차단. 네 목적에 맞게 socket.*도 막을 수 있다.</p>
+  </li>
+  <li>
+    <p>타임아웃과 안전 종료 추가. 자식이 결과를 안 보내면 terminate 후 TimeoutError.</p>
+  </li>
+  <li>
+    <p>allowed_objects는 dict로 명시 주입. exec의 globals로만 전달돼, 그 외 바깥 이름은 보이지 않는다.</p>
+  </li>
+  <li>
+    <p>이건 “실수 방지용”이다. 악의적 확장(C 확장에서 직접 open 호출, ctypes로 커널 호출 등)은 막지 못한다는 점은 설계상 감수. 그 대신 코드가 짧고 의존성 없고, LLM이 악의적으로 행동하지 않는다는 전제에서는 실용적이다.</p>
+  </li>
+</ol>
+
+<p>여기서 더 단단히 하고 싶다면, 네가 이미 쓰던 커널 유지 구조에 이 가드를 첫 셀로 주입하고, 파일은 copy_to_sandbox로 WRITE_ROOT 밑으로만 들여와 다루게 만드는 정도면 충분히 80/20을 채운다.</p>
+
+<p class="chat--user">
+
+근데 기존 코드에서 return을 먼저하고 join을 하는데 말이 안되는거지?
+
+</p>
+
+<p>맞아. 그 코드는 return 다음에 p.join()이 있어 실행되지 않아. 결과를 받은 뒤 프로세스를 정리(join/terminate)하고 리소스를 닫은 다음에 return 해야 한다. 그렇지 않으면 좀비 프로세스가 생길 수 있다(특히 POSIX).</p>
+
+<p>안전한 기본 패턴을 아주 간단히 적으면 이렇게 된다.</p>
+
+<ol>
+  <li>
+    <p>자식 시작 → 부모에서 child_conn 닫기</p>
+  </li>
+  <li>
+    <p>poll로 타임아웃 감시하며 recv</p>
+  </li>
+  <li>
+    <p>결과 받으면 p.join()으로 수거</p>
+  </li>
+  <li>
+    <p>타임아웃이면 p.terminate() 후 p.join()</p>
+  </li>
+  <li>
+    <p>항상 파이프 닫기</p>
+  </li>
+</ol>
+
+<p>최소 수정 예시</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sandbox2020</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">allowed_globals</span><span class="p">,</span> <span class="n">timeout_sec</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="n">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Pipe</span>
+
+    <span class="k">def</span> <span class="nf">ran_in_subprocess</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">allowed</span><span class="p">):</span>
+        <span class="c1"># ... 내부 실행 로직 ...
+</span>        <span class="n">conn</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">conn</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>           <span class="c1"># 자식 쪽 파이프 닫기 후 종료
+</span>
+    <span class="n">parent_conn</span><span class="p">,</span> <span class="n">child_conn</span> <span class="o">=</span> <span class="nc">Pipe</span><span class="p">(</span><span class="n">duplex</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">ran_in_subprocess</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">child_conn</span><span class="p">,</span> <span class="n">allowed_globals</span><span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="n">child_conn</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>          <span class="c1"># 부모 쪽에서 child end는 바로 닫기
+</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># 타임아웃 감시하면서 결과 수신
+</span>        <span class="k">if</span> <span class="n">parent_conn</span><span class="p">.</span><span class="nf">poll</span><span class="p">(</span><span class="n">timeout_sec</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">parent_conn</span><span class="p">.</span><span class="nf">recv</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">()</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">TimeoutError</span><span class="p">(</span><span class="sh">"</span><span class="s">sandbox execution timed out</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="c1"># 여기서 반드시 조인해서 수거
+</span>        <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_alive</span><span class="p">():</span>
+            <span class="c1"># 혹시 아직 살아 있으면 강제 종료 후 재조인
+</span>            <span class="n">p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">()</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">parent_conn</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>한 줄 요약<br />
+return을 먼저 하면 그 아래 코드는 죽은 코드가 된다. 결과를 변수에 담고, 프로세스를 수거(p.join)하고, 핸들들을 닫은 뒤에 return 하도록 순서를 바꿔야 한다.</p>
+
         
       </section>
 
@@ -2117,7 +3116,7 @@ landlock 패키지에 PathBeneath라는 게 없대. 그리고 Config는 유저�
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T12:51:13+09:00">2025-11-05</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T14:20:13+09:00">2025-11-05</time></p>
 
       </footer>
 
@@ -2171,7 +3170,7 @@ landlock 패키지에 PathBeneath라는 게 없대. 그리고 Config는 유저�
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T12:51:19+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T14:20:18+09:00">2025-11-05</time>
       </span>
     
 
