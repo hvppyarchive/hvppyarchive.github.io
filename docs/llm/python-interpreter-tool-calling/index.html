@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-11-05T14:20:13+09:00">
+  <meta property="article:published_time" content="2025-11-05T14:47:56+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python 코드 실행 Tool Calling">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-11-05T14:20:13+09:00">
+    <meta itemprop="datePublished" content="2025-11-05T14:47:56+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T14:20:13+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T14:47:56+09:00">2025-11-05</time>
       </span>
     
 
@@ -3091,6 +3091,438 @@ conn.send([fig])
 <p>한 줄 요약<br />
 return을 먼저 하면 그 아래 코드는 죽은 코드가 된다. 결과를 변수에 담고, 프로세스를 수거(p.join)하고, 핸들들을 닫은 뒤에 return 하도록 순서를 바꿔야 한다.</p>
 
+<p class="chat--user">
+
+수정할 것: conn 불필요한 것 같은데 그냥 subprocess(with 파일/subprocess sendbox)로 실행하고 stdout 메시지랑 stderr 메시지만 있으면 될 것 같아. 단 에러 난 내용에 대해선 좀 더 자세히 나오면 좋겠어. 어떤 파일을 접근하려다 났는지/어떤 커맨드를 하려다 났는지
+
+&lt;p class="chat--user" markdown="1"&gt;
+
+수정할 것: conn 불필요한 것 같은데 그냥 subprocess(with 파일/subprocess sendbox)로 실행하고 stdout 메시지랑 stderr 메시지만 있으면 될 것 같아. 단 에러 난 내용에 대해선 좀 더 자세히 나오면 좋겠어. 어떤 파일을 접근하려다 났는지/어떤 커맨드를 하려다 났는지 또, async를 활용해서 끝날때까지는 await로 하면 좋겠어
+
+</p>
+
+<p>좋아. 파이프(conn) 없이, 별도 파이썬 서브프로세스를 async/await로 실행하고 stdout/stderr만 수집하는 최소 구현을 정리했다. 서브프로세스 안에서는 audit hook으로 “파일 시스템 쓰기”를 WRITE_ROOT 내부로만 제한하고, subprocess/os.system 시도를 차단한다. 에러 메시지는 어떤 파일/커맨드 때문에 막혔는지 자세히 출력된다.</p>
+
+<p>아래 스크립트 하나로 바로 실행해도 되고, run_user_code_async 함수만 가져다 써도 된다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sandbox_async.py
+# Python 3.8+ 필요. 외부 의존성 없음.
+</span><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">tempfile</span><span class="p">,</span> <span class="n">textwrap</span><span class="p">,</span> <span class="n">traceback</span>
+
+<span class="n">CHILD_TEMPLATE</span> <span class="o">=</span> <span class="sa">r</span><span class="sh">"""</span><span class="s">
+import os, sys
+
+WRITE_ROOT = os.environ.get(</span><span class="sh">"</span><span class="s">WRITE_ROOT</span><span class="sh">"</span><span class="s">, os.path.abspath(</span><span class="sh">"</span><span class="s">./sandbox</span><span class="sh">"</span><span class="s">))
+ALLOW_READ_ANYWHERE = os.environ.get(</span><span class="sh">"</span><span class="s">ALLOW_READ_ANYWHERE</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">1</span><span class="sh">"</span><span class="s">) == </span><span class="sh">"</span><span class="s">1</span><span class="sh">"</span><span class="s">
+READ_ALLOW = os.environ.get(</span><span class="sh">"</span><span class="s">READ_ALLOW</span><span class="sh">"</span><span class="s">, </span><span class="sh">""</span><span class="s">)
+READ_ALLOW = [os.path.realpath(p) for p in READ_ALLOW.split(os.pathsep) if p]
+
+def _real(p): 
+    try: return os.path.realpath(p)
+    except Exception: return str(p)
+
+def _in_write_root(p):
+    rp = _real(p); wr = _real(WRITE_ROOT)
+    return rp == wr or rp.startswith(wr + os.sep)
+
+def _is_read_allowed(p):
+    if ALLOW_READ_ANYWHERE: 
+        return True
+    rp = _real(p)
+    if _in_write_root(rp): 
+        return True
+    return any(rp == r or rp.startswith(r + os.sep) for r in READ_ALLOW)
+
+def _audit(event, args):
+    # 파일 열기/생성
+    if event in (</span><span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">os.open</span><span class="sh">"</span><span class="s">):
+        path = str(args[0])
+        mode = str(args[1]) if len(args) &gt; 1 else </span><span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="s">
+        flags = int(args[2]) if len(args) &gt; 2 else 0
+        write_intent = any(ch in mode for ch in (</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="s">)) or \
+            (flags &amp; (os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_TRUNC | os.O_APPEND))
+        if write_intent and not _in_write_root(path):
+            msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} path={_real(path)} mode={mode} flags={flags} reason=write-outside-WRITE_ROOT({WRITE_ROOT})</span><span class="sh">"</span><span class="s">
+            print(msg, file=sys.stderr, flush=True)
+            raise PermissionError(msg)
+        # 선택: 읽기 제한을 두고 싶으면 여기서 검사
+        if (not write_intent) and (not _is_read_allowed(path)):
+            msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} path={_real(path)} reason=read-not-allowed</span><span class="sh">"</span><span class="s">
+            print(msg, file=sys.stderr, flush=True)
+            raise PermissionError(msg)
+
+    # 파일 조작류 (경로가 첫 인자에 온다고 가정; rename/replace는 src,dst 둘 다 체크)
+    elif event in (</span><span class="sh">"</span><span class="s">os.rename</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.replace</span><span class="sh">"</span><span class="s">):
+        src = str(args[0]); dst = str(args[1])
+        if not (_in_write_root(src) and _in_write_root(dst)):
+            msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} src={_real(src)} dst={_real(dst)} reason=op-outside-WRITE_ROOT({WRITE_ROOT})</span><span class="sh">"</span><span class="s">
+            print(msg, file=sys.stderr, flush=True)
+            raise PermissionError(msg)
+    elif event in (</span><span class="sh">"</span><span class="s">os.remove</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.unlink</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.mkdir</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.makedirs</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.rmdir</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.chmod</span><span class="sh">"</span><span class="s">):
+        path = str(args[0])
+        if not _in_write_root(path):
+            msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} path={_real(path)} reason=op-outside-WRITE_ROOT({WRITE_ROOT})</span><span class="sh">"</span><span class="s">
+            print(msg, file=sys.stderr, flush=True)
+            raise PermissionError(msg)
+
+    # 서브프로세스/시스템 호출 차단
+    elif event.startswith(</span><span class="sh">"</span><span class="s">subprocess.</span><span class="sh">"</span><span class="s">) or event == </span><span class="sh">"</span><span class="s">os.system</span><span class="sh">"</span><span class="s">:
+        cmd = None
+        try:
+            # subprocess.Popen은 첫 인자로 args(커맨드)가 들어오는 경우가 많다
+            cmd = args[0]
+        except Exception:
+            cmd = </span><span class="sh">"</span><span class="s">&lt;unknown&gt;</span><span class="sh">"</span><span class="s">
+        msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} cmd={cmd} reason=subprocess-disabled</span><span class="sh">"</span><span class="s">
+        print(msg, file=sys.stderr, flush=True)
+        raise PermissionError(msg)
+
+    # 네트워크를 막고 싶으면 주석 해제
+    # elif event.startswith(</span><span class="sh">"</span><span class="s">socket.</span><span class="sh">"</span><span class="s">):
+    #     msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} reason=network-disabled</span><span class="sh">"</span><span class="s">
+    #     print(msg, file=sys.stderr, flush=True)
+    #     raise PermissionError(msg)
+
+# 설치
+sys.addaudithook(_audit)
+
+# 사용자 코드 실행
+USER_CODE = r\"\"\"{user_code}\"\"\"
+g = {</span><span class="sh">"</span><span class="s">__name__</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="s">}
+try:
+    exec(USER_CODE, g, g)
+except Exception as e:
+    # 에러를 자세히 stderr로
+    print(</span><span class="sh">"</span><span class="s">[ERROR] exception while executing user code:</span><span class="sh">"</span><span class="s">, file=sys.stderr)
+    traceback.print_exc()
+    raise
+</span><span class="sh">"""</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_user_code_async</span><span class="p">(</span>
+    <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">write_root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">./sandbox</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">read_allow</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">python_executable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    user code를 별도 파이썬 서브프로세스에서 실행하고 stdout/stderr만 수집.
+    쓰기는 write_root 내부에서만 허용. subprocess/os.system은 차단.
+    </span><span class="sh">"""</span>
+    <span class="n">write_root</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="n">write_root</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">write_root</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">py</span> <span class="o">=</span> <span class="n">python_executable</span> <span class="ow">or</span> <span class="n">sys</span><span class="p">.</span><span class="n">executable</span>
+
+    <span class="n">child_code</span> <span class="o">=</span> <span class="n">CHILD_TEMPLATE</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">user_code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span>
+    <span class="c1"># 임시 파일에 자식 스크립트 저장
+</span>    <span class="k">with</span> <span class="n">tempfile</span><span class="p">.</span><span class="nc">NamedTemporaryFile</span><span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="sh">"</span><span class="s">.py</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">child_path</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">name</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">child_code</span><span class="p">)</span>
+
+    <span class="c1"># 자식 환경
+</span>    <span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>
+    <span class="n">env</span><span class="p">[</span><span class="sh">"</span><span class="s">WRITE_ROOT</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">write_root</span>
+    <span class="n">env</span><span class="p">[</span><span class="sh">"</span><span class="s">ALLOW_READ_ANYWHERE</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">1</span><span class="sh">"</span> <span class="k">if</span> <span class="n">allow_read_anywhere</span> <span class="k">else</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span>
+    <span class="k">if</span> <span class="n">read_allow</span><span class="p">:</span>
+        <span class="n">env</span><span class="p">[</span><span class="sh">"</span><span class="s">READ_ALLOW</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">pathsep</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">read_allow</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+            <span class="n">py</span><span class="p">,</span> <span class="n">child_path</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_sec</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">124</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[TIMEOUT] exceeded </span><span class="si">{</span><span class="n">timeout_sec</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="n">rc</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="n">stdout</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="n">stderr</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span>
+        <span class="p">}</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">unlink</span><span class="p">(</span><span class="n">child_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+<span class="c1"># 데모
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="n">user_code</span> <span class="o">=</span> <span class="sh">"""</span><span class="s">
+import os, sys, numpy
+print(</span><span class="sh">"</span><span class="s">hello from user code</span><span class="sh">"</span><span class="s">)
+# 허용된 쓰기
+open(os.path.join(os.environ[</span><span class="sh">'</span><span class="s">WRITE_ROOT</span><span class="sh">'</span><span class="s">], </span><span class="sh">'</span><span class="s">ok.txt</span><span class="sh">'</span><span class="s">), </span><span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="s">).write(</span><span class="sh">'</span><span class="s">ok</span><span class="sh">'</span><span class="s">)
+# 금지된 쓰기
+try:
+    open(</span><span class="sh">'</span><span class="s">/etc/forbidden.txt</span><span class="sh">'</span><span class="s">,</span><span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="s">).write(</span><span class="sh">'</span><span class="s">no</span><span class="sh">'</span><span class="s">)
+except Exception as e:
+    print(</span><span class="sh">"</span><span class="s">caught:</span><span class="sh">"</span><span class="s">, type(e).__name__)
+</span><span class="sh">"""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">run_user_code_async</span><span class="p">(</span><span class="n">user_code</span><span class="p">,</span> <span class="n">write_root</span><span class="o">=</span><span class="sh">"</span><span class="s">./sandbox</span><span class="sh">"</span><span class="p">,</span> <span class="n">timeout_sec</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RETURN =</span><span class="sh">"</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">])</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>핵심 포인트 요약</p>
+
+<ol>
+  <li>
+    <p>별도 파이썬 프로세스에서 실행하므로 세션 유지가 필요 없을 때 가볍고 안전하다. 세션 유지형이 필요하면 프로세스를 길게 붙잡는 래퍼를 만들면 된다.</p>
+  </li>
+  <li>
+    <p>파일 쓰기는 WRITE_ROOT 내부만 허용. 금지 시도는 stderr에 [AUDIT] 라인으로 이벤트, 경로, 이유가 찍히고 PermissionError를 일으킨다.</p>
+  </li>
+  <li>
+    <p>subprocess/os.system은 차단되고, 차단 사유와 시도한 커맨드를 stderr로 남긴다.</p>
+  </li>
+  <li>
+    <p>await로 결과를 받을 때까지 기다린다. 타임아웃이 나면 returncode 124와 함께 종료한다.</p>
+  </li>
+  <li>
+    <p>읽기는 기본적으로 어디서든 허용하지만, allow_read_anywhere=False로 두고 read_allow 리스트를 주면 읽기도 경로 기반 허용으로 좁힐 수 있다.</p>
+  </li>
+</ol>
+
+<p>이제 네 에이전트 툴 쪽에서는 이 함수 하나만 감싸서 호출하면 된다. 툴 인자는 code, write_root, timeout 정도만 노출하고, 정책(읽기 허용 범위)은 서버 측에서만 관리해도 깔끔하다.</p>
+
+<p class="chat--user">
+
+추가 구현 요청: read_path(리스트)와 write_path(리스트)를 받도록 하고 싶어. 그리고 시작하는 cwd(Working directory)도 코드 시작할 때 코드랑 같이 입력 하면 좋겠어. 없으면 그냥 None으로 하기. 그런데 cwd를 subprocess 에서 바꿔도 부모 프로세스에는 상관이 없지?
+
+</p>
+
+<p>정리 먼저.</p>
+
+<ul>
+  <li>
+    <p>요청 반영: read_path(여러 개), write_path(여러 개) 받기, 시작 작업 디렉터리(cwd) 옵션, 비동기(async/await) 실행, 결과는 stdout/stderr만.</p>
+  </li>
+  <li>
+    <p>서브프로세스 안에서 audit hook으로 파일/서브프로세스 시도 감시. 어떤 파일·커맨드 때문에 막혔는지 stderr에 자세히 씀.</p>
+  </li>
+  <li>
+    <p>서브프로세스에서 cwd를 바꿔도 부모 프로세스에는 영향 없다(프로세스마다 현재 디렉터리는 독립).</p>
+  </li>
+</ul>
+
+<p>아래는 바로 쓸 수 있는 최소 구현이다. 외부 의존성 없음, Python 3.8+.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sandbox_async_paths.py
+</span><span class="kn">import</span> <span class="n">asyncio</span><span class="p">,</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">tempfile</span>
+
+<span class="n">CHILD_TEMPLATE</span> <span class="o">=</span> <span class="sa">r</span><span class="sh">"""</span><span class="s">
+import os, sys, traceback
+
+WRITE_DIRS = [p for p in os.environ.get(</span><span class="sh">"</span><span class="s">WRITE_DIRS</span><span class="sh">"</span><span class="s">,</span><span class="sh">""</span><span class="s">).split(os.pathsep) if p]
+READ_DIRS  = [p for p in os.environ.get(</span><span class="sh">"</span><span class="s">READ_DIRS</span><span class="sh">"</span><span class="s">,</span><span class="sh">""</span><span class="s">).split(os.pathsep) if p]
+ALLOW_READ_ANYWHERE = os.environ.get(</span><span class="sh">"</span><span class="s">ALLOW_READ_ANYWHERE</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">1</span><span class="sh">"</span><span class="s">) == </span><span class="sh">"</span><span class="s">1</span><span class="sh">"</span><span class="s">
+
+def _real(p):
+    try: return os.path.realpath(p)
+    except Exception: return str(p)
+
+def _is_under_any(path, roots):
+    rp = _real(path)
+    for r in roots:
+        rr = _real(r)
+        if rp == rr or rp.startswith(rr + os.sep):
+            return True
+    return False
+
+def _audit(event, args):
+    try:
+        # 파일 열기
+        if event in (</span><span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">os.open</span><span class="sh">"</span><span class="s">):
+            path = str(args[0])
+            mode = str(args[1]) if len(args) &gt; 1 else </span><span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="s">
+            flags = int(args[2]) if len(args) &gt; 2 else 0
+            write = any(ch in mode for ch in (</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="s">)) or \
+                    (flags &amp; (os.O_WRONLY|os.O_RDWR|os.O_CREAT|os.O_TRUNC|os.O_APPEND))
+            if write and not _is_under_any(path, WRITE_DIRS):
+                msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} path={_real(path)} mode={mode} flags={flags} reason=write-outside-allowed</span><span class="sh">"</span><span class="s">
+                print(msg, file=sys.stderr, flush=True)
+                raise PermissionError(msg)
+            if not write and not ALLOW_READ_ANYWHERE and not _is_under_any(path, READ_DIRS+WRITE_DIRS):
+                msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} path={_real(path)} reason=read-not-allowed</span><span class="sh">"</span><span class="s">
+                print(msg, file=sys.stderr, flush=True)
+                raise PermissionError(msg)
+
+        # 파일 조작류
+        elif event in (</span><span class="sh">"</span><span class="s">os.rename</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.replace</span><span class="sh">"</span><span class="s">):
+            src = str(args[0]); dst = str(args[1])
+            if not (_is_under_any(src, WRITE_DIRS) and _is_under_any(dst, WRITE_DIRS)):
+                msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} src={_real(src)} dst={_real(dst)} reason=op-outside-allowed</span><span class="sh">"</span><span class="s">
+                print(msg, file=sys.stderr, flush=True)
+                raise PermissionError(msg)
+        elif event in (</span><span class="sh">"</span><span class="s">os.remove</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.unlink</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.mkdir</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.makedirs</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.rmdir</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">os.chmod</span><span class="sh">"</span><span class="s">):
+            path = str(args[0])
+            if not _is_under_any(path, WRITE_DIRS):
+                msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} path={_real(path)} reason=op-outside-allowed</span><span class="sh">"</span><span class="s">
+                print(msg, file=sys.stderr, flush=True)
+                raise PermissionError(msg)
+
+        # 서브프로세스/시스템 호출 차단
+        elif event.startswith(</span><span class="sh">"</span><span class="s">subprocess.</span><span class="sh">"</span><span class="s">) or event == </span><span class="sh">"</span><span class="s">os.system</span><span class="sh">"</span><span class="s">:
+            cmd = None
+            try: cmd = args[0]
+            except Exception: cmd = </span><span class="sh">"</span><span class="s">&lt;unknown&gt;</span><span class="sh">"</span><span class="s">
+            msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} cmd={cmd} reason=subprocess-disabled</span><span class="sh">"</span><span class="s">
+            print(msg, file=sys.stderr, flush=True)
+            raise PermissionError(msg)
+
+        # 네트워크를 막고 싶으면 주석 해제
+        # elif event.startswith(</span><span class="sh">"</span><span class="s">socket.</span><span class="sh">"</span><span class="s">):
+        #     msg = f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event={event} reason=network-disabled</span><span class="sh">"</span><span class="s">
+        #     print(msg, file=sys.stderr, flush=True)
+        #     raise PermissionError(msg)
+
+    except Exception:
+        raise
+
+sys.addaudithook(_audit)
+
+USER_CODE = r\"\"\"{user_code}\"\"\"
+g = {</span><span class="sh">"</span><span class="s">__name__</span><span class="sh">"</span><span class="s">:</span><span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="s">}
+try:
+    exec(USER_CODE, g, g)
+except Exception:
+    print(</span><span class="sh">"</span><span class="s">[ERROR] exception while executing user code:</span><span class="sh">"</span><span class="s">, file=sys.stderr)
+    traceback.print_exc()
+    raise
+</span><span class="sh">"""</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_user_code_async</span><span class="p">(</span>
+    <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">read_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">write_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">cwd</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">python_executable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    별도 파이썬 서브프로세스에서 사용자 코드를 실행한다.
+    - read_paths: 읽기 허용 경로 목록(하위 포함). None 또는 []면 읽기 어디든 허용(allow_read_anywhere=True).
+    - write_paths: 쓰기 허용 경로 목록(하위 포함). None/[]면 쓰기 전부 차단.
+    - cwd: 서브프로세스 시작 작업 디렉터리. None이면 부모의 cwd를 상속. 자식이 바꿔도 부모에는 영향 없음.
+    - stdout/stderr를 수집해 반환.
+    </span><span class="sh">"""</span>
+    <span class="n">py</span> <span class="o">=</span> <span class="n">python_executable</span> <span class="ow">or</span> <span class="n">sys</span><span class="p">.</span><span class="n">executable</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+    <span class="n">wp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">wp</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">allow_read_anywhere</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">allow_read_anywhere</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">rp</span><span class="p">)</span>  <span class="c1"># 읽기 경로 미지정이면 어디든 읽기 허용
+</span>
+    <span class="n">child_code</span> <span class="o">=</span> <span class="n">CHILD_TEMPLATE</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">user_code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="p">.</span><span class="nc">NamedTemporaryFile</span><span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="sh">"</span><span class="s">.py</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">child_path</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">name</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">child_code</span><span class="p">)</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>
+    <span class="n">env</span><span class="p">[</span><span class="sh">"</span><span class="s">READ_DIRS</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">pathsep</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">[</span><span class="sh">"</span><span class="s">WRITE_DIRS</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">pathsep</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">[</span><span class="sh">"</span><span class="s">ALLOW_READ_ANYWHERE</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">1</span><span class="sh">"</span> <span class="k">if</span> <span class="n">allow_read_anywhere</span> <span class="k">else</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">create_subprocess_exec</span><span class="p">(</span>
+            <span class="n">py</span><span class="p">,</span> <span class="n">child_path</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">asyncio</span><span class="p">.</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+            <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">,</span>  <span class="c1"># 자식의 시작 작업 디렉터리. 부모엔 영향 없음.
+</span>        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">communicate</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_sec</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="n">proc</span><span class="p">.</span><span class="nf">kill</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">proc</span><span class="p">.</span><span class="nf">wait</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span><span class="mi">124</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span><span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span><span class="sa">f</span><span class="sh">"</span><span class="s">[TIMEOUT] exceeded </span><span class="si">{</span><span class="n">timeout_sec</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="n">proc</span><span class="p">.</span><span class="n">returncode</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="n">stdout</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span>
+            <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="n">stderr</span><span class="p">.</span><span class="nf">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="sh">"</span><span class="s">replace</span><span class="sh">"</span><span class="p">),</span>
+        <span class="p">}</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="nf">unlink</span><span class="p">(</span><span class="n">child_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="c1"># 데모 실행
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="sa">r</span><span class="sh">"""</span><span class="s">
+import os, sys, subprocess
+print(</span><span class="sh">"</span><span class="s">CWD:</span><span class="sh">"</span><span class="s">, os.getcwd())
+# 허용된 쓰기
+open(os.path.join(</span><span class="sh">"</span><span class="s">out_dir</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">ok.txt</span><span class="sh">"</span><span class="s">), </span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">).write(</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="s">)  # 상대경로는 cwd 기준
+# 금지된 쓰기
+try:
+    open(</span><span class="sh">"</span><span class="s">/tmp/blocked.txt</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">).write(</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="s">)
+except Exception as e:
+    print(</span><span class="sh">"</span><span class="s">blocked write:</span><span class="sh">"</span><span class="s">, type(e).__name__)
+# 서브프로세스 시도
+try:
+    subprocess.check_output([</span><span class="sh">"</span><span class="s">echo</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">hi</span><span class="sh">"</span><span class="s">])
+except Exception as e:
+    print(</span><span class="sh">"</span><span class="s">blocked subproc:</span><span class="sh">"</span><span class="s">, type(e).__name__)
+# 허용된 읽기(예: read_paths가 지정되었거나 allow_read_anywhere=True인 경우)
+print(</span><span class="sh">"</span><span class="s">done</span><span class="sh">"</span><span class="s">)
+</span><span class="sh">"""</span>
+        <span class="c1"># 예시: cwd를 ./work로, 쓰기는 ./work/out_dir 아래만, 읽기는 어디든 허용
+</span>        <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="sh">"</span><span class="s">./work/out_dir</span><span class="sh">"</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">run_user_code_async</span><span class="p">(</span>
+            <span class="n">code</span><span class="p">,</span>
+            <span class="n">read_paths</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>                 <span class="c1"># None → 어디든 읽기 허용
+</span>            <span class="n">write_paths</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./work/out_dir</span><span class="sh">"</span><span class="p">],</span>  <span class="c1"># 여기만 쓰기 허용
+</span>            <span class="n">cwd</span><span class="o">=</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">,</span>                    <span class="c1"># 자식의 시작 CWD
+</span>            <span class="n">timeout_sec</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">])</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>포인트</p>
+
+<ul>
+  <li>
+    <p>read_paths와 write_paths는 하위 폴더까지 포함해 허용된다. 쓰기는 write_paths 중 하나에 포함될 때만 통과.</p>
+  </li>
+  <li>
+    <p>read_paths를 지정하지 않으면 allow_read_anywhere=True로 동작해 어디든 읽기 허용(요구가 느슨할 때 편함). 읽기도 제한하려면 read_paths를 지정하고 allow_read_anywhere를 생략하면 자동으로 False로 바뀐다.</p>
+  </li>
+  <li>
+    <p>cwd 인자는 서브프로세스에만 적용된다. 자식이 os.chdir로 바꿔도 부모 프로세스에는 아무 영향 없다.</p>
+  </li>
+  <li>
+    <p>차단 시 stderr에 [AUDIT] 라인으로 이벤트, 경로, 커맨드, 이유를 상세히 남긴다.</p>
+  </li>
+</ul>
+
         
       </section>
 
@@ -3116,7 +3548,7 @@ return을 먼저 하면 그 아래 코드는 죽은 코드가 된다. 결과를 
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T14:20:13+09:00">2025-11-05</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T14:47:56+09:00">2025-11-05</time></p>
 
       </footer>
 
@@ -3170,7 +3602,7 @@ return을 먼저 하면 그 아래 코드는 죽은 코드가 된다. 결과를 
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T14:20:18+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T14:48:01+09:00">2025-11-05</time>
       </span>
     
 
