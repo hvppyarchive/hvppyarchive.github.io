@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-11-05T14:47:56+09:00">
+  <meta property="article:published_time" content="2025-11-05T15:33:14+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python 코드 실행 Tool Calling">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-11-05T14:47:56+09:00">
+    <meta itemprop="datePublished" content="2025-11-05T15:33:14+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T14:47:56+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T15:33:14+09:00">2025-11-05</time>
       </span>
     
 
@@ -3523,6 +3523,1167 @@ print(</span><span class="sh">"</span><span class="s">done</span><span class="sh
   </li>
 </ul>
 
+<p class="chat--user">
+
+{event}가 없대 format 부분에서
+
+</p>
+
+<p>맞아. 그 에러는 CHILD_TEMPLATE 전체에 <code class="language-plaintext highlighter-rouge">.format(...)</code>을 걸면서 템플릿 안에 있는 f-string의 <code class="language-plaintext highlighter-rouge">{event}</code>, <code class="language-plaintext highlighter-rouge">{args}</code> 같은 중괄호를 바깥 포맷터가 “키 event/args를 달라”로 오해했기 때문에 생긴 거야.</p>
+
+<p>해결은 셋 중 하나로 하면 깔끔해.</p>
+
+<ol>
+  <li>
+    <p>string.Template로 치환하기(가장 간단)</p>
+  </li>
+  <li>
+    <p>템플릿 안 모든 중괄호를 이스케이프해서 ``로 바꾸고 <code class="language-plaintext highlighter-rouge">.format(user_code=...)</code> 사용</p>
+  </li>
+  <li>
+    <p>아예 사용자 코드 위치만 특수 토큰으로 두고 <code class="language-plaintext highlighter-rouge">.replace()</code>로 치환</p>
+  </li>
+</ol>
+
+<p>바로 돌아가는 패치(Template 사용)만 보여줄게. 너의 기존 run_user_code_async에서 템플릿 치환 부분만 바꾸면 된다.</p>
+
+<p>수정 전<br />
+child_code = CHILD_TEMPLATE.format(user_code=code)</p>
+
+<p>수정 후<br />
+from string import Template<br />
+child_code = Template(CHILD_TEMPLATE).substitute(USER_CODE=code)</p>
+
+<p>그리고 CHILD_TEMPLATE 안의 자리표시자도 <code class="language-plaintext highlighter-rouge">${USER_CODE}</code>로 바꿔줘야 한다.</p>
+
+<p>예시(핵심 부분만)<br />
+CHILD_TEMPLATE = r"""<br />
+import os, sys, traceback</p>
+
+<h1 id="-중략-">… 중략 …</h1>
+
+<p>sys.addaudithook(_audit)</p>
+
+<p>USER_CODE = r"""${USER_CODE}"""<br />
+g = {"<strong>name</strong> ":"<strong>main</strong> "}<br />
+try:<br />
+exec(USER_CODE, g, g)<br />
+except Exception:<br />
+print("[ERROR] exception while executing user code:", file=sys.stderr)<br />
+traceback.print_exc()<br />
+raise<br />
+"""</p>
+
+<p>이렇게 바꾸면 템플릿 안의 f-string들(예: f"[AUDIT] blocked: event={event} …")은 손대지 않아도 되고, 바깥 치환기(Template)는 <code class="language-plaintext highlighter-rouge">$</code>만 보고 치환하므로 <code class="language-plaintext highlighter-rouge">{event}</code>를 건드리지 않는다.</p>
+
+<p>참고로 <code class="language-plaintext highlighter-rouge">.format()</code>을 꼭 쓰고 싶다면 템플릿 내부의 모든 중괄호를 ``로 이스케이프해야 한다. 예: <code class="language-plaintext highlighter-rouge">f"[AUDIT] blocked: event="</code>처럼. 그런데 그러면 내부 f-string이 더 이상 f-string이 아니게 되니, 그 경우엔 f-string을 포기하고 나중에 <code class="language-plaintext highlighter-rouge">.format(event=event, …)</code>를 자식 프로세스에서 호출하는 식으로 바꿔야 해서 코드가 번거로워진다. Template가 제일 깔끔해.</p>
+
+<p class="chat--user">
+
+async multi process 를 이용할 순 없나 string으로 코드를 줄줄이 쓰니깐 좀 …
+
+</p>
+
+<p>맞아. 문자열 템플릿로 “자식 스크립트”를 만들지 말고, 멀티프로세싱으로 독립 프로세스에서 실행하되 async/await로 감싸면 깔끔하다. 아래 코드는 순수 파이썬(의존성 없음)으로 동작하고, 자식 프로세스는 audit hook으로 파일/서브프로세스를 감시한다. 읽기·쓰기 허용 경로는 리스트로 받고, 시작 CWD도 옵션으로 준다. 자식에서 CWD를 바꿔도 부모에는 영향 없다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sandbox_async_multiprocess.py
+# Python 3.8+ 전제. 외부 의존성 없음.
+</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
+<span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">io</span><span class="p">,</span> <span class="n">traceback</span><span class="p">,</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="k">def</span> <span class="nf">_install_guard</span><span class="p">(</span><span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                   <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                   <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                   <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+    <span class="n">wp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+
+    <span class="k">def</span> <span class="nf">_real</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span> <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">roots</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nf">_real</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="n">r</span> <span class="ow">or</span> <span class="n">path</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">_audit</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="c1"># open / os.open: (path, mode, flags)
+</span>        <span class="k">if</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">os.open</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">write</span> <span class="o">=</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="ow">in</span> <span class="n">mode</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="p">))</span> <span class="ow">or</span> \
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">O_WRONLY</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_RDWR</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_CREAT</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_TRUNC</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_APPEND</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">write</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> mode=</span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s"> flags=</span><span class="si">{</span><span class="n">flags</span><span class="si">}</span><span class="s"> reason=write-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">write</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_read_anywhere</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rp</span><span class="o">+</span><span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=read-not-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 파일 조작(경로 첫 인자; rename/replace는 src,dst 둘 다 확인)
+</span>        <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">os.rename</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.replace</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">src</span><span class="p">,</span> <span class="n">dst</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nf">_under_any</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">wp</span><span class="p">)</span> <span class="ow">and</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">wp</span><span class="p">)):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> src=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">src</span><span class="p">)</span><span class="si">}</span><span class="s"> dst=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=op-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">os.remove</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.unlink</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.mkdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.makedirs</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.rmdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.chmod</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=op-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 서브프로세스/시스템 호출
+</span>        <span class="k">elif</span> <span class="n">block_subprocess</span> <span class="ow">and</span> <span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">subprocess.</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">==</span> <span class="sh">"</span><span class="s">os.system</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">try</span><span class="p">:</span> <span class="n">cmd</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="n">cmd</span> <span class="o">=</span> <span class="sh">"</span><span class="s">&lt;unknown&gt;</span><span class="sh">"</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> cmd=</span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s"> reason=subprocess-disabled</span><span class="sh">"</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 네트워크 차단 옵션
+</span>        <span class="k">elif</span> <span class="n">block_network</span> <span class="ow">and</span> <span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">socket.</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> reason=network-disabled</span><span class="sh">"</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">sys</span><span class="p">.</span><span class="nf">addaudithook</span><span class="p">(</span><span class="n">_audit</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_child_worker</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                  <span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">result_q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span><span class="p">):</span>
+    <span class="c1"># stdout/stderr 캡처
+</span>    <span class="n">stdout_buf</span><span class="p">,</span> <span class="n">stderr_buf</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="nc">StringIO</span><span class="p">(),</span> <span class="n">io</span><span class="p">.</span><span class="nc">StringIO</span><span class="p">()</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># CWD 설정(부모에는 영향 없음)
+</span>        <span class="k">if</span> <span class="n">cwd</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+
+        <span class="c1"># 가드 설치
+</span>        <span class="nf">_install_guard</span><span class="p">(</span><span class="n">read_paths</span><span class="p">,</span> <span class="n">write_paths</span><span class="p">,</span> <span class="n">allow_read_anywhere</span><span class="p">,</span>
+                       <span class="n">block_subprocess</span><span class="o">=</span><span class="n">block_subprocess</span><span class="p">,</span> <span class="n">block_network</span><span class="o">=</span><span class="n">block_network</span><span class="p">)</span>
+
+        <span class="c1"># 코드 실행
+</span>        <span class="n">g</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">__name__</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">}</span>
+        <span class="kn">import</span> <span class="n">contextlib</span>
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stdout</span><span class="p">(</span><span class="n">stdout_buf</span><span class="p">),</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stderr</span><span class="p">(</span><span class="n">stderr_buf</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nf">exec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="n">rc</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[ERROR] exception while executing user code:</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># 가드 초기화 중 오류 등
+</span>        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[ERROR] sandbox init/exec failed: </span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">stderr_buf</span><span class="p">)</span>
+        <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">stderr_buf</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">result_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span>
+            <span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="n">rc</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="n">stdout_buf</span><span class="p">.</span><span class="nf">getvalue</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="n">stderr_buf</span><span class="p">.</span><span class="nf">getvalue</span><span class="p">(),</span>
+        <span class="p">})</span>
+
+<span class="k">def</span> <span class="nf">_run_blocking</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                  <span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                  <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span> <span class="o">=</span> <span class="n">mp</span><span class="p">.</span><span class="nc">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">mp</span><span class="p">.</span><span class="nc">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_child_worker</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">code</span><span class="p">,</span> <span class="n">read_paths</span><span class="p">,</span> <span class="n">write_paths</span><span class="p">,</span> <span class="n">cwd</span><span class="p">,</span> <span class="n">allow_read_anywhere</span><span class="p">,</span>
+        <span class="n">block_subprocess</span><span class="p">,</span> <span class="n">block_network</span><span class="p">,</span> <span class="n">q</span>
+    <span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+
+    <span class="c1"># 결과 대기(타임아웃 지원)
+</span>    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">q</span><span class="p">.</span><span class="nf">empty</span><span class="p">():</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">get</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_alive</span><span class="p">():</span>
+            <span class="c1"># 비정상 종료 케이스
+</span>            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="n">p</span><span class="p">.</span><span class="n">exitcode</span> <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="n">exitcode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span>
+                      <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">[ERROR] child exited unexpectedly</span><span class="sh">"</span><span class="p">}</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span> <span class="o">&gt;</span> <span class="n">timeout_sec</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">()</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">124</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[TIMEOUT] exceeded </span><span class="si">{</span><span class="n">timeout_sec</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">}</span>
+        <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_alive</span><span class="p">():</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">()</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_user_code_mp_async</span><span class="p">(</span>
+    <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">read_paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">write_paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    별도 프로세스에서 사용자 코드를 실행하고 stdout/stderr만 수집한다(비동기).
+    - read_paths: 읽기 허용 경로 리스트(하위 포함). None이면 어디든 읽기 허용.
+    - write_paths: 쓰기 허용 경로 리스트(하위 포함). None/[]면 쓰기 전부 차단.
+    - cwd: 자식 프로세스 시작 CWD. None이면 부모 CWD 상속. 자식 변경은 부모에 영향 없음.
+    - block_subprocess: 서브프로세스 호출 차단 여부.
+    - block_network: 네트워크 차단 여부(기본 False).
+    - timeout_sec: 시간 초과시 returncode=124 반환.
+    </span><span class="sh">"""</span>
+    <span class="k">if</span> <span class="n">allow_read_anywhere</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">allow_read_anywhere</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">read_paths</span><span class="p">)</span>  <span class="c1"># 읽기 경로 미지정 → 어디든 읽기 허용
+</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span>
+        <span class="bp">None</span><span class="p">,</span>
+        <span class="n">_run_blocking</span><span class="p">,</span>
+        <span class="n">code</span><span class="p">,</span>
+        <span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+        <span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+        <span class="n">cwd</span><span class="p">,</span>
+        <span class="n">allow_read_anywhere</span><span class="p">,</span>
+        <span class="n">timeout_sec</span><span class="p">,</span>
+        <span class="n">block_subprocess</span><span class="p">,</span>
+        <span class="n">block_network</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># 데모
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="n">demo_code</span> <span class="o">=</span> <span class="sa">r</span><span class="sh">"""</span><span class="s">
+import os, sys, subprocess
+print(</span><span class="sh">"</span><span class="s">hello, cwd:</span><span class="sh">"</span><span class="s">, os.getcwd())
+# 허용된 쓰기
+open(</span><span class="sh">"</span><span class="s">out/ok.txt</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">).write(</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="s">)
+# 금지된 쓰기
+try:
+    open(</span><span class="sh">"</span><span class="s">/etc/blocked.txt</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">).write(</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="s">)
+except Exception as e:
+    print(</span><span class="sh">"</span><span class="s">blocked write:</span><span class="sh">"</span><span class="s">, type(e).__name__)
+# 서브프로세스 시도(차단)
+try:
+    subprocess.check_output([</span><span class="sh">"</span><span class="s">echo</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">hi</span><span class="sh">"</span><span class="s">])
+except Exception as e:
+    print(</span><span class="sh">"</span><span class="s">blocked subproc:</span><span class="sh">"</span><span class="s">, type(e).__name__)
+print(</span><span class="sh">"</span><span class="s">done</span><span class="sh">"</span><span class="s">)
+</span><span class="sh">"""</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="sh">"</span><span class="s">./work/out</span><span class="sh">"</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">run_user_code_mp_async</span><span class="p">(</span>
+            <span class="n">demo_code</span><span class="p">,</span>
+            <span class="n">read_paths</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>               <span class="c1"># 읽기 어디든
+</span>            <span class="n">write_paths</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./work/out</span><span class="sh">"</span><span class="p">],</span>    <span class="c1"># 여기에만 쓰기 허용
+</span>            <span class="n">cwd</span><span class="o">=</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">timeout_sec</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">block_subprocess</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">block_network</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">])</span>
+
+    <span class="c1"># Windows spawn 대비
+</span>    <span class="k">if</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span> <span class="o">==</span> <span class="sh">"</span><span class="s">win32</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">mp</span><span class="p">.</span><span class="nf">freeze_support</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>핵심 포인트</p>
+
+<ol>
+  <li>
+    <p>문자열 템플릿로 “자식 스크립트”를 만들지 않는다. 모듈 내의 <code class="language-plaintext highlighter-rouge">_child_worker</code>가 별도 프로세스에서 실행되어 exec(code)를 돌린다.</p>
+  </li>
+  <li>
+    <p>read_paths, write_paths를 리스트로 받아 하위까지 허용한다. 쓰기 시도는 write_paths 바깥이면 [AUDIT] 라인이 stderr에 찍히고 PermissionError가 난다. 어떤 파일을 쓰려 했는지, 어떤 조작을 하려 했는지 모두 기록된다.</p>
+  </li>
+  <li>
+    <p>async/await는 <code class="language-plaintext highlighter-rouge">run_in_executor</code>로 멀티프로세스 작업을 논블로킹으로 감싼다. 타임아웃이 나면 자식을 terminate하고 returncode=124로 돌려준다.</p>
+  </li>
+  <li>
+    <p>자식에서 cwd를 바꿔도 부모에는 영향 없다. 시작 CWD는 인자로 지정 가능하다.</p>
+  </li>
+  <li>
+    <p>서브프로세스, os.system을 차단했고, 필요하면 <code class="language-plaintext highlighter-rouge">block_network=True</code>로 소켓도 막을 수 있다.</p>
+  </li>
+</ol>
+
+<p>여기서 세션 유지형이 필요해지면, 프로세스를 오래 살려두고 큐로 여러 코드를 보내는 “세션 워커” 패턴으로 확장하면 된다. 지금은 요구하신 “간단하고 의존성 없는, async 멀티프로세스 + stdout/stderr만 수집”에 맞춘 최소 구현이다.</p>
+
+<p class="chat--user">
+
+근데 이런 식으로 수행하면 parent 코드에 있는 글로벌 변수 같은걸 user code가 접근할수도 있게 되나?
+
+</p>
+
+<p>핵심만 딱 정리.</p>
+
+<ol>
+  <li>
+    <p>지금 멀티프로세스 설계에서, 기본이 Linux의 fork면 자식이 부모의 메모리 스냅샷을 “읽기”는 할 수 있다. 예컨대 user code가 import <strong>main</strong> 해서 모듈 전역을 보면, 포크 시점의 값들이 보인다. 부모 상태를 바꾸진 못하지만, 전역 값이 노출되는 건 맞다.</p>
+  </li>
+  <li>
+    <p>이걸 원천 차단하려면 시작 방법을 spawn으로 강제하면 된다. spawn은 새 인터프리터를 깨끗하게 띄우고 모듈을 다시 임포트하므로, 부모의 런타임 전역 객체가 그대로 보이지 않는다. 네가 의도적으로 넘겨준 값(인자, 큐 메시지, exec에 주는 dict)만 접근 가능하다. Windows/macOS는 기본이 spawn, Linux는 기본이 fork라서 강제하는 것이 중요하다.</p>
+  </li>
+  <li>
+    <p>추가로 환경변수는 기본적으로 상속된다. 민감 정보가 있다면 자식에서 os.environ을 초기화하거나, 부모에서 run_user_code_mp_async 호출 전에 “허용 리스트만” 넘기는 방식을 써라.</p>
+  </li>
+</ol>
+
+<p>아래는 내 이전 코드에 “spawn 강제 + 환경변수 정리 옵션”을 넣은 패치다. 이러면 user code는 부모 전역에 직접 접근할 수 없다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># patch: spawn 사용 + 선택적 환경변수 정리
+</span><span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
+
+<span class="k">def</span> <span class="nf">_child_worker</span><span class="p">(...,</span> <span class="n">sanitize_env</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">allowed_env_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span> <span class="p">...):</span>
+    <span class="c1"># CWD 설정
+</span>    <span class="k">if</span> <span class="n">cwd</span><span class="p">:</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+
+    <span class="c1"># 환경변수 정리(선택)
+</span>    <span class="k">if</span> <span class="n">sanitize_env</span><span class="p">:</span>
+        <span class="n">keep</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="n">allowed_env_keys</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nf">list</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keep</span><span class="p">:</span>
+                <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="c1"># 가드 설치
+</span>    <span class="nf">_install_guard</span><span class="p">(...)</span>
+
+    <span class="c1"># 완전히 깨끗한 글로벌 dict로 실행
+</span>    <span class="n">g</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">__name__</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stdout</span><span class="p">(</span><span class="n">stdout_buf</span><span class="p">),</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stderr</span><span class="p">(</span><span class="n">stderr_buf</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nf">exec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">rc</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[ERROR] exception while executing user code:</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">()</span>
+    <span class="bp">...</span>
+
+<span class="k">def</span> <span class="nf">_run_blocking</span><span class="p">(...,</span> <span class="n">sanitize_env</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">allowed_env_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span><span class="p">,</span> <span class="p">...)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">mp</span><span class="p">.</span><span class="nf">get_context</span><span class="p">(</span><span class="sh">"</span><span class="s">spawn</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># 여기!
+</span>    <span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="nc">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="nc">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_child_worker</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(...,</span> <span class="n">sanitize_env</span><span class="p">,</span> <span class="n">allowed_env_keys</span><span class="p">,</span> <span class="p">...))</span>
+    <span class="n">p</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="bp">...</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run_user_code_mp_async</span><span class="p">(...,</span> <span class="n">sanitize_env</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">allowed_env_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="p">...):</span>
+    <span class="bp">...</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span>
+        <span class="bp">None</span><span class="p">,</span>
+        <span class="n">_run_blocking</span><span class="p">,</span>
+        <span class="n">code</span><span class="p">,</span>
+        <span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+        <span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+        <span class="n">cwd</span><span class="p">,</span>
+        <span class="n">allow_read_anywhere</span><span class="p">,</span>
+        <span class="n">timeout_sec</span><span class="p">,</span>
+        <span class="n">block_subprocess</span><span class="p">,</span>
+        <span class="n">block_network</span><span class="p">,</span>
+        <span class="n">sanitize_env</span><span class="p">,</span>
+        <span class="n">allowed_env_keys</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div></div>
+
+<p>요점 체크</p>
+
+<ul>
+  <li>
+    <p>spawn을 쓰면 user code는 부모 전역에 접근하지 못한다. 네가 exec에 넣은 dict(g)와 네가 넘긴 인자만 본다.</p>
+  </li>
+  <li>
+    <p>fork를 쓰면 import <strong>main</strong> 등으로 부모 모듈 전역 “값”을 읽을 수 있다. 그래서 Linux에서는 반드시 spawn으로 강제하자.</p>
+  </li>
+  <li>
+    <p>자식에서 os.chdir로 CWD를 바꿔도 부모에는 영향 없다. 프로세스별로 독립이다.</p>
+  </li>
+  <li>
+    <p>환경변수는 기본 상속이라 민감 정보가 있다면 sanitize_env=True와 allowed_env_keys로 최소화하자.</p>
+  </li>
+</ul>
+
+<p>이 설정이면, LLM이 악의적이진 않다는 전제에서 “부모 전역 접근” 걱정은 깔끔히 정리된다.</p>
+
+<p class="chat--user">
+
+음 OK. 전체 코드 다 써줘.
+
+</p>
+
+<p>좋아. 아래 스크립트 하나로 끝난다. 멀티프로세스로 분리해 exec(code)를 돌리고, spawn 컨텍스트로 부모 전역 노출을 막았다. read_paths와 write_paths 리스트로 경로 허용을 설정하고, 자식 프로세스 시작 cwd도 선택적으로 지정한다. 파일·서브프로세스(옵션으로 네트워크) 시도는 audit hook에서 차단하며, 어떤 경로/커맨드였는지 stderr에 자세히 남긴다. 비동기 API는 run_user_code_mp_async 한 함수만 쓰면 된다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sandbox_async_multiprocess_full.py
+# Python 3.8+ / 외부 의존성 없음
+</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
+<span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">io</span><span class="p">,</span> <span class="n">traceback</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">contextlib</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="c1"># ============== 내부: 가드 설치 ==============
+</span><span class="k">def</span> <span class="nf">_install_guard</span><span class="p">(</span><span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                   <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                   <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                   <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                   <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+    <span class="n">wp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+
+    <span class="k">def</span> <span class="nf">_real</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">roots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nf">_real</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="n">r</span> <span class="ow">or</span> <span class="n">path</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">_audit</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="c1"># 파일 열기
+</span>        <span class="k">if</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">os.open</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">write</span> <span class="o">=</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="ow">in</span> <span class="n">mode</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="p">))</span> <span class="ow">or</span> \
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">O_WRONLY</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_RDWR</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_CREAT</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_TRUNC</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_APPEND</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">write</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> mode=</span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s"> flags=</span><span class="si">{</span><span class="n">flags</span><span class="si">}</span><span class="s"> reason=write-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="nf">if </span><span class="p">(</span><span class="ow">not</span> <span class="n">write</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">allow_read_anywhere</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rp</span> <span class="o">+</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=read-not-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 파일 조작류
+</span>        <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">os.rename</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.replace</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">src</span><span class="p">,</span> <span class="n">dst</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nf">_under_any</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">wp</span><span class="p">)</span> <span class="ow">and</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">wp</span><span class="p">)):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> src=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">src</span><span class="p">)</span><span class="si">}</span><span class="s"> dst=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=op-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">os.remove</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.unlink</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.mkdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.makedirs</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.rmdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.chmod</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=op-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 서브프로세스/시스템 호출
+</span>        <span class="k">elif</span> <span class="n">block_subprocess</span> <span class="ow">and</span> <span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">subprocess.</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">==</span> <span class="sh">"</span><span class="s">os.system</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="sh">"</span><span class="s">&lt;unknown&gt;</span><span class="sh">"</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> cmd=</span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s"> reason=subprocess-disabled</span><span class="sh">"</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 네트워크 차단 옵션
+</span>        <span class="k">elif</span> <span class="n">block_network</span> <span class="ow">and</span> <span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">socket.</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> reason=network-disabled</span><span class="sh">"</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">sys</span><span class="p">.</span><span class="nf">addaudithook</span><span class="p">(</span><span class="n">_audit</span><span class="p">)</span>
+
+<span class="c1"># ============== 내부: 자식 워커 ==============
+</span><span class="k">def</span> <span class="nf">_child_worker</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                  <span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">sanitize_env</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">allowed_env_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                  <span class="n">result_q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">stdout_buf</span><span class="p">,</span> <span class="n">stderr_buf</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="nc">StringIO</span><span class="p">(),</span> <span class="n">io</span><span class="p">.</span><span class="nc">StringIO</span><span class="p">()</span>
+    <span class="n">rc</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># CWD 설정(부모에는 영향 없음)
+</span>        <span class="k">if</span> <span class="n">cwd</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+
+        <span class="c1"># 환경변수 최소화(선택)
+</span>        <span class="k">if</span> <span class="n">sanitize_env</span><span class="p">:</span>
+            <span class="n">keep</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="n">allowed_env_keys</span> <span class="ow">or</span> <span class="p">[</span><span class="sh">"</span><span class="s">PATH</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">PYTHONPATH</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">HOME</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">TMPDIR</span><span class="sh">"</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nf">list</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keep</span><span class="p">:</span>
+                    <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+        <span class="c1"># 가드 설치
+</span>        <span class="nf">_install_guard</span><span class="p">(</span><span class="n">read_paths</span><span class="p">,</span> <span class="n">write_paths</span><span class="p">,</span> <span class="n">allow_read_anywhere</span><span class="p">,</span>
+                       <span class="n">block_subprocess</span><span class="o">=</span><span class="n">block_subprocess</span><span class="p">,</span> <span class="n">block_network</span><span class="o">=</span><span class="n">block_network</span><span class="p">)</span>
+
+        <span class="c1"># exec용 깨끗한 글로벌 dict
+</span>        <span class="n">g</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">__name__</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">}</span>
+
+        <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stdout</span><span class="p">(</span><span class="n">stdout_buf</span><span class="p">),</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stderr</span><span class="p">(</span><span class="n">stderr_buf</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nf">exec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="n">rc</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[ERROR] exception while executing user code:</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[ERROR] sandbox init/exec failed: </span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">stderr_buf</span><span class="p">)</span>
+        <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">stderr_buf</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">result_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span>
+            <span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="n">rc</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="n">stdout_buf</span><span class="p">.</span><span class="nf">getvalue</span><span class="p">(),</span>
+            <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="n">stderr_buf</span><span class="p">.</span><span class="nf">getvalue</span><span class="p">(),</span>
+        <span class="p">})</span>
+
+<span class="c1"># ============== 내부: 동기 실행(스레드풀에서 호출) ==============
+</span><span class="k">def</span> <span class="nf">_run_blocking</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                  <span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                  <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                  <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">sanitize_env</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                  <span class="n">allowed_env_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">mp</span><span class="p">.</span><span class="nf">get_context</span><span class="p">(</span><span class="sh">"</span><span class="s">spawn</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># 부모 전역 노출 방지
+</span>    <span class="n">q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="nc">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="nc">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_child_worker</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">code</span><span class="p">,</span> <span class="n">read_paths</span><span class="p">,</span> <span class="n">write_paths</span><span class="p">,</span> <span class="n">cwd</span><span class="p">,</span> <span class="n">allow_read_anywhere</span><span class="p">,</span>
+        <span class="n">block_subprocess</span><span class="p">,</span> <span class="n">block_network</span><span class="p">,</span> <span class="n">sanitize_env</span><span class="p">,</span> <span class="n">allowed_env_keys</span><span class="p">,</span> <span class="n">q</span>
+    <span class="p">))</span>
+    <span class="n">p</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+    <span class="n">result</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">q</span><span class="p">.</span><span class="nf">empty</span><span class="p">():</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">get</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_alive</span><span class="p">():</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="n">p</span><span class="p">.</span><span class="n">exitcode</span> <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="n">exitcode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span>
+                      <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">[ERROR] child exited unexpectedly</span><span class="sh">"</span><span class="p">}</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span> <span class="o">&gt;</span> <span class="n">timeout_sec</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">()</span>
+            <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">124</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[TIMEOUT] exceeded </span><span class="si">{</span><span class="n">timeout_sec</span><span class="si">}</span><span class="s">s</span><span class="sh">"</span><span class="p">}</span>
+        <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">is_alive</span><span class="p">():</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">()</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="ow">or</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="sh">""</span><span class="p">,</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">[ERROR] no result</span><span class="sh">"</span><span class="p">}</span>
+
+<span class="c1"># ============== 공개: 비동기 API ==============
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">run_user_code_mp_async</span><span class="p">(</span>
+    <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">read_paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">write_paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">sanitize_env</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">allowed_env_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    별도 프로세스에서 사용자 코드를 실행하고 stdout/stderr를 수집해 반환(비동기).
+    - read_paths: 읽기 허용 경로 리스트(하위 포함). None이면 어디든 읽기 허용.
+    - write_paths: 쓰기 허용 경로 리스트(하위 포함). None/[]면 쓰기 전부 차단.
+    - cwd: 자식 프로세스 시작 작업 디렉터리. 자식의 os.chdir는 부모에 영향 없음.
+    - allow_read_anywhere: 명시적 제어(기본 None → read_paths 미지정이면 True).
+    - block_subprocess: 서브프로세스 호출 차단 여부.
+    - block_network: 네트워크 차단 여부.
+    - sanitize_env: 자식 환경변수를 최소화할지 여부.
+    - allowed_env_keys: sanitize_env=True일 때 보존할 키 목록(기본 PATH, PYTHONPATH, HOME, TMPDIR).
+    - timeout_sec: 시간 초과 시 returncode=124.
+    </span><span class="sh">"""</span>
+    <span class="k">if</span> <span class="n">allow_read_anywhere</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">allow_read_anywhere</span> <span class="o">=</span> <span class="p">(</span><span class="ow">not</span> <span class="n">read_paths</span><span class="p">)</span>
+
+    <span class="c1"># 쓰기 경로는 미리 만들어 둔다.
+</span>    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">(</span><span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[]):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span>
+        <span class="bp">None</span><span class="p">,</span>
+        <span class="n">_run_blocking</span><span class="p">,</span>
+        <span class="n">code</span><span class="p">,</span>
+        <span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+        <span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+        <span class="n">cwd</span><span class="p">,</span>
+        <span class="n">allow_read_anywhere</span><span class="p">,</span>
+        <span class="n">timeout_sec</span><span class="p">,</span>
+        <span class="n">block_subprocess</span><span class="p">,</span>
+        <span class="n">block_network</span><span class="p">,</span>
+        <span class="n">sanitize_env</span><span class="p">,</span>
+        <span class="n">allowed_env_keys</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># ============== 데모 ==============
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="n">demo_code</span> <span class="o">=</span> <span class="sa">r</span><span class="sh">"""</span><span class="s">
+import os, sys, subprocess
+print(</span><span class="sh">"</span><span class="s">hello, cwd:</span><span class="sh">"</span><span class="s">, os.getcwd())
+# 허용된 쓰기
+open(</span><span class="sh">"</span><span class="s">out/ok.txt</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">).write(</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="s">)
+# 금지된 쓰기
+try:
+    open(</span><span class="sh">"</span><span class="s">/etc/blocked.txt</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">).write(</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="s">)
+except Exception as e:
+    print(</span><span class="sh">"</span><span class="s">blocked write:</span><span class="sh">"</span><span class="s">, type(e).__name__)
+# 서브프로세스 시도(차단)
+try:
+    subprocess.check_output([</span><span class="sh">"</span><span class="s">echo</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">hi</span><span class="sh">"</span><span class="s">])
+except Exception as e:
+    print(</span><span class="sh">"</span><span class="s">blocked subproc:</span><span class="sh">"</span><span class="s">, type(e).__name__)
+print(</span><span class="sh">"</span><span class="s">done</span><span class="sh">"</span><span class="s">)
+</span><span class="sh">"""</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="sh">"</span><span class="s">./work/out</span><span class="sh">"</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">run_user_code_mp_async</span><span class="p">(</span>
+            <span class="n">demo_code</span><span class="p">,</span>
+            <span class="n">read_paths</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>               <span class="c1"># 읽기 어디든 허용
+</span>            <span class="n">write_paths</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./work/out</span><span class="sh">"</span><span class="p">],</span>    <span class="c1"># 여기만 쓰기 허용
+</span>            <span class="n">cwd</span><span class="o">=</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">,</span>                  <span class="c1"># 자식 시작 CWD
+</span>            <span class="n">timeout_sec</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">block_subprocess</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">block_network</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">sanitize_env</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>             <span class="c1"># 환경 최소화
+</span>            <span class="n">allowed_env_keys</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">PATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">PYTHONPATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">HOME</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TMPDIR</span><span class="sh">"</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC:</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span> <span class="o">==</span> <span class="sh">"</span><span class="s">win32</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">mp</span><span class="p">.</span><span class="nf">freeze_support</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">main</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>이제 이 파일을 모듈로 두고 run_user_code_mp_async만 호출하면 된다. 필요하면 read_paths/write_paths/cwd를 에이전트 툴 인자로 노출하고, 환경변수 최소화나 네트워크 차단은 서버 쪽 정책으로 고정해도 된다.</p>
+
+<p class="chat--user">
+
+만약에 multi threading이면 어떻게 돼?
+
+</p>
+
+<p>요지는 “스레드로 돌리느냐, 프로세스로 돌리느냐”를 나눠 보아야 해.</p>
+
+<ol>
+  <li>우리 설계처럼 멀티프로세스로 샌드박스를 띄운 뒤, 그 안에서 유저 코드가 멀티스레드를 쓰는 경우</li>
+</ol>
+
+<ul>
+  <li>
+    <p>괜찮다. <code class="language-plaintext highlighter-rouge">sys.addaudithook</code>은 “프로세스 단위”로 설치되고, 그 프로세스의 모든 스레드에서 발생한 이벤트에 적용된다. 즉 유저 코드가 스레드를 여러 개 만들어도 파일 쓰기 차단, <code class="language-plaintext highlighter-rouge">subprocess</code> 차단은 그대로 먹힌다.</p>
+  </li>
+  <li>
+    <p>주의점은 프로세스 단위 속성들(CWD, 환경변수 등)은 스레드 간 공유된다는 것. 하지만 이건 부모에게는 영향 없다(부모는 다른 프로세스).</p>
+  </li>
+  <li>
+    <p>안정성 보강 팁: 자식 프로세스 진입 직후 <code class="language-plaintext highlighter-rouge">resource</code>로 한도(시간/메모리/파일크기)를 걸면, 스레드 폭주로 인한 자원 잡아먹기도 방지된다.</p>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">resource</span>
+<span class="n">resource</span><span class="p">.</span><span class="nf">setrlimit</span><span class="p">(</span><span class="n">resource</span><span class="p">.</span><span class="n">RLIMIT_CPU</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">resource</span><span class="p">.</span><span class="nf">setrlimit</span><span class="p">(</span><span class="n">resource</span><span class="p">.</span><span class="n">RLIMIT_AS</span><span class="p">,</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">,)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">resource</span><span class="p">.</span><span class="nf">setrlimit</span><span class="p">(</span><span class="n">resource</span><span class="p">.</span><span class="n">RLIMIT_FSIZE</span><span class="p">,</span> <span class="p">(</span><span class="mi">200</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">,)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>위 3줄을 내가 준 <code class="language-plaintext highlighter-rouge">_child_worker</code> 맨 앞쪽(가드 설치 직후) 정도에 넣으면 충분해.</p>
+
+<ol>
+  <li>샌드박스를 “스레드”로만 돌리고(=부모와 같은 프로세스), 비동기/스레드로 병렬 실행하고 싶은 경우</li>
+</ol>
+
+<ul>
+  <li>
+    <p>비권장. 같은 프로세스에서 <code class="language-plaintext highlighter-rouge">exec</code>을 돌리면 메모리 격리가 없다. 유저 코드가 부모의 전역 상태를 들여다보거나 건드릴 여지가 생긴다. 예를 들어 같은 프로세스에서 <code class="language-plaintext highlighter-rouge">import __main__</code>, <code class="language-plaintext highlighter-rouge">inspect</code>로 프레임을 타고 올라가면 부모 스코프에 닿을 수 있다.</p>
+  </li>
+  <li>
+    <p>또한 같은 프로세스라 <code class="language-plaintext highlighter-rouge">os.chdir</code>은 전역 CWD를 바꿔서 “다른 스레드/부모 로직”에도 영향을 준다. 환경변수 수정도 마찬가지. 파일가드(audit hook)는 스레드 전체에 적용되지만, “상태 격리”가 안 된다.</p>
+  </li>
+  <li>
+    <p>그래도 꼭 스레드 모드가 필요하다면 최소한 다음을 추가해야 한다.</p>
+
+    <ul>
+      <li>
+        <p>스레드 모드에선 <code class="language-plaintext highlighter-rouge">os.chdir</code> 금지(감사 훅에서 <code class="language-plaintext highlighter-rouge">event == "os.chdir"</code> 혹은 <code class="language-plaintext highlighter-rouge">os.chdir</code>를 래핑해서 막기).</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">exec</code>의 <code class="language-plaintext highlighter-rouge">globals</code>를 새 dict로 주고, 부모 전역 참조를 전달하지 않기.</p>
+      </li>
+      <li>
+        <p>민감 빌트인/모듈 접근을 최소화(예: <code class="language-plaintext highlighter-rouge">__import__</code>, <code class="language-plaintext highlighter-rouge">inspect</code> 등). 이건 기능 제한과 충돌하니 신중해야 한다.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>결론적으로 “LLM이 악의적이지 않다” 가정 하더라도, 스레드만으로는 실수로 부모 상태를 망칠 수 있다. 그래서 나는 계속 “spawn 프로세스” 권장.</p>
+  </li>
+</ul>
+
+<ol>
+  <li>병렬 실행(동시에 여러 개 돌리기)을 원하면</li>
+</ol>
+
+<ul>
+  <li>
+    <p>지금 구조 그대로 <code class="language-plaintext highlighter-rouge">run_user_code_mp_async</code>를 여러 번 await하면 된다. 내부에서 프로세스를 매번 띄우니 완전 분리된다.</p>
+  </li>
+  <li>
+    <p>대량 병렬 시엔 세마포어로 동시 실행 수를 제한하거나, 프로세스 풀(예: <code class="language-plaintext highlighter-rouge">concurrent.futures.ProcessPoolExecutor</code>)로 바꾸면 리소스 효율이 좋아진다. 인터페이스는 그대로 유지한 채 내부 실행자만 풀로 교체하면 된다.</p>
+  </li>
+</ul>
+
+<p>정리</p>
+
+<ul>
+  <li>
+    <p>“멀티스레딩을 유저 코드가 자식 프로세스 안에서 쓰는 것”은 OK. 감사 훅은 모든 스레드에 적용된다.</p>
+  </li>
+  <li>
+    <p>“샌드박스 자체를 스레드로 구현”은 메모리·상태 격리가 없어 위험하다. CWD/ENV가 전역이라 부모에 영향도 줄 수 있다. 그래서 지금처럼 spawn 멀티프로세스 유지가 정답이다.</p>
+  </li>
+  <li>
+    <p>병렬성은 프로세스 단위로 가져가고, 필요하면 리소스 한도와 풀링으로 튜닝하자.</p>
+  </li>
+</ul>
+
+<p>원하면 스레드 모드의 최소 샘플도 붙여 줄 수 있는데, 위 이유로 실전 투입은 추천하지 않는다.</p>
+
+<p class="chat--user">
+
+오케이 프로세스 한 번이 아니라 기억이 유지되는 커널은 어떻게 만들수있을까
+
+</p>
+
+<p>좋아. “기억이 유지되는 커널”을 멀티프로세스로 만들었다. 한 번 띄워두면 같은 프로세스 안의 전역 dict를 재사용해서 상태가 이어지고, 비동기(await) 인터페이스로 코드 조각을 계속 실행할 수 있다. 파일·서브프로세스(선택적으로 네트워크)는 감사 훅(sys.addaudithook)으로 가볍게 샌드박스한다. 읽기/쓰기 허용 경로, 시작 CWD, 환경 정리 여부도 런타임에 바꿀 수 있다.</p>
+
+<p>아래 파일 하나로 끝난다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># persistent_kernel_async.py
+# Python 3.8+ / 외부 의존성 없음
+</span>
+<span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
+<span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">io</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">traceback</span><span class="p">,</span> <span class="n">contextlib</span><span class="p">,</span> <span class="n">threading</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="c1"># ---------------- 내부: 감사 훅(파일/서브프로세스/네트워크 제어) ----------------
+</span><span class="k">def</span> <span class="nf">_install_guard</span><span class="p">(</span><span class="n">read_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                   <span class="n">write_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                   <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                   <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                   <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+    <span class="n">wp</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[])]</span>
+
+    <span class="k">def</span> <span class="nf">_real</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">realpath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">roots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">roots</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nf">_real</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="n">r</span> <span class="ow">or</span> <span class="n">path</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">_audit</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="c1"># 파일 열기(open / os.open)
+</span>        <span class="k">if</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">os.open</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">write</span> <span class="o">=</span> <span class="nf">any</span><span class="p">(</span><span class="n">ch</span> <span class="ow">in</span> <span class="n">mode</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="p">))</span> <span class="ow">or</span> \
+                    <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">O_WRONLY</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_RDWR</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_CREAT</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_TRUNC</span><span class="o">|</span><span class="n">os</span><span class="p">.</span><span class="n">O_APPEND</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">write</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> mode=</span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s"> flags=</span><span class="si">{</span><span class="n">flags</span><span class="si">}</span><span class="s"> reason=write-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="nf">if </span><span class="p">(</span><span class="ow">not</span> <span class="n">write</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">allow_read_anywhere</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rp</span> <span class="o">+</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=read-not-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 파일 조작(경로 첫 인자; rename/replace는 src,dst 둘 다 확인)
+</span>        <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">os.rename</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.replace</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">src</span><span class="p">,</span> <span class="n">dst</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nf">_under_any</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">wp</span><span class="p">)</span> <span class="ow">and</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">wp</span><span class="p">)):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> src=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">src</span><span class="p">)</span><span class="si">}</span><span class="s"> dst=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=op-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">event</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">os.remove</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.unlink</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.mkdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.makedirs</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.rmdir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">os.chmod</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">_under_any</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">wp</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> path=</span><span class="si">{</span><span class="nf">_real</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s"> reason=op-outside-allowed</span><span class="sh">"</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 서브프로세스/시스템 호출
+</span>        <span class="k">elif</span> <span class="n">block_subprocess</span> <span class="ow">and</span> <span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">subprocess.</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">==</span> <span class="sh">"</span><span class="s">os.system</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="sh">"</span><span class="s">&lt;unknown&gt;</span><span class="sh">"</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> cmd=</span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s"> reason=subprocess-disabled</span><span class="sh">"</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 네트워크 차단(옵션)
+</span>        <span class="k">elif</span> <span class="n">block_network</span> <span class="ow">and</span> <span class="n">event</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">socket.</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">[AUDIT] blocked: event=</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s"> reason=network-disabled</span><span class="sh">"</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">sys</span><span class="p">.</span><span class="nf">addaudithook</span><span class="p">(</span><span class="n">_audit</span><span class="p">)</span>
+
+<span class="c1"># ---------------- 내부: 자식 프로세스 커널 ----------------
+</span><span class="k">def</span> <span class="nf">_kernel_proc</span><span class="p">(</span><span class="n">req_q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span><span class="p">,</span> <span class="n">resp_q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span><span class="p">,</span>
+                 <span class="n">init_cfg</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="c1"># 상태
+</span>    <span class="n">read_paths</span> <span class="o">=</span> <span class="n">init_cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">read_paths</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="n">write_paths</span> <span class="o">=</span> <span class="n">init_cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">write_paths</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="n">allow_read_anywhere</span> <span class="o">=</span> <span class="n">init_cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">allow_read_anywhere</span><span class="sh">"</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="n">block_subprocess</span> <span class="o">=</span> <span class="n">init_cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">block_subprocess</span><span class="sh">"</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="n">block_network</span> <span class="o">=</span> <span class="n">init_cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">block_network</span><span class="sh">"</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">sanitize_env</span> <span class="o">=</span> <span class="n">init_cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">sanitize_env</span><span class="sh">"</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">allowed_env_keys</span> <span class="o">=</span> <span class="n">init_cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">allowed_env_keys</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[</span><span class="sh">"</span><span class="s">PATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">PYTHONPATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">HOME</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TMPDIR</span><span class="sh">"</span><span class="p">]</span>
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">init_cfg</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">cwd</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># CWD/ENV 설정
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cwd</span><span class="p">:</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">os</span><span class="p">.</span><span class="nf">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sanitize_env</span><span class="p">:</span>
+            <span class="n">keep</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="n">allowed_env_keys</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nf">list</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keep</span><span class="p">:</span>
+                    <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="nf">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># 초기화 오류도 응답
+</span>        <span class="n">resp_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">init failed: </span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">})</span>
+        <span class="k">return</span>
+
+    <span class="c1"># 리소스 한도(원하면 조정)
+</span>    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="n">resource</span>
+        <span class="n">resource</span><span class="p">.</span><span class="nf">setrlimit</span><span class="p">(</span><span class="n">resource</span><span class="p">.</span><span class="n">RLIMIT_CPU</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+        <span class="n">resource</span><span class="p">.</span><span class="nf">setrlimit</span><span class="p">(</span><span class="n">resource</span><span class="p">.</span><span class="n">RLIMIT_FSIZE</span><span class="p">,</span> <span class="p">(</span><span class="mi">200</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">,)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># 메모리는 OS/glibc 동작에 따라 영향이 다를 수 있으니 필요할 때만 켜기
+</span>        <span class="c1"># resource.setrlimit(resource.RLIMIT_AS, (1024*1024*1024,)*2)
+</span>    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># 감사 훅 설치(프로세스 전체 스레드에 적용)
+</span>    <span class="nf">_install_guard</span><span class="p">(</span><span class="n">read_paths</span><span class="p">,</span> <span class="n">write_paths</span><span class="p">,</span> <span class="n">allow_read_anywhere</span><span class="p">,</span>
+                   <span class="n">block_subprocess</span><span class="o">=</span><span class="n">block_subprocess</span><span class="p">,</span> <span class="n">block_network</span><span class="o">=</span><span class="n">block_network</span><span class="p">)</span>
+
+    <span class="c1"># 전역 dict: 이게 “기억”이다.
+</span>    <span class="n">g</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">__name__</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">}</span>
+
+    <span class="c1"># 이벤트 루프
+</span>    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">req_q</span><span class="p">.</span><span class="nf">get</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">req</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">rid</span> <span class="o">=</span> <span class="n">req</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">req</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">op</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="sh">"</span><span class="s">exec</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">code</span> <span class="o">=</span> <span class="n">req</span><span class="p">[</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">]</span>
+                <span class="n">stdout_buf</span><span class="p">,</span> <span class="n">stderr_buf</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="nc">StringIO</span><span class="p">(),</span> <span class="n">io</span><span class="p">.</span><span class="nc">StringIO</span><span class="p">()</span>
+                <span class="n">rc</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">with</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stdout</span><span class="p">(</span><span class="n">stdout_buf</span><span class="p">),</span> <span class="n">contextlib</span><span class="p">.</span><span class="nf">redirect_stderr</span><span class="p">(</span><span class="n">stderr_buf</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="nf">exec</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                        <span class="n">rc</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">[ERROR] exception while executing user code:</span><span class="sh">"</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
+                        <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">()</span>
+                <span class="n">resp_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">rid</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span> <span class="n">rc</span><span class="p">,</span>
+                            <span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span> <span class="n">stdout_buf</span><span class="p">.</span><span class="nf">getvalue</span><span class="p">(),</span> <span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span> <span class="n">stderr_buf</span><span class="p">.</span><span class="nf">getvalue</span><span class="p">()})</span>
+
+            <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="sh">"</span><span class="s">reset</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="p">{</span><span class="sh">"</span><span class="s">__name__</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">}</span>
+                <span class="n">resp_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">rid</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">msg</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">reset-done</span><span class="sh">"</span><span class="p">})</span>
+
+            <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="sh">"</span><span class="s">set_paths</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">read_paths</span> <span class="o">=</span> <span class="n">req</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">read_paths</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+                <span class="n">write_paths</span> <span class="o">=</span> <span class="n">req</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">write_paths</span><span class="sh">"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+                <span class="n">allow_read_anywhere</span> <span class="o">=</span> <span class="n">req</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">allow_read_anywhere</span><span class="sh">"</span><span class="p">,</span> <span class="n">allow_read_anywhere</span><span class="p">)</span>
+                <span class="c1"># 훅은 이미 설치되어 있지만, 클로저 값이 아니라 함수 내에서 최신 리스트를 캡쳐하도록 재설치
+</span>                <span class="nf">_install_guard</span><span class="p">(</span><span class="n">read_paths</span><span class="p">,</span> <span class="n">write_paths</span><span class="p">,</span> <span class="n">allow_read_anywhere</span><span class="p">,</span>
+                               <span class="n">block_subprocess</span><span class="o">=</span><span class="n">block_subprocess</span><span class="p">,</span> <span class="n">block_network</span><span class="o">=</span><span class="n">block_network</span><span class="p">)</span>
+                <span class="n">resp_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">rid</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">msg</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">paths-updated</span><span class="sh">"</span><span class="p">})</span>
+
+            <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="sh">"</span><span class="s">set_cwd</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">new_cwd</span> <span class="o">=</span> <span class="n">req</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">cwd</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">new_cwd</span><span class="p">:</span>
+                    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">new_cwd</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                    <span class="n">os</span><span class="p">.</span><span class="nf">chdir</span><span class="p">(</span><span class="n">new_cwd</span><span class="p">)</span>
+                <span class="n">resp_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">rid</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">cwd</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">()})</span>
+
+            <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">resp_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">rid</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">cwd</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">(),</span>
+                            <span class="sh">"</span><span class="s">read_paths</span><span class="sh">"</span><span class="p">:</span> <span class="n">read_paths</span><span class="p">,</span> <span class="sh">"</span><span class="s">write_paths</span><span class="sh">"</span><span class="p">:</span> <span class="n">write_paths</span><span class="p">,</span>
+                            <span class="sh">"</span><span class="s">allow_read_anywhere</span><span class="sh">"</span><span class="p">:</span> <span class="n">allow_read_anywhere</span><span class="p">})</span>
+
+            <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="sh">"</span><span class="s">shutdown</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">resp_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">rid</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">msg</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">bye</span><span class="sh">"</span><span class="p">})</span>
+                <span class="k">break</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">resp_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">rid</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">unknown op: </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="sh">"</span><span class="p">})</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">resp_q</span><span class="p">.</span><span class="nf">put</span><span class="p">({</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">rid</span><span class="p">,</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="nf">type</span><span class="p">(</span><span class="n">e</span><span class="p">).</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">})</span>
+
+<span class="c1"># ---------------- 부모 측: 세션 핸들(비동기 API) ----------------
+</span><span class="k">class</span> <span class="nc">PersistentKernel</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_ctx</span> <span class="o">=</span> <span class="n">mp</span><span class="p">.</span><span class="nf">get_context</span><span class="p">(</span><span class="sh">"</span><span class="s">spawn</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_req_q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_ctx</span><span class="p">.</span><span class="nc">Queue</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_resp_q</span><span class="p">:</span> <span class="n">mp</span><span class="p">.</span><span class="n">Queue</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_ctx</span><span class="p">.</span><span class="nc">Queue</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_p</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mp</span><span class="p">.</span><span class="n">Process</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_next_id</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Lock</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                    <span class="o">*</span><span class="p">,</span>
+                    <span class="n">read_paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="n">write_paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="n">block_subprocess</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="n">block_network</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="n">sanitize_env</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="n">allowed_env_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="n">startup_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">init_cfg</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">read_paths</span><span class="sh">"</span><span class="p">:</span> <span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+            <span class="sh">"</span><span class="s">write_paths</span><span class="sh">"</span><span class="p">:</span> <span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+            <span class="sh">"</span><span class="s">cwd</span><span class="sh">"</span><span class="p">:</span> <span class="n">cwd</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">allow_read_anywhere</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span> <span class="k">if</span> <span class="n">allow_read_anywhere</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">allow_read_anywhere</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">block_subprocess</span><span class="sh">"</span><span class="p">:</span> <span class="n">block_subprocess</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">block_network</span><span class="sh">"</span><span class="p">:</span> <span class="n">block_network</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">sanitize_env</span><span class="sh">"</span><span class="p">:</span> <span class="n">sanitize_env</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">allowed_env_keys</span><span class="sh">"</span><span class="p">:</span> <span class="n">allowed_env_keys</span> <span class="ow">or</span> <span class="p">[</span><span class="sh">"</span><span class="s">PATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">PYTHONPATH</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">HOME</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">TMPDIR</span><span class="sh">"</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_p</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_ctx</span><span class="p">.</span><span class="nc">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_kernel_proc</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_req_q</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">_resp_q</span><span class="p">,</span> <span class="n">init_cfg</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_p</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+        <span class="c1"># 간단 헬스체크: 상태 요청
+</span>        <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">status</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">startup_timeout</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">aexec</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_rpc</span><span class="p">({</span><span class="sh">"</span><span class="s">op</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">exec</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">:</span> <span class="n">code</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_rpc</span><span class="p">({</span><span class="sh">"</span><span class="s">op</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">reset</span><span class="sh">"</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">set_paths</span><span class="p">(</span><span class="n">self</span><span class="p">,</span>
+                        <span class="n">read_paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                        <span class="n">write_paths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                        <span class="n">allow_read_anywhere</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                        <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_rpc</span><span class="p">({</span><span class="sh">"</span><span class="s">op</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">set_paths</span><span class="sh">"</span><span class="p">,</span>
+                                <span class="sh">"</span><span class="s">read_paths</span><span class="sh">"</span><span class="p">:</span> <span class="n">read_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+                                <span class="sh">"</span><span class="s">write_paths</span><span class="sh">"</span><span class="p">:</span> <span class="n">write_paths</span> <span class="ow">or</span> <span class="p">[],</span>
+                                <span class="sh">"</span><span class="s">allow_read_anywhere</span><span class="sh">"</span><span class="p">:</span> <span class="n">allow_read_anywhere</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">set_cwd</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">cwd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_rpc</span><span class="p">({</span><span class="sh">"</span><span class="s">op</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">set_cwd</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">cwd</span><span class="sh">"</span><span class="p">:</span> <span class="n">cwd</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_rpc</span><span class="p">({</span><span class="sh">"</span><span class="s">op</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">self</span><span class="p">.</span><span class="nf">_rpc</span><span class="p">({</span><span class="sh">"</span><span class="s">op</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">shutdown</span><span class="sh">"</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_cleanup</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">_cleanup</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">_p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_p</span><span class="p">.</span><span class="nf">is_alive</span><span class="p">():</span>
+                    <span class="n">self</span><span class="p">.</span><span class="n">_p</span><span class="p">.</span><span class="nf">terminate</span><span class="p">()</span>
+                    <span class="n">self</span><span class="p">.</span><span class="n">_p</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_p</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_rpc</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_p</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">_p</span><span class="p">.</span><span class="nf">is_alive</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sh">"</span><span class="s">kernel not started</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">self</span><span class="p">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="n">rid</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_next_id</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_next_id</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="nf">dict</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+            <span class="n">payload</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rid</span>
+            <span class="c1"># 큐 put/get은 블로킹이므로 스레드풀로 넘김
+</span>            <span class="k">await</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">_req_q</span><span class="p">.</span><span class="n">put</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+            <span class="c1"># 응답 대기(타임아웃)
+</span>            <span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">timeout</span>
+            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">remaining</span> <span class="o">=</span> <span class="n">deadline</span> <span class="o">-</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="nc">TimeoutError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">kernel request timed out: </span><span class="si">{</span><span class="n">payload</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">op</span><span class="sh">'</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">_resp_q</span><span class="p">.</span><span class="n">get</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="nf">min</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">remaining</span><span class="p">))</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="c1"># 계속 폴링
+</span>                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">resp</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">)</span> <span class="o">==</span> <span class="n">rid</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">resp</span>
+                <span class="c1"># 혹시 다른 응답이면 버퍼링하지 않고 무시(직렬 호출 전제)
+</span>                <span class="c1"># 병렬 호출을 원하면 here: per-request map/fan-in 스레드 추가 필요
+</span>
+<span class="c1"># ---------------- 사용 예(데모) ----------------
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nc">PersistentKernel</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span>
+            <span class="n">read_paths</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>                 <span class="c1"># None → 어디든 읽기 허용
+</span>            <span class="n">write_paths</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./work/out</span><span class="sh">"</span><span class="p">],</span>      <span class="c1"># 여기만 쓰기 허용
+</span>            <span class="n">cwd</span><span class="o">=</span><span class="sh">"</span><span class="s">./work</span><span class="sh">"</span><span class="p">,</span>                    <span class="c1"># 커널의 시작 CWD (부모엔 영향 없음)
+</span>            <span class="n">block_subprocess</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">block_network</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">sanitize_env</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># 1) 상태 확인
+</span>        <span class="nf">print</span><span class="p">(</span><span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">status</span><span class="p">())</span>
+
+        <span class="c1"># 2) 실행 1: 파일 쓰기(허용) + 금지 시도(거부)
+</span>        <span class="n">code1</span> <span class="o">=</span> <span class="sa">r</span><span class="sh">"""</span><span class="s">
+import os, sys, subprocess
+print(</span><span class="sh">"</span><span class="s">CWD:</span><span class="sh">"</span><span class="s">, os.getcwd())
+open(</span><span class="sh">"</span><span class="s">out/ok.txt</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">).write(</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="s">)
+try:
+    open(</span><span class="sh">"</span><span class="s">/etc/blocked.txt</span><span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="s">w</span><span class="sh">"</span><span class="s">).write(</span><span class="sh">"</span><span class="s">x</span><span class="sh">"</span><span class="s">)
+except Exception as e:
+    print(</span><span class="sh">"</span><span class="s">blocked write:</span><span class="sh">"</span><span class="s">, type(e).__name__)
+print(</span><span class="sh">"</span><span class="s">done-1</span><span class="sh">"</span><span class="s">)
+</span><span class="sh">"""</span>
+        <span class="n">res1</span> <span class="o">=</span> <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">aexec</span><span class="p">(</span><span class="n">code1</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">RC1:</span><span class="sh">"</span><span class="p">,</span> <span class="n">res1</span><span class="p">[</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDOUT1:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res1</span><span class="p">[</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">STDERR1:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">res1</span><span class="p">[</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">])</span>
+
+        <span class="c1"># 3) 실행 2: 상태 유지 확인(앞에서 만든 변수 재사용)
+</span>        <span class="n">code2</span> <span class="o">=</span> <span class="sa">r</span><span class="sh">"""</span><span class="s">
+if </span><span class="sh">'</span><span class="s">counter</span><span class="sh">'</span><span class="s"> not in globals():
+    counter = 0
+counter += 1
+print(</span><span class="sh">"</span><span class="s">counter:</span><span class="sh">"</span><span class="s">, counter)
+</span><span class="sh">"""</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">res2</span> <span class="o">=</span> <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">aexec</span><span class="p">(</span><span class="n">code2</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">res2</span><span class="p">[</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">].</span><span class="nf">strip</span><span class="p">())</span>
+
+        <span class="c1"># 4) reset 후 다시 확인
+</span>        <span class="nf">print</span><span class="p">(</span><span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">reset</span><span class="p">())</span>
+        <span class="n">res3</span> <span class="o">=</span> <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">aexec</span><span class="p">(</span><span class="sh">"</span><span class="s">print(</span><span class="sh">'</span><span class="s">has counter?</span><span class="sh">'</span><span class="s">, </span><span class="sh">'</span><span class="s">counter</span><span class="sh">'</span><span class="s"> in globals())</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">res3</span><span class="p">[</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">].</span><span class="nf">strip</span><span class="p">())</span>
+
+        <span class="c1"># 5) 경로/작업 디렉터리 변경
+</span>        <span class="nf">print</span><span class="p">(</span><span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">set_paths</span><span class="p">(</span><span class="n">write_paths</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">./work2/out2</span><span class="sh">"</span><span class="p">],</span> <span class="n">read_paths</span><span class="o">=</span><span class="p">[],</span>
+                                <span class="n">allow_read_anywhere</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+        <span class="nf">print</span><span class="p">(</span><span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">set_cwd</span><span class="p">(</span><span class="sh">"</span><span class="s">./work2</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">res4</span> <span class="o">=</span> <span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">aexec</span><span class="p">(</span><span class="sh">"</span><span class="s">open(</span><span class="sh">'</span><span class="s">out2/ok2.txt</span><span class="sh">'</span><span class="s">,</span><span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="s">).write(</span><span class="sh">'</span><span class="s">ok2</span><span class="sh">'</span><span class="s">); print(</span><span class="sh">'</span><span class="s">wrote ok2</span><span class="sh">'</span><span class="s">)</span><span class="sh">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">res4</span><span class="p">[</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">].</span><span class="nf">strip</span><span class="p">())</span>
+
+        <span class="c1"># 6) 종료
+</span>        <span class="nf">print</span><span class="p">(</span><span class="k">await</span> <span class="n">k</span><span class="p">.</span><span class="nf">shutdown</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span> <span class="o">==</span> <span class="sh">"</span><span class="s">win32</span><span class="sh">"</span><span class="p">:</span>
+        <span class="n">mp</span><span class="p">.</span><span class="nf">freeze_support</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="nf">demo</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>핵심 정리</p>
+
+<ol>
+  <li>
+    <p>커널은 별도 프로세스로 한 번 띄우고 유지한다(spawn). 같은 세션에서의 exec는 같은 globals dict를 재사용하므로 상태가 이어진다.</p>
+  </li>
+  <li>
+    <p>파일·조작·서브프로세스(옵션으로 네트워크) 시도는 감사 훅으로 감시하고, 금지 시도는 어떤 경로/커맨드였는지 stderr에 [AUDIT]로 남긴다.</p>
+  </li>
+  <li>
+    <p>read_paths, write_paths, cwd를 시작 시점에 지정하고, 중간에 set_paths/set_cwd로 변경 가능하다.</p>
+  </li>
+  <li>
+    <p>부모 전역은 spawn 덕분에 기본 노출이 없다. 환경변수는 sanitize_env로 최소화할 수 있다.</p>
+  </li>
+  <li>
+    <p>비동기 호출은 aexec/reset/status 등으로 제공한다. 동시 다발 호출은 락으로 직렬화해 안전하게 처리했다(진짜 병렬을 원하면 응답 매칭 맵과 전용 리더 스레드로 확장).</p>
+  </li>
+</ol>
+
+<p>이걸 바로 네 vLLM/Agents SDK 툴로 감싸면 “세션 유지형 파이썬 인터프리터”를 깔끔하게 쓸 수 있다.</p>
+
         
       </section>
 
@@ -3548,7 +4709,7 @@ print(</span><span class="sh">"</span><span class="s">done</span><span class="sh
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T14:47:56+09:00">2025-11-05</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T15:33:14+09:00">2025-11-05</time></p>
 
       </footer>
 
@@ -3602,7 +4763,7 @@ print(</span><span class="sh">"</span><span class="s">done</span><span class="sh
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T14:48:01+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T15:33:20+09:00">2025-11-05</time>
       </span>
     
 
