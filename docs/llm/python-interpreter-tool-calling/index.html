@@ -35,7 +35,7 @@
 
 
 
-  <meta property="article:published_time" content="2025-11-05T12:28:16+09:00">
+  <meta property="article:published_time" content="2025-11-05T12:51:13+09:00">
 
 
 
@@ -152,7 +152,7 @@
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Python 코드 실행 Tool Calling">
     <meta itemprop="description" content="">
-    <meta itemprop="datePublished" content="2025-11-05T12:28:16+09:00">
+    <meta itemprop="datePublished" content="2025-11-05T12:51:13+09:00">
     
 
     <div class="page__inner-wrap">
@@ -172,7 +172,7 @@
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T12:28:16+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T12:51:13+09:00">2025-11-05</time>
       </span>
     
 
@@ -1728,6 +1728,370 @@ loop()
 
 <p>원하면 여기에 바로 붙여 쓸 수 있는 완성형 모듈(Manager + 두 백엔드 + 최소 RPC 루프)로 묶어서 드릴 수 있다.</p>
 
+<p class="chat--user">
+
+landlock 패키지에 PathBeneath라는 게 없대. 그리고 Config는 유저가 직접할거라 LLM으로는 노출 금지
+
+</p>
+
+<p>좋아. 정리부터 하고, 바로 가져다 쓸 수 있는 코드와 설계를 깔끔히 바꿔서 줄게. 핵심은 “설정(Config)은 네가 직접, LLM에겐 절대 노출하지 않음”, “세션 유지 선택 가능”, “파일 시스템은 Landlock으로 읽기/쓰기 경계”야. 그리고 네가 지적한 대로 PyPI의 landlock 패키지는 PathBeneath 클래스를 안 쓰고 Ruleset 중심의 API라서, 그에 맞춰 업데이트했어. Landlock의 원리는 커널 레벨에서 한 번 적용하면 호출 스레드와 자식에게 영구적으로 누적되는 일방향 제약이야. 사용자 공간에서 임의로 해제할 수 없도록 설계되어 있어(커널 사용자공간 API/매뉴얼에 명시, 그리고 최근 워크숍 자료에도 “한 번 켜면 끌 수 없다”는 원칙이 반복됨). <a href="https://man7.org/linux/man-pages/man7/landlock.7.html?utm_source=chatgpt.com">man7.org+2</a></p>
+
+<p>아래는 3단계 분리 설계와 코드 스켈레톤이야.</p>
+
+<h1 id="1-툴-config-단계호스트-전용llm-비노출">1) 툴 Config 단계(호스트 전용·LLM 비노출)</h1>
+
+<p>Config는 네 코드에서만 실행. LLM은 모르게 유지.</p>
+
+<p>기능</p>
+
+<ol>
+  <li>
+    <p>읽기 전용 경로 목록(ro_roots), 읽기/쓰기 허용 루트(rw_root 한 개 추천)를 지정.</p>
+  </li>
+  <li>
+    <p>Landlock을 현재 프로세스에 적용하고, 이후 새로 만드는 커널/서브프로세스에도 상속.</p>
+  </li>
+  <li>
+    <p>세션 풀 생성(에이전트별 세션 유지용).</p>
+  </li>
+</ol>
+
+<p>landlock 패키지의 공개 문서 기준으로는 Ruleset().allow(path)로 경로 하위 접근을 허용하고 apply()로 적용하는 형태야. 이 패키지는 PathBeneath를 노출하지 않고 고수준 API를 제공해. 예시에서 “기본은 전부 차단, allow로 명시한 경로만 허용” 모델이므로, 읽기 허용 루트는 모두 allow로 넣고, 쓰기가 필요한 디렉터리는 별도로 관리하는 게 안전해. 쓰기 권한의 세밀한 비트 지정은 커널은 지원하지만(예: READ_DIR/READ_FILE/WRITE/TRUNCATE 등), 이 파이썬 패키지에서 경로별 권한 비트를 직접 노출하지 않을 수 있어 버전별로 차이가 난다. 최신 PyPI 페이지를 보면 고수준 예제만 문서화돼 있으니 이 점을 전제로 코드를 짜고, 만약 네 환경에서 per-path write 허용이 필요하면 아래 “플랜 B”를 참고해. <a href="https://pypi.org/project/landlock/">PyPI</a></p>
+
+<p>구현 스켈레톤</p>
+
+<ul>
+  <li>아래 모듈은 설정만 담당. LLM에게 이 모듈의 어떤 내용도 전달하지 마.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sandbox_config.py  (호스트 전용, LLM 비노출)
+</span><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">shutil</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="n">landlock</span> <span class="kn">import</span> <span class="n">Ruleset</span>  <span class="c1"># PyPI 'landlock' (Edward-Knight)
+</span>
+<span class="k">class</span> <span class="nc">FsPolicy</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">ro_roots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">rw_root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">allow_world_read</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="c1"># 절대경로 정규화
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">ro_roots</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ro_roots</span><span class="p">]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">rw_root</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="n">rw_root</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">allow_world_read</span> <span class="o">=</span> <span class="n">allow_world_read</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">rw_root</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">SandboxManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_applied</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">policy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FsPolicy</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">apply_landlock</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">policy</span><span class="p">:</span> <span class="n">FsPolicy</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_applied</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="nc">Ruleset</span><span class="p">()</span>  <span class="c1"># 기본: 전부 금지, allow로만 허용
+</span>        <span class="k">if</span> <span class="n">policy</span><span class="p">.</span><span class="n">allow_world_read</span><span class="p">:</span>
+            <span class="n">rs</span><span class="p">.</span><span class="nf">allow</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># 모든 경로 읽기 허용(“완벽한 샌드박스 불필요” 요구일 때 편의용)
+</span>        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">policy</span><span class="p">.</span><span class="n">ro_roots</span><span class="p">:</span>
+                <span class="n">rs</span><span class="p">.</span><span class="nf">allow</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="c1"># rw_root는 LLM에게 copy_to_sandbox 통해서만 파일을 두게 한다.
+</span>        <span class="c1"># 패키지 API가 경로별 쓰기 비트를 노출하지 않는 경우가 있어,
+</span>        <span class="c1"># 쓰기는 원칙적으로 차단하고, 커널이 허용하는 한에서만 rw_root 내 조작을 시도한다.
+</span>        <span class="c1"># (패키지 업데이트로 per-path write 옵션이 생기면 여기서 조건부로 허용 추가)
+</span>
+        <span class="n">rs</span><span class="p">.</span><span class="nf">apply</span><span class="p">()</span>  <span class="c1"># 현재 스레드 및 자식 프로세스에 영구 적용
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_applied</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">policy</span> <span class="o">=</span> <span class="n">policy</span>
+
+    <span class="c1"># 유틸: 신뢰할 수 있는 사전 복사기(LLM은 이 함수를 tool로만 호출)
+</span>    <span class="k">def</span> <span class="nf">copy_to_sandbox</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst_relpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">self</span><span class="p">.</span><span class="n">policy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="sh">"</span><span class="s">Sandbox not configured</span><span class="sh">"</span>
+        <span class="n">src_abs</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+        <span class="c1"># 읽기 허용 경로 검증
+</span>        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">policy</span><span class="p">.</span><span class="n">allow_world_read</span> <span class="ow">or</span> <span class="nf">any</span><span class="p">(</span><span class="n">src_abs</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span> <span class="ow">or</span> <span class="n">src_abs</span> <span class="o">==</span> <span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">policy</span><span class="p">.</span><span class="n">ro_roots</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Source not allowed: </span><span class="si">{</span><span class="n">src_abs</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">dst_abs</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">abspath</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">policy</span><span class="p">.</span><span class="n">rw_root</span><span class="p">,</span> <span class="n">dst_relpath</span><span class="p">))</span>
+        <span class="c1"># rw_root 밖으로 벗어나는 경로 금지
+</span>        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">dst_abs</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">policy</span><span class="p">.</span><span class="n">rw_root</span> <span class="o">+</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span> <span class="ow">or</span> <span class="n">dst_abs</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">policy</span><span class="p">.</span><span class="n">rw_root</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Destination escapes rw_root: </span><span class="si">{</span><span class="n">dst_abs</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="n">dst_abs</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="p">.</span><span class="nf">copy2</span><span class="p">(</span><span class="n">src_abs</span><span class="p">,</span> <span class="n">dst_abs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dst_abs</span>
+</code></pre></div></div>
+
+<p>참고: Landlock은 일방향 제약이며 restrict_self 이후 해제가 불가한 특성이 공식 문서와 발표 자료에 반복해서 설명돼 있어. 이 구조 덕분에 “파이썬 코드가 룰셋을 풀어버린다” 류의 우려는 정상 커널/사용자 공간 전제에서 해당되지 않아. 단, 커널 취약점이 공개·패치되는 경우가 가끔 있으니 커널을 최신으로 유지하는 게 좋아. 기능과 권한 비트는 매뉴얼과 사용자공간 API 문서에 잘 정리돼 있어. <a href="https://man7.org/linux/man-pages/man7/landlock.7.html?utm_source=chatgpt.com">man7.org+2</a></p>
+
+<p>플랜 B: 경로별 쓰기 비트가 꼭 필요하면</p>
+
+<ol>
+  <li>
+    <p>최근 이슈로 유명한 landrun(Go CLI) 같은 얇은 래퍼를 써서 “–ro /… –rw /sandbox …” 형태로 정확히 분리할 수 있어. 컨테이너나 도커는 아님. <a href="https://github.com/Zouuup/landrun?utm_source=chatgpt.com">GitHub+2</a></p>
+  </li>
+  <li>
+    <p>또는 아주 얇은 ctypes 래퍼로 landlock_create_ruleset/landlock_add_rule를 직접 호출해 권한 비트를 정확히 넣는 방법(WRITE/TRUNCATE/… 조합)을 쓰면 돼. 비트 목록과 의미는 커널 문서에 정리돼 있어. <a href="https://man.archlinux.org/man/landlock_add_rule.2.en?utm_source=chatgpt.com">man.archlinux.org+1</a></p>
+  </li>
+</ol>
+
+<h1 id="2-툴-사용법llm에-전달할-스펙">2) 툴 사용법(LLM에 전달할 스펙)</h1>
+
+<p>설정 정보는 한 줄도 노출하지 않는다. 아래 네 가지만 공개.</p>
+
+<ol>
+  <li>
+    <p>python_exec_internal(session_id, code, timeout_sec)</p>
+  </li>
+  <li>
+    <p>python_exec_visible(session_id, code, timeout_sec, enforce_plot_rules)</p>
+  </li>
+  <li>
+    <p>copy_to_sandbox(src, dst_relpath)</p>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>python_session_control(session_id, action=["reset"</td>
+          <td>"kill"])</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<p>copy_to_sandbox는 내부적으로 SandboxManager.copy_to_sandbox를 호출한다. 소스는 읽기 허용 경로 내에 있어야 하고, 목적지는 rw_root 하위 상대경로만 허용한다. 이렇게 하면 LLM은 “호스트 파일에 자유 접근(읽기)”은 가능하지만 “쓰기”는 반드시 샌드박스 디렉터리로 복사한 사본만 다루게 되는 워크플로가 된다.</p>
+
+<h1 id="3-실제-실행-단계세션-유지일회용-선택">3) 실제 실행 단계(세션 유지/일회용 선택)</h1>
+
+<p>세션은 커널 유지형과 일회용 둘 다 지원. 기본은 유지형, 요청 시 일회용으로 실행.</p>
+
+<p>구현 스켈레톤</p>
+
+<ul>
+  <li>아래는 너가 올려둔 jupyter_client 기반 코드를 정책 분리/에러 메세지/추가 도구 포함으로 다듬은 버전. seaborn/색상/서브플롯 금지 규칙도 그대로.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># code_tool.py  (LLM에 노출되는 엔드포인트는 여기 함수 시그니처뿐)
+</span><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">base64</span><span class="p">,</span> <span class="n">re</span><span class="p">,</span> <span class="n">shutil</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="n">jupyter_client</span> <span class="kn">import</span> <span class="n">KernelManager</span>
+<span class="kn">from</span> <span class="n">sandbox_config</span> <span class="kn">import</span> <span class="n">SandboxManager</span><span class="p">,</span> <span class="n">FsPolicy</span>
+
+<span class="c1"># 0) 초기 설정(호스트 전용)
+</span><span class="n">SANDBOX</span> <span class="o">=</span> <span class="nc">SandboxManager</span><span class="p">()</span>
+<span class="c1"># 예: 네 앱에서만 호출. LLM에겐 감춤.
+# SANDBOX.apply_landlock(FsPolicy(
+#     ro_roots=["/home/you/data", "/usr/share"],
+#     rw_root="/home/you/sbx",
+#     allow_world_read=False  # 느슨한 설정이 필요하면 True
+# ))
+</span>
+<span class="c1"># 1) 세션 풀
+</span><span class="k">class</span> <span class="nc">KernelSession</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">km</span> <span class="o">=</span> <span class="nc">KernelManager</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">km</span><span class="p">.</span><span class="nf">start_kernel</span><span class="p">(</span><span class="n">extra_arguments</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">--HistoryManager.enabled=False</span><span class="sh">"</span><span class="p">])</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">kc</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">km</span><span class="p">.</span><span class="nf">client</span><span class="p">();</span> <span class="n">self</span><span class="p">.</span><span class="n">kc</span><span class="p">.</span><span class="nf">start_channels</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">kc</span><span class="p">.</span><span class="nf">stop_channels</span><span class="p">();</span> <span class="n">self</span><span class="p">.</span><span class="n">km</span><span class="p">.</span><span class="nf">shutdown_kernel</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">\bseaborn\b</span><span class="sh">"</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>  <span class="c1"># 정책 예
+</span>            <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span><span class="sh">""</span><span class="p">,</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">Do not use seaborn</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">artifacts</span><span class="sh">"</span><span class="p">:[]}</span>
+        <span class="n">msg_id</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">kc</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">allow_stdin</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">stop_on_error</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">();</span> <span class="n">out</span><span class="o">=</span><span class="p">[];</span> <span class="n">err</span><span class="o">=</span><span class="p">[];</span> <span class="n">arts</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">km</span><span class="p">.</span><span class="nf">shutdown_kernel</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span><span class="mi">124</span><span class="p">,</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span><span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">Timeout</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">artifacts</span><span class="sh">"</span><span class="p">:[]}</span>
+            <span class="k">try</span><span class="p">:</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">kc</span><span class="p">.</span><span class="nf">get_iopub_msg</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">msg</span><span class="p">[</span><span class="sh">"</span><span class="s">parent_header</span><span class="sh">"</span><span class="p">].</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">msg_id</span><span class="sh">"</span><span class="p">)</span> <span class="o">!=</span> <span class="n">msg_id</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="sh">"</span><span class="s">header</span><span class="sh">"</span><span class="p">][</span><span class="sh">"</span><span class="s">msg_type</span><span class="sh">"</span><span class="p">];</span> <span class="n">content</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="sh">"</span><span class="s">content</span><span class="sh">"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="sh">"</span><span class="s">stream</span><span class="sh">"</span><span class="p">:</span>
+                <span class="p">(</span><span class="n">out</span> <span class="k">if</span> <span class="n">content</span><span class="p">[</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">]</span><span class="o">==</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span> <span class="k">else</span> <span class="n">err</span><span class="p">).</span><span class="nf">append</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="sh">"</span><span class="s">text</span><span class="sh">"</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">typ</span> <span class="o">==</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span>
+                <span class="n">err</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">content</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">traceback</span><span class="sh">"</span><span class="p">,</span> <span class="p">[])))</span>
+            <span class="k">elif</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">display_data</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">execute_result</span><span class="sh">"</span><span class="p">):</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">content</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">data</span><span class="sh">"</span><span class="p">,{})</span>
+                <span class="k">if</span> <span class="sh">"</span><span class="s">image/png</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="n">b</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">"</span><span class="s">image/png</span><span class="sh">"</span><span class="p">];</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="nf">encode</span><span class="p">()</span> <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">b</span>
+                    <span class="n">fn</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">"</span><span class="s">plot_</span><span class="si">{</span><span class="nf">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="si">}</span><span class="s">.png</span><span class="sh">"</span>
+                    <span class="n">os</span><span class="p">.</span><span class="nf">makedirs</span><span class="p">(</span><span class="n">SANDBOX</span><span class="p">.</span><span class="n">policy</span><span class="p">.</span><span class="n">rw_root</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># 안전
+</span>                    <span class="n">fp</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">SANDBOX</span><span class="p">.</span><span class="n">policy</span><span class="p">.</span><span class="n">rw_root</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="sh">"</span><span class="s">wb</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+                    <span class="n">arts</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span><span class="n">fn</span><span class="p">,</span><span class="sh">"</span><span class="s">path</span><span class="sh">"</span><span class="p">:</span><span class="n">fp</span><span class="p">,</span><span class="sh">"</span><span class="s">mime</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">image/png</span><span class="sh">"</span><span class="p">})</span>
+            <span class="k">elif</span> <span class="n">typ</span><span class="o">==</span><span class="sh">"</span><span class="s">status</span><span class="sh">"</span> <span class="ow">and</span> <span class="n">content</span><span class="p">[</span><span class="sh">"</span><span class="s">execution_state</span><span class="sh">"</span><span class="p">]</span><span class="o">==</span><span class="sh">"</span><span class="s">idle</span><span class="sh">"</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span><span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">out</span><span class="p">)[:</span><span class="mi">20000</span><span class="p">],</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span><span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">err</span><span class="p">)[:</span><span class="mi">20000</span><span class="p">],</span><span class="sh">"</span><span class="s">artifacts</span><span class="sh">"</span><span class="p">:</span><span class="n">arts</span><span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">SessionPool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span> <span class="n">self</span><span class="p">.</span><span class="n">pool</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">KernelSession</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KernelSession</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">pool</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">pool</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="nc">KernelSession</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">pool</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span> 
+        <span class="k">if</span> <span class="n">sid</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">pool</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">pool</span><span class="p">[</span><span class="n">sid</span><span class="p">].</span><span class="nf">shutdown</span><span class="p">();</span> <span class="n">self</span><span class="p">.</span><span class="n">pool</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="nc">KernelSession</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">pool</span><span class="p">.</span><span class="nf">pop</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="nf">shutdown</span><span class="p">()</span>
+
+<span class="n">POOL</span> <span class="o">=</span> <span class="nc">SessionPool</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">_plot_rule_check</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">\.subplot\(</span><span class="sh">"</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span> <span class="ow">or</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">subplots\(</span><span class="sh">"</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sh">"</span><span class="s">Do not use subplots</span><span class="sh">"</span>
+    <span class="k">if</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">(color\s*=|palette\s*=|style\s*=)</span><span class="sh">"</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sh">"</span><span class="s">Do not set explicit colors or styles</span><span class="sh">"</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="c1"># 2) LLM이 쓰는 툴(설정 정보 없음)
+</span><span class="k">def</span> <span class="nf">python_exec_internal</span><span class="p">(</span><span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">POOL</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sess</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_sec</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">python_exec_visible</span><span class="p">(</span><span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">enforce_plot_rules</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">enforce_plot_rules</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="nf">_plot_rule_check</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">returncode</span><span class="sh">"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="sh">"</span><span class="s">stdout</span><span class="sh">"</span><span class="p">:</span><span class="sh">""</span><span class="p">,</span><span class="sh">"</span><span class="s">stderr</span><span class="sh">"</span><span class="p">:</span><span class="n">v</span><span class="p">,</span><span class="sh">"</span><span class="s">artifacts</span><span class="sh">"</span><span class="p">:[]}</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">POOL</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sess</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_sec</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">python_session_control</span><span class="p">(</span><span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="sh">"</span><span class="s">reset</span><span class="sh">"</span><span class="p">:</span> <span class="n">POOL</span><span class="p">.</span><span class="nf">reset</span><span class="p">(</span><span class="n">session_id</span><span class="p">);</span> <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">msg</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">reset</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="sh">"</span><span class="s">kill</span><span class="sh">"</span><span class="p">:</span>  <span class="n">POOL</span><span class="p">.</span><span class="nf">kill</span><span class="p">(</span><span class="n">session_id</span><span class="p">);</span>  <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">msg</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">killed</span><span class="sh">"</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span> <span class="sh">"</span><span class="s">msg</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">unknown action</span><span class="sh">"</span><span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">copy_to_sandbox</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst_relpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">SANDBOX</span><span class="p">.</span><span class="nf">copy_to_sandbox</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst_relpath</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="sh">"</span><span class="s">dst</span><span class="sh">"</span><span class="p">:</span> <span class="n">dst</span><span class="p">}</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+</code></pre></div></div>
+
+<p>툴 스펙(JSON)만 LLM에 전달</p>
+
+<ul>
+  <li>네 OpenAI Agents SDK나 vLLM+GPTOSS/Qwen 파이프라인에서 아래 “툴 서명”만 노출해. 설정 경로나 정책 정보는 절대 넣지 마.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">python_exec_internal_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">python_exec_internal</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">세션 유지형 파이썬 실행(비가시).</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{</span>
+        <span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">integer</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">minimum</span><span class="sh">"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="sh">"</span><span class="s">maximum</span><span class="sh">"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span><span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span><span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">python_exec_visible_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">python_exec_visible</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">사용자 가시 실행(단일 matplotlib 플롯, 색/스타일 금지).</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{</span>
+        <span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">timeout_sec</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">integer</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">minimum</span><span class="sh">"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="sh">"</span><span class="s">maximum</span><span class="sh">"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span><span class="mi">3</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">enforce_plot_rules</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">boolean</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">default</span><span class="sh">"</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">code</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span><span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span><span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">copy_to_sandbox_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">copy_to_sandbox</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">호스트 파일을 샌드박스 쓰기 루트로 복사. 목적지는 rw_root 하위 상대경로만.</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{</span>
+        <span class="sh">"</span><span class="s">src</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">dst_relpath</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:[</span><span class="sh">"</span><span class="s">src</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">dst_relpath</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span><span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span><span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">python_session_control_tool</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">,</span>
+  <span class="sh">"</span><span class="s">function</span><span class="sh">"</span><span class="p">:{</span>
+    <span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">python_session_control</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">세션 재시작/종료</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">parameters</span><span class="sh">"</span><span class="p">:{</span>
+      <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">object</span><span class="sh">"</span><span class="p">,</span>
+      <span class="sh">"</span><span class="s">properties</span><span class="sh">"</span><span class="p">:{</span>
+        <span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">},</span>
+        <span class="sh">"</span><span class="s">action</span><span class="sh">"</span><span class="p">:{</span><span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span><span class="sh">"</span><span class="s">string</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">enum</span><span class="sh">"</span><span class="p">:[</span><span class="sh">"</span><span class="s">reset</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">kill</span><span class="sh">"</span><span class="p">]}</span>
+      <span class="p">},</span>
+      <span class="sh">"</span><span class="s">required</span><span class="sh">"</span><span class="p">:[</span><span class="sh">"</span><span class="s">session_id</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">action</span><span class="sh">"</span><span class="p">],</span>
+      <span class="sh">"</span><span class="s">additionalProperties</span><span class="sh">"</span><span class="p">:</span><span class="bp">False</span>
+    <span class="p">},</span>
+    <span class="sh">"</span><span class="s">strict</span><span class="sh">"</span><span class="p">:</span><span class="bp">True</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>세션 유지 vs 일회용</p>
+
+<ul>
+  <li>
+    <p>유지형: session_id를 고정으로 넘기면 커널 상태가 유지된다.</p>
+  </li>
+  <li>
+    <p>일회용: python_session_control(session_id, "kill")로 즉석 종료 후 새 session_id를 쓰면 된다. 혹은 내부적으로 “one-shot” 코드를 별도 분기해 KernelManager를 매번 생성/종료해도 된다.</p>
+  </li>
+</ul>
+
+<p>안전성에 대한 메모</p>
+
+<ul>
+  <li>
+    <p>Landlock은 커널 LSM이므로 사용 중 해제 불가한 일방향 제약(자식 상속 포함)이고, 경로 기반 권한 비트를 제공한다. FS 권한 비트와 설계 원리는 커널 문서의 사용자공간 API/매뉴얼에서 확인 가능하다. <a href="https://man7.org/linux/man-pages/man7/landlock.7.html?utm_source=chatgpt.com">man7.org+2</a></p>
+  </li>
+  <li>
+    <p>PyPI ‘landlock’ 패키지는 PathBeneath를 직접 노출하지 않고 Ruleset.allow / apply를 쓰는 고수준 래퍼다. 문서 예시는 디렉터리 계층 접근 허용 예제만 제공한다. 버전에 따라 경로별 쓰기 비트를 직접 못 줄 수 있으니, 정확한 RW 분리를 원하면 landrun 같은 얇은 CLI를 함께 쓰거나(ctypes로 직접 비트 지정) 정책을 약간 느슨하게 운영하면 된다. <a href="https://pypi.org/project/landlock/">PyPI+1</a></p>
+  </li>
+</ul>
+
+<p>마무리 체크리스트</p>
+
+<ol>
+  <li>
+    <p>네 앱 초기화 시점에만 SANDBOX.apply_landlock(…) 호출. 이 코드는 절대 LLM 프롬프트·툴 정의에 섞지 않는다.</p>
+  </li>
+  <li>
+    <p>LLM에는 네 개 툴 시그니처만 노출.</p>
+  </li>
+  <li>
+    <p>쓰기가 필요한 파일은 무조건 copy_to_sandbox로 rw_root에 사본을 둔 뒤 그 경로만 쓰도록 유도.</p>
+  </li>
+  <li>
+    <p>세션 유지가 필요하면 session_id를 고정하고, 필요 없으면 kill→새로 생성.</p>
+  </li>
+</ol>
+
+<p>원하는 방향으로 더 촘촘한 RW 비트 제어가 필요한 순간이 오면 두 가지 루트가 있어. 첫째, landrun을 커널 앞단 래퍼로 덮어씌우기(도커 아님). 둘째, 작은 ctypes 뼈대에 커널 매뉴얼의 LANDLOCK_ACCESS_FS_* 비트를 그대로 넣는 저수준 바인딩. 어느 쪽이든 연결해 줄 수 있어.</p>
+
         
       </section>
 
@@ -1753,7 +2117,7 @@ loop()
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T12:28:16+09:00">2025-11-05</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-05T12:51:13+09:00">2025-11-05</time></p>
 
       </footer>
 
@@ -1807,7 +2171,7 @@ loop()
         <i class="far fa-calendar-alt" aria-hidden="true"></i> 
         -->
         
-        <time datetime="2025-11-05T12:28:23+09:00">2025-11-05</time>
+        <time datetime="2025-11-05T12:51:19+09:00">2025-11-05</time>
       </span>
     
 
