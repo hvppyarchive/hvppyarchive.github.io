@@ -1,0 +1,2252 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>웹 한글 키보드 추가 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="웹 한글 키보드 추가">
+<meta property="og:url" content="https://hvppyarchive.github.io/misc/web-korean-keyboard/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-11-07T17:47:23+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/misc/web-korean-keyboard/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="웹 한글 키보드 추가">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-11-07T17:47:23+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/misc/web-korean-keyboard/" itemprop="url">웹 한글 키보드 추가
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-07T17:47:23+09:00">2025-11-07</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+&lt;!DOCTYPE HTML&gt; &lt;html&gt; &lt;head&gt; <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <link href="kbd.css" rel="stylesheet" type="text/css" /> <script src="kbd.js"></script> <script> var controller, visible = true; function onPageLoaded() { var input = document.getElementById('t1'); controller = new i18n.input.keyboard.Keyboard(); controller.loadLayout('vi_telex'); controller.loadLayout('vi_vni'); controller.loadLayout('deva_phone'); controller.loadLayout('gu_phone'); controller.loadLayout('ar'); controller.loadLayout('he'); controller.loadLayout('ps'); controller.loadLayout('ur'); controller.loadLayout('fa'); controller.loadLayout('ko'); controller.loadLayout('bg_phone'); controller.loadLayout('yi'); controller.loadLayout('fr'); controller.loadLayout('ml_phone'); controller.loadLayout('kn_phone'); controller.loadLayout('sa_phone'); controller.loadLayout('ca'); controller.loadLayout('th_pattajoti'); controller.loadLayout('th_tis'); controller.loadLayout('ta_typewriter'); controller.loadLayout('ta_itrans'); controller.loadLayout('ne_inscript'); controller.loadLayout('ne_phone'); controller.loadLayout('us_intl'); controller.loadLayout('ethi'); controller.loadLayout('nv'); controller.reposition(input, 5, 4, [5, 0, 0, 0]); controller.activateLayout('ne_inscript'); controller.register(input); controller.addEventListener( 'kc', function() { visible = false; }); input.focus(); } function onLayoutSelected(layoutCode) { controller.activateLayout(layoutCode); document.getElementById('t1').focus(); } function toggle() { if (controller) { controller.setVisible(visible = !visible); } } </script> &lt;/head&gt; &lt;body onload='onPageLoaded()'&gt; <select onchange="onLayoutSelected(this.value)"> <option value="vi_vni">vi_vni</option> <option value="ml_phone">ml_phone</option> <option value="vi_telex">vi_telex</option> <option value="deva_phone">deva_phone</option> <option value="gu_phone">gu_phone</option> <option value="ar">ar</option> <option value="he">he</option> <option value="ps">ps</option> <option value="ur">ur</option> <option value="fa">fa</option> <option value="ko">ko</option> <option value="yi">yi</option> <option value="bg_phone">bg_phone</option> <option value="fr">fr</option> <option value="kn_phone">kn_phone</option> <option value="sa_phone">sa_phone</option> <option value="ca">ca</option> <option value="th_pattajoti">th_pattajoti</option> <option value="th_tis">th_tis</option> <option value="ta_typewriter">ta_typewriter</option> <option value="ta_itrans">ta_itrans</option> <option value="ne_inscript" selected="">ne_inscript</option> <option value="ne_phone">ne_phone</option> <option value="us_intl">us_intl</option> <option value="ethi">ethi</option> <option value="nv">nv</option> </select> <input type="input" id="t1" style="width: 400px" /> <input type="button" value="Toggle show/hide" onclick="javascript:toggle()" /> <br /> &lt;/body&gt; &lt;/html&gt; 이 코드 해석 좀
+
+</p>
+
+<p>아래 HTML/JS는 “가상 키보드 위젯”을 특정 입력창에 붙여서 여러 언어 레이아웃 간 전환을 지원하는 예제예요. 핵심은 kbd.js에 들어있는 i18n.input.keyboard.Keyboard 클래스를 써서 키보드 팝업을 띄우고, <select>로 레이아웃을 바꾸는 구조입니다.</select></p>
+
+<h1 id="한-줄-요약">한 줄 요약</h1>
+
+<p>페이지가 로드되면 가상 키보드를 만들고 다양한 언어 레이아웃을 미리 로드한 뒤, 입력창(#t1)에 붙입니다. 드롭다운으로 레이아웃을 바꾸고, 버튼으로 키보드 표시/숨김을 전환합니다.</p>
+
+<h1 id="구성-요소별-해설">구성 요소별 해설</h1>
+
+<h2 id="1-head-설정">1) <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code> 설정</h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">meta</code> 태그: UTF-8 인코딩, IE에서 최신 렌더링 모드 사용.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">link href="kbd.css"</code>: 가상 키보드 UI 스타일.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">script src='kbd.js'</code>: 키보드 엔진이 들어있는 스크립트. 여기서 <code class="language-plaintext highlighter-rouge">i18n.input.keyboard.Keyboard</code> 클래스와 레이아웃 코드들이 제공됩니다.</p>
+  </li>
+</ul>
+
+<h2 id="2-전역-변수">2) 전역 변수</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+var controller, visible = true;
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">controller</code>: 키보드 인스턴스를 담을 변수.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">visible</code>: 키보드 표시 상태. 토글 버튼과 이벤트 리스너에서 쓸 플래그.</p>
+  </li>
+</ul>
+
+<h2 id="3-onpageloaded-페이지-로드-시-초기화">3) <code class="language-plaintext highlighter-rouge">onPageLoaded()</code>: 페이지 로드 시 초기화</h2>
+
+<p>흐름을 단계별로 보면 이렇습니다.</p>
+
+<ol>
+  <li>대상 입력창 찾기</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+var input = document.getElementById('t1');
+</code></pre></div></div>
+
+<ol>
+  <li>키보드 인스턴스 생성</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+controller = new i18n.input.keyboard.Keyboard();
+</code></pre></div></div>
+
+<ol>
+  <li>사용할 레이아웃들 미리 로드</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+controller.loadLayout('vi_telex');
+// ... 여러 번 호출 ...
+controller.loadLayout('nv');
+</code></pre></div></div>
+
+<p>여기서 ‘vi_telex’, ‘ko’, ‘ar’ 같은 문자열은 각 언어/자판 이름입니다. 필요한 레이아웃만 골라서 로드해도 됩니다.</p>
+
+<ol>
+  <li>키보드 위치 지정</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+controller.reposition(input, 5, 4, [5, 0, 0, 0]);
+</code></pre></div></div>
+
+<ul>
+  <li>대상 <code class="language-plaintext highlighter-rouge">input</code> 주변에 가상 키보드가 어디에 뜰지 정합니다. 인수 의미는 라이브러리 구현에 따라 다르지만, 보통 기준 요소, 오프셋, 여백 같은 좌표 파라미터입니다.</li>
+</ul>
+
+<ol>
+  <li>기본 활성 레이아웃 설정</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+controller.activateLayout('ne_inscript');
+</code></pre></div></div>
+
+<ul>
+  <li>초기값으로 네팔어 인스크립트 자판을 선택.</li>
+</ul>
+
+<ol>
+  <li>입력창에 키보드 연결</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+controller.register(input);
+</code></pre></div></div>
+
+<ul>
+  <li>이 입력창에 포커스가 오면 키보드를 붙여서 입력 이벤트를 가로채고, 가상 키 입력을 넣어줍니다.</li>
+</ul>
+
+<ol>
+  <li>특정 이벤트 리스너 등록</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+controller.addEventListener('kc', function() { visible = false; });
+</code></pre></div></div>
+
+<ul>
+  <li>‘kc’는 라이브러리 쪽 이벤트(아마 key commit/keypress 완료 같은 의미)로 보입니다. 이벤트가 발생하면 <code class="language-plaintext highlighter-rouge">visible</code>을 false로 바꿔요. 단, 실제로 화면을 숨기지는 않고 플래그만 바꿉니다. 숨김 처리는 <code class="language-plaintext highlighter-rouge">toggle()</code>에서 <code class="language-plaintext highlighter-rouge">controller.setVisible(visible)</code>을 호출할 때 반영됩니다.</li>
+</ul>
+
+<ol>
+  <li>입력창에 포커스</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+input.focus();
+</code></pre></div></div>
+
+<h2 id="4-onlayoutselectedlayoutcode-드롭다운으로-레이아웃-변경">4) <code class="language-plaintext highlighter-rouge">onLayoutSelected(layoutCode)</code>: 드롭다운으로 레이아웃 변경</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+controller.activateLayout(layoutCode);
+document.getElementById('t1').focus();
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;select&gt;</code>에서 선택된 값(레이아웃 코드)을 받아서 즉시 전환하고, 다시 입력창에 포커스를 줍니다.</li>
+</ul>
+
+<h2 id="5-toggle-표시숨김-전환">5) <code class="language-plaintext highlighter-rouge">toggle()</code>: 표시/숨김 전환</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+if (controller) {
+  controller.setVisible(visible = !visible);
+}
+</code></pre></div></div>
+
+<ul>
+  <li>전역 플래그를 뒤집고, 실제 키보드 UI를 보여주거나 감춥니다.</li>
+</ul>
+
+<h2 id="6-body-ui-요소들">6) <code class="language-plaintext highlighter-rouge">&lt;body&gt;</code>: UI 요소들</h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">onload='onPageLoaded()'</code>: 페이지 로드 후 초기화 실행.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">&lt;select onchange='onLayoutSelected(this.value)'&gt;</code>: 레이아웃 목록. 옵션 value가 곧 레이아웃 코드입니다. 기본 선택은 <code class="language-plaintext highlighter-rouge">ne_inscript</code>.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">&lt;input id='t1'&gt;</code>: 실제로 타이핑할 입력창.</p>
+  </li>
+  <li>
+    <p>“Toggle show/hide” 버튼: 가상 키보드 표시/숨김 전환.</p>
+  </li>
+</ul>
+
+<h1 id="눈에-띄는-포인트와-개선-팁">눈에 띄는 포인트와 개선 팁</h1>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">input</code>의 type 속성<br />
+현재 <code class="language-plaintext highlighter-rouge">type='input'</code>인데, 표준 값은 <code class="language-plaintext highlighter-rouge">type='text'</code>가 맞습니다.</li>
+</ol>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"t1"</span> <span class="na">style=</span><span class="s">"width: 400px"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<ol>
+  <li>불필요하거나 불명확한 이벤트 처리<br />
+<code class="language-plaintext highlighter-rouge">'kc'</code> 이벤트에서 <code class="language-plaintext highlighter-rouge">visible = false;</code>만 하고 실제 숨김은 하지 않습니다. 키 입력 후 자동으로 키보드를 숨기고 싶다면 <code class="language-plaintext highlighter-rouge">setVisible(false)</code>까지 호출해야 의도가 확실해집니다.</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+controller.addEventListener('kc', function() {
+  visible = false;
+  controller.setVisible(false);
+});
+</code></pre></div></div>
+
+<p>반대로 숨기고 싶지 않다면 이 리스너를 제거하세요.</p>
+
+<ol>
+  <li>초기 표시 상태 일관성<br />
+초기 <code class="language-plaintext highlighter-rouge">visible = true</code>지만 실제로 키보드를 보여주는 코드를 직접 호출하지 않습니다. 라이브러리에 따라 <code class="language-plaintext highlighter-rouge">register()</code>만으로 기본 표시가 될 수도, 포커스 때만 뜰 수도 있어요. 항상 보이게 하려면 초기화 끝에 아래를 호출해 일관성을 보장할 수 있습니다.</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+controller.setVisible(true);
+</code></pre></div></div>
+
+<ol>
+  <li>레이아웃 로딩 최적화<br />
+지금은 상당히 많은 레이아웃을 모두 로드합니다. 실제로 필요한 것만 <code class="language-plaintext highlighter-rouge">loadLayout</code> 하거나, 선택 시점에 지연 로드하도록 바꾸면 초기 로딩이 가벼워집니다. 예:</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+function onLayoutSelected(code) {
+  if (!controller.isLayoutLoaded(code)) controller.loadLayout(code);
+  controller.activateLayout(code);
+  t1.focus();
+}
+</code></pre></div></div>
+
+<p>(라이브러리에 <code class="language-plaintext highlighter-rouge">isLayoutLoaded</code> 같은 헬퍼가 없다면 내부 상태를 직접 관리해야 합니다.)</p>
+
+<ol>
+  <li>접근성 및 i18n 배려</li>
+</ol>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">&lt;label for="t1"&gt;</code>를 추가하고, 드롭다운에도 라벨을 붙이면 스크린 리더 호환성이 좋아집니다.</p>
+  </li>
+  <li>
+    <p>레이아웃 코드 대신 사람 친화적인 이름(예: “한국어(두벌식)”)을 <code class="language-plaintext highlighter-rouge">&lt;option&gt;</code> 텍스트에 사용하세요.</p>
+  </li>
+</ul>
+
+<ol>
+  <li>스타일 조정<br />
+가상 키보드가 화면을 가리면 <code class="language-plaintext highlighter-rouge">reposition(...)</code> 인자를 조정하거나, <code class="language-plaintext highlighter-rouge">kbd.css</code>에서 z-index/position을 손봐 배치 품질을 올릴 수 있습니다.</li>
+</ol>
+
+<h1 id="동작-순서-정리">동작 순서 정리</h1>
+
+<ol>
+  <li>
+    <p>페이지 로드 → <code class="language-plaintext highlighter-rouge">onPageLoaded()</code> 실행.</p>
+  </li>
+  <li>
+    <p>키보드 인스턴스 생성 → 여러 레이아웃 로드 → 입력창에 부착 → 기본 레이아웃 활성.</p>
+  </li>
+  <li>
+    <p>드롭다운 선택 시 <code class="language-plaintext highlighter-rouge">onLayoutSelected()</code>로 레이아웃 전환.</p>
+  </li>
+  <li>
+    <p>“Toggle show/hide” 버튼으로 키보드 표시/숨김 전환.</p>
+  </li>
+</ol>
+
+<p>필요하면 이 코드를 기반으로 기본 레이아웃을 한국어(<code class="language-plaintext highlighter-rouge">'ko'</code>)로 바꾸거나, 처음부터 숨김으로 시작하도록 세팅하는 변형 예시도 바로 만들어 드릴 수 있어요.</p>
+
+<p class="chat--user">
+
+가상 키보드 없이 입력을 했을때 한글로 입력되게 할 순 없나
+
+</p>
+
+<p>짧게 결론부터 말하면, 브라우저만으로 사용자의 <strong>입력기(IME)</strong>를 한글로 전환시킬 수는 없어요. <code class="language-plaintext highlighter-rouge">lang="ko"</code>나 <code class="language-plaintext highlighter-rouge">inputmode</code> 같은 HTML 속성도 IME를 바꾸지 않습니다. 즉, 가상 키보드 없이 곧장 한글이 찍히게 하려면 선택지는 세 가지예요.</p>
+
+<h2 id="가능한-방법">가능한 방법</h2>
+
+<ol>
+  <li>
+    <p>운영체제/브라우저 IME 사용<br />
+사용자가 OS에서 한글 입력기를 켜도록 안내하는 방법입니다. 가장 안정적이고 표준적이지만, 코드만으로 강제할 수는 없습니다.</p>
+  </li>
+  <li>
+    <p>“보이지 않는” JS 입력기(자동 변환)<br />
+가상 키보드 UI는 없지만, 자바스크립트가 키 입력을 가로채서 영문 키를 <strong>한글 자모로 매핑</strong> 하고, <strong>자동 합성(초/중/종성 조합)</strong> 해서 인풋에 넣는 방식입니다. 사용자는 평소처럼 타이핑하지만 결과는 한글로 들어갑니다.<br />
+핵심은 두 단계:</p>
+  </li>
+</ol>
+
+<ul>
+  <li>
+    <p>키 매핑: 예) 2벌식 기준으로 <code class="language-plaintext highlighter-rouge">r → ㄱ</code>, <code class="language-plaintext highlighter-rouge">k → ㅏ</code>, <code class="language-plaintext highlighter-rouge">s → ㄴ</code> …</p>
+  </li>
+  <li>
+    <p>합성: 들어온 자모들을 초성/중성/종성 규칙에 맞춰 유니코드 한글 음절로 조합</p>
+  </li>
+</ul>
+
+<p>완전한 합성 로직을 직접 구현하려면 꽤 길어집니다. 보통은 <strong>Hangul 조합 라이브러리</strong>(예: <code class="language-plaintext highlighter-rouge">Hangul.assemble()</code> 같은 API 제공)를 써서 자모 배열을 음절로 합칩니다.</p>
+
+<p>아래는 “UI 없는 한글 입력기”의 최소 예시 흐름입니다. 실제 서비스용이라면 자모/합성 규칙을 모두 보강해야 합니다.</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">"t1"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">style=</span><span class="s">"width:400px"</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;script&gt;</span>
+  <span class="c1">// 2벌식 키→자모(데모용: 일부만 수록)</span>
+  <span class="kd">const</span> <span class="nx">keyToJamo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">r</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㄱ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">s</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㄴ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">e</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㄷ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">f</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㄹ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅁ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">q</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅂ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">t</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅅ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">d</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅇ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">w</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅈ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅊ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">z</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅋ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">x</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅌ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">v</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅍ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">g</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅎ</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">'</span><span class="s1">k</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅏ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">o</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅐ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">i</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅑ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">j</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅓ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">p</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅔ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">u</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅕ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">h</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅗ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">y</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅛ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">n</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅜ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅠ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">m</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅡ</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">l</span><span class="dl">'</span><span class="p">:</span><span class="dl">'</span><span class="s1">ㅣ</span><span class="dl">'</span>
+  <span class="p">};</span>
+
+  <span class="c1">// 간단 합성기: 자모가 늘어날 때마다 음절로 조립</span>
+  <span class="c1">// 실전용은 초/중/종성 상태머신과 복합모음/겹받침 처리 필요</span>
+  <span class="kd">function</span> <span class="nf">assembleHangul</span><span class="p">(</span><span class="nx">jamoArray</span><span class="p">){</span>
+    <span class="c1">// 예시: Hangul.js 같은 라이브러리가 있으면 Hangul.assemble(jamoArray) 사용</span>
+    <span class="c1">// 여기서는 초간단(불완전) 합성기로 대체: 자모를 그냥 이어 붙임</span>
+    <span class="c1">// → 실제 프로젝트에서는 반드시 정식 합성 로직/라이브러리를 쓰세요!</span>
+    <span class="k">return</span> <span class="nx">jamoArray</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="nx">input</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">t1</span><span class="dl">'</span><span class="p">);</span>
+  <span class="kd">let</span> <span class="nx">buffer</span> <span class="o">=</span> <span class="p">[];</span>    <span class="c1">// 자모 버퍼</span>
+  <span class="kd">let</span> <span class="nx">composing</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span> <span class="c1">// 현재 합성 결과</span>
+
+  <span class="nx">input</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">keydown</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// 조합 중에 일반 동작 막고 우리가 넣는다</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">ctrlKey</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">metaKey</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">altKey</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span> <span class="c1">// 단축키는 통과</span>
+    <span class="kd">const</span> <span class="nx">k</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span><span class="p">;</span>
+    <span class="c1">// 백스페이스 처리(버퍼에서 자모 하나 제거)</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">k</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">Backspace</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if </span><span class="p">(</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">e</span><span class="p">.</span><span class="nf">preventDefault</span><span class="p">();</span>
+        <span class="nx">buffer</span><span class="p">.</span><span class="nf">pop</span><span class="p">();</span>
+        <span class="nx">composing</span> <span class="o">=</span> <span class="nf">assembleHangul</span><span class="p">(</span><span class="nx">buffer</span><span class="p">);</span>
+        <span class="nf">replaceTail</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="nx">composing</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// 엔터/탭/방향키 등은 통과</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">k</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+    <span class="kd">const</span> <span class="nx">jamo</span> <span class="o">=</span> <span class="nx">keyToJamo</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span>
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">jamo</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span> <span class="c1">// 매핑 없는 키는 통과(영문 그대로 치고 싶다면 여기서 return 하지 말고 허용)</span>
+
+    <span class="nx">e</span><span class="p">.</span><span class="nf">preventDefault</span><span class="p">();</span>
+    <span class="nx">buffer</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">jamo</span><span class="p">);</span>
+    <span class="nx">composing</span> <span class="o">=</span> <span class="nf">assembleHangul</span><span class="p">(</span><span class="nx">buffer</span><span class="p">);</span>
+    <span class="nf">replaceTail</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="nx">composing</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="c1">// 커서 위치의 “최근 조합 문자열”을 치환(데모: 입력 전체를 덮어쓰기)</span>
+  <span class="kd">function</span> <span class="nf">replaceTail</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">text</span><span class="p">){</span>
+    <span class="c1">// 간단화를 위해 입력 전체를 조합 결과로 치환(실전: selectionStart/End로 부분 치환)</span>
+    <span class="nx">el</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">text</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>주의사항</p>
+
+<ul>
+  <li>
+    <p>위 코드는 <strong>합성 로직을 거의 생략</strong> 한 데모라서 “감사” 같은 음절 조합이 제대로 안 됩니다. 반드시 <strong>정식 합성기</strong> 를 붙이세요. (유니코드 한글은 <code class="language-plaintext highlighter-rouge">AC00</code>부터 초·중·종성을 수식으로 조합합니다.)</p>
+  </li>
+  <li>
+    <p>영문을 그대로도 입력해야 한다면, 매핑되지 않은 키는 <code class="language-plaintext highlighter-rouge">preventDefault</code> 하지 않고 원래대로 통과시키면 됩니다. 반대로 “무조건 한글만”이면 모든 알파벳을 가로채세요.</p>
+  </li>
+  <li>
+    <p>모바일에서는 소프트 키보드/자동 교정과 충돌할 수 있어 <code class="language-plaintext highlighter-rouge">inputmode</code>와 이벤트 처리를 꼼꼼히 테스트해야 합니다.</p>
+  </li>
+  <li>
+    <p>contenteditable 영역에서도 <code class="language-plaintext highlighter-rouge">beforeinput</code>/<code class="language-plaintext highlighter-rouge">input</code> 이벤트를 쓰면 비슷한 방식으로 구현 가능합니다.</p>
+  </li>
+</ul>
+
+<ol>
+  <li>사후 변환(사용자는 영문 로마자 입력 → 제출 시 서버/클라이언트에서 한글로 변환)<br />
+실시간 조합이 부담스러우면 이 방식이 단순합니다. 제출 직전에 영문을 한글로 바꾸는 버튼/옵션을 두는 식이죠.</li>
+</ol>
+
+<h2 id="정리">정리</h2>
+
+<ul>
+  <li>
+    <p>브라우저가 IME를 바꿔주지는 못한다.</p>
+  </li>
+  <li>
+    <p>UI 없는 <strong>JS 입력기(자모 매핑 + 합성)</strong> 로 “가상 키보드 없이도 한글처럼” 입력되게 만드는 건 가능하다.</p>
+  </li>
+  <li>
+    <p>실제로 쓰려면 표준 2벌식 전체 매핑, 겹모음/겹받침, 되돌리기(Backspace) 처리, 커서 위치 치환 등을 갖춘 <strong>완성된 합성기</strong> 가 필요하다.</p>
+  </li>
+</ul>
+
+<p>원하시면 위 데모를 기반으로 2벌식 전체 매핑과 정식 합성 로직까지 탑재한 버전을 바로 만들어 드릴게요.</p>
+
+<p class="chat--user">
+
+내가 준 소스는 그런 기능은 아니야?
+
+</p>
+
+<p>가능해요. 네가 준 코드는 “가상 키보드 UI”를 띄우는 게 기본이지만, 실제로는 <strong>키 입력을 가로채서 선택한 레이아웃(예: ‘ko’)대로 문자를 넣는 엔진</strong> 이 핵심이라서, UI를 <strong>숨긴 채로</strong> 한글이 입력되게 만들 수 있어요. 즉, 페이지 안에서만 동작하는 “간이 IME”처럼 쓸 수 있습니다.</p>
+
+<p>정리하자면</p>
+
+<ul>
+  <li>
+    <p>OS의 한글 IME를 켜주는 건 아니지만,</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">controller</code>가 활성화된 입력창에서는 물리 키보드 입력을 <strong>2벌식 한글 조합</strong> 으로 변환해서 넣어줄 수 있고,</p>
+  </li>
+  <li>
+    <p>가상 키보드 패널은 <code class="language-plaintext highlighter-rouge">setVisible(false)</code>로 감춰도 동작합니다.</p>
+  </li>
+</ul>
+
+<p>아래처럼 최소 수정하면 됩니다.</p>
+
+<h3 id="핵심-수정-포인트">핵심 수정 포인트</h3>
+
+<ol>
+  <li>
+    <p>기본 레이아웃을 한국어로 바꾸기</p>
+  </li>
+  <li>
+    <p>가상 키보드 패널을 시작부터 숨기기</p>
+  </li>
+  <li>
+    <p>드롭다운/토글이 필요 없으면 제거(선택 사항)</p>
+  </li>
+</ol>
+
+<h3 id="예시-수정-코드">예시 수정 코드</h3>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE HTML&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"kbd.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"kbd.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+  <span class="nt">&lt;script&gt;</span>
+    <span class="kd">var</span> <span class="nx">controller</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="nf">onPageLoaded</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">t1</span><span class="dl">'</span><span class="p">);</span>
+
+      <span class="nx">controller</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">i18n</span><span class="p">.</span><span class="nx">input</span><span class="p">.</span><span class="nx">keyboard</span><span class="p">.</span><span class="nc">Keyboard</span><span class="p">();</span>
+
+      <span class="c1">// 필요한 레이아웃만 남겨도 됩니다.</span>
+      <span class="nx">controller</span><span class="p">.</span><span class="nf">loadLayout</span><span class="p">(</span><span class="dl">'</span><span class="s1">ko</span><span class="dl">'</span><span class="p">);</span>          <span class="c1">// 한국어</span>
+      <span class="nx">controller</span><span class="p">.</span><span class="nf">loadLayout</span><span class="p">(</span><span class="dl">'</span><span class="s1">us_intl</span><span class="dl">'</span><span class="p">);</span>     <span class="c1">// 필요 시 영문 국제 배열 등</span>
+
+      <span class="nx">controller</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="nx">input</span><span class="p">);</span>           <span class="c1">// 입력창에 연결</span>
+      <span class="nx">controller</span><span class="p">.</span><span class="nf">activateLayout</span><span class="p">(</span><span class="dl">'</span><span class="s1">ko</span><span class="dl">'</span><span class="p">);</span>      <span class="c1">// ★ 기본 한글 레이아웃 선택</span>
+      <span class="nx">controller</span><span class="p">.</span><span class="nf">reposition</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]);</span>
+
+      <span class="nx">controller</span><span class="p">.</span><span class="nf">setVisible</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>         <span class="c1">// ★ 패널은 숨기고 엔진만 동작</span>
+      <span class="c1">// 불필요: 아래 리스너는 패널 표시 상태만 건드립니다.</span>
+      <span class="c1">// controller.addEventListener('kc', function(){ ... });</span>
+
+      <span class="nx">input</span><span class="p">.</span><span class="nf">focus</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 드롭다운으로 바꾸고 싶다면 유지</span>
+    <span class="kd">function</span> <span class="nf">onLayoutSelected</span><span class="p">(</span><span class="nx">layoutCode</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">controller</span><span class="p">.</span><span class="nf">activateLayout</span><span class="p">(</span><span class="nx">layoutCode</span><span class="p">);</span>
+      <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">t1</span><span class="dl">'</span><span class="p">).</span><span class="nf">focus</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body</span> <span class="na">onload=</span><span class="s">"onPageLoaded()"</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!-- 드롭다운을 유지하고 싶다면 'ko'를 기본 선택으로 --&gt;</span>
+  <span class="nt">&lt;select</span> <span class="na">onchange=</span><span class="s">"onLayoutSelected(this.value)"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"ko"</span> <span class="na">selected</span><span class="nt">&gt;</span>ko<span class="nt">&lt;/option&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"us_intl"</span><span class="nt">&gt;</span>us_intl<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;/select&gt;</span>
+
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"t1"</span> <span class="na">style=</span><span class="s">"width:400px"</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!-- 패널 토글 버튼은 불필요하면 제거 --&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>사용 팁</p>
+
+<ul>
+  <li>
+    <p>이 방식은 <strong>해당 입력창에서만</strong> 영→한 변환이 적용됩니다. 다른 필드나 OS 전체 입력기엔 영향이 없어요.</p>
+  </li>
+  <li>
+    <p>물리 키보드가 US 배열이라고 가정하는 매핑이 많습니다. 키보드 배열이 다르면 일부 키 위치가 달라질 수 있어요.</p>
+  </li>
+  <li>
+    <p>한글 조합은 라이브러리가 처리합니다. 커서 이동/백스페이스 등 일반 편집 동작도 라이브러리 쪽 로직을 따릅니다.</p>
+  </li>
+</ul>
+
+<p>원하면 드롭다운도 없애고 <strong>항상 한글만</strong> 들어가도록 깔끔하게 정리한 버전으로도 바로 바꿔드릴게요.</p>
+
+<p class="chat--user">
+
+&lt;!DOCTYPE html&gt; &lt;html lang="en"&gt; &lt;head&gt; <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>Korean Keyboard</title> <!-- 防缓存META标签 --> <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" /> <meta http-equiv="Pragma" content="no-cache" /> <meta http-equiv="Expires" content="0" /> <!-- 带版本戳的样式表 --> <link rel="stylesheet" href="style.css?v=20250802" /> &lt;/head&gt; &lt;body&gt; <!-- 语言切换器 --> &lt;div class="language-selector"&gt; &lt;div class="language-buttons" id="languageButtons"&gt;&lt;/div&gt; &lt;/div&gt; &lt;div class="container"&gt; &lt;h1&gt;Korean Input Test&lt;/h1&gt; <!-- 说明文字移动到这里 --> &lt;div class="info"&gt; &lt;p&gt;Type with English keyboard and it will automatically convert to Korean.</p>
+<p>Hold Shift to input more Korean characters.</p>
+<p>&lt;/div&gt; &lt;div class="input-section"&gt; <textarea id="koreanInput" placeholder="Type in English and it will convert to Korean..."></textarea> &lt;/div&gt; &lt;div class="button-section"&gt; <button id="copyBtn">Copy</button> <button id="clearBtn">Clear</button> <button id="saveBtn">Save Text</button> <button id="fontSmallerBtn" title="Smaller Text">-</button> <button id="fontLargerBtn" title="Larger Text">+</button> &lt;/div&gt; <!-- 虚拟键盘区域 - 移除标题和控制 --> &lt;div class="virtual-keyboard-section"&gt; &lt;div class="virtual-keyboard" id="virtualKeyboard"&gt; <!-- 键盘布局将通过JavaScript动态生成 --> &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; <!-- 带版本戳的JavaScript文件 --> <script src="i18n.js?v=20250802"></script> <script src="virtual-keyboard.js?v=20250802"></script> <script src="korean-input.js?v=20250802"></script> &lt;footer class="site-footer"&gt; <a href="https://github.com/nonsensejoke/korean-keyboard" target="_blank" rel="noopener noreferrer"> <svg class="github-logo" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"> <path d="M12 0C5.373 0 0 5.373 0 12C0 17.523 3.438 22.093 8.205 23.5C8.795 23.6 9.025 23.225 9.025 22.9C9.025 22.6 9.015 21.685 9.01 20.705C5.672 21.415 4.965 19.165 4.965 19.165C4.445 17.815 3.65 17.415 3.65 17.415C2.61 16.685 3.73 16.705 3.73 16.705C4.855 16.785 5.425 17.815 5.425 17.815C6.425 19.565 8.125 19.065 8.75 18.785C8.85 18.115 9.125 17.665 9.425 17.415C6.885 17.135 4.225 16.125 4.225 11.755C4.225 10.455 4.675 9.395 5.425 8.575C5.315 8.295 4.925 7.155 5.525 5.605C5.525 5.605 6.485 5.295 8.985 6.845C9.915 6.585 10.925 6.455 11.975 6.455C13.025 6.455 14.035 6.585 14.965 6.845C17.465 5.295 18.425 5.605 18.425 5.605C19.025 7.155 18.635 8.295 18.525 8.575C19.275 9.395 19.725 10.455 19.725 11.755C19.725 16.135 17.065 17.135 14.515 17.415C14.895 17.735 15.225 18.335 15.225 19.205C15.225 20.555 15.215 21.625 15.215 21.9C15.215 22.225 15.445 22.605 16.045 22.5C20.825 21.085 24 16.515 24 11C24 4.373 18.627 0 12 0Z"></path> </svg> <span>nonsensejoke/korean-keyboard</span> </a> &lt;/footer&gt; &lt;/body&gt; &lt;/html&gt; 이 사이트 따라 만들고 싶어 근데 특정 키가 눌렷을때 한영 모드 전환되게</p>
+
+<p>&lt;/p&gt;</p>
+
+<p>좋아, “자동 한글 변환” 흐름은 그대로 두고, 특정 키를 눌렀을 때 한/영 입력 모드를 전환하도록 설계해보자. 핵심은 한글 조합 파이프라인 앞단에 “현재 IME 모드” 상태값을 두고, 단축키를 잡아 토글하는 거야. 모드가 ko면 기존 조합기로 처리, en이면 원래 브라우저 입력에 맡기면 된다.</p>
+
+<p>아래는 바로 적용 가능한 설계와 코드 예시야. 파일 이름은 네가 올려둔 구조에 맞춰 넣었어.</p>
+
+<h2 id="1-html에-모드-표시-추가선택">1) HTML에 모드 표시 추가(선택)</h2>
+
+<p>사용자에게 지금 모드가 뭔지 보여주는 작은 칩을 추가하면 좋아.</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"input-section"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"ime-status"</span> <span class="na">aria-live=</span><span class="s">"polite"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">"imeMode"</span><span class="nt">&gt;</span>KO<span class="nt">&lt;/span&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;textarea</span> <span class="na">id=</span><span class="s">"koreanInput"</span> <span class="na">placeholder=</span><span class="s">"Type in English and it will convert to Korean..."</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>간단한 스타일은 style.css에 넣자.</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.ime-status</span> <span class="p">{</span>
+  <span class="nl">display</span><span class="p">:</span> <span class="nb">inline-block</span><span class="p">;</span>
+  <span class="nl">margin-bottom</span><span class="p">:</span> <span class="m">6px</span><span class="p">;</span>
+  <span class="nl">font-size</span><span class="p">:</span> <span class="m">12px</span><span class="p">;</span>
+  <span class="nl">opacity</span><span class="p">:</span> <span class="m">.8</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ime-status</span> <span class="nf">#imeMode</span> <span class="p">{</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">2px</span> <span class="m">6px</span><span class="p">;</span>
+  <span class="nl">border-radius</span><span class="p">:</span> <span class="m">6px</span><span class="p">;</span>
+  <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">currentColor</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ime-status</span> <span class="nf">#imeMode</span><span class="o">[</span><span class="nt">data-mode</span><span class="o">=</span><span class="s1">"ko"</span><span class="o">]</span> <span class="p">{</span> <span class="nl">content</span><span class="p">:</span> <span class="s1">"KO"</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.ime-status</span> <span class="nf">#imeMode</span><span class="o">[</span><span class="nt">data-mode</span><span class="o">=</span><span class="s1">"en"</span><span class="o">]</span> <span class="p">{</span> <span class="nl">content</span><span class="p">:</span> <span class="s1">"EN"</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="2-korean-inputjs에-한영-모드-상태와-토글-단축키-추가">2) korean-input.js에 한/영 모드 상태와 토글 단축키 추가</h2>
+
+<p>포인트는 세 가지다.</p>
+
+<ul>
+  <li>
+    <p>전역 모드 상태값(ko/en)</p>
+  </li>
+  <li>
+    <p>단축키로 모드 토글</p>
+  </li>
+  <li>
+    <p>모드가 en일 때는 가로채지 않고 기본 입력 흐름 유지</p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// korean-input.js
+
+// 1) 모드 상태
+const MODE = { KO: 'ko', EN: 'en' };
+let imeMode = (localStorage.getItem('imeMode') === MODE.EN) ? MODE.EN : MODE.KO;
+
+const textarea = document.getElementById('koreanInput');
+const modeChip = document.getElementById('imeMode');
+
+function renderMode() {
+  if (!modeChip) return;
+  modeChip.textContent = (imeMode === MODE.KO) ? 'KO' : 'EN';
+  modeChip.setAttribute('data-mode', imeMode);
+}
+renderMode();
+
+// 2) 단축키 정의: Ctrl+Space 또는 F2 중 하나 눌러도 전환
+function isToggleHotkey(e) {
+  // OS 단축키 충돌이 있을 수 있으니 대안 키도 둔다
+  // Ctrl+Space 또는 F2
+  return (e.ctrlKey &amp;&amp; !e.shiftKey &amp;&amp; !e.altKey &amp;&amp; e.code === 'Space') || (e.code === 'F2');
+}
+
+function toggleImeMode() {
+  imeMode = (imeMode === MODE.KO) ? MODE.EN : MODE.KO;
+  localStorage.setItem('imeMode', imeMode);
+  renderMode();
+  // 사용자 피드백(선택): 잠깐 하이라이트 주기
+  if (modeChip) {
+    modeChip.style.transition = 'background .2s';
+    modeChip.style.background = 'rgba(0,0,0,.08)';
+    setTimeout(() =&gt; modeChip.style.background = 'transparent', 150);
+  }
+}
+
+// 3) 한글 조합기(네가 이미 갖고 있는 로직/객체를 사용)
+// 예: composer.feedKey(e), composer.backspace(), composer.commit(), getComposedText() 같은 API를 가정
+// 없다면 기존 네 조합 함수를 여기서 호출하도록 연결
+importComposerIfNeeded(); // 실제로는 네 기존 모듈을 가져와 사용
+
+// 커서/선택 치환 유틸
+function replaceSelectionWith(textarea, text) {
+  const { selectionStart, selectionEnd, value } = textarea;
+  const before = value.slice(0, selectionStart);
+  const after  = value.slice(selectionEnd);
+  const newPos = before.length + text.length;
+  textarea.value = before + text + after;
+  textarea.setSelectionRange(newPos, newPos);
+}
+
+// 현재 조합 결과를 반영
+function applyComposition(text) {
+  // 단순히 현재 커서 위치에 합성 중 문자열을 반영하도록 구현
+  // 네가 이미 구현한 방식이 있다면 그 방법으로 대체
+  replaceSelectionWith(textarea, text);
+}
+
+// 4) 키 이벤트 훅
+textarea.addEventListener('keydown', (e) =&gt; {
+  // 4-1) 모드 토글
+  if (isToggleHotkey(e)) {
+    e.preventDefault();
+    toggleImeMode();
+    return;
+  }
+
+  // 4-2) EN 모드일 땐 가로채지 않음
+  if (imeMode === MODE.EN) return;
+
+  // 4-3) KO 모드: 조합기가 처리할 키만 가로채기
+  // 조합기에서 처리하는 키의 범위는 너의 구현에 맞춰 조정
+  // 예: 영문자/숫자/백스페이스/스페이스 정도는 preventDefault하고 composer로 넘기기
+  const k = e.key;
+  const isChar = k.length === 1; // 한 글자 키
+  const isBackspace = (k === 'Backspace');
+  const isSpace = (k === ' ');
+  const isEnter = (k === 'Enter');
+
+  // 방향키/홈/엔드 등은 통과시켜야 편집이 가능
+  if (!isChar &amp;&amp; !isBackspace &amp;&amp; !isSpace &amp;&amp; !isEnter) return;
+
+  // 여기서부터는 조합기에게 위임
+  e.preventDefault();
+
+  if (isBackspace) {
+    composer.backspace();
+    applyComposition(composer.text()); // composer.text(): 현재 합성 문자열
+    return;
+  }
+  if (isEnter) {
+    // 줄바꿈은 조합을 커밋하고 개행 추가
+    const committed = composer.commit();
+    replaceSelectionWith(textarea, committed + '\n');
+    return;
+  }
+  if (isSpace) {
+    // 스페이스는 조합 커밋 후 공백
+    const committed = composer.commit();
+    replaceSelectionWith(textarea, committed + ' ');
+    return;
+  }
+
+  // 일반 문자: 조합기에 먹이고 반영
+  composer.feedKey(e);              // 내부에서 2벌식/겹모음/겹받침 처리
+  applyComposition(composer.text()); // 합성중 문자열 반영
+});
+
+// 5) 포커스 아웃 시 조합 커밋(선택)
+textarea.addEventListener('blur', () =&gt; {
+  if (imeMode === MODE.KO) {
+    const committed = composer.commit();
+    if (committed) replaceSelectionWith(textarea, committed);
+  }
+});
+
+// 6) 가상 키보드와도 모드 동기화(선택)
+// 만약 virtual-keyboard.js에서 '한/영' 키를 렌더링한다면:
+document.addEventListener('vk:toggle-ime', () =&gt; {
+  toggleImeMode();
+});
+</code></pre></div></div>
+
+<h3 id="주의할-점">주의할 점</h3>
+
+<ul>
+  <li>
+    <p>OS 단축키 충돌: Ctrl+Space는 macOS/Windows 모두에서 IME 전환으로 쓰일 때가 있다. 브라우저에 키가 도달하면 위 코드가 잡지만, OS 단계에서 먹히면 이벤트가 아예 안 온다. 그래서 F2 같은 대체 키를 함께 두었다.</p>
+  </li>
+  <li>
+    <p>모바일: 소프트 키보드에서는 물리키 이벤트가 제한적이다. 모바일 지원을 원하면 화면에 “한/영” 토글 버튼을 하나 배치해 <code class="language-plaintext highlighter-rouge">toggleImeMode()</code>를 눌러주게 하자.</p>
+  </li>
+  <li>
+    <p>Undo/Redo: <code class="language-plaintext highlighter-rouge">preventDefault</code>로 직접 값을 바꾸면 기본 Undo 스택과 엮이는 방식이 달라질 수 있다. 큰 단위(커밋 시점)로만 value를 바꾸거나, <code class="language-plaintext highlighter-rouge">beforeinput</code> 이벤트를 사용해 브라우저 편집 힌트를 맞춰주면 품질이 오른다.</p>
+  </li>
+  <li>
+    <p>선택 영역 편집: 위 예시는 커서 기준 치환으로 단순화했다. 드래그 선택 후 입력·백스페이스 등도 정확히 작동하게 하려면 selectionStart/End 기준으로 조합 중 문자열 범위를 추적하거나, 커밋 시점마다 앵커를 갱신하자.</p>
+  </li>
+  <li>
+    <p>조합기 API: 위에 쓴 <code class="language-plaintext highlighter-rouge">composer.feedKey/backspace/commit/text</code>는 네가 가진 한글 조합 로직에 맞춰 이름만 바꿔 붙이면 된다.</p>
+  </li>
+</ul>
+
+<h2 id="3-virtual-keyboardjs에서-한영-키-눌렀을-때-토글선택">3) virtual-keyboard.js에서 ‘한/영’ 키 눌렀을 때 토글(선택)</h2>
+
+<p>화면 키보드에도 한/영 키를 달고 싶다면, 클릭 시 커스텀 이벤트를 쏘자.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// virtual-keyboard.js 내부
+function emitToggleIme() {
+  const ev = new CustomEvent('vk:toggle-ime', { bubbles: true });
+  document.dispatchEvent(ev);
+}
+
+// 키 렌더링 시
+// &lt;button data-key="HANENG"&gt;한/영&lt;/button&gt;
+keyboardRoot.addEventListener('click', (e) =&gt; {
+  const key = e.target.closest('[data-key]');
+  if (!key) return;
+  const code = key.getAttribute('data-key');
+  if (code === 'HANENG') {
+    emitToggleIme();
+    return;
+  }
+  // ... 기존 키 처리 ...
+});
+</code></pre></div></div>
+
+<h2 id="4-키-매핑-우선순위">4) 키 매핑 우선순위</h2>
+
+<ul>
+  <li>
+    <p>ko 모드일 때만 <code class="language-plaintext highlighter-rouge">preventDefault</code>로 잡아 한글 조합 흐름으로 보낸다.</p>
+  </li>
+  <li>
+    <p>en 모드일 때는 최대한 브라우저 기본 동작을 살려둬야 텍스트 편집 경험이 자연스럽다.</p>
+  </li>
+  <li>
+    <p>필요한 경우 숫자/기호도 조합기에서 처리할지 여부를 옵션화해라.</p>
+  </li>
+</ul>
+
+<h2 id="5-빠른-체크리스트">5) 빠른 체크리스트</h2>
+
+<ul>
+  <li>
+    <p>단축키: Ctrl+Space, F2 두 가지 다 제공</p>
+  </li>
+  <li>
+    <p>모드 표시: 작은 칩으로 KO/EN 표기</p>
+  </li>
+  <li>
+    <p>로컬 저장: 마지막 모드 기억(localStorage)</p>
+  </li>
+  <li>
+    <p>포커스 아웃: 미커밋 문자 커밋</p>
+  </li>
+  <li>
+    <p>모바일: 화면 토글 버튼 추가</p>
+  </li>
+</ul>
+
+<p>이대로 넣으면 “특정 키를 눌러 한/영 전환”이 깔끔하게 붙는다. 네 조합기 함수 이름이 다르면 그 부분만 바꿔서 연결하면 되고, 원하면 CapsLock 전환, 오른쪽 Alt 등 다른 키 조합도 추가해줄 수 있어.</p>
+
+<p class="chat--user">
+
+내가 준 소스본거 맞아?
+
+</p>
+
+<p>짚고 갈게.</p>
+
+<p>네가 <strong>이번에 올린 HTML 소스</strong> 는 다음 JS 파일들을 불러오고 있을 뿐,<br />
+그 안의 내용(특히 korean-input.js / i18n.js / virtual-keyboard.js)은 <strong>여기 챗에 공유되지 않았어.</strong></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"i18n.js?v=20250802"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"virtual-keyboard.js?v=20250802"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"korean-input.js?v=20250802"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>즉,</p>
+
+<p><strong>네가 준 건 ‘HTML 구조’이고, 실제 한글 자동 변환 기능은 저 JS 파일 안에 있다.</strong><br />
+그리고 내가 위에서 작성해준 "한/영 모드 전환" 코드는 그 JS 내부에 추가해야 하는 기능 코드였어.</p>
+
+<hr />
+
+<h3 id="정답">정답</h3>
+
+<p>너가 공유한 HTML 코드만으로는 <strong>"특정 키 눌러 한/영 전환" 기능이 없다.</strong></p>
+
+<p>그리고 "따라 만들고 싶다"는 사이트 소스인지 확인하는 질문이라면:</p>
+
+<blockquote>
+  <p><strong>지금까지 네가 챗에 올린 소스는 그 사이트 전체 소스가 아니다.<br />
+ 핵심 기능(JS 부분)은 아직 챗에서 보지 못했다.</strong></p>
+</blockquote>
+
+<hr />
+
+<h3 id="왜냐">왜냐?</h3>
+
+<ul>
+  <li>
+    <p>HTML에는 <strong>텍스트 박스, 버튼, UI 구조</strong> 만 있음</p>
+  </li>
+  <li>
+    <p>진짜 한글 자동 변환 / 자판 조합 알고리즘은 <code class="language-plaintext highlighter-rouge">korean-input.js</code>에 있음</p>
+  </li>
+  <li>
+    <p>가상 키보드 UI는 <code class="language-plaintext highlighter-rouge">virtual-keyboard.js</code>에 있음</p>
+  </li>
+  <li>
+    <p>언어 배열 및 레이아웃 정의는 <code class="language-plaintext highlighter-rouge">i18n.js</code>에 있음</p>
+  </li>
+</ul>
+
+<p>즉, 네가 준 HTML은 “이 사이트를 따라 만들기 위한 껍데기”고,<br />
+기능은 전부 JS가 담당하고 있어.</p>
+
+<hr />
+
+<h3 id="그래서-해야-할-것">그래서 해야 할 것</h3>
+
+<ol>
+  <li>
+    <p>네가 쓰고 있는 <code class="language-plaintext highlighter-rouge">korean-input.js</code> 를 보여줘<br />
+그래야 <strong>거기에 한/영 전환 핫키 코드를 정확히 삽입해줄 수 있어.</strong></p>
+  </li>
+  <li>
+    <p>또는 사용 중인 GitHub 저장소 링크(URL)를 알려줘도 됨<br />
+그러면 구조를 보고 어디에 코드를 넣는지 딱 집어주겠다.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="다음-메시지에-이렇게-보내줘">다음 메시지에 이렇게 보내줘</h3>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">korean-input</span><span class="nc">.js</span> <span class="nt">소스</span> <span class="nt">전체</span>
+</code></pre></div></div>
+
+<p>또는</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">virtual</span><span class="o">-</span><span class="n">keyboard</span><span class="p">.</span><span class="n">js</span> <span class="err">소스</span> <span class="err">전체</span>
+</code></pre></div></div>
+
+<p><strong>그 파일을 보면 네가 원하는 ‘특정 키로 한/영 전환’ 기능을 실제 코드에 정확히 넣어줄게.</strong></p>
+
+<p>지금은 HTML만 있어서 “맞는지?” 라고 물으면 답은 <strong>아직 아니야. 핵심 소스를 안 본 상태거든.</strong><br />
+계속 가보자.</p>
+
+<p class="chat--user">
+
+class KoreanInput { constructor() { // 字体大小管理 this.fontSize = 18; // 默认字体大小 // 普通状态的键盘映射 this.normalMap = { // 辅音 (초성/종성) 'q': 'ㅂ', 'w': 'ㅈ', 'e': 'ㄷ', 'r': 'ㄱ', 't': 'ㅅ', 'a': 'ㅁ', 's': 'ㄴ', 'd': 'ㅇ', 'f': 'ㄹ', 'g': 'ㅎ', 'z': 'ㅋ', 'x': 'ㅌ', 'c': 'ㅊ', 'v': 'ㅍ', // 元音 (중성) 'y': 'ㅛ', 'u': 'ㅕ', 'l': 'ㅣ', 'o': 'ㅐ', 'p': 'ㅔ', 'h': 'ㅗ', 'j': 'ㅓ', 'k': 'ㅏ', 'i': 'ㅑ', 'b': 'ㅠ', 'n': 'ㅜ', 'm': 'ㅡ' }; // Shift状态的键盘映射 this.shiftMap = { // 双辅音 'Q': 'ㅃ', 'W': 'ㅉ', 'E': 'ㄸ', 'R': 'ㄲ', 'T': 'ㅆ', // 复合元音 'O': 'ㅒ', 'P': 'ㅖ', // 其他按键保持原映射（小写转大写） 'q': 'ㅃ', 'w': 'ㅉ', 'e': 'ㄸ', 'r': 'ㄲ', 't': 'ㅆ', 'o': 'ㅒ', 'p': 'ㅖ' }; // 韩文字符范围常量 this.HANGUL_BASE = 0xAC00; this.CHOSUNG_BASE = 0x1100; this.JUNGSUNG_BASE = 0x1161; this.JONGSUNG_BASE = 0x11A7; // 初声 (19个) this.chosungList = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']; // 中声 (21个) this.jungsungList = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ']; // 终声 (28个，包含空字符) this.jongsungList = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']; // 完整的韩文组合引擎数据结构（从参考项目移植） this.initial = [12593, 12594, 12596, 12599, 12600, 12601, 12609, 12610, 12611, 12613, 12614, 12615, 12616, 12617, 12618, 12619, 12620, 12621, 12622]; this.finale = [0, 12593, 12594, 12595, 12596, 12597, 12598, 12599, 12601, 12602, 12603, 12604, 12605, 12606, 12607, 12608, 12609, 12610, 12612, 12613, 12614, 12615, 12616, 12618, 12619, 12620, 12621, 12622]; this.dMedial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 800, 801, 820, 0, 0, 1304, 1305, 1320, 0, 0, 1820]; this.dFinale = [0, 0, 0, 119, 0, 422, 427, 0, 0, 801, 816, 817, 819, 825, 826, 827, 0, 0, 1719, 0, 1919]; // Unicode常量 this.SBase = 44032; this.LBase = 4352; this.VBase = 12623; this.TBase = 4519; this.LCount = 19; this.VCount = 21; this.TCount = 28; this.NCount = 588; this.SCount = 11172; // 当前正在组合的字符状态 this.currentChosung = ''; this.currentJungsung = ''; this.currentJongsung = ''; this.buffer = ''; } // 查找数组中元素的索引（工具函数） indexOf(array, value) { for (let i = 0; i &lt; array.length; i++) { if (array[i] === value) { return i; } } return -1; } // 获取字符映射 getCharacter(key, isShift) { if (isShift &amp;&amp; this.shiftMap[key]) { return this.shiftMap[key]; } return this.normalMap[key.toLowerCase()] || null; } // 判断是否为辅音 isConsonant(char) { return this.chosungList.includes(char) || this.jongsungList.includes(char); } // 判断是否为元音 isVowel(char) { return this.jungsungList.includes(char); } // 完整的韩文组合算法（从参考项目移植并优化） composeHangul(inputString) { const length = inputString.length; if (length === 0) { return ""; } let currentCharCode = inputString.charCodeAt(0); let result = String.fromCharCode(currentCharCode); for (let i = 1; i &lt; length; i++) { const nextCharCode = inputString.charCodeAt(i); const initialIndex = this.indexOf(this.initial, currentCharCode); // 初声 + 中声 → 音节 if (initialIndex !== -1) { const vowelOffset = nextCharCode - this.VBase; if (0 &lt;= vowelOffset &amp;&amp; vowelOffset &lt; this.VCount) { currentCharCode = this.SBase + (initialIndex * this.VCount + vowelOffset) * this.TCount; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } } // 元音 + 元音 → 复合元音 const currentVowelOffset = currentCharCode - this.VBase; const nextVowelOffset = nextCharCode - this.VBase; if (0 &lt;= currentVowelOffset &amp;&amp; currentVowelOffset &lt; this.VCount &amp;&amp; 0 &lt;= nextVowelOffset &amp;&amp; nextVowelOffset &lt; this.VCount) { const dMedialIndex = this.indexOf(this.dMedial, (currentVowelOffset * 100) + nextVowelOffset); if (dMedialIndex &gt; 0) { currentCharCode = this.VBase + dMedialIndex; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } } const syllableOffset = currentCharCode - this.SBase; // 音节 + 终声 → 完整音节 if (0 &lt;= syllableOffset &amp;&amp; syllableOffset &lt; 11145 &amp;&amp; (syllableOffset % this.TCount) === 0) { const finaleIndex = this.indexOf(this.finale, nextCharCode); if (finaleIndex !== -1) { currentCharCode += finaleIndex; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } // 处理复合中声 const vowelIndex = Math.floor((syllableOffset % this.NCount) / this.TCount); const dMedialIndex = this.indexOf(this.dMedial, (vowelIndex * 100) + (nextCharCode - this.VBase)); if (dMedialIndex &gt; 0) { currentCharCode += (dMedialIndex - vowelIndex) * this.TCount; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } } // 完整音节 + 元音 → 终声分离 + 新音节 (关键修复!) if (0 &lt;= syllableOffset &amp;&amp; syllableOffset &lt; 11172 &amp;&amp; (syllableOffset % this.TCount) !== 0) { const finaleIndex = syllableOffset % this.TCount; const vowelOffset = nextCharCode - this.VBase; if (0 &lt;= vowelOffset &amp;&amp; vowelOffset &lt; this.VCount) { const newInitialIndex = this.indexOf(this.initial, this.finale[finaleIndex]); if (0 &lt;= newInitialIndex &amp;&amp; newInitialIndex &lt; this.LCount) { // 移除终声，创建新音节 result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode - finaleIndex); currentCharCode = this.SBase + (newInitialIndex * this.VCount + vowelOffset) * this.TCount; result = result + String.fromCharCode(currentCharCode); continue; } // 处理复合终声分解 if (finaleIndex &lt; this.dFinale.length &amp;&amp; this.dFinale[finaleIndex] !== 0) { result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode - finaleIndex + Math.floor(this.dFinale[finaleIndex] / 100)); currentCharCode = this.SBase + (this.indexOf(this.initial, this.finale[(this.dFinale[finaleIndex] % 100)]) * this.VCount + vowelOffset) * this.TCount; result = result + String.fromCharCode(currentCharCode); continue; } } // 处理复合终声 const dFinaleIndex = this.indexOf(this.dFinale, (finaleIndex * 100) + this.indexOf(this.finale, nextCharCode)); if (dFinaleIndex &gt; 0) { currentCharCode = currentCharCode + dFinaleIndex - finaleIndex; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } } // 无法组合，添加新字符 currentCharCode = nextCharCode; result = result + String.fromCharCode(nextCharCode); } return result; } // 分解韩文字符（按照参考项目实现） decomposeHangul(inputString) { const length = inputString.length; let result = ""; for (let i = 0; i &lt; length; i++) { const charCode = inputString.charCodeAt(i); const syllableOffset = charCode - this.SBase; // 检查是否为韩文音节 if (syllableOffset &lt; 0 || syllableOffset &gt;= this.SCount) { result += String.fromCharCode(charCode); continue; } // 分解音节 const initialIndex = Math.floor(syllableOffset / this.NCount); const vowelCode = this.VBase + Math.floor((syllableOffset % this.NCount) / this.TCount); const finaleCode = this.finale[syllableOffset % this.TCount]; result += String.fromCharCode(this.initial[initialIndex], vowelCode); if (finaleCode !== 0) { result += String.fromCharCode(finaleCode); } } return result; } // 处理输入 - 简化版本，直接返回字符用于smartInsert处理 processInput(char) { // 简化：直接返回字符，让smartInsert处理所有组合逻辑 return char; } // 检测韩文字符是否完成（用于历史保存时机判断） isHangulCharComplete(char) { if (!char) return false; const charCode = char.charCodeAt(0); const syllableOffset = charCode - this.SBase; // 检查是否为完整的韩文音节（不是单独的字母组件） if (0 &lt;= syllableOffset &amp;&amp; syllableOffset &lt; this.SCount) { return true; // 是完整的韩文音节 } return false; // 不是完整的韩文音节或不是韩文字符 } // 检测从旧文本到新文本是否有韩文字符完成 detectHangulCompletion(oldText, newText, cursorPosition) { // 检查光标位置附近是否有新完成的韩文字符 if (cursorPosition &lt;= 0) return false; const newChar = newText[cursorPosition - 1]; const oldChar = oldText[cursorPosition - 1] || ''; // 如果新字符是完整韩文字符，而旧字符不是，则表示有字符完成 if (this.isHangulCharComplete(newChar) &amp;&amp; !this.isHangulCharComplete(oldChar)) { return true; } // 检查是否有韩文字符从不完整变为完整 if (newChar !== oldChar &amp;&amp; this.isHangulCharComplete(newChar)) { return true; } return false; } // 智能插入函数 - 改进版本，更好地处理韩文组合，增加完成检测 smartInsert(currentText, cursorStart, cursorEnd, newChar) { // 1. 构建新文本：插入新字符 const textBefore = currentText.substring(0, cursorStart); const textAfter = currentText.substring(cursorEnd); const tempText = textBefore + newChar + textAfter; const tempCursorPos = cursorStart + newChar.length; // 2. 韩文组合处理：尝试不同长度的字符序列 for (let testLength = Math.min(4, tempCursorPos); testLength &gt;= 2; testLength–) { const testChars = tempText.substring(tempCursorPos - testLength, tempCursorPos); const composed = this.composeHangul(testChars); // 3. 如果组合成功（长度减少，或者内容有意义变化），则替换 if (composed.length &lt; testChars.length || composed !== testChars) { const newText = tempText.substring(0, tempCursorPos - testLength) + composed + tempText.substring(tempCursorPos); const newCursorPos = tempCursorPos - testLength + composed.length; // 4. 检测韩文字符是否完成（用于历史保存） const hangulCompleted = this.detectHangulCompletion(currentText, newText, newCursorPos); return { text: newText, cursorPosition: newCursorPos, hangulCompleted: hangulCompleted }; } } // 5. 无法组合，返回临时文本，检查是否有韩文完成 const hangulCompleted = this.detectHangulCompletion(currentText, tempText, tempCursorPos); return { text: tempText, cursorPosition: tempCursorPos, hangulCompleted: hangulCompleted }; } // 处理辅音输入 processConsonant(consonant) { if (!this.currentChosung) { // 开始新的音节 this.currentChosung = consonant; this.currentJungsung = ''; this.currentJongsung = ''; return consonant; } else if (this.currentJungsung &amp;&amp; !this.currentJongsung) { // 添加终声 this.currentJongsung = consonant; return this.combineHangul(this.currentChosung, this.currentJungsung, this.currentJongsung); } else { // 开始新的音节 const result = this.finalizeCurrent() + consonant; this.currentChosung = consonant; this.currentJungsung = ''; this.currentJongsung = ''; return result; } } // 处理元音输入 processVowel(vowel) { if (this.currentChosung &amp;&amp; !this.currentJungsung) { // 添加中声 this.currentJungsung = vowel; return this.combineHangul(this.currentChosung, this.currentJungsung); } else if (this.currentChosung &amp;&amp; this.currentJungsung &amp;&amp; this.currentJongsung) { // 终声变成新音节的初声 const result = this.combineHangul(this.currentChosung, this.currentJungsung) + this.combineHangul(this.currentJongsung, vowel); this.currentChosung = this.currentJongsung; this.currentJungsung = vowel; this.currentJongsung = ''; return result; } else { // 处理其他情况 const result = this.finalizeCurrent() + vowel; this.reset(); return result; } } // 完成当前字符组合 finalizeCurrent() { if (this.currentChosung &amp;&amp; this.currentJungsung) { return this.combineHangul(this.currentChosung, this.currentJungsung, this.currentJongsung); } else if (this.currentChosung) { return this.currentChosung; } return ''; } // 重置状态 reset() { this.currentChosung = ''; this.currentJungsung = ''; this.currentJongsung = ''; } // 从单个韩文字符恢复输入状态 restoreStateFromCharacter(char) { if (!char) { this.reset(); return; } const decomposed = this.decomposeHangul(char); if (decomposed) { // 是完整的韩文字符，恢复组合状态 this.currentChosung = decomposed.chosung; this.currentJungsung = decomposed.jungsung; this.currentJongsung = decomposed.jongsung; } else if (this.isConsonant(char)) { // 是单独的辅音，设置为初声 this.currentChosung = char; this.currentJungsung = ''; this.currentJongsung = ''; } else if (this.isVowel(char)) { // 是单独的元音，这种情况不应该出现在正常的韩文输入中 // 重置状态 this.reset(); } else { // 不是韩文字符，重置状态 this.reset(); } } // 处理退格 - 使用新的decomposeHangul实现 handleBackspace(currentText) { if (currentText.length === 0) return ''; const lastChar = currentText[currentText.length - 1]; const decomposed = this.decomposeHangul(lastChar); // 检查是否为韩文字符（通过分解结果长度判断） if (decomposed.length &gt; 1) { // 是韩文字符，按照参考项目的逻辑处理 const decomposedArray = Array.from(decomposed); if (decomposedArray.length &gt; 1) { // 删除最后一个字符部件，重新组合 const remaining = decomposedArray.slice(0, -1).join(''); const recomposed = this.composeHangul(remaining); return currentText.slice(0, -1) + recomposed; } } // 不是韩文字符或无法分解，直接删除 return currentText.slice(0, -1); } // 程序化处理输入（用于移动端虚拟键盘） processInputProgrammatically(key, isShift, currentText, cursorPosition) { const char = this.getCharacter(key, isShift); if (!char) return null; // 使用smartInsert函数处理输入 return this.smartInsert(currentText, cursorPosition, cursorPosition, char); } // === 新增功能：保存文本 === // 保存文本为文件 saveTextAsFile(text) { if (!text.trim()) { alert(window.languageManager ? window.languageManager.getText('noTextToSave') || 'No text to save!' : 'No text to save!'); return; } try { // 创建Blob对象 const blob = new Blob([text], { type: 'text/plain;charset=utf-8' }); // 创建下载链接 const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; // 生成文件名（包含时间戳） const now = new Date(); const timestamp = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0') + '-' + String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0') + String(now.getSeconds()).padStart(2, '0'); link.download = <code class="language-plaintext highlighter-rouge">korean-text-${timestamp}.txt</code>; // 触发下载 document.body.appendChild(link); link.click(); document.body.removeChild(link); // 清理URL对象 URL.revokeObjectURL(url); } catch (e) { console.error('Failed to save file:', e); alert('Failed to save file. Please try again.'); } } // === 新增功能：字体大小调整 === // 简单的设置保存 saveSettings() { try { const data = { fontSize: this.fontSize }; localStorage.setItem('korean-input-data', JSON.stringify(data)); } catch (e) { console.warn('Failed to save settings to localStorage:', e); } } // 从localStorage加载设置 loadSettings() { const savedData = localStorage.getItem('korean-input-data'); if (savedData) { try { const data = JSON.parse(savedData); if (data.fontSize) { this.fontSize = data.fontSize; } } catch (e) { console.warn('Failed to load settings from localStorage:', e); } } } // 获取当前字体大小 getFontSize() { return this.fontSize; } // 设置字体大小 setFontSize(size) { this.fontSize = Math.max(12, Math.min(36, size)); // 限制在12-36px之间 const textarea = document.getElementById('koreanInput'); if (textarea) { textarea.style.fontSize = this.fontSize + 'px'; } this.saveSettings(); // 保存字体大小设置 return this.fontSize; } // 增大字体 increaseFontSize() { return this.setFontSize(this.fontSize + 2); } // 减小字体 decreaseFontSize() { return this.setFontSize(this.fontSize - 2); } // 初始化字体大小 initializeFontSize() { this.loadSettings(); // 加载保存的设置 const textarea = document.getElementById('koreanInput'); if (textarea) { textarea.style.fontSize = this.fontSize + 'px'; } } } // DOM加载完成后初始化 document.addEventListener('DOMContentLoaded', function() { const koreanInput = new KoreanInput(); const textarea = document.getElementById('koreanInput'); const copyBtn = document.getElementById('copyBtn'); const clearBtn = document.getElementById('clearBtn'); const saveBtn = document.getElementById('saveBtn'); const fontSmallerBtn = document.getElementById('fontSmallerBtn'); const fontLargerBtn = document.getElementById('fontLargerBtn'); // 初始化字体大小 koreanInput.initializeFontSize(); // 初始化虚拟键盘和语言切换器 window.virtualKeyboard = new VirtualKeyboard(koreanInput); window.languageSwitcher = new LanguageSwitcher(); // 初始化界面语言 window.languageManager.updateUI(); // 修复初始化时序问题：确保虚拟键盘的多语言文字正确显示 if (window.virtualKeyboard) { // 更新功能键文字（修复空格键显示问题） window.virtualKeyboard.updateFunctionKeysText(); // 如果是移动设备且当前处于虚拟键盘模式，更新状态指示器 if (window.virtualKeyboard.isMobileDevice &amp;&amp; window.virtualKeyboard.isVirtualKeyboardMode) { window.virtualKeyboard.updateKeyboardStateIndicator(false); } } // 键盘事件监听 textarea.addEventListener('keydown', function(e) { // 检查输入来源，如果是虚拟键盘输入且在移动设备上，则忽略 if (window.virtualKeyboard &amp;&amp; window.virtualKeyboard.inputSource === 'virtual' &amp;&amp; window.virtualKeyboard.isMobileDevice) { return; } if (e.key === 'Backspace') { e.preventDefault(); // 获取光标位置信息 const cursorStart = this.selectionStart; const cursorEnd = this.selectionEnd; if (cursorStart === cursorEnd) { // 普通删除：删除光标前的一个字符 if (cursorStart &gt; 0) { const textBefore = this.value.substring(0, cursorStart); const textAfter = this.value.substring(cursorStart); // 对光标前的文本应用韩文智能退格逻辑 const newTextBefore = koreanInput.handleBackspace(textBefore); const newText = newTextBefore + textAfter; this.value = newText; // 设置新的光标位置 const newCursorPos = newTextBefore.length; this.setSelectionRange(newCursorPos, newCursorPos); // 基于光标位置智能恢复韩文输入状态 if (newCursorPos &gt; 0) { const charBeforeCursor = newText[newCursorPos - 1]; koreanInput.restoreStateFromCharacter(charBeforeCursor); } else { koreanInput.reset(); } } } else { // 选区删除：删除选中的文本 const textBefore = this.value.substring(0, cursorStart); const textAfter = this.value.substring(cursorEnd); const newText = textBefore + textAfter; this.value = newText; this.setSelectionRange(cursorStart, cursorStart); // 基于光标位置智能恢复韩文输入状态 if (cursorStart &gt; 0) { const charBeforeCursor = newText[cursorStart - 1]; koreanInput.restoreStateFromCharacter(charBeforeCursor); } else { koreanInput.reset(); } } // 注意：这里不再调用 koreanInput.reset()，因为状态已经在上面智能恢复了 return; } if (e.key === ' ') { e.preventDefault(); const cursorStart = this.selectionStart; const textBefore = this.value.substring(0, cursorStart); const textAfter = this.value.substring(this.selectionEnd); this.value = textBefore + ' ' + textAfter; // 移动光标到空格之后 const newCursorPos = cursorStart + 1; this.setSelectionRange(newCursorPos, newCursorPos); // 重置韩文输入状态 koreanInput.reset(); return; } // 忽略其他特殊键 if (e.key.length &gt; 1 &amp;&amp; e.key !== 'Shift') return; const char = koreanInput.getCharacter(e.key, e.shiftKey); if (char) { e.preventDefault(); const result = koreanInput.processInput(char); // 更新输入框内容 const cursorPos = this.selectionStart; const textBefore = this.value.substring(0, cursorPos); const textAfter = this.value.substring(this.selectionEnd); // 全新的韩文输入逻辑：智能光标插入处理 const insertResult = koreanInput.smartInsert(this.value, cursorPos, this.selectionEnd, result); // 更新文本和光标位置 this.value = insertResult.text; this.setSelectionRange(insertResult.cursorPosition, insertResult.cursorPosition); } }); // 添加触摸和焦点事件监听，区分输入来源 textarea.addEventListener('touchstart', function(e) { if (window.virtualKeyboard) { window.virtualKeyboard.inputSource = 'touch'; // 同步虚拟光标位置 setTimeout(() =&gt; { window.virtualKeyboard.syncVirtualCursor(); }, 50); } }); textarea.addEventListener('mousedown', function(e) { if (window.virtualKeyboard) { window.virtualKeyboard.inputSource = 'mouse'; // 同步虚拟光标位置 setTimeout(() =&gt; { window.virtualKeyboard.syncVirtualCursor(); }, 50); } }); textarea.addEventListener('focus', function(e) { if (window.virtualKeyboard) { // 如果是虚拟键盘操作导致的焦点，立即失焦 if (window.virtualKeyboard.isMobileDevice &amp;&amp; window.virtualKeyboard.isVirtualKeyboardMode) { e.preventDefault(); this.blur(); return false; } // 如果是移动设备且输入源不是虚拟键盘，允许系统键盘弹出 if (window.virtualKeyboard.isMobileDevice &amp;&amp; window.virtualKeyboard.inputSource !== 'virtual') { // 正常的焦点行为，允许系统键盘弹出 window.virtualKeyboard.syncVirtualCursor(); } } koreanInput.reset(); }); // 监听自定义虚拟输入事件 textarea.addEventListener('virtualinput', function(e) { // 处理虚拟输入事件，这里可以添加额外的处理逻辑 // 例如更新其他UI元素等 }); // 监听光标位置变化（selectionchange事件） document.addEventListener('selectionchange', function() { if (window.virtualKeyboard &amp;&amp; document.activeElement === textarea) { // 用户直接在textarea中移动了光标，同步虚拟光标 if (!window.virtualKeyboard.isVirtualKeyboardMode) { window.virtualKeyboard.syncVirtualCursor(); } } }); // 监听文本选择变化（兼容性更好的方式） textarea.addEventListener('selectionchange', function() { if (window.virtualKeyboard &amp;&amp; !window.virtualKeyboard.isVirtualKeyboardMode) { window.virtualKeyboard.syncVirtualCursor(); } }); // 监听键盘事件同步光标（用户直接使用物理键盘时） textarea.addEventListener('keyup', function(e) { if (window.virtualKeyboard &amp;&amp; !window.virtualKeyboard.isVirtualKeyboardMode) { window.virtualKeyboard.syncVirtualCursor(); } }); // 复制功能 copyBtn.addEventListener('click', function() { textarea.select(); document.execCommand('copy'); // 显示复制成功提示（多语言支持） const originalText = this.textContent; this.textContent = window.languageManager.getText('copiedMsg'); setTimeout(() =&gt; { this.textContent = originalText; }, 1000); }); // 清空功能 clearBtn.addEventListener('click', function() { textarea.value = ''; koreanInput.reset(); window.virtualKeyboard.reset(); textarea.focus(); }); // 保存文本功能 saveBtn.addEventListener('click', function() { koreanInput.saveTextAsFile(textarea.value); textarea.focus(); }); // 缩小字体功能 fontSmallerBtn.addEventListener('click', function() { koreanInput.decreaseFontSize(); textarea.focus(); }); // 放大字体功能 fontLargerBtn.addEventListener('click', function() { koreanInput.increaseFontSize(); textarea.focus(); }); // 点击事件重置状态和同步光标 textarea.addEventListener('click', function() { koreanInput.reset(); // 设置输入源为直接输入 if (window.virtualKeyboard) { window.virtualKeyboard.inputSource = 'direct'; // 同步虚拟光标位置 window.virtualKeyboard.syncVirtualCursor(); } }); });
+
+</p>
+
+<p>좋아. 네 코드에 “특정 키로 한/영 전환”을 붙이려면, 입력 파이프라인의 맨 앞에 IME 모드 상태(ko/en)를 두고, 단축키로 그 값을 토글하면 돼. ko일 때만 지금의 한글 조합 로직을 실행하고, en일 때는 브라우저 기본 입력을 그대로 통과시키면 된다. 아래는 네가 올린 소스에 최소 침습으로 추가/변경해야 할 부분만 단계별로 정리한 거야.</p>
+
+<h1 id="1-koreaninput-클래스에-모드-상태와-api-추가">1) KoreanInput 클래스에 모드 상태와 API 추가</h1>
+
+<p>생성자에 모드 상태를 넣고 로컬스토리지에 저장·복원하도록 해. 그리고 토글/설정 메서드를 추가.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+class KoreanInput {
+    constructor() {
+        // ... 기존 코드 그대로 ...
+
+        // IME 모드: 'ko' | 'en'
+        this.mode = (localStorage.getItem('imeMode') === 'en') ? 'en' : 'ko';
+    }
+
+    setMode(mode) {
+        this.mode = (mode === 'en') ? 'en' : 'ko';
+        localStorage.setItem('imeMode', this.mode);
+        // 모드에 따라 상태 초기화가 필요하면 여기서 처리
+        if (this.mode === 'en') this.reset();
+    }
+
+    toggleMode() {
+        this.setMode(this.mode === 'ko' ? 'en' : 'ko');
+        // 모드 표시 UI가 있다면 여기서 갱신
+        const chip = document.getElementById('imeMode');
+        if (chip) {
+            chip.textContent = (this.mode === 'ko') ? 'KO' : 'EN';
+            chip.setAttribute('data-mode', this.mode);
+        }
+    }
+    
+    // ... 나머지 메서드 그대로 ...
+}
+</code></pre></div></div>
+
+<p>선택 사항: 모드 상태를 화면에 표시하고 싶다면 HTML에 작은 칩을 하나 두면 좋아.</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"ime-status"</span><span class="nt">&gt;&lt;span</span> <span class="na">id=</span><span class="s">"imeMode"</span><span class="nt">&gt;</span>KO<span class="nt">&lt;/span&gt;&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>초기화 시점에 한번 동기화:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// DOMContentLoaded 내부
+const chip = document.getElementById('imeMode');
+if (chip) {
+    chip.textContent = (koreanInput.mode === 'ko') ? 'KO' : 'EN';
+    chip.setAttribute('data-mode', koreanInput.mode);
+}
+</code></pre></div></div>
+
+<h1 id="2-단축키-정의-ctrlspace-또는-f2">2) 단축키 정의: Ctrl+Space 또는 F2</h1>
+
+<p>OS 단축키와 충돌 가능성을 줄이려고 F2도 함께 지원하자.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+function isToggleHotkey(e) {
+    // Ctrl+Space 또는 F2
+    return (e.ctrlKey &amp;&amp; !e.shiftKey &amp;&amp; !e.altKey &amp;&amp; e.code === 'Space') || (e.code === 'F2');
+}
+</code></pre></div></div>
+
+<h1 id="3-keydown-핸들러를-모드-기반으로-분기">3) keydown 핸들러를 모드 기반으로 분기</h1>
+
+<p>지금 keydown은 Backspace, Space, 일반 문자 등을 모두 가로채서 한글 조합으로 넣고 있어. 이 로직을 “ko일 때만” 실행하도록 감싸고, “en일 때는” 브라우저 기본 입력을 그대로 흐르게 두면 된다. 즉, 기존의 <code class="language-plaintext highlighter-rouge">preventDefault()</code>들을 ko 모드에서만 수행하게 만드는 게 핵심.</p>
+
+<p>아래는 네 keydown 리스너의 핵심 부분을 안전하게 바꾼 버전이야. 바뀐 줄에 주석을 달아놨다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+textarea.addEventListener('keydown', function(e) {
+    // 가상키보드 입력 통과 로직은 그대로
+    if (window.virtualKeyboard &amp;&amp; window.virtualKeyboard.inputSource === 'virtual' &amp;&amp; window.virtualKeyboard.isMobileDevice) {
+        return;
+    }
+
+    // 1) 한/영 토글 단축키
+    if (isToggleHotkey(e)) {
+        e.preventDefault();
+        koreanInput.toggleMode();
+        return;
+    }
+
+    // 2) EN 모드: 브라우저 기본 입력을 그대로 사용
+    if (koreanInput.mode === 'en') {
+        return; // 어떤 키도 가로채지 않음
+    }
+
+    // 3) KO 모드: 기존 한글 조합 로직 실행
+    if (e.key === 'Backspace') {
+        e.preventDefault();
+
+        const cursorStart = this.selectionStart;
+        const cursorEnd = this.selectionEnd;
+
+        if (cursorStart === cursorEnd) {
+            if (cursorStart &gt; 0) {
+                const textBefore = this.value.substring(0, cursorStart);
+                const textAfter = this.value.substring(cursorStart);
+                const newTextBefore = koreanInput.handleBackspace(textBefore);
+                const newText = newTextBefore + textAfter;
+
+                this.value = newText;
+
+                const newCursorPos = newTextBefore.length;
+                this.setSelectionRange(newCursorPos, newCursorPos);
+
+                if (newCursorPos &gt; 0) {
+                    const charBeforeCursor = newText[newCursorPos - 1];
+                    koreanInput.restoreStateFromCharacter(charBeforeCursor);
+                } else {
+                    koreanInput.reset();
+                }
+            }
+        } else {
+            const textBefore = this.value.substring(0, cursorStart);
+            const textAfter = this.value.substring(cursorEnd);
+            const newText = textBefore + textAfter;
+
+            this.value = newText;
+            this.setSelectionRange(cursorStart, cursorStart);
+
+            if (cursorStart &gt; 0) {
+                const charBeforeCursor = newText[cursorStart - 1];
+                koreanInput.restoreStateFromCharacter(charBeforeCursor);
+            } else {
+                koreanInput.reset();
+            }
+        }
+        return;
+    }
+
+    if (e.key === ' ') {
+        e.preventDefault();
+
+        const cursorStart = this.selectionStart;
+        const textBefore = this.value.substring(0, cursorStart);
+        const textAfter = this.value.substring(this.selectionEnd);
+
+        this.value = textBefore + ' ' + textAfter;
+
+        const newCursorPos = cursorStart + 1;
+        this.setSelectionRange(newCursorPos, newCursorPos);
+
+        koreanInput.reset();
+        return;
+    }
+
+    // 특수키 무시(Shift 등)
+    if (e.key.length &gt; 1 &amp;&amp; e.key !== 'Shift') return;
+
+    const char = koreanInput.getCharacter(e.key, e.shiftKey);
+    if (char) {
+        e.preventDefault();
+        const result = koreanInput.processInput(char);
+
+        const cursorPos = this.selectionStart;
+        const insertResult = koreanInput.smartInsert(this.value, cursorPos, this.selectionEnd, result);
+
+        this.value = insertResult.text;
+        this.setSelectionRange(insertResult.cursorPosition, insertResult.cursorPosition);
+        return;
+    }
+
+    // 매핑되지 않은 키는 KO 모드에서도 통과시킬지, 막을지 정책 결정
+    // 필요하면 아래에서 e.preventDefault()를 제거하거나 추가
+});
+</code></pre></div></div>
+
+<p>핵심 포인트</p>
+
+<ol>
+  <li>
+    <p>토글 단축키를 가장 먼저 처리해 즉시 모드를 바꾼다.</p>
+  </li>
+  <li>
+    <p>en 모드에서는 아무것도 가로채지 않는다. Backspace/Space/일반 문자 포함 전부 브라우저 기본 동작.</p>
+  </li>
+  <li>
+    <p>ko 모드일 때만 기존 한글 조합 로직이 실행된다.</p>
+  </li>
+</ol>
+
+<h1 id="4-모바일가상키보드와-동기화선택">4) 모바일·가상키보드와 동기화(선택)</h1>
+
+<p>화면 키보드에도 한/영 키를 달았다면, 그 버튼 클릭 시 <code class="language-plaintext highlighter-rouge">koreanInput.toggleMode()</code>를 호출해주면 된다. 예시:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// virtual-keyboard.js에서
+buttonHanEng.addEventListener('click', () =&gt; {
+    if (window.koreanInput) window.koreanInput.toggleMode();
+});
+</code></pre></div></div>
+
+<h1 id="5-사용성-팁">5) 사용성 팁</h1>
+
+<p>단축키는 Ctrl+Space가 OS 레벨에서 먼저 먹을 수 있다. 그럴 때를 대비해 F2 같은 대체 키를 함께 두는 게 안전하다. 모드 칩을 표시하면 사용자 혼란도 줄어든다.</p>
+
+<p>이렇게 붙이면, 사이트는 그대로 유지하면서도 특정 키로 한/영 모드를 전환할 수 있어. 더 빡빡하게 통제하고 싶다면 en 모드일 때도 일부 키(예: Backspace만)는 가로채서 너의 selection 관리 로직에 맞추는 식으로 세분화할 수 있다.</p>
+
+<p class="chat--user">
+
+ime라고 하니까 좀 헷갈리는데 os의 ime랑은 전혀 상관없는거지?
+
+</p>
+
+<p>맞아. 여기서 말하는 건 OS의 한글 입력기(IME)랑 전혀 별개야. 네 코드는 “페이지 안에서 키 이벤트를 받아 영→한으로 조합해 넣는 자바스크립트 입력기”일 뿐, 운영체제의 IME 상태를 바꾸거나 읽을 수 없어.</p>
+
+<h2 id="뭐가-어떻게-다른가">뭐가 어떻게 다른가</h2>
+
+<ul>
+  <li>
+    <p>OS IME: 시스템 전역. 앱·브라우저 어디서나 적용. 단축키(예: 윈도우/맥 한영 전환)로 토글되고, 브라우저가 제어 못 함.</p>
+  </li>
+  <li>
+    <p>네 JS 입력기: 특정 <code class="language-plaintext highlighter-rouge">textarea</code>에서만 동작. <code class="language-plaintext highlighter-rouge">keydown</code>을 가로채서 자모 매핑→조합 알고리즘으로 텍스트를 “넣어줄” 뿐. 페이지 밖에는 영향 없음.</p>
+  </li>
+</ul>
+
+<h2 id="함께-켜졌을-때의-상호작용">함께 켜졌을 때의 상호작용</h2>
+
+<ul>
+  <li>
+    <p>OS IME가 “한글”로 켜져 있으면 브라우저가 이미 조합을 수행하므로, 너의 JS 조합과 충돌하거나 이중 입력처럼 보일 수 있다.</p>
+  </li>
+  <li>
+    <p>OS 단축키(Ctrl+Space 등)는 OS가 먼저 먹을 수 있어, 너의 페이지에 <code class="language-plaintext highlighter-rouge">keydown</code>이 아예 안 오기도 한다.</p>
+  </li>
+</ul>
+
+<h2 id="안전하게-쓰는-가드강력-추천">안전하게 쓰는 가드(강력 추천)</h2>
+
+<p>OS IME로 실제 조합 중일 때는 이벤트에 <code class="language-plaintext highlighter-rouge">isComposing</code> 플래그가 선다. 이때는 네 커스텀 조합을 끄면 충돌이 사라진다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+textarea.addEventListener('keydown', (e) =&gt; {
+  // OS IME 조합 중이거나 IME가 'Process' 키를 보낼 땐 건드리지 않음
+  if (e.isComposing || e.key === 'Process') return;
+
+  // 네 ‘한/영 모드’ 토글
+  if (isToggleHotkey(e)) { e.preventDefault(); koreanInput.toggleMode(); return; }
+
+  // EN 모드면 기본 입력 통과
+  if (koreanInput.mode === 'en') return;
+
+  // KO 모드면 기존 커스텀 조합 로직 실행
+  // …(지금 갖고 있는 로직)
+});
+</code></pre></div></div>
+
+<p>추가로, 충돌 가능성을 더 낮추려면 입력창 속성을 이렇게 세팅해 둬:</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;textarea</span> <span class="na">id=</span><span class="s">"koreanInput"</span>
+  <span class="na">autocomplete=</span><span class="s">"off"</span> <span class="na">autocapitalize=</span><span class="s">"off"</span> <span class="na">autocorrect=</span><span class="s">"off"</span> <span class="na">spellcheck=</span><span class="s">"false"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+</code></pre></div></div>
+
+<p>(IME 자체를 끄진 못하지만, 자동 교정/철자 교정 같은 브라우저 레이어 간섭을 줄여준다.)</p>
+
+<h2 id="모바일에서의-차이">모바일에서의 차이</h2>
+
+<ul>
+  <li>모바일 소프트 키보드는 물리 키 이벤트가 제한적이라 JS 조합기로만 처리하기 어렵다. 화면에 “한/영 토글” 버튼을 별도로 제공해 <code class="language-plaintext highlighter-rouge">toggleMode()</code>를 직접 호출하는 식이 안정적이다.</li>
+</ul>
+
+<h2 id="용어-정리헷갈림-방지">용어 정리(헷갈림 방지)</h2>
+
+<ul>
+  <li>
+    <p>“OS IME”는 그대로 IME.</p>
+  </li>
+  <li>
+    <p>네 쪽은 “인페이지 한글 조합기”, “커스텀 입력기”, 혹은 UI상 “KO/EN 모드”처럼 부르는 게 명확하다.</p>
+  </li>
+</ul>
+
+<h2 id="현실적인-운용-팁">현실적인 운용 팁</h2>
+
+<ul>
+  <li>
+    <p>페이지 어딘가에 현재 모드 칩(KO/EN)을 표시하고, 처음엔 “OS 한글 입력은 꺼 주세요” 같은 안내를 보여주면 사용자 혼란이 크게 줄어든다.</p>
+  </li>
+  <li>
+    <p>단축키는 OS와 충돌 가능한 Ctrl+Space 외에 F2/RightAlt 등 대체 키를 함께 두는 게 좋다.</p>
+  </li>
+</ul>
+
+<p>이렇게 <code class="language-plaintext highlighter-rouge">isComposing</code> 가드와 모드 표기를 붙이면, OS IME와 완전히 독립적으로 동작하면서도 충돌을 최소화할 수 있다.</p>
+
+<p class="chat--user">
+
+모든 텍스트 에리아에 이 기능을 넣고 싶어 그리고 너가 말한 대로 페이지에 현재 모드를 아이콘으로 보여주고 싶어
+
+</p>
+
+<p>좋다—이제 “페이지의 모든 <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code>에 한/영 전환형 한글 조합기”를 붙이고, 화면 구석에 <strong>모드 아이콘(KO/EN)</strong> 을 띄워서 전역 상태를 보여주자. 핵심은 전역 모드 상태(ko/en) + 공용 <code class="language-plaintext highlighter-rouge">KoreanInput</code> 인스턴스 + 모든 텍스트에리아에 동일한 키 핸들러를 붙이는 거야. 동적으로 추가되는 textarea도 <code class="language-plaintext highlighter-rouge">MutationObserver</code>로 커버하자.</p>
+
+<p>아래는 네 현재 구조를 최대한 유지하면서 “전역 적용”과 “아이콘 표시”를 추가한 코드 세트야.</p>
+
+<hr />
+
+<h1 id="1-모드-아이콘-ui-추가-html--css">1) 모드 아이콘 UI 추가 (HTML + CSS)</h1>
+
+<p>페이지 공통 위치(우하단)에 작게 떠 있는 칩을 만든다.</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- body 끝나기 직전(footer 위나 아래)에 추가 --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"imeBadge"</span> <span class="na">class=</span><span class="s">"ime-badge"</span> <span class="na">aria-live=</span><span class="s">"polite"</span> <span class="na">title=</span><span class="s">"Ctrl+Space 또는 F2로 전환"</span><span class="nt">&gt;&lt;/div&gt;</span>
+</code></pre></div></div>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/* style.css에 추가 */</span>
+<span class="nc">.ime-badge</span><span class="p">{</span>
+  <span class="nl">position</span><span class="p">:</span> <span class="nb">fixed</span><span class="p">;</span>
+  <span class="nl">right</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span>
+  <span class="nl">bottom</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span>
+  <span class="nl">z-index</span><span class="p">:</span> <span class="m">9999</span><span class="p">;</span>
+  <span class="nl">min-width</span><span class="p">:</span> <span class="m">36px</span><span class="p">;</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">6px</span> <span class="m">10px</span><span class="p">;</span>
+  <span class="nl">border-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span>
+  <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">currentColor</span><span class="p">;</span>
+  <span class="nl">font</span><span class="p">:</span> <span class="m">12px</span><span class="o">/</span><span class="m">1.2</span> <span class="n">system-ui</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span>
+  <span class="nl">text-align</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+  <span class="nl">opacity</span><span class="p">:</span> <span class="m">.8</span><span class="p">;</span>
+  <span class="nl">background</span><span class="p">:</span> <span class="nf">rgba</span><span class="p">(</span><span class="m">255</span><span class="p">,</span><span class="m">255</span><span class="p">,</span><span class="m">255</span><span class="p">,</span><span class="m">.85</span><span class="p">);</span>
+  <span class="py">backdrop-filter</span><span class="p">:</span> <span class="nf">blur</span><span class="p">(</span><span class="m">6px</span><span class="p">);</span>
+  <span class="nl">cursor</span><span class="p">:</span> <span class="nb">default</span><span class="p">;</span>
+  <span class="py">user-select</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.ime-badge</span><span class="o">[</span><span class="nt">data-mode</span><span class="o">=</span><span class="s1">"ko"</span><span class="o">]</span><span class="nd">::after</span><span class="p">{</span> <span class="nl">content</span><span class="p">:</span> <span class="s1">"KO"</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.ime-badge</span><span class="o">[</span><span class="nt">data-mode</span><span class="o">=</span><span class="s1">"en"</span><span class="o">]</span><span class="nd">::after</span><span class="p">{</span> <span class="nl">content</span><span class="p">:</span> <span class="s1">"EN"</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="c">/* textarea 기본 옵션(권장) */</span>
+<span class="nt">textarea</span><span class="p">{</span>
+  <span class="py">autocomplete</span><span class="p">:</span> <span class="n">off</span><span class="p">;</span>
+  <span class="py">autocapitalize</span><span class="p">:</span> <span class="n">off</span><span class="p">;</span>
+  <span class="py">spellcheck</span><span class="p">:</span> <span class="no">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="2-koreaninput-클래스-전역-모드-api-확장">2) KoreanInput 클래스: 전역 모드 API 확장</h1>
+
+<p>이미 넣어둔 <code class="language-plaintext highlighter-rouge">mode</code>, <code class="language-plaintext highlighter-rouge">setMode</code>, <code class="language-plaintext highlighter-rouge">toggleMode</code>를 전역에서 호출하기 쉽게 조금 일반화하고, 초기 배지와 동기화까지 포함한다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// KoreanInput 클래스 내부에 이미 제안했던 것 + 배지 반영
+setMode(mode) {
+  this.mode = (mode === 'en') ? 'en' : 'ko';
+  localStorage.setItem('imeMode', this.mode);
+  if (this.mode === 'en') this.reset();
+  const badge = document.getElementById('imeBadge');
+  if (badge){
+    badge.setAttribute('data-mode', this.mode);
+    // 살짝 깜빡이는 피드백
+    badge.style.transition = 'background .15s';
+    badge.style.background = 'rgba(0,0,0,.08)';
+    setTimeout(()=&gt; badge.style.background = 'rgba(255,255,255,.85)', 120);
+  }
+}
+toggleMode(){ this.setMode(this.mode === 'ko' ? 'en' : 'ko'); }
+</code></pre></div></div>
+
+<p>DOMContentLoaded에서 배지를 현재 모드와 동기화:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// DOMContentLoaded 내부
+const badge = document.getElementById('imeBadge');
+if (badge){
+  badge.setAttribute('data-mode', koreanInput.mode);
+}
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="3-모든-textarea에-붙는-핸들러-유틸">3) 모든 textarea에 붙는 핸들러 유틸</h1>
+
+<p>특정 요소에 붙이던 keydown 로직을 “재사용 가능한 함수”로 만든다. 이 함수는 네 기존 keydown 내용(Backspace·Space·일반문자 처리)을 그대로 활용하되, <strong>isComposing 가드</strong> 와 <strong>모드 분기</strong> 를 맨 앞에 둔다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// 전역 유틸: 한/영 토글 핫키
+function isToggleHotkey(e){
+  return (e.ctrlKey &amp;&amp; !e.shiftKey &amp;&amp; !e.altKey &amp;&amp; e.code === 'Space') || (e.code === 'F2');
+}
+
+// 특정 textarea에 조합기를 장착
+function attachKoreanHandlers(textarea, koreanInput){
+  if (!textarea || textarea.__koreanAttached) return;
+  textarea.__koreanAttached = true;
+
+  // 포커스 시 상태 초기화(에디터 전환 시 잔상 방지)
+  textarea.addEventListener('focus', (e)=&gt;{
+    // 모바일 가상키보드 모드 등 네 로직이 있으면 그대로 유지
+    koreanInput.reset();
+  });
+
+  // 키다운: 전역 모드 + 가드
+  textarea.addEventListener('keydown', function(e){
+    // OS IME 조합 중이거나 Process 키면 건드리지 않음
+    if (e.isComposing || e.key === 'Process') return;
+
+    // 전역 토글
+    if (isToggleHotkey(e)){
+      e.preventDefault();
+      koreanInput.toggleMode();
+      return;
+    }
+
+    // EN 모드: 기본 입력 통과 (아무것도 막지 않음)
+    if (koreanInput.mode === 'en') return;
+
+    // ===== 아래부터는 KO 모드에서만 실행: 네 기존 로직을 그대로 이식 =====
+
+    if (e.key === 'Backspace'){
+      e.preventDefault();
+      const cursorStart = this.selectionStart;
+      const cursorEnd = this.selectionEnd;
+
+      if (cursorStart === cursorEnd){
+        if (cursorStart &gt; 0){
+          const textBefore = this.value.substring(0, cursorStart);
+          const textAfter  = this.value.substring(cursorStart);
+          const newTextBefore = koreanInput.handleBackspace(textBefore);
+          const newText = newTextBefore + textAfter;
+          this.value = newText;
+
+          const newCursorPos = newTextBefore.length;
+          this.setSelectionRange(newCursorPos, newCursorPos);
+
+          if (newCursorPos &gt; 0){
+            const charBeforeCursor = newText[newCursorPos - 1];
+            koreanInput.restoreStateFromCharacter(charBeforeCursor);
+          } else {
+            koreanInput.reset();
+          }
+        }
+      } else {
+        const textBefore = this.value.substring(0, cursorStart);
+        const textAfter  = this.value.substring(cursorEnd);
+        const newText = textBefore + textAfter;
+        this.value = newText;
+        this.setSelectionRange(cursorStart, cursorStart);
+
+        if (cursorStart &gt; 0){
+          const charBeforeCursor = newText[cursorStart - 1];
+          koreanInput.restoreStateFromCharacter(charBeforeCursor);
+        } else {
+          koreanInput.reset();
+        }
+      }
+      return;
+    }
+
+    if (e.key === ' '){
+      e.preventDefault();
+      const cursorStart = this.selectionStart;
+      const textBefore  = this.value.substring(0, cursorStart);
+      const textAfter   = this.value.substring(this.selectionEnd);
+      this.value = textBefore + ' ' + textAfter;
+
+      const newCursorPos = cursorStart + 1;
+      this.setSelectionRange(newCursorPos, newCursorPos);
+      koreanInput.reset();
+      return;
+    }
+
+    // 특수키 무시(Shift 등)
+    if (e.key.length &gt; 1 &amp;&amp; e.key !== 'Shift') return;
+
+    const char = koreanInput.getCharacter(e.key, e.shiftKey);
+    if (char){
+      e.preventDefault();
+      const result = koreanInput.processInput(char);
+      const cursorPos = this.selectionStart;
+      const insertResult = koreanInput.smartInsert(this.value, cursorPos, this.selectionEnd, result);
+      this.value = insertResult.text;
+      this.setSelectionRange(insertResult.cursorPosition, insertResult.cursorPosition);
+    }
+  });
+
+  // 클릭/마우스/터치로 커서 바꿨을 때 상태 초기화(네 기존 방식 유지)
+  textarea.addEventListener('click', ()=&gt;{
+    koreanInput.reset();
+  });
+  textarea.addEventListener('keyup', ()=&gt;{
+    // 필요시 가상커서 동기화 등 넣을 자리
+  });
+}
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="4-한-번에-모두-장착--동적-추가도-커버">4) 한 번에 모두 장착 + 동적 추가도 커버</h1>
+
+<p>페이지 로드시 모든 <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code>를 찾아 장착하고, DOM에 새로운 textarea가 생기면 자동으로 붙인다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+document.addEventListener('DOMContentLoaded', function(){
+  const koreanInput = new KoreanInput();
+  window.koreanInput = koreanInput; // 다른 스크립트에서 접근 가능하도록
+
+  // 배지 초기 상태 반영
+  const badge = document.getElementById('imeBadge');
+  if (badge){ badge.setAttribute('data-mode', koreanInput.mode); }
+
+  // 페이지의 모든 textarea에 장착
+  document.querySelectorAll('textarea').forEach(el=&gt;{
+    // 권장 옵션 적용
+    el.setAttribute('autocomplete','off');
+    el.setAttribute('autocapitalize','off');
+    el.setAttribute('spellcheck','false');
+    attachKoreanHandlers(el, koreanInput);
+  });
+
+  // 동적 추가 대응
+  const mo = new MutationObserver((mutations)=&gt;{
+    for (const m of mutations){
+      m.addedNodes &amp;&amp; m.addedNodes.forEach(node=&gt;{
+        if (node.nodeType === 1){ // ELEMENT_NODE
+          if (node.matches &amp;&amp; node.matches('textarea')){
+            node.setAttribute('autocomplete','off');
+            node.setAttribute('autocapitalize','off');
+            node.setAttribute('spellcheck','false');
+            attachKoreanHandlers(node, koreanInput);
+          }
+          // 하위에 여러 개 생기는 케이스
+          node.querySelectorAll &amp;&amp; node.querySelectorAll('textarea').forEach(el=&gt;{
+            el.setAttribute('autocomplete','off');
+            el.setAttribute('autocapitalize','off');
+            el.setAttribute('spellcheck','false');
+            attachKoreanHandlers(el, koreanInput);
+          });
+        }
+      });
+    }
+  });
+  mo.observe(document.documentElement, { childList:true, subtree:true });
+
+  // 전역 키로도 토글 가능(포커스가 textarea가 아니어도)
+  document.addEventListener('keydown', (e)=&gt;{
+    if (e.isComposing || e.key === 'Process') return;
+    if (isToggleHotkey(e)){
+      e.preventDefault();
+      koreanInput.toggleMode();
+    }
+  });
+
+  // 배지 클릭으로도 전환(모바일 배려)
+  if (badge){
+    badge.addEventListener('click', ()=&gt; koreanInput.toggleMode());
+  }
+});
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="5-선택-옵션">5) 선택 옵션</h1>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">&lt;input type="text"&gt;</code>에도 적용하고 싶다면 <code class="language-plaintext highlighter-rouge">querySelectorAll('textarea, input[type="text"], input[type="search"]')</code>로 확장하되, selection API가 동일하게 동작하는지 확인하자. 지금 로직은 대부분 호환된다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">contenteditable</code>까지 커버하려면 selection 처리와 text node 교체가 달라서 별 어댑터가 필요하다. 요청하면 그 버전도 만들어줄 수 있다.</p>
+  </li>
+  <li>
+    <p>가상 키보드와 모드 동기화가 필요하면, 가상 키보드의 한/영 버튼 클릭 시 <code class="language-plaintext highlighter-rouge">window.koreanInput.toggleMode()</code>만 호출해주면 끝난다.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h1 id="동작-요약">동작 요약</h1>
+
+<ul>
+  <li>
+    <p>전역 모드 상태는 <code class="language-plaintext highlighter-rouge">localStorage('imeMode')</code>에 저장되어 새로고침해도 유지.</p>
+  </li>
+  <li>
+    <p>화면 우하단 배지에 KO/EN 표시. 클릭하거나 Ctrl+Space, F2로 전환.</p>
+  </li>
+  <li>
+    <p>모든 <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code>에서 KO 모드일 때만 한글 조합(네 로직)이 동작, EN 모드면 브라우저 기본 입력.</p>
+  </li>
+  <li>
+    <p>OS IME가 조합 중일 때는 <code class="language-plaintext highlighter-rouge">e.isComposing</code> 가드로 충돌 방지.</p>
+  </li>
+</ul>
+
+<p>원하면 <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code>/<code class="language-plaintext highlighter-rouge">contenteditable</code> 확장과, 배지 디자인(아이콘 SVG, 다크모드, 접근성 라벨)도 덧입혀서 깔끔하게 정리해줄게.</p>
+
+<p class="chat--user">
+
+좋아 잘 되고 있다. 그런데 Ctrl+a, Ctrl+x 같은 키가 제대로 동작을 안해 이거 고쳐줄 수 있어? 
+
+</p>
+
+<p>좋아—바로 고칠 수 있어. 핵심은 <strong>Ctrl/⌘(Meta)와 조합된 단축키는 절대<code class="language-plaintext highlighter-rouge">preventDefault</code>로 막지 않는 것</strong>이야. 지금 keydown 핸들러가 KO 모드에서 Backspace·Space·문자 입력을 가로채다 보니 <code class="language-plaintext highlighter-rouge">Ctrl+A / X / C / V / Z / Y</code> 같은 표준 단축키가 비정상 동작하는 거지.</p>
+
+<p>아래처럼 “수정 라인만” 추가하면 깔끔하게 해결돼.</p>
+
+<h2 id="1-보조-함수-추가">1) 보조 함수 추가</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+function isToggleHotkey(e){
+  return (e.ctrlKey &amp;&amp; !e.shiftKey &amp;&amp; !e.altKey &amp;&amp; e.code === 'Space') || (e.code === 'F2');
+}
+
+// Ctrl/Meta 조합(표준 단축키)면 브라우저에 맡기기
+function isEditorShortcut(e){
+  // AltGraph(우Alt)나 Ctrl+Alt 같은 조합도 통과
+  const altGraph = e.getModifierState &amp;&amp; e.getModifierState('AltGraph');
+  const ctrlMeta = e.ctrlKey || e.metaKey;
+  const ctrlAlt  = e.ctrlKey &amp;&amp; e.altKey;
+  return altGraph || ctrlAlt || ctrlMeta;
+}
+</code></pre></div></div>
+
+<h2 id="2-keydown-핸들러-앞부분-분기-강화">2) <code class="language-plaintext highlighter-rouge">keydown</code> 핸들러 앞부분 분기 강화</h2>
+
+<p>네가 모든 <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code>에 붙이는 <code class="language-plaintext highlighter-rouge">keydown</code> 리스너 안에서, <strong>가장 위쪽에</strong> 아래 가드를 넣어.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+textarea.addEventListener('keydown', function(e){
+  // OS IME 조합 중이면 건드리지 않음
+  if (e.isComposing || e.key === 'Process') return;
+
+  // 전역 토글 단축키 우선 처리
+  if (isToggleHotkey(e)){
+    e.preventDefault();
+    koreanInput.toggleMode();
+    return;
+  }
+
+  // ⭐ 표준 편집 단축키는 무조건 통과(Ctrl/⌘, AltGraph 등)
+  if (isEditorShortcut(e)){
+    return; // Ctrl+A/X/C/V/Z/Y, Ctrl+←/→ 등 전부 브라우저 기본 동작
+  }
+
+  // EN 모드는 전부 통과
+  if (koreanInput.mode === 'en') return;
+
+  // ----- 이하 KO 모드 전용 로직(기존 코드 유지) -----
+  // Backspace/Space/문자 처리...
+});
+</code></pre></div></div>
+
+<h2 id="3-ko-모드-내부에서도-조합된-backspace-예외-처리">3) KO 모드 내부에서도 “조합된 Backspace” 예외 처리</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Ctrl+Backspace</code>(단어 단위 삭제)나 <code class="language-plaintext highlighter-rouge">Ctrl+Delete</code>도 기본 동작을 살리고 싶다면 KO 블록 진입 <strong>이전</strong> 에 이미 <code class="language-plaintext highlighter-rouge">isEditorShortcut(e)</code>에서 빠져나가므로 추가 변경 없이 해결돼. 다만 혹시 아래처럼 KO 블록 안쪽에 Backspace를 먼저 잡아버리는 코드가 있다면, 한 줄만 보강하면 된다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+if (e.key === 'Backspace'){
+  // ⭐ 단어 삭제 같은 조합은 통과
+  // (여기까지 오면 Ctrl/Meta는 이미 걸러졌지만, 남겨두면 안전)
+  if (e.ctrlKey || e.metaKey) return;
+
+  e.preventDefault();
+  // ... 네 기존 handleBackspace 로직 ...
+  return;
+}
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">Space</code>도 마찬가지로 조합키와 함께 누르면 통과:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+if (e.key === ' '){
+  // 예: Shift+Space 같은 변형을 통과시키고 싶다면 조건을 확장해도 됨
+  if (e.ctrlKey || e.altKey || e.metaKey) return;
+  e.preventDefault();
+  // ... 기존 공백 처리 ...
+  return;
+}
+</code></pre></div></div>
+
+<h2 id="4-문자-입력-차단-조건-정리">4) 문자 입력 차단 조건 정리</h2>
+
+<p>문자 키만 가로채고, 그 외 편집 키는 통과시키려면 이렇게 두면 안전해.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// 특수키 무시(Shift 등)
+if (e.key.length &gt; 1 &amp;&amp; e.key !== 'Shift') return;
+
+// 여기서부터는 "일반 문자"만 가로챔
+const char = koreanInput.getCharacter(e.key, e.shiftKey);
+if (char){
+  e.preventDefault();
+  const result = koreanInput.processInput(char);
+  const cursorPos = this.selectionStart;
+  const insertResult = koreanInput.smartInsert(this.value, cursorPos, this.selectionEnd, result);
+  this.value = insertResult.text;
+  this.setSelectionRange(insertResult.cursorPosition, insertResult.cursorPosition);
+}
+</code></pre></div></div>
+
+<h2 id="5-결과">5) 결과</h2>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Ctrl+A</code> 전체선택, <code class="language-plaintext highlighter-rouge">Ctrl+X/C/V</code> 잘린/복사/붙여넣기, <code class="language-plaintext highlighter-rouge">Ctrl+Z/Y</code> 되돌리기/다시하기, <code class="language-plaintext highlighter-rouge">Ctrl+←/→</code> 단어 단위 이동, <code class="language-plaintext highlighter-rouge">Ctrl+Backspace/Delete</code> 단어 삭제 모두 정상.</p>
+  </li>
+  <li>
+    <p>KO 모드에서만 한글 조합이 적용되고, EN 모드/표준 단축키/OS IME 조합 상태는 전부 브라우저 기본 편집 흐름을 유지.</p>
+  </li>
+</ul>
+
+<p>추가로, Edge/Windows에서 <strong>AltGraph(우Alt)</strong> 가 잡히는 환경이 종종 있어서 <code class="language-plaintext highlighter-rouge">isEditorShortcut</code>에 <code class="language-plaintext highlighter-rouge">AltGraph</code>를 꼭 포함했어. 이걸 빼면 일부 기호 입력이 막힐 수 있다.</p>
+
+<p>원하면 <code class="language-plaintext highlighter-rouge">&lt;input type="text"&gt;</code>나 <code class="language-plaintext highlighter-rouge">contenteditable</code>까지 확장할 때의 단축키/선택 영역 처리도 같은 원칙으로 정리해 줄게.</p>
+
+<p class="chat--user">
+
+input 도 같은 방식으로 처리하고 싶어
+
+</p>
+
+<p>좋지! <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code>도 <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code>와 똑같은 방식으로 처리할 수 있어. 핵심은 같은 키다운 핸들러를 재사용하고, 셀렉터를 <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code> + 텍스트계열 <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code>으로 확장하는 거야. 아래 코드를 그대로 추가·교체하면 된다.</p>
+
+<h2 id="1-유틸-함수-그대로-사용">1) 유틸 함수 그대로 사용</h2>
+
+<p>이미 쓰던 토글/단축키 가드 유지.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+function isToggleHotkey(e){
+  return (e.ctrlKey &amp;&amp; !e.shiftKey &amp;&amp; !e.altKey &amp;&amp; e.code === 'Space') || (e.code === 'F2');
+}
+function isEditorShortcut(e){
+  const altGraph = e.getModifierState &amp;&amp; e.getModifierState('AltGraph');
+  const ctrlMeta = e.ctrlKey || e.metaKey;
+  const ctrlAlt  = e.ctrlKey &amp;&amp; e.altKey;
+  return altGraph || ctrlAlt || ctrlMeta;
+}
+</code></pre></div></div>
+
+<h2 id="2-공통-장착-함수-textarea와-input-모두-지원">2) 공통 장착 함수: <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code>와 <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code> 모두 지원</h2>
+
+<p>기존 <code class="language-plaintext highlighter-rouge">attachKoreanHandlers</code>를 살짝 일반화해 어느 편집 요소든 붙도록 한다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+function attachKoreanHandlers(editEl, koreanInput){
+  if (!editEl || editEl.__koreanAttached) return;
+  editEl.__koreanAttached = true;
+
+  // 권장 옵션(자동 교정 비활성)
+  editEl.setAttribute('autocomplete','off');
+  editEl.setAttribute('autocapitalize','off');
+  editEl.setAttribute('spellcheck','false');
+
+  // 포커스 시 상태 초기화
+  editEl.addEventListener('focus', ()=&gt;{
+    koreanInput.reset();
+  });
+
+  // 키다운: 공통 처리
+  editEl.addEventListener('keydown', function(e){
+    if (e.isComposing || e.key === 'Process') return;
+
+    if (isToggleHotkey(e)){
+      e.preventDefault();
+      koreanInput.toggleMode();
+      return;
+    }
+
+    // Ctrl/Meta 등 편집 단축키는 통과
+    if (isEditorShortcut(e)) return;
+
+    // EN 모드는 통과
+    if (koreanInput.mode === 'en') return;
+
+    // KO 모드: 기존 로직
+    if (e.key === 'Backspace'){
+      if (e.ctrlKey || e.metaKey) return; // 단어 삭제 등 통과
+      e.preventDefault();
+
+      const cursorStart = this.selectionStart;
+      const cursorEnd   = this.selectionEnd;
+
+      if (cursorStart === cursorEnd){
+        if (cursorStart &gt; 0){
+          const textBefore = this.value.substring(0, cursorStart);
+          const textAfter  = this.value.substring(cursorStart);
+          const newTextBefore = koreanInput.handleBackspace(textBefore);
+          const newText = newTextBefore + textAfter;
+          this.value = newText;
+          const newCursorPos = newTextBefore.length;
+          this.setSelectionRange(newCursorPos, newCursorPos);
+
+          if (newCursorPos &gt; 0){
+            const charBeforeCursor = newText[newCursorPos - 1];
+            koreanInput.restoreStateFromCharacter(charBeforeCursor);
+          } else {
+            koreanInput.reset();
+          }
+        }
+      } else {
+        const textBefore = this.value.substring(0, cursorStart);
+        const textAfter  = this.value.substring(cursorEnd);
+        const newText = textBefore + textAfter;
+        this.value = newText;
+        this.setSelectionRange(cursorStart, cursorStart);
+
+        if (cursorStart &gt; 0){
+          const charBeforeCursor = newText[cursorStart - 1];
+          koreanInput.restoreStateFromCharacter(charBeforeCursor);
+        } else {
+          koreanInput.reset();
+        }
+      }
+      return;
+    }
+
+    if (e.key === ' '){
+      if (e.ctrlKey || e.altKey || e.metaKey) return; // 조합 스페이스는 통과
+      e.preventDefault();
+      const cursorStart = this.selectionStart;
+      const textBefore  = this.value.substring(0, cursorStart);
+      const textAfter   = this.value.substring(this.selectionEnd);
+      this.value = textBefore + ' ' + textAfter;
+      const newCursorPos = cursorStart + 1;
+      this.setSelectionRange(newCursorPos, newCursorPos);
+      koreanInput.reset();
+      return;
+    }
+
+    // 특수키(Shift 등) 통과
+    if (e.key.length &gt; 1 &amp;&amp; e.key !== 'Shift') return;
+
+    const char = koreanInput.getCharacter(e.key, e.shiftKey);
+    if (char){
+      e.preventDefault();
+      const result = koreanInput.processInput(char);
+
+      const cursorPos = this.selectionStart;
+      const insertResult = koreanInput.smartInsert(this.value, cursorPos, this.selectionEnd, result);
+
+      this.value = insertResult.text;
+      this.setSelectionRange(insertResult.cursorPosition, insertResult.cursorPosition);
+    }
+  });
+
+  // 클릭/키업 등 상태 초기화
+  editEl.addEventListener('click', ()=&gt; koreanInput.reset());
+  editEl.addEventListener('keyup',  ()=&gt; {/* 필요시 커서 동기화 자리 */});
+}
+</code></pre></div></div>
+
+<h2 id="3-초기-장착-textarea--텍스트계열-input-모두-선택">3) 초기 장착: <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code> + 텍스트계열 <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code> 모두 선택</h2>
+
+<p>폼 입력 타입 중 텍스트로 편집 가능한 것들만 포함한다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+document.addEventListener('DOMContentLoaded', function(){
+  const koreanInput = new KoreanInput();
+  window.koreanInput = koreanInput;
+
+  // 모드 배지 초기화
+  const badge = document.getElementById('imeBadge');
+  if (badge) badge.setAttribute('data-mode', koreanInput.mode);
+
+  // 대상 셀렉터: textarea + text/search/url/tel/password/email (숫자/날짜 계열 제외)
+  const editableSelector = [
+    'textarea',
+    'input:not([type])',
+    'input[type="text"]',
+    'input[type="search"]',
+    'input[type="url"]',
+    'input[type="tel"]',
+    'input[type="password"]',
+    'input[type="email"]'
+  ].join(',');
+
+  document.querySelectorAll(editableSelector).forEach(el=&gt;{
+    attachKoreanHandlers(el, koreanInput);
+  });
+
+  // 동적 추가 대응
+  const mo = new MutationObserver(muts=&gt;{
+    muts.forEach(m=&gt;{
+      m.addedNodes &amp;&amp; m.addedNodes.forEach(node=&gt;{
+        if (node.nodeType !== 1) return;
+        if (node.matches &amp;&amp; node.matches(editableSelector)){
+          attachKoreanHandlers(node, koreanInput);
+        }
+        node.querySelectorAll &amp;&amp; node.querySelectorAll(editableSelector).forEach(el=&gt;{
+          attachKoreanHandlers(el, koreanInput);
+        });
+      });
+    });
+  });
+  mo.observe(document.documentElement, { childList:true, subtree:true });
+
+  // 전역 토글(포커스가 편집 요소가 아니어도 동작)
+  document.addEventListener('keydown', (e)=&gt;{
+    if (e.isComposing || e.key === 'Process') return;
+    if (isToggleHotkey(e)){
+      e.preventDefault();
+      koreanInput.toggleMode();
+    }
+  });
+
+  // 배지 클릭으로 모드 전환
+  if (badge){
+    badge.addEventListener('click', ()=&gt; koreanInput.toggleMode());
+  }
+});
+</code></pre></div></div>
+
+<h2 id="4-주의사항과-팁">4) 주의사항과 팁</h2>
+
+<ul>
+  <li>
+    <p>숫자/날짜 입력은 브라우저 기본 위젯과 충돌하니 셀렉터에서 제외했다. 필요하면 타입을 텍스트로 바꿔서 사용해.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">maxlength</code>가 있는 <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code>은 합성 중 글자 수가 순간 늘었다 줄 수 있다. 문제 생기면 <code class="language-plaintext highlighter-rouge">smartInsert</code>에서 길이 체크를 추가해서 최종 결과만 제한하도록 조정하자.</p>
+  </li>
+  <li>
+    <p>붙여넣기 이벤트를 EN 모드에서만 통과시키고 KO 모드에서는 “붙여넣기 후 한글 재조합”을 하고 싶다면 <code class="language-plaintext highlighter-rouge">paste</code> 이벤트에서 <code class="language-plaintext highlighter-rouge">preventDefault()</code> 후 <code class="language-plaintext highlighter-rouge">e.clipboardData.getData('text')</code>를 읽어 <code class="language-plaintext highlighter-rouge">smartInsert</code>로 흘려주면 된다.</p>
+  </li>
+</ul>
+
+<p>이렇게 붙이면 페이지의 모든 텍스트 입력 필드에서 동일하게 한/영 전환형 한글 조합이 동작하고, 표준 단축키(Ctrl/⌘+A/X/C/V/Z/Y)도 제대로 살아난다. 다음으로 <code class="language-plaintext highlighter-rouge">contenteditable</code>까지 확장하고 싶으면 알려줘—그건 Selection API 어댑터만 추가하면 된다.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#misc" class="page__taxonomy-item p-category" rel="tag">misc</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-07T17:47:23+09:00">2025-11-07</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/misc/virutual-korean-keyboard/" class="pagination--pager" title="untitled">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-07T17:47:29+09:00">2025-11-07</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/virutual-korean-keyboard/" rel="permalink">untitled
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-07T17:47:20+09:00">2025-11-07</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">ChatGPT404 Not Found
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/python-interpreter-tool-calling/" rel="permalink">Python 코드 실행 Tool Calling
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-05T17:49:25+09:00">2025-11-05</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/vllm-pdf/" rel="permalink">vLLM에 pdf 넣는법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-04T14:13:34+09:00">2025-11-04</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
