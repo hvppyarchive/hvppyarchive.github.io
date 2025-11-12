@@ -1,0 +1,1625 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>CFileDialog 구현 방법 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="CFileDialog 구현 방법">
+<meta property="og:url" content="https://hvppyarchive.github.io/python/custom-pyside-filedialog/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-11-12T14:36:21+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/python/custom-pyside-filedialog/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="CFileDialog 구현 방법">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-11-12T14:36:21+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/python/custom-pyside-filedialog/" itemprop="url">CFileDialog 구현 방법
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-12T14:36:21+09:00">2025-11-12</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+PySide6(PyQt6)를 이용해서 나만의 QFileDialog를 만들고 싶어. 이름은 CFileDialog라고 하자. 그냥 Qt의 내장 다이얼로그와 비슷하면 돼 ## UI 설명 가장 위에는 현재 경로가 콤보 박스로 있고, 콤보박스를 누르면 하위 경로들을 선택할 수 있게 된다 예를 들어 지금 /a/b/c/d 에서 시작했으면 /a/b/c/d /a/b/c /a/b /a / 이런 식으로 나와야하고, 경로 클릭 시 그 경로로 다이얼로그 이동할 것. 그 옆에는 Back, Forward, Parent Directory, Create New Folder 버튼이 있다. 가운데 리스트뷰에는 현재 폴더의 하위 폴더, 파일들이 보인다. (모드에 따라 보이는게 다름, 폴더 선택 모드냐 파일 선택 모드냐) 아래에는 경로를 입력을 할 수 있는 LineEdit이 있고 경로 입력 시에 자동완성 될만한게 QCompleter로 나타난다. 이 때 네트워크 드라이브를 사용하므로 QCompleter가 매우 느릴 수 있는데, QCompleter의 역할을 쓰레드로 빼면 좋을 것 같음. 현재 경로에서 가장 일치하는 상위 10개 정도 경로만 Completer로 사용하고 경로가 완성되면 다시 리프레시 해서 상위 10개를 찾는 식으로 하면 좋을 것 같음. (중요) 그 아래에는 Type 선택 콤보박스가 있다. 그 외 사용법은 QFileDialog와 거의 동일하게 하면 좋겠음. 파일/폴더 얻을 지 Save용인지 Load용인지
+
+</p>
+
+<p>좋아요. 이건 꽤 본격적인 커스텀 다이얼로그 설계예요.<br />
+PySide6(PyQt6 동일 구조)에서 Qt의 기본 <code class="language-plaintext highlighter-rouge">QFileDialog</code>를 재현하면서 더 유연하게 만들기 위해선 <strong>QDialog 기반의 클래스</strong> 로 직접 구현하는 게 가장 깔끔합니다.<br />
+아래는 전체적인 구조와 주요 포인트를 단계별로 설명할게요.</p>
+
+<hr />
+
+<h2 id="핵심-구조-개요">핵심 구조 개요</h2>
+
+<p><code class="language-plaintext highlighter-rouge">CFileDialog</code>는 기본적으로 <code class="language-plaintext highlighter-rouge">QDialog</code>를 상속받습니다.<br />
+내부 구성요소는 다음과 같습니다.</p>
+
+<ul>
+  <li>
+    <p><strong>상단 영역</strong> :</p>
+
+    <ul>
+      <li>
+        <p>경로 콤보박스 (<code class="language-plaintext highlighter-rouge">QComboBox</code>)</p>
+      </li>
+      <li>
+        <p>Back / Forward / Up / New Folder 버튼 (<code class="language-plaintext highlighter-rouge">QToolButton</code>)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>중앙 영역</strong> :</p>
+
+    <ul>
+      <li>
+        <p>파일/폴더 목록 (<code class="language-plaintext highlighter-rouge">QListView</code> or <code class="language-plaintext highlighter-rouge">QTreeView</code>)</p>
+      </li>
+      <li>
+        <p>모델은 <code class="language-plaintext highlighter-rouge">QFileSystemModel</code> 사용</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>하단 영역</strong> :</p>
+
+    <ul>
+      <li>
+        <p>경로 입력창 (<code class="language-plaintext highlighter-rouge">QLineEdit</code>) + 자동완성 (<code class="language-plaintext highlighter-rouge">QCompleter</code>)</p>
+      </li>
+      <li>
+        <p>Type 선택 콤보박스 (<code class="language-plaintext highlighter-rouge">QComboBox</code>)</p>
+      </li>
+      <li>
+        <p>확인/취소 버튼 (<code class="language-plaintext highlighter-rouge">QDialogButtonBox</code>)</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="주요-동작-설계">주요 동작 설계</h2>
+
+<h3 id="1-경로-콤보박스">1. 경로 콤보박스</h3>
+
+<p>현재 경로를 <code class="language-plaintext highlighter-rouge">/a/b/c/d</code> 형태로 표시하고, 클릭 시 아래처럼 보여야 함:</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">/</span><span class="nt">a</span><span class="o">/</span><span class="nt">b</span><span class="o">/</span><span class="nt">c</span><span class="o">/</span><span class="nt">d</span>
+<span class="o">/</span><span class="nt">a</span><span class="o">/</span><span class="nt">b</span><span class="o">/</span><span class="nt">c</span>
+<span class="o">/</span><span class="nt">a</span><span class="o">/</span><span class="nt">b</span>
+<span class="o">/</span><span class="nt">a</span>
+<span class="o">/</span>
+</code></pre></div></div>
+
+<p>이건 <code class="language-plaintext highlighter-rouge">QComboBox</code>를 매번 경로 변경 시 갱신하는 방식으로 구현 가능.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">update_path_combo</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">parts</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">subpath</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="o">*</span><span class="n">parts</span><span class="p">[:</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">addItem</span><span class="p">(</span><span class="n">subpath</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>콤보박스에서 항목 선택 시 <code class="language-plaintext highlighter-rouge">QFileSystemModel</code>의 root를 해당 경로로 변경.</p>
+
+<hr />
+
+<h3 id="2-탐색-버튼들">2. 탐색 버튼들</h3>
+
+<ul>
+  <li>
+    <p><strong>Back / Forward</strong> : 간단히 <code class="language-plaintext highlighter-rouge">deque</code>를 이용한 히스토리 관리.</p>
+  </li>
+  <li>
+    <p><strong>Up (Parent)</strong> : <code class="language-plaintext highlighter-rouge">os.path.dirname(current_path)</code>로 이동.</p>
+  </li>
+  <li>
+    <p><strong>New Folder</strong> : <code class="language-plaintext highlighter-rouge">QInputDialog.getText()</code>로 폴더명 받아 <code class="language-plaintext highlighter-rouge">os.makedirs()</code>.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="3-파일폴더-리스트">3. 파일/폴더 리스트</h3>
+
+<p><code class="language-plaintext highlighter-rouge">QFileSystemModel</code> + <code class="language-plaintext highlighter-rouge">QListView</code> 또는 <code class="language-plaintext highlighter-rouge">QTreeView</code> 사용.<br />
+선택 모드에 따라 표시되는 항목 제한 가능:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">select_mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">folder</span><span class="sh">'</span><span class="p">:</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">setFilter</span><span class="p">(</span><span class="n">QDir</span><span class="p">.</span><span class="n">AllDirs</span> <span class="o">|</span> <span class="n">QDir</span><span class="p">.</span><span class="n">NoDotAndDotDot</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">setFilter</span><span class="p">(</span><span class="n">QDir</span><span class="p">.</span><span class="n">AllEntries</span> <span class="o">|</span> <span class="n">QDir</span><span class="p">.</span><span class="n">NoDotAndDotDot</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">QListView.clicked</code> 시 <code class="language-plaintext highlighter-rouge">LineEdit</code> 업데이트.</p>
+
+<hr />
+
+<h3 id="4-경로-입력--자동완성">4. 경로 입력 + 자동완성</h3>
+
+<p>핵심 포인트는 <strong>QCompleter를 별도 쓰레드로 관리</strong> 하는 부분이에요.<br />
+대용량 네트워크 드라이브에서 디렉토리 자동완성은 느리므로,<br />
+다음과 같은 비동기 구조를 씁니다.</p>
+
+<h4 id="worker-thread">Worker Thread</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PathCompleterWorker</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+    <span class="n">paths_ready</span> <span class="o">=</span> <span class="nc">Signal</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">base_path</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="n">base_path</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="p">.</span><span class="nf">walk</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">base_path</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">d</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">prefix</span><span class="p">):</span>
+                    <span class="n">matches</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
+                        <span class="k">break</span>
+            <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">paths_ready</span><span class="p">.</span><span class="nf">emit</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">CFileDialog</code>에서 입력창 내용이 바뀔 때마다 이 쓰레드 실행 → <code class="language-plaintext highlighter-rouge">QCompleter</code> 갱신.</p>
+
+<hr />
+
+<h3 id="5-type-선택-콤보박스">5. Type 선택 콤보박스</h3>
+
+<p>일반 파일 다이얼로그처럼 <code class="language-plaintext highlighter-rouge">*.txt</code>, <code class="language-plaintext highlighter-rouge">*.png</code> 등의 필터를 표시:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">self</span><span class="p">.</span><span class="n">type_combo</span><span class="p">.</span><span class="nf">addItems</span><span class="p">([</span><span class="sh">"</span><span class="s">All Files (*)</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Text Files (*.txt)</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Images (*.png *.jpg)</span><span class="sh">"</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">currentTextChanged</code> 시 모델 필터 갱신.</p>
+
+<hr />
+
+<h3 id="6-qfiledialog처럼-동작하게-만들기">6. QFileDialog처럼 동작하게 만들기</h3>
+
+<p>외부 인터페이스는 기존 QFileDialog와 유사하게:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dlg</span> <span class="o">=</span> <span class="nc">CFileDialog</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="p">,</span> <span class="n">select_mode</span><span class="o">=</span><span class="sh">'</span><span class="s">file</span><span class="sh">'</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">dlg</span><span class="p">.</span><span class="nf">exec</span><span class="p">():</span>
+    <span class="n">selected_path</span> <span class="o">=</span> <span class="n">dlg</span><span class="p">.</span><span class="nf">selected_path</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>옵션:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">mode</code>: <code class="language-plaintext highlighter-rouge">"open"</code> / <code class="language-plaintext highlighter-rouge">"save"</code></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">select_mode</code>: <code class="language-plaintext highlighter-rouge">"file"</code> / <code class="language-plaintext highlighter-rouge">"folder"</code></p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="전체-구조-코드-예시-요약-버전">전체 구조 코드 예시 (요약 버전)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">PySide6.QtCore</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">PySide6.QtGui</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="k">class</span> <span class="nc">CFileDialog</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">start_path</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="p">,</span> <span class="n">select_mode</span><span class="o">=</span><span class="sh">'</span><span class="s">file</span><span class="sh">'</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">select_mode</span> <span class="o">=</span> <span class="n">select_mode</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">history</span> <span class="o">=</span> <span class="nf">deque</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">forward_stack</span> <span class="o">=</span> <span class="nf">deque</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_path</span> <span class="o">=</span> <span class="n">start_path</span> <span class="ow">or</span> <span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_build_ui</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_connect_signals</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_load_path</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_build_ui</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">setWindowTitle</span><span class="p">(</span><span class="sh">"</span><span class="s">CFileDialog</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="c1"># 상단
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span> <span class="o">=</span> <span class="nc">QComboBox</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">back_btn</span> <span class="o">=</span> <span class="nc">QToolButton</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sh">"</span><span class="s">←</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">forward_btn</span> <span class="o">=</span> <span class="nc">QToolButton</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sh">"</span><span class="s">→</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">up_btn</span> <span class="o">=</span> <span class="nc">QToolButton</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sh">"</span><span class="s">↑</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">new_folder_btn</span> <span class="o">=</span> <span class="nc">QToolButton</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sh">"</span><span class="s">+</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">top_layout</span> <span class="o">=</span> <span class="nc">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">top_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">back_btn</span><span class="p">)</span>
+        <span class="n">top_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">forward_btn</span><span class="p">)</span>
+        <span class="n">top_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">up_btn</span><span class="p">)</span>
+        <span class="n">top_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">new_folder_btn</span><span class="p">)</span>
+        <span class="n">top_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">)</span>
+
+        <span class="c1"># 중앙
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="nc">QFileSystemModel</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">setRootPath</span><span class="p">(</span><span class="sh">""</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="nc">QListView</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setModel</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="c1"># 하단
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span> <span class="o">=</span> <span class="nc">QLineEdit</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">type_combo</span> <span class="o">=</span> <span class="nc">QComboBox</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">type_combo</span><span class="p">.</span><span class="nf">addItems</span><span class="p">([</span><span class="sh">"</span><span class="s">All Files (*)</span><span class="sh">"</span><span class="p">])</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">button_box</span> <span class="o">=</span> <span class="nc">QDialogButtonBox</span><span class="p">(</span><span class="n">QDialogButtonBox</span><span class="p">.</span><span class="n">Ok</span> <span class="o">|</span> <span class="n">QDialogButtonBox</span><span class="p">.</span><span class="n">Cancel</span><span class="p">)</span>
+
+        <span class="n">bottom_layout</span> <span class="o">=</span> <span class="nc">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">bottom_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">)</span>
+        <span class="n">bottom_layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">type_combo</span><span class="p">)</span>
+
+        <span class="n">layout</span> <span class="o">=</span> <span class="nc">QVBoxLayout</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">layout</span><span class="p">.</span><span class="nf">addLayout</span><span class="p">(</span><span class="n">top_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">)</span>
+        <span class="n">layout</span><span class="p">.</span><span class="nf">addLayout</span><span class="p">(</span><span class="n">bottom_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">button_box</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_connect_signals</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="n">currentTextChanged</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_load_path</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">up_btn</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_go_up</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">back_btn</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_go_back</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">forward_btn</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_go_forward</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">new_folder_btn</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_create_folder</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_item_clicked</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">button_box</span><span class="p">.</span><span class="n">accepted</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">accept</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">button_box</span><span class="p">.</span><span class="n">rejected</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">reject</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_load_path</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span> <span class="k">return</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setRootIndex</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">index</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">update_path_combo</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update_path_combo</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">blockSignals</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">parts</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">addItem</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="o">*</span><span class="n">parts</span><span class="p">[:</span><span class="n">i</span><span class="p">]))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">blockSignals</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_item_clicked</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">filePath</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_load_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">selected_path</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">text</span><span class="p">()</span>
+
+    <span class="c1"># 기타 버튼 함수 생략 (Back, Forward, Up, etc.)
+</span></code></pre></div></div>
+
+<hr />
+
+<p>이 설계대로라면 Qt 내장 <code class="language-plaintext highlighter-rouge">QFileDialog</code>와 거의 동일한 인터페이스를 가지되,<br />
+확장성과 사용자 지정성이 훨씬 높습니다.</p>
+
+<p>다음 단계로는 <strong>Completer를 쓰레드로 실제 연결하는 부분</strong> 을 구현해보면 완성형에 가까워집니다.<br />
+원한다면 그 부분만 이어서 구체적으로 작성해드릴게요 — 쓰레드 관리(<code class="language-plaintext highlighter-rouge">QThreadPool</code> + <code class="language-plaintext highlighter-rouge">QRunnable</code>) 방식으로.</p>
+
+<p class="chat--user">
+
+다음 단계로 진행해줘.
+
+</p>
+
+<p>좋아, 바로 “자동완성 + 스레드” 단계까지 붙여서 동작하는 전체 예제를 만들어줄게.<br />
+아래 코드는 PySide6 기준이며, <code class="language-plaintext highlighter-rouge">QThreadPool + QRunnable</code>로 완성 후보 10개를 비동기로 찾고, 입력이 바뀔 때마다 최신 검색만 반영되도록 <code class="language-plaintext highlighter-rouge">task_id</code>로 레이스 컨디션을 막았어. 경로 콤보/뒤로·앞으로·상위·새폴더, 파일/폴더 모드, Open/Save, Type 필터, 히스토리, 디바운스까지 들어있어.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">fnmatch</span>
+<span class="kn">import</span> <span class="n">traceback</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="n">PySide6.QtCore</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Qt</span><span class="p">,</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">Slot</span><span class="p">,</span> <span class="n">QModelIndex</span><span class="p">,</span>
+                                 <span class="n">QTimer</span><span class="p">,</span> <span class="n">QRunnable</span><span class="p">,</span> <span class="n">QThreadPool</span><span class="p">,</span> <span class="n">QMetaObject</span><span class="p">,</span> <span class="n">Q_ARG</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="n">PySide6.QtGui</span> <span class="kn">import</span> <span class="n">QIcon</span>
+    <span class="kn">from</span> <span class="n">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">QApplication</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QToolButton</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span>
+        <span class="n">QListView</span><span class="p">,</span> <span class="n">QTreeView</span><span class="p">,</span> <span class="n">QFileSystemModel</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QCompleter</span><span class="p">,</span>
+        <span class="n">QDialogButtonBox</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QSizePolicy</span>
+    <span class="p">)</span>
+<span class="k">except</span> <span class="nb">ImportError</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">PySide6가 필요합니다. pip install PySide6</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># --------------------------
+# 비동기 컴플리터 작업자
+# --------------------------
+</span>
+<span class="k">class</span> <span class="nc">_CompleterResultEmitter</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+    <span class="n">resultsReady</span> <span class="o">=</span> <span class="nc">Signal</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>  <span class="c1"># task_id, results 리스트(str)
+</span>
+<span class="k">class</span> <span class="nc">PathSearchTask</span><span class="p">(</span><span class="n">QRunnable</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    입력 문자열을 기반으로 base_dir 아래에서 이름이 prefix로 시작하는 경로(파일/폴더)를
+    최대 top_k개까지 찾아서 내보내는 작업. (가벼운 BFS, 얕은 탐색)
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">base_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">want_files</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">want_dirs</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">depth_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">emitter</span><span class="p">:</span> <span class="n">_CompleterResultEmitter</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">task_id</span> <span class="o">=</span> <span class="n">task_id</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">base_dir</span> <span class="o">=</span> <span class="n">base_dir</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">want_files</span> <span class="o">=</span> <span class="n">want_files</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">want_dirs</span> <span class="o">=</span> <span class="n">want_dirs</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">top_k</span> <span class="o">=</span> <span class="n">top_k</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">depth_limit</span> <span class="o">=</span> <span class="n">depth_limit</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">emitter</span> <span class="o">=</span> <span class="n">emitter</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">base_dir</span><span class="p">).</span><span class="nf">resolve</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">base</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+                <span class="c1"># 베이스 디렉터리가 없으면 상위들을 타고 올라가며 존재하는 곳부터
+</span>                <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="nc">Path</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">base_dir</span><span class="p">).</span><span class="nf">resolve</span><span class="p">().</span><span class="n">parents</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">parent</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+                        <span class="n">base</span> <span class="o">=</span> <span class="n">parent</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">self</span><span class="p">.</span><span class="nf">_emit</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+                    <span class="k">return</span>
+
+            <span class="c1"># 우선 1순위: base_dir의 직접 하위
+</span>            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">os</span><span class="p">.</span><span class="nf">scandir</span><span class="p">(</span><span class="n">base</span><span class="p">)</span> <span class="k">as</span> <span class="n">it</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="n">entry</span><span class="p">.</span><span class="n">name</span>
+                        <span class="c1"># 시작 접두사 매칭 (대소문자 구분 없음)
+</span>                        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">.</span><span class="nf">lower</span><span class="p">().</span><span class="nf">startswith</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">prefix</span><span class="p">.</span><span class="nf">lower</span><span class="p">()):</span>
+                            <span class="k">continue</span>
+                        <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">want_dirs</span><span class="p">:</span>
+                                <span class="n">results</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">name</span><span class="p">)))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">want_files</span><span class="p">:</span>
+                                <span class="n">results</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">name</span><span class="p">)))</span>
+                        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">top_k</span><span class="p">:</span>
+                            <span class="n">self</span><span class="p">.</span><span class="nf">_emit</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+                            <span class="k">return</span>
+            <span class="k">except</span> <span class="n">PermissionError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="c1"># 2순위: 얕은 깊이 탐색 (depth_limit)
+</span>            <span class="c1"># BFS 큐: (Path, depth)
+</span>            <span class="kn">from</span> <span class="n">collections</span> <span class="kn">import</span> <span class="n">deque</span> <span class="k">as</span> <span class="n">cdeque</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="nf">cdeque</span><span class="p">()</span>
+            <span class="n">q</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="n">base</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">seen</span> <span class="o">=</span> <span class="nf">set</span><span class="p">([</span><span class="nf">str</span><span class="p">(</span><span class="n">base</span><span class="p">)])</span>
+
+            <span class="k">while</span> <span class="n">q</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">top_k</span><span class="p">:</span>
+                <span class="n">cur</span><span class="p">,</span> <span class="n">depth</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="nf">popleft</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">depth_limit</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">os</span><span class="p">.</span><span class="nf">scandir</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span> <span class="k">as</span> <span class="n">it</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">full</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span> <span class="n">entry</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+                                    <span class="c1"># 디렉터리 자체가 매칭되면 결과에
+</span>                                    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">want_dirs</span> <span class="ow">and</span> <span class="n">entry</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="nf">lower</span><span class="p">().</span><span class="nf">startswith</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">prefix</span><span class="p">.</span><span class="nf">lower</span><span class="p">()):</span>
+                                        <span class="n">results</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">full</span><span class="p">))</span>
+                                        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">top_k</span><span class="p">:</span>
+                                            <span class="n">self</span><span class="p">.</span><span class="nf">_emit</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+                                            <span class="k">return</span>
+                                    <span class="c1"># 하위로 진행
+</span>                                    <span class="n">s</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">full</span><span class="p">)</span>
+                                    <span class="k">if</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+                                        <span class="n">seen</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                                        <span class="n">q</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="n">full</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">want_files</span> <span class="ow">and</span> <span class="n">entry</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="nf">lower</span><span class="p">().</span><span class="nf">startswith</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">prefix</span><span class="p">.</span><span class="nf">lower</span><span class="p">()):</span>
+                                        <span class="n">results</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">full</span><span class="p">))</span>
+                                        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">top_k</span><span class="p">:</span>
+                                            <span class="n">self</span><span class="p">.</span><span class="nf">_emit</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+                                            <span class="k">return</span>
+                            <span class="k">except</span> <span class="n">PermissionError</span><span class="p">:</span>
+                                <span class="k">continue</span>
+                <span class="k">except</span> <span class="n">PermissionError</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="c1"># 에러는 무시하고 빈 결과
+</span>            <span class="n">traceback</span><span class="p">.</span><span class="nf">print_exc</span><span class="p">()</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="nf">_emit</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_emit</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span>
+        <span class="c1"># UI 스레드로 안전하게 신호
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="n">QMetaObject</span><span class="p">.</span><span class="nf">invokeMethod</span><span class="p">(</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">emitter</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">resultsReady</span><span class="sh">"</span><span class="p">,</span>
+                <span class="n">Qt</span><span class="p">.</span><span class="n">QueuedConnection</span><span class="p">,</span>
+                <span class="nc">Q_ARG</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">task_id</span><span class="p">),</span>
+                <span class="nc">Q_ARG</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">results</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+<span class="c1"># --------------------------
+# CFileDialog 본체
+# --------------------------
+</span>
+<span class="k">class</span> <span class="nc">CFileDialog</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    모드:
+      mode: </span><span class="sh">"</span><span class="s">open</span><span class="sh">"</span><span class="s"> | </span><span class="sh">"</span><span class="s">save</span><span class="sh">"</span><span class="s">
+      select_mode: </span><span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="s"> | </span><span class="sh">"</span><span class="s">folder</span><span class="sh">"</span><span class="s">
+    QFileDialog와 유사한 사용법:
+        dlg = CFileDialog(mode=</span><span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="s">, select_mode=</span><span class="sh">'</span><span class="s">file</span><span class="sh">'</span><span class="s">, filters=[</span><span class="sh">"</span><span class="s">All Files (*)</span><span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="s">Images (*.png *.jpg)</span><span class="sh">"</span><span class="s">])
+        if dlg.exec():
+            print(dlg.selected_path())
+    </span><span class="sh">"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">start_path</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="p">,</span> <span class="n">select_mode</span><span class="o">=</span><span class="sh">'</span><span class="s">file</span><span class="sh">'</span><span class="p">,</span>
+                 <span class="n">filters</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">setWindowTitle</span><span class="p">(</span><span class="sh">"</span><span class="s">CFileDialog</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">resize</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>  <span class="c1"># open/save
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">select_mode</span> <span class="o">=</span> <span class="n">select_mode</span>  <span class="c1"># file/folder
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">filters</span> <span class="o">=</span> <span class="n">filters</span> <span class="ow">or</span> <span class="p">[</span><span class="sh">"</span><span class="s">All Files (*)</span><span class="sh">"</span><span class="p">]</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">history_back</span> <span class="o">=</span> <span class="nf">deque</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">history_fwd</span> <span class="o">=</span> <span class="nf">deque</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">current_path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">start_path</span><span class="p">).</span><span class="nf">resolve</span><span class="p">())</span> <span class="k">if</span> <span class="n">start_path</span> <span class="k">else</span> <span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">()</span>
+
+        <span class="c1"># completer state
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_completer_task_id</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_latest_task_id</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_completer_emitter</span> <span class="o">=</span> <span class="nf">_CompleterResultEmitter</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_completer_emitter</span><span class="p">.</span><span class="n">resultsReady</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_on_completer_results</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_thread_pool</span> <span class="o">=</span> <span class="n">QThreadPool</span><span class="p">.</span><span class="nf">globalInstance</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_debounce_timer</span> <span class="o">=</span> <span class="nc">QTimer</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_debounce_timer</span><span class="p">.</span><span class="nf">setInterval</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_debounce_timer</span><span class="p">.</span><span class="nf">setSingleShot</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_debounce_timer</span><span class="p">.</span><span class="n">timeout</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_spawn_completer_task</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="nf">_build_ui</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_connect_signals</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_configure_modes</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_load_path</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_path</span><span class="p">,</span> <span class="n">push_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="c1"># ---------- UI 구성 ----------
+</span>    <span class="k">def</span> <span class="nf">_build_ui</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="c1"># 상단 툴바
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">back_btn</span> <span class="o">=</span> <span class="nc">QToolButton</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">back_btn</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="sh">"</span><span class="s">Back</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">forward_btn</span> <span class="o">=</span> <span class="nc">QToolButton</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">forward_btn</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="sh">"</span><span class="s">Forward</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">up_btn</span> <span class="o">=</span> <span class="nc">QToolButton</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">up_btn</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="sh">"</span><span class="s">Parent</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">new_folder_btn</span> <span class="o">=</span> <span class="nc">QToolButton</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">new_folder_btn</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="sh">"</span><span class="s">New Folder</span><span class="sh">"</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span> <span class="o">=</span> <span class="nc">QComboBox</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">setSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="p">.</span><span class="n">Expanding</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="p">.</span><span class="n">Fixed</span><span class="p">)</span>
+
+        <span class="n">top</span> <span class="o">=</span> <span class="nc">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">top</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">back_btn</span><span class="p">)</span>
+        <span class="n">top</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">forward_btn</span><span class="p">)</span>
+        <span class="n">top</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">up_btn</span><span class="p">)</span>
+        <span class="n">top</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">new_folder_btn</span><span class="p">)</span>
+        <span class="n">top</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">)</span>
+
+        <span class="c1"># 중앙 파일 뷰
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="nc">QFileSystemModel</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">setRootPath</span><span class="p">(</span><span class="sh">""</span><span class="p">)</span>  <span class="c1"># 전체 파일 시스템
+</span>        <span class="c1"># 필터는 모드에 따라 아래에서 설정
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="o">=</span> <span class="nc">QTreeView</span><span class="p">()</span>  <span class="c1"># 트리로 쓰되, 루트 인덱스를 현재 경로로 심어 1계층처럼 사용
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setModel</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setRootIsDecorated</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setSortingEnabled</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">sortByColumn</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Qt</span><span class="p">.</span><span class="n">AscendingOrder</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setSelectionBehavior</span><span class="p">(</span><span class="n">QTreeView</span><span class="p">.</span><span class="n">SelectRows</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setUniformRowHeights</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="c1"># 보조 컬럼 정리
+</span>        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setColumnWidth</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
+
+        <span class="c1"># 하단: 경로 입력 + Type + 버튼
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span> <span class="o">=</span> <span class="nc">QLineEdit</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">setPlaceholderText</span><span class="p">(</span><span class="sh">"</span><span class="s">경로를 입력하세요…</span><span class="sh">"</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">completer_model</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 유지용 (디버그)
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">completer</span> <span class="o">=</span> <span class="nc">QCompleter</span><span class="p">([],</span> <span class="n">self</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">.</span><span class="nf">setCaseSensitivity</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">CaseInsensitive</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">.</span><span class="nf">setFilterMode</span><span class="p">(</span><span class="n">Qt</span><span class="p">.</span><span class="n">MatchContains</span><span class="p">)</span>  <span class="c1"># prefix 기반이지만 substring도 보여주면 편함
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">.</span><span class="nf">setCompletionMode</span><span class="p">(</span><span class="n">QCompleter</span><span class="p">.</span><span class="n">PopupCompletion</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">setCompleter</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">type_combo</span> <span class="o">=</span> <span class="nc">QComboBox</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">type_combo</span><span class="p">.</span><span class="nf">addItems</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">filters</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">button_box</span> <span class="o">=</span> <span class="nc">QDialogButtonBox</span><span class="p">(</span><span class="n">QDialogButtonBox</span><span class="p">.</span><span class="n">Ok</span> <span class="o">|</span> <span class="n">QDialogButtonBox</span><span class="p">.</span><span class="n">Cancel</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">self</span><span class="p">)</span>
+
+        <span class="n">bottom_row1</span> <span class="o">=</span> <span class="nc">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">bottom_row1</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nc">QLabel</span><span class="p">(</span><span class="sh">"</span><span class="s">경로:</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">bottom_row1</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">)</span>
+        <span class="n">bottom_row1</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nc">QLabel</span><span class="p">(</span><span class="sh">"</span><span class="s">Type:</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">bottom_row1</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">type_combo</span><span class="p">)</span>
+
+        <span class="n">layout</span> <span class="o">=</span> <span class="nc">QVBoxLayout</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+        <span class="n">layout</span><span class="p">.</span><span class="nf">addLayout</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
+        <span class="n">layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">)</span>
+        <span class="n">layout</span><span class="p">.</span><span class="nf">addLayout</span><span class="p">(</span><span class="n">bottom_row1</span><span class="p">)</span>
+        <span class="n">layout</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">button_box</span><span class="p">)</span>
+
+    <span class="c1"># ---------- 시그널 연결 ----------
+</span>    <span class="k">def</span> <span class="nf">_connect_signals</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">back_btn</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_go_back</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">forward_btn</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_go_forward</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">up_btn</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_go_up</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">new_folder_btn</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_create_folder</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="n">activated</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_combo_jump</span><span class="p">)</span>  <span class="c1"># 인덱스 선택 시 이동
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">doubleClicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_item_double_clicked</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">clicked</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_item_clicked</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="n">textEdited</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_on_path_edited</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">type_combo</span><span class="p">.</span><span class="n">currentTextChanged</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_on_filter_changed</span><span class="p">)</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">button_box</span><span class="p">.</span><span class="n">accepted</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_accept_if_valid</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">button_box</span><span class="p">.</span><span class="n">rejected</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">reject</span><span class="p">)</span>
+
+    <span class="c1"># ---------- 모드/필터 ----------
+</span>    <span class="k">def</span> <span class="nf">_configure_modes</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">select_mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">folder</span><span class="sh">'</span><span class="p">:</span>
+            <span class="c1"># 폴더만
+</span>            <span class="kn">from</span> <span class="n">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QDir</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">setFilter</span><span class="p">(</span><span class="n">QDir</span><span class="p">.</span><span class="n">AllDirs</span> <span class="o">|</span> <span class="n">QDir</span><span class="p">.</span><span class="n">NoDotAndDotDot</span> <span class="o">|</span> <span class="n">QDir</span><span class="p">.</span><span class="n">Drives</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="n">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QDir</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">setFilter</span><span class="p">(</span><span class="n">QDir</span><span class="p">.</span><span class="n">AllEntries</span> <span class="o">|</span> <span class="n">QDir</span><span class="p">.</span><span class="n">NoDotAndDotDot</span> <span class="o">|</span> <span class="n">QDir</span><span class="p">.</span><span class="n">Drives</span><span class="p">)</span>
+
+        <span class="c1"># 이름 필터(패턴) 적용
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">setNameFilterDisables</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_apply_name_filters_from_combo</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_apply_name_filters_from_combo</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="c1"># "Images (*.png *.jpg)" -&gt; ["*.png", "*.jpg"]
+</span>        <span class="n">text</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">type_combo</span><span class="p">.</span><span class="nf">currentText</span><span class="p">()</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="sh">"</span><span class="s">(</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="sh">"</span><span class="s">)</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">inside</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">text</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="sh">"</span><span class="s">(</span><span class="sh">"</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">text</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="sh">"</span><span class="s">)</span><span class="sh">"</span><span class="p">)]</span>
+            <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">inside</span><span class="p">.</span><span class="nf">split</span><span class="p">()</span> <span class="k">if</span> <span class="sh">"</span><span class="s">*</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">p</span> <span class="ow">or</span> <span class="sh">"</span><span class="s">?</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">*</span><span class="sh">"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">patterns</span><span class="p">:</span>
+            <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">*</span><span class="sh">"</span><span class="p">]</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">setNameFilters</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_filter_changed</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_apply_name_filters_from_combo</span><span class="p">()</span>
+
+    <span class="c1"># ---------- 경로 로딩 ----------
+</span>    <span class="k">def</span> <span class="nf">_load_path</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">push_history</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="nf">resolve</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">push_history</span><span class="p">:</span>
+            <span class="c1"># 히스토리 푸시
+</span>            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">current_path</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="n">current_path</span> <span class="o">!=</span> <span class="n">path</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">history_back</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_path</span><span class="p">)</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">history_fwd</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+
+        <span class="n">self</span><span class="p">.</span><span class="n">current_path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_update_path_combo</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">index</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="nf">setRootIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="c1"># OK 버튼 활성화 상태 갱신
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">_update_ok_enabled</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_combo_jump</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">itemText</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">target</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_load_path</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_path_combo</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">blockSignals</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">clear</span><span class="p">()</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="nf">resolve</span><span class="p">()</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">parts</span>
+        <span class="c1"># 예: /, /a, /a/b, /a/b/c ... 혹은 Windows: C:\, C:\Users, ...
+</span>        <span class="n">acc</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)):</span>
+            <span class="n">acc</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">joined</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="o">*</span><span class="n">acc</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">addItem</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">joined</span><span class="p">))</span>
+        <span class="c1"># 현재 경로가 가장 아래쪽에 오도록 선택
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">setCurrentIndex</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">path_combo</span><span class="p">.</span><span class="nf">blockSignals</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="c1"># ---------- 탐색 버튼 ----------
+</span>    <span class="k">def</span> <span class="nf">_go_back</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">history_back</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">history_back</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">history_fwd</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_path</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_load_path</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">push_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_go_forward</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">history_fwd</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">history_fwd</span><span class="p">.</span><span class="nf">pop</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">history_back</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_path</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_load_path</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">push_history</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_go_up</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_path</span><span class="p">).</span><span class="n">parent</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">and</span> <span class="n">parent</span> <span class="o">!=</span> <span class="n">self</span><span class="p">.</span><span class="n">current_path</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_load_path</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_folder</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="p">.</span><span class="nf">getText</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">새 폴더</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">폴더명:</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">name</span><span class="p">.</span><span class="nf">strip</span><span class="p">():</span>
+            <span class="k">return</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">current_path</span><span class="p">,</span> <span class="n">name</span><span class="p">.</span><span class="nf">strip</span><span class="p">())</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">target</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="c1"># 새 폴더로 포커스 이동
+</span>            <span class="n">self</span><span class="p">.</span><span class="nf">_load_path</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+        <span class="k">except</span> <span class="nb">FileExistsError</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="p">.</span><span class="nf">warning</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">경고</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">동일한 이름의 폴더가 이미 존재합니다.</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">PermissionError</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="p">.</span><span class="nf">critical</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">오류</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">폴더를 만들 권한이 없습니다.</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="p">.</span><span class="nf">critical</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">오류</span><span class="sh">"</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="s">폴더 생성 실패: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># ---------- 뷰 클릭/더블클릭 ----------
+</span>    <span class="k">def</span> <span class="nf">_item_clicked</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">filePath</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="c1"># 미리보듯 경로창에 반영
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">_update_ok_enabled</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_item_double_clicked</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="nf">filePath</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_load_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 파일이면 경로창에 넣고 OK
+</span>            <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">_update_ok_enabled</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">open</span><span class="sh">'</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="n">select_mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">file</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="nf">accept</span><span class="p">()</span>
+
+    <span class="c1"># ---------- OK 유효성 ----------
+</span>    <span class="k">def</span> <span class="nf">_is_selection_valid</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">select_mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">folder</span><span class="sh">'</span><span class="p">:</span>
+            <span class="c1"># 폴더 선택 모드
+</span>            <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isdir</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="c1"># Save 모드에서는 새 폴더명도 허용할지? 여기선 폴더 존재만 허용
+</span>            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="c1"># 파일 선택 모드
+</span>        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="p">:</span>
+            <span class="c1"># 존재하고, 파일이어야 함
+</span>            <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isfile</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+                <span class="c1"># 필터도 통과해야 함
+</span>                <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_match_type_filters</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">target</span><span class="p">).</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># save 모드: 존재 여부 무관, 상위 폴더가 있어야 함
+</span>            <span class="n">parent</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">target</span><span class="p">).</span><span class="n">parent</span>
+            <span class="k">if</span> <span class="n">parent</span><span class="p">.</span><span class="nf">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">parent</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">():</span>
+                <span class="c1"># 파일명 필터도 통과하는지(선택한 필터와 맞지 않아도 저장 허용할지 정책 결정)
+</span>                <span class="c1"># 여기서는 허용(사용자가 필터 바꾸지 않고 확장자 직접 입력 가능)
+</span>                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">_match_type_filters</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">type_combo</span><span class="p">.</span><span class="nf">currentText</span><span class="p">()</span>
+        <span class="c1"># 괄호 안 패턴들 추출
+</span>        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="sh">"</span><span class="s">(</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="sh">"</span><span class="s">)</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">inside</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">text</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="sh">"</span><span class="s">(</span><span class="sh">"</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">text</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="sh">"</span><span class="s">)</span><span class="sh">"</span><span class="p">)]</span>
+            <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">inside</span><span class="p">.</span><span class="nf">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="p">.</span><span class="nf">strip</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">patterns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">pat</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fnmatch</span><span class="p">.</span><span class="nf">fnmatch</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pat</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">_update_ok_enabled</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">ok_btn</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">button_box</span><span class="p">.</span><span class="nf">button</span><span class="p">(</span><span class="n">QDialogButtonBox</span><span class="p">.</span><span class="n">Ok</span><span class="p">)</span>
+        <span class="n">ok_btn</span><span class="p">.</span><span class="nf">setEnabled</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">_is_selection_valid</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_accept_if_valid</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nf">_is_selection_valid</span><span class="p">():</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">accept</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">QMessageBox</span><span class="p">.</span><span class="nf">warning</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">선택 확인</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">선택이 유효하지 않습니다.</span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># ---------- 경로 입력 + 비동기 자동완성 ----------
+</span>    <span class="k">def</span> <span class="nf">_on_path_edited</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="c1"># 디바운스 후 검색 태스크 실행
+</span>        <span class="n">self</span><span class="p">.</span><span class="n">_debounce_timer</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+        <span class="c1"># 입력 중에도 OK 버튼 상태 적절히 조정
+</span>        <span class="n">self</span><span class="p">.</span><span class="nf">_update_ok_enabled</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_spawn_completer_task</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">.</span><span class="nf">model</span><span class="p">().</span><span class="nf">setStringList</span><span class="p">([])</span> <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">.</span><span class="nf">model</span><span class="p">()</span> <span class="k">else</span> <span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">.</span><span class="nf">setModel</span><span class="p">(</span><span class="nc">QCompleter</span><span class="p">([],</span> <span class="n">self</span><span class="p">).</span><span class="nf">model</span><span class="p">())</span>
+            <span class="k">return</span>
+
+        <span class="c1"># base_dir와 prefix 분리
+</span>        <span class="c1"># 예: "/a/b/pa" -&gt; base="/a/b", prefix="pa"
+</span>        <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">text</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">):</span>
+            <span class="n">base_dir</span> <span class="o">=</span> <span class="n">text</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="sh">""</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base_dir</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">)</span> <span class="k">if</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">!=</span> <span class="sh">""</span> <span class="k">else</span> <span class="n">os</span><span class="p">.</span><span class="n">sep</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span>
+
+        <span class="n">want_files</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">select_mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">file</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">want_dirs</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># 항상 디렉터리도 제안: 경로 완성에 중요
+</span>        <span class="n">top_k</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">depth_limit</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># 너무 깊이 들어가면 느려짐
+</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_completer_task_id</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_latest_task_id</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_completer_task_id</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="nc">PathSearchTask</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">_completer_task_id</span><span class="p">,</span> <span class="n">base_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span>
+                              <span class="n">want_files</span><span class="p">,</span> <span class="n">want_dirs</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">depth_limit</span><span class="p">,</span>
+                              <span class="n">self</span><span class="p">.</span><span class="n">_completer_emitter</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_thread_pool</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_on_completer_results</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">results</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># 최신 요청만 반영
+</span>        <span class="k">if</span> <span class="n">task_id</span> <span class="o">!=</span> <span class="n">self</span><span class="p">.</span><span class="n">_latest_task_id</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># 결과를 가까운 경로부터 정렬(문자열 길이/사전식)
+</span>        <span class="n">results_sorted</span> <span class="o">=</span> <span class="nf">sorted</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">s</span><span class="p">.</span><span class="nf">lower</span><span class="p">()))</span>
+        <span class="c1"># QCompleter 갱신
+</span>        <span class="n">model</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">.</span><span class="nf">model</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">and</span> <span class="nf">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="sh">'</span><span class="s">setStringList</span><span class="sh">'</span><span class="p">):</span>
+            <span class="n">model</span><span class="p">.</span><span class="nf">setStringList</span><span class="p">(</span><span class="n">results_sorted</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">string_list_model</span> <span class="o">=</span> <span class="nc">QCompleter</span><span class="p">(</span><span class="n">results_sorted</span><span class="p">,</span> <span class="n">self</span><span class="p">).</span><span class="nf">model</span><span class="p">()</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">.</span><span class="nf">setModel</span><span class="p">(</span><span class="n">string_list_model</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">completer</span><span class="p">.</span><span class="nf">complete</span><span class="p">()</span>  <span class="c1"># 팝업 열기 시도
+</span>
+    <span class="c1"># ---------- 외부 API ----------
+</span>    <span class="k">def</span> <span class="nf">selected_path</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
+
+<span class="c1"># --------------------------
+# 실행 예시
+# --------------------------
+</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="nc">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span>
+
+    <span class="c1"># 사용 예시 1: 파일 Open
+</span>    <span class="n">dlg1</span> <span class="o">=</span> <span class="nc">CFileDialog</span><span class="p">(</span>
+        <span class="n">start_path</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">(),</span>
+        <span class="n">mode</span><span class="o">=</span><span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="p">,</span>
+        <span class="n">select_mode</span><span class="o">=</span><span class="sh">'</span><span class="s">file</span><span class="sh">'</span><span class="p">,</span>
+        <span class="n">filters</span><span class="o">=</span><span class="p">[</span>
+            <span class="sh">"</span><span class="s">All Files (*)</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">Text Files (*.txt *.md)</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">Images (*.png *.jpg *.jpeg *.bmp *.gif)</span><span class="sh">"</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">dlg1</span><span class="p">.</span><span class="nf">exec</span><span class="p">():</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">OPEN FILE:</span><span class="sh">"</span><span class="p">,</span> <span class="n">dlg1</span><span class="p">.</span><span class="nf">selected_path</span><span class="p">())</span>
+
+    <span class="c1"># 사용 예시 2: 폴더 선택
+</span>    <span class="n">dlg2</span> <span class="o">=</span> <span class="nc">CFileDialog</span><span class="p">(</span>
+        <span class="n">start_path</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">(),</span>
+        <span class="n">mode</span><span class="o">=</span><span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="p">,</span>
+        <span class="n">select_mode</span><span class="o">=</span><span class="sh">'</span><span class="s">folder</span><span class="sh">'</span><span class="p">,</span>
+        <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">All Files (*)</span><span class="sh">"</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">dlg2</span><span class="p">.</span><span class="nf">exec</span><span class="p">():</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">SELECT FOLDER:</span><span class="sh">"</span><span class="p">,</span> <span class="n">dlg2</span><span class="p">.</span><span class="nf">selected_path</span><span class="p">())</span>
+
+    <span class="c1"># 사용 예시 3: 파일 Save
+</span>    <span class="n">dlg3</span> <span class="o">=</span> <span class="nc">CFileDialog</span><span class="p">(</span>
+        <span class="n">start_path</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="nf">getcwd</span><span class="p">(),</span>
+        <span class="n">mode</span><span class="o">=</span><span class="sh">'</span><span class="s">save</span><span class="sh">'</span><span class="p">,</span>
+        <span class="n">select_mode</span><span class="o">=</span><span class="sh">'</span><span class="s">file</span><span class="sh">'</span><span class="p">,</span>
+        <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">All Files (*)</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Python (*.py)</span><span class="sh">"</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">dlg3</span><span class="p">.</span><span class="nf">exec</span><span class="p">():</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">SAVE FILE:</span><span class="sh">"</span><span class="p">,</span> <span class="n">dlg3</span><span class="p">.</span><span class="nf">selected_path</span><span class="p">())</span>
+
+    <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>설명 포인트 정리</p>
+
+<ul>
+  <li>
+    <p>자동완성 비동기화<br />
+입력이 바뀌면 200ms 디바운스 후 <code class="language-plaintext highlighter-rouge">QThreadPool</code>에 <code class="language-plaintext highlighter-rouge">PathSearchTask</code>를 던져서, 현재 입력 기준 <code class="language-plaintext highlighter-rouge">base_dir</code> 아래에서 이름이 접두사로 맞는 경로들을 최대 10개 찾는다. 결과는 <code class="language-plaintext highlighter-rouge">task_id</code>로 최신성 확인 후에만 <code class="language-plaintext highlighter-rouge">QCompleter</code> 모델을 갱신한다. 네트워크 드라이브처럼 느린 환경에서도 메인 스레드를 막지 않으면서 점진적으로 후보를 보여준다.</p>
+  </li>
+  <li>
+    <p>후보 품질<br />
+1순위로 현재 폴더의 직속 항목을 살피고, 부족하면 얕은 깊이(기본 2)만 BFS로 확장해 근처 경로를 제안한다. 정렬은 길이→사전식으로 해서 더 “가까운” 경로가 먼저 온다.</p>
+  </li>
+  <li>
+    <p>필터<br />
+<code class="language-plaintext highlighter-rouge">Type</code> 콤보박스의 패턴을 <code class="language-plaintext highlighter-rouge">QFileSystemModel.setNameFilters</code>로 적용했다. Open 파일 모드에서는 OK 직전에도 파일명이 패턴과 맞는지 빠르게 확인한다.</p>
+  </li>
+  <li>
+    <p>동작 정책<br />
+Open+File: 존재하는 파일만 OK.<br />
+Open+Folder: 존재하는 폴더만 OK.<br />
+Save+File: 상위 폴더만 존재하면 OK(파일은 없어도 됨).<br />
+Save+Folder 정책은 예제에선 막아두었는데, 원하면 옵션으로 허용 로직을 추가할 수 있다.</p>
+  </li>
+  <li>
+    <p>경로 콤보<br />
+현재 경로의 루트부터 단계적으로 쌓아서 표시한다. 항목 선택 시 해당 경로로 점프한다. 히스토리 Back/Forward, 상위 이동, 새 폴더도 지원한다.</p>
+  </li>
+</ul>
+
+<p>다음 확장 아이디어</p>
+
+<ul>
+  <li>
+    <p>네트워크 드라이브에서 <code class="language-plaintext highlighter-rouge">depth_limit</code>를 동적으로 조절(지연 길이에 따라 1↔3).</p>
+  </li>
+  <li>
+    <p>숨김 파일 토글, 최근 위치/즐겨찾기 사이드바 추가.</p>
+  </li>
+  <li>
+    <p>멀티 선택 지원(파일 다중 선택 모드).</p>
+  </li>
+  <li>
+    <p>Windows 드라이브 루트(“C:\”, “D:\”) 목록을 콤보에 자동 삽입.</p>
+  </li>
+</ul>
+
+<p>추가로 원하는 동작 정책이나 세부 UX가 있으면 말해줘. 바로 코드에 녹여서 완성도를 더 끌어올려볼게.</p>
+
+<p class="chat--user">
+
+혹시 더 좋은 개발 방향 있어?
+
+</p>
+
+<p>좋지! 지금도 꽤 쓸만하지만, “더 견고하고 빠르고 확장 가능한” 방향으로 다듬을 수 있는 포인트들을 제안할게. 당장 적용할 수 있는 것부터 중장기적인 리팩터링 아이디어까지, 실전적인 순서로 정리했어.</p>
+
+<h1 id="성능안정성">성능·안정성</h1>
+
+<ol>
+  <li>캐싱과 취소 토큰</li>
+</ol>
+
+<ul>
+  <li>
+    <p>자동완성 후보 탐색 결과를 디렉터리 단위로 캐시하고, mtime(디렉터리 수정 시간) + 사이즈로 신선도 체크.</p>
+  </li>
+  <li>
+    <p>현재 task_id 방식은 최신성 보장은 되지만, 쓰레드가 불필요하게 계속 돈다는 단점이 있어. <code class="language-plaintext highlighter-rouge">PathSearchTask</code>에 <code class="language-plaintext highlighter-rouge">cancelled</code> 플래그(쓰레드 안전) 넣어서 오래 걸리는 네트워크 디렉터리 탐색을 중간 취소 가능하게 만들면 대기시간을 크게 줄일 수 있어.</p>
+  </li>
+</ul>
+
+<ol>
+  <li>점진적 자동완성(Incremental feed)</li>
+</ol>
+
+<ul>
+  <li>한 번에 10개를 찾을 때까지 도는 대신, 3개 단위로 먼저 emit → UI 갱신 → 남은 후보 계속 탐색. 사용자는 즉시 반응을 보게 되고, 나머지는 뒤늦게 채워진다.</li>
+</ul>
+
+<ol>
+  <li>QFileSystemWatcher 연동</li>
+</ol>
+
+<ul>
+  <li>루트 인덱스 기준으로 하위 디렉터리에 변화가 생기면 캐시를 무효화하고 리스트뷰를 부드럽게 갱신. 네트워크 환경에서도 변화를 즉시 반영할 수 있다.</li>
+</ul>
+
+<ol>
+  <li>아이콘·메타데이터 지연 로딩</li>
+</ol>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">QFileSystemModel</code>의 아이콘 로딩은 느릴 수 있다. <code class="language-plaintext highlighter-rouge">QFileIconProvider</code>를 상속해 썸네일·아이콘을 별도 스레드에서 지연 로딩하고, 임시 기본 아이콘을 먼저 보여주면 스크롤 지연이 줄어든다.</li>
+</ul>
+
+<ol>
+  <li>대용량 폴더 가상화</li>
+</ol>
+
+<ul>
+  <li>수만 개 항목이 있는 디렉터리에서는 모든 항목을 모델에 올리는 것만으로도 느려진다. <code class="language-plaintext highlighter-rouge">QSortFilterProxyModel</code>로 가볍게 필터링하고, 스크롤 위치에 따라 보이는 구간만 프리페치하는 “페이징/윈도우링” 기법을 적용하면 체감 성능이 크게 좋아진다.</li>
+</ul>
+
+<h1 id="아키텍처유지보수">아키텍처·유지보수</h1>
+
+<ol>
+  <li>모델/뷰 분리 강화</li>
+</ol>
+
+<ul>
+  <li>현재는 <code class="language-plaintext highlighter-rouge">QFileSystemModel</code> 하나로 대부분 해결 중. 여기에 “선택 정책”, “필터 정책”, “히스토리/네비게이션 정책”을 얹은 서비스 계층(작은 클래스로) 분리하면 테스트 용이성↑.<br />
+예) <code class="language-plaintext highlighter-rouge">NavigationHistory</code>, <code class="language-plaintext highlighter-rouge">FilterPolicy</code>, <code class="language-plaintext highlighter-rouge">SelectionValidator</code>, <code class="language-plaintext highlighter-rouge">CompleterProvider</code>.</li>
+</ul>
+
+<ol>
+  <li>인터페이스 호환성 레이어</li>
+</ol>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">QFileDialog.getOpenFileName()</code> 같은 정적 API와 호환되는 래퍼 제공.<br />
+예) <code class="language-plaintext highlighter-rouge">CFileDialog.getOpenFileName(parent, caption, dir, filter)</code> 형태로 반환 타입도 동일하게 맞춰주면 기존 코드 치환이 쉽다.</li>
+</ul>
+
+<ol>
+  <li>유연한 플러그인 필터</li>
+</ol>
+
+<ul>
+  <li>단순 패턴 필터(“*.png”) 외에 사용자 정의 필터 콜백을 지원.<br />
+예) “최근 24시간 수정” “크기 100MB 이상” 같은 조건을 추가 필터로 끼워 넣기.</li>
+</ul>
+
+<ol>
+  <li>테스트 전략</li>
+</ol>
+
+<ul>
+  <li>로컬/네트워크 파일시스템을 흉내내는 가짜 파일시스템(fsys) 어댑터 도입. 비즈니스 로직을 fs 어댑터 인터페이스에 의존하게 하고, 테스트에서는 메모리상 가짜 트리로 검증.</li>
+</ul>
+
+<h1 id="ux탐색성">UX·탐색성</h1>
+
+<ol>
+  <li>브레드크럼(breadcrumbs) 위젯</li>
+</ol>
+
+<ul>
+  <li>현재 경로 콤보는 좋지만, 클릭 가능한 조각(폴더 단추들)로 표시하면 상위로 점프가 더 직관적. 드래그로 하위 펼치기까지 지원하면 금상첨화.</li>
+</ul>
+
+<ol>
+  <li>Places/사이드바</li>
+</ol>
+
+<ul>
+  <li>홈, 데스크톱, 다운로드, 드라이브 루트, 즐겨찾기(핀), 최근 위치 섹션 추가. Qt의 <code class="language-plaintext highlighter-rouge">QFileDialog</code>가 주는 경험을 재현하면서도 커스텀화 가능.</li>
+</ul>
+
+<ol>
+  <li>키보드 내비게이션</li>
+</ol>
+
+<ul>
+  <li>F2: 이름 바꾸기, Del: 삭제(옵션), Alt+↑: 상위, Alt+←/→: 뒤/앞, Ctrl+L: 경로 포커스 같은 단축키. 텍스트 사용자가 특히 빨라진다.</li>
+</ul>
+
+<ol>
+  <li>멀티선택</li>
+</ol>
+
+<ul>
+  <li>파일 모드에서 다중 선택을 옵션으로 지원하고, 하단에 선택 개수/합계 크기 표시. 저장 모드에서도 “여러 개를 한 번에”는 보통 허용하지 않지만 옵션으로 노출 가능.</li>
+</ul>
+
+<ol>
+  <li>자동완성 UX 디테일</li>
+</ol>
+
+<ul>
+  <li>탭(Tab)으로 첫 후보 자동완성, 오른쪽 화살표로 경로 구분자 자동 삽입, 끝에 구분자 입력 시 즉시 상위 10개 하위 디렉터리 재검색 등 타자 흐름 최적화.</li>
+</ul>
+
+<h1 id="네트워크플랫포옴-고려">네트워크·플랫포옴 고려</h1>
+
+<ol>
+  <li>UNC/SMB·리눅스 마운트·맥 볼륨</li>
+</ol>
+
+<ul>
+  <li>Windows UNC 경로(\server\share) 파싱과 자동완성, Linux의 /mnt, macOS의 /Volumes 감지. 네트워크 드라이브는 depth_limit을 기본 1로, 지연 시간 측정 후 동적 확장.</li>
+</ul>
+
+<ol>
+  <li>심볼릭 링크·순환 방지</li>
+</ol>
+
+<ul>
+  <li>BFS에서 symlink는 별도 세트로 추적, 같은 inode/경로 해시 재방문 방지. 네트워크에서 링크 루프가 있을 수 있으니 필수.</li>
+</ul>
+
+<ol>
+  <li>긴 경로 지원(Windows)</li>
+</ol>
+
+<ul>
+  <li>260자 제한 우회(\?\ prefix) 처리 옵션.</li>
+</ul>
+
+<ol>
+  <li>권한·락 대응</li>
+</ol>
+
+<ul>
+  <li>PermissionError는 이미 처리했지만, 저장 모드에서 파일 덮어쓰기 경고, 읽기전용 폴더 알림, 네트워크 타임아웃 후 재시도 버튼 같은 UX를 추가.</li>
+</ul>
+
+<h1 id="접근성현지화브랜딩">접근성·현지화·브랜딩</h1>
+
+<ol>
+  <li>접근성</li>
+</ol>
+
+<ul>
+  <li>각 버튼에 <code class="language-plaintext highlighter-rouge">accessibleName/Description</code> 설정, 포커스 인디케이터 가시성 강화, 스크린리더 라벨링.</li>
+</ul>
+
+<ol>
+  <li>현지화(i18n)</li>
+</ol>
+
+<ul>
+  <li>문자열 분리와 <code class="language-plaintext highlighter-rouge">QTranslator</code> 적용 포인트 마련.</li>
+</ul>
+
+<ol>
+  <li>테마/다크모드</li>
+</ol>
+
+<ul>
+  <li>아이콘 대비, 선택 하이라이트, 고해상도 스케일링(HiDPI) 보정.</li>
+</ul>
+
+<h1 id="디테일-코드-아이디어">디테일 코드 아이디어</h1>
+
+<ol>
+  <li>취소 가능한 탐색 태스크 스텁</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PathSearchTask</span><span class="p">(</span><span class="n">QRunnable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="p">...,</span> <span class="n">cancel_flag</span><span class="p">):</span>
+        <span class="bp">...</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_cancel_flag</span> <span class="o">=</span> <span class="n">cancel_flag</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nf">slow_scan</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_cancel_flag</span><span class="p">.</span><span class="nf">is_set</span><span class="p">():</span>
+                <span class="k">return</span>
+            <span class="bp">...</span>
+</code></pre></div></div>
+
+<ul>
+  <li>새 요청이 들어오면 이전 태스크의 <code class="language-plaintext highlighter-rouge">cancel_flag.set()</code> 호출.</li>
+</ul>
+
+<ol>
+  <li>캐시 키와 무효화</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cache_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">base_dir</span><span class="p">,</span> <span class="n">want_files</span><span class="p">,</span> <span class="n">want_dirs</span><span class="p">)</span>
+<span class="n">entries</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">cache_key</span><span class="p">,</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">entries</span> <span class="ow">or</span> <span class="n">meta</span> <span class="o">!=</span> <span class="p">(</span><span class="nf">mtime</span><span class="p">(</span><span class="n">base_dir</span><span class="p">),</span> <span class="nf">dir_size_estimate</span><span class="p">(</span><span class="n">base_dir</span><span class="p">)):</span>
+    <span class="n">entries</span> <span class="o">=</span> <span class="nf">list_dir_fast</span><span class="p">(</span><span class="n">base_dir</span><span class="p">)</span>
+    <span class="n">cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">entries</span><span class="p">,</span> <span class="p">(</span><span class="nf">mtime</span><span class="p">(...),</span> <span class="nf">dir_size_estimate</span><span class="p">(...)))</span>
+</code></pre></div></div>
+
+<ol>
+  <li>사용자 정의 필터 콜백</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">set_custom_filters</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">predicates</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">QFileInfo</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]]):</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">_predicates</span> <span class="o">=</span> <span class="n">predicates</span>
+<span class="c1"># proxy model의 filterAcceptsRow에서 모든 predicate AND 매칭
+</span></code></pre></div></div>
+
+<ol>
+  <li>브레드크럼</li>
+</ol>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">QToolButton</code>들을 동적으로 생성하고, 눌렀을 때 그 조각까지의 경로로 이동. 버튼에 메뉴(하위 디렉터리 미리보기) 연결하면 빠른 점프 가능.</li>
+</ul>
+
+<h1 id="단계별-적용-추천">단계별 적용 추천</h1>
+
+<ul>
+  <li>
+    <p>1단계: 자동완성 취소·캐시·점진적 갱신</p>
+  </li>
+  <li>
+    <p>2단계: 브레드크럼 + Places 사이드바 + 단축키</p>
+  </li>
+  <li>
+    <p>3단계: 아이콘 지연 로딩 + 대용량 폴더 가상화</p>
+  </li>
+  <li>
+    <p>4단계: 플러그인 필터·테스트 인프라·i18n</p>
+  </li>
+</ul>
+
+<p>원하면 1단계(취소 가능한 자동완성 + 캐시 + 점진 emit) 코드를 네 가지 메소드만 바꿔서 바로 패치 가능한 형태로 제공할게.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#python" class="page__taxonomy-item p-category" rel="tag">python</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-12T14:36:21+09:00">2025-11-12</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/misc/web-korean-keyboard/" class="pagination--pager" title="웹 한글 키보드 추가">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-12T14:36:26+09:00">2025-11-12</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/web-korean-keyboard/" rel="permalink">웹 한글 키보드 추가
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-07T20:48:31+09:00">2025-11-07</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/virutual-korean-keyboard/" rel="permalink">untitled
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-07T17:47:20+09:00">2025-11-07</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">ChatGPT404 Not Found
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/llm/python-interpreter-tool-calling/" rel="permalink">Python 코드 실행 Tool Calling
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-05T17:49:25+09:00">2025-11-05</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
