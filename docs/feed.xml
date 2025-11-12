@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-11-12T17:53:43+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-11-12T17:53:43+09:00</published><updated>2025-11-12T17:53:43+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hvppyarchive.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hvppyarchive.github.io/" rel="alternate" type="text/html" /><updated>2025-11-12T19:33:40+09:00</updated><id>https://hvppyarchive.github.io/feed.xml</id><title type="html">ARCHIVE</title><subtitle>An amazing archive.</subtitle><author><name>hvppyarchive</name></author><entry><title type="html"></title><link href="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/" rel="alternate" type="text/html" title="" /><published>2025-11-12T19:33:40+09:00</published><updated>2025-11-12T19:33:40+09:00</updated><id>https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str</id><content type="html" xml:base="https://hvppyarchive.github.io/2025-08-19-python-repr-vs-str/"><![CDATA[<p class="chat--user">
 
 Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 함수와 <code class="language-plaintext highlighter-rouge">__str__</code> 함수의 차이점
 
@@ -126,7 +126,7 @@ Python에서 <code class="language-plaintext highlighter-rouge">__repr__</code> 
 
 <hr />
 
-<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">CFileDialog 구현 방법</title><link href="https://hvppyarchive.github.io/python/custom-pyside-filedialog/" rel="alternate" type="text/html" title="CFileDialog 구현 방법" /><published>2025-11-12T17:53:38+09:00</published><updated>2025-11-12T17:53:38+09:00</updated><id>https://hvppyarchive.github.io/python/custom-pyside-filedialog</id><content type="html" xml:base="https://hvppyarchive.github.io/python/custom-pyside-filedialog/"><![CDATA[<p class="chat--user">
+<p>원하시면 <code class="language-plaintext highlighter-rouge">__repr__</code> 와 <code class="language-plaintext highlighter-rouge">__str__</code> 를 동시에 구현했을 때 <code class="language-plaintext highlighter-rouge">print(obj)</code> 와 <code class="language-plaintext highlighter-rouge">obj</code> (쉘 출력) 의 차이를 직접 실행해 보여드릴 수도 있는데, 예제 코드 시연을 원하시나요?</p>]]></content><author><name>hvppyarchive</name></author></entry><entry><title type="html">CFileDialog 구현 방법</title><link href="https://hvppyarchive.github.io/python/custom-pyside-filedialog/" rel="alternate" type="text/html" title="CFileDialog 구현 방법" /><published>2025-11-12T19:33:35+09:00</published><updated>2025-11-12T19:33:35+09:00</updated><id>https://hvppyarchive.github.io/python/custom-pyside-filedialog</id><content type="html" xml:base="https://hvppyarchive.github.io/python/custom-pyside-filedialog/"><![CDATA[<p class="chat--user">
 
 PySide6(PyQt6)를 이용해서 나만의 QFileDialog를 만들고 싶어. 이름은 CFileDialog라고 하자. 그냥 Qt의 내장 다이얼로그와 비슷하면 돼 ## UI 설명 가장 위에는 현재 경로가 콤보 박스로 있고, 콤보박스를 누르면 하위 경로들을 선택할 수 있게 된다 예를 들어 지금 /a/b/c/d 에서 시작했으면 /a/b/c/d /a/b/c /a/b /a / 이런 식으로 나와야하고, 경로 클릭 시 그 경로로 다이얼로그 이동할 것. 그 옆에는 Back, Forward, Parent Directory, Create New Folder 버튼이 있다. 가운데 리스트뷰에는 현재 폴더의 하위 폴더, 파일들이 보인다. (모드에 따라 보이는게 다름, 폴더 선택 모드냐 파일 선택 모드냐) 아래에는 경로를 입력을 할 수 있는 LineEdit이 있고 경로 입력 시에 자동완성 될만한게 QCompleter로 나타난다. 이 때 네트워크 드라이브를 사용하므로 QCompleter가 매우 느릴 수 있는데, QCompleter의 역할을 쓰레드로 빼면 좋을 것 같음. 현재 경로에서 가장 일치하는 상위 10개 정도 경로만 Completer로 사용하고 경로가 완성되면 다시 리프레시 해서 상위 10개를 찾는 식으로 하면 좋을 것 같음. (중요) 그 아래에는 Type 선택 콤보박스가 있다. 그 외 사용법은 QFileDialog와 거의 동일하게 하면 좋겠음. 파일/폴더 얻을 지 Save용인지 Load용인지
 
@@ -2918,7 +2918,1011 @@ PySide6 기준이고, <code class="language-plaintext highlighter-rouge">Process
   </li>
 </ul>
 
-<p>특정 OS나 네트워크 공유에서 튜닝이 더 필요하면, 문제 재현 경로와 함께 알려줘. 타임박스·깊이·루트 규칙을 미세조정한 패치를 바로 만들어줄게.</p>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">웹 한글 키보드 추가</title><link href="https://hvppyarchive.github.io/misc/web-korean-keyboard/" rel="alternate" type="text/html" title="웹 한글 키보드 추가" /><published>2025-11-07T20:48:31+09:00</published><updated>2025-11-07T20:48:31+09:00</updated><id>https://hvppyarchive.github.io/misc/web-korean-keyboard</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/web-korean-keyboard/"><![CDATA[<p class="chat--user">
+<p>특정 OS나 네트워크 공유에서 튜닝이 더 필요하면, 문제 재현 경로와 함께 알려줘. 타임박스·깊이·루트 규칙을 미세조정한 패치를 바로 만들어줄게.</p>
+
+<p class="chat--user">
+
+원인을 좀 더 좁힌거 같아. os.path.isfile("/user/j") 이게 너무 느려 안 끝나
+
+</p>
+
+<p>맞아, 핵심 원인은 <code class="language-plaintext highlighter-rouge">os.path.isfile("/user/j")</code> 같은 “경로 자체에 대한 stat 호출”이 네트워크·자동마운트(autofs)·SMB/UNC 같은 느린 파일시스템에서 블로킹되기 때문이야. 특히 <code class="language-plaintext highlighter-rouge">/user</code> 가 자동마운트 지점이면, <code class="language-plaintext highlighter-rouge">isfile</code> 한 번만으로도 커널이 마운트를 시도→DNS 탐색→타임아웃까지 기다리느라 GUI가 얼어붙은 것처럼 느껴져. 스레드로 돌려도 GIL·결과 반영 타이밍·연쇄 호출 때문에 체감 프리즈가 나오는 거고.</p>
+
+<p>해법은 “타이핑 중에는 절대 <code class="language-plaintext highlighter-rouge">isfile</code>/<code class="language-plaintext highlighter-rouge">exists</code> 같은 직접 stat을 하지 않는다”야. 검증이 필요해도 경량 우회로를 쓰거나, 별도 프로세스에서 타임박스로 돌리고 결과가 늦으면 그냥 “모름”으로 처리하는 정책이 안전해.</p>
+
+<p>아래처럼 바꾸면 바로 효과를 볼 수 있어.</p>
+
+<h1 id="전략-요약">전략 요약</h1>
+
+<ol>
+  <li>
+    <p>입력 중에는 <code class="language-plaintext highlighter-rouge">isfile</code> 완전 금지. 자동완성은 문자열 매칭만.</p>
+  </li>
+  <li>
+    <p>최종 OK 검증에서만 “빠른 존재 확인”을 시도하되, 경로에 직접 stat 하지 말고 상위 폴더를 짧게 나열해 이름 비교한다.</p>
+  </li>
+  <li>
+    <p>그래도 네트워크일 수 있으니 타임박스(예: 50ms)를 넘기면 “미확인”으로 간주하고 OK을 잠시 비활성화하거나, 메시지로 알려준다.</p>
+  </li>
+  <li>
+    <p>필요하면 멀티프로세싱으로 “느릴 수 있는 stat”을 분리하고 100~150ms 타임아웃을 둔다.</p>
+  </li>
+  <li>
+    <p>autofs·네트워크 루트 프리픽스를 블록리스트로 두고, 접두사가 짧을 땐 아예 검증을 스킵한다.</p>
+  </li>
+</ol>
+
+<h1 id="코드-패치-1-빠른-파일-확인기로-교체">코드 패치 1: 빠른 파일 확인기로 교체</h1>
+
+<p><code class="language-plaintext highlighter-rouge">_is_selection_valid()</code>에서 쓰던 <code class="language-plaintext highlighter-rouge">os.path.isfile()</code>를 아래 함수로 바꿔 호출해.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_fast_isfile</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">경로 자체를 stat하지 않고, 부모 디렉터리를 짧게 나열해서 이름으로 판단.</span><span class="sh">"""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">parent</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="c1"># 위험 프리픽스는 즉시 포기(autofs/네트워크 루트)
+</span>    <span class="n">s</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">parent</span><span class="p">).</span><span class="nf">lower</span><span class="p">()</span>
+    <span class="n">risky_roots</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">,</span> <span class="sh">"</span><span class="s">/net</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/nfs</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/afs</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/mnt</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/users</span><span class="sh">"</span><span class="p">,</span>
+                   <span class="sh">"</span><span class="s">/volumes</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="se">\\\\</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nf">any</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">rr</span><span class="p">)</span> <span class="k">for</span> <span class="n">rr</span> <span class="ow">in</span> <span class="n">risky_roots</span><span class="p">)</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>  <span class="c1"># 접두사가 짧으면 스캔하지 않음
+</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">os</span><span class="p">.</span><span class="nf">scandir</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="k">as</span> <span class="n">it</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+                <span class="c1"># 타임박스 초과 시 즉시 포기
+</span>                <span class="nf">if </span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&gt;</span> <span class="n">budget_ms</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">False</span>
+                <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="c1"># 여기서도 stat 대신 dir 여부만 확인(캐시 활용)
+</span>                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="ow">not</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="bp">True</span>  <span class="c1"># 파일로 가정
+</span>    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>그리고 <code class="language-plaintext highlighter-rouge">_is_selection_valid()</code>를 이렇게 조정.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_is_selection_valid</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">select_mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">folder</span><span class="sh">'</span><span class="p">:</span>
+        <span class="c1"># 폴더 검증도 빠른 버전으로(직접 stat 대신 상위 나열)
+</span>        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_fast_isdir</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="p">:</span>
+        <span class="c1"># 느린 환경에서 isfile 금지 → 빠른 확인기 사용
+</span>        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_fast_isfile</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="nf">_match_type_filters</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">target</span><span class="p">).</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">target</span><span class="p">).</span><span class="n">parent</span>
+        <span class="c1"># 저장은 상위 폴더만 확인(이것도 빠른 판정 사용)
+</span>        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nf">_fast_isdir</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">parent</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">_fast_isdir</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">parent</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+        <span class="c1"># 루트 등: 대개 디렉터리로 취급
+</span>        <span class="k">return</span> <span class="bp">True</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">os</span><span class="p">.</span><span class="nf">scandir</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="k">as</span> <span class="n">it</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+                <span class="nf">if </span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&gt;</span> <span class="n">budget_ms</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">False</span>
+                <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>설명: <code class="language-plaintext highlighter-rouge">os.path.isfile(target)</code> 대신, 부모 디렉터리를 아주 짧게 나열하면서 이름이 같은 엔트리만 판정한다. 이러면 커널이 문제의 경로 자체를 접근(=자동마운트 트리거)하지 않고도 대부분의 케이스를 해결한다.</p>
+
+<h1 id="코드-패치-2-최종-검증을-비동기타임아웃으로">코드 패치 2: 최종 검증을 비동기·타임아웃으로</h1>
+
+<p>그래도 원격 부모 폴더 나열이 느릴 수 있어. 그럴 땐 프로세스 풀로 “안전 판정”을 돌리고, 120ms 안에 답이 없으면 OK 버튼을 잠깐 비활성화하거나 경고 배지를 띄우자.</p>
+
+<p>최상위에 워커 함수 추가:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_safe_isfile_worker</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>다이얼로그 <code class="language-plaintext highlighter-rouge">__init__</code>에서 재사용용 풀 하나:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">concurrent.futures</span> <span class="kn">import</span> <span class="n">ProcessPoolExecutor</span>
+<span class="n">self</span><span class="p">.</span><span class="n">_check_pool</span> <span class="o">=</span> <span class="nc">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">self</span><span class="p">.</span><span class="n">_pending_check</span> <span class="o">=</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>OK 직전 확인(예: <code class="language-plaintext highlighter-rouge">_accept_if_valid</code>에서):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_accept_if_valid</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">path_edit</span><span class="p">.</span><span class="nf">text</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">open</span><span class="sh">'</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="n">select_mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">file</span><span class="sh">'</span><span class="p">:</span>
+        <span class="c1"># 빠른 판정으로 충분하면 바로 통과
+</span>        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nf">_fast_isfile</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="nf">_match_type_filters</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">target</span><span class="p">).</span><span class="n">name</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">accept</span><span class="p">();</span> <span class="k">return</span>
+        <span class="c1"># 느리면 프로세스로 120ms만 시도
+</span>        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_pending_check</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">_pending_check</span><span class="p">.</span><span class="nf">done</span><span class="p">():</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">_pending_check</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="n">fut</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_check_pool</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span><span class="n">_safe_isfile_worker</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_pending_check</span> <span class="o">=</span> <span class="n">fut</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="n">fut</span><span class="p">.</span><span class="nf">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">ok</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="nf">_match_type_filters</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">target</span><span class="p">).</span><span class="n">name</span><span class="p">):</span>
+            <span class="n">self</span><span class="p">.</span><span class="nf">accept</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="n">QMessageBox</span><span class="p">.</span><span class="nf">warning</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">선택 확인</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">파일이 존재하지 않거나 접근할 수 없습니다.</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="c1"># 나머지 케이스는 기존 로직
+</span>    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nf">_is_selection_valid</span><span class="p">():</span>
+        <span class="n">self</span><span class="p">.</span><span class="nf">accept</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">QMessageBox</span><span class="p">.</span><span class="nf">warning</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="sh">"</span><span class="s">선택 확인</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">선택이 유효하지 않습니다.</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>닫을 때 풀 정리:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_pending_check</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">_pending_check</span><span class="p">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">_check_pool</span><span class="p">.</span><span class="nf">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cancel_futures</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="nf">super</span><span class="p">().</span><span class="nf">closeEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h1 id="정책-팁">정책 팁</h1>
+
+<ul>
+  <li>
+    <p>“루트/네트워크 루트 + 접두사 짧음”에서는 어떤 판정도 하지 말고, 자동완성과 OK 둘 다 보수적으로 막아라. 타자 몇 글자 더 치면 자연스럽게 풀린다.</p>
+  </li>
+  <li>
+    <p>저장 모드에서는 존재 확인이 필요 없다. 상위 폴더만 빠르게 확인하면 된다.</p>
+  </li>
+  <li>
+    <p>자동완성·검증 모두 “경로 자체 stat”을 피하고, 가능하면 “부모 나열”로 판정하라.</p>
+  </li>
+  <li>
+    <p>조직 환경에서 <code class="language-plaintext highlighter-rouge">/user</code>, <code class="language-plaintext highlighter-rouge">/net</code>, <code class="language-plaintext highlighter-rouge">/home</code>, <code class="language-plaintext highlighter-rouge">/nfs</code> 같은 autofs 지점이 있다면, 그 접두사는 공격적으로 스킵하도록 블록리스트에 올려라.</p>
+  </li>
+  <li>
+    <p>리눅스라면 <code class="language-plaintext highlighter-rouge">/proc/mounts</code>를 읽어 <code class="language-plaintext highlighter-rouge">autofs</code> 타입 마운트 목록을 만들어두고, 그 경로 밑은 접두사 길이 3 미만이면 무조건 스킵하는 게 최선이다.</p>
+  </li>
+</ul>
+
+<p>정리하면, 지금 보이는 병목은 <code class="language-plaintext highlighter-rouge">isfile</code> 한 방으로 autofs를 찌르면서 발생해. 위 패치처럼 “경로 자체 stat 금지 + 부모 디렉터리 짧게 나열 + 타임박스 + 필요시 프로세스 타임아웃”으로 바꾸면 같은 환경에서도 프리즈가 사라질 거야. 원하는 형태로 바로 붙일 수 있게, 네 코드의 <code class="language-plaintext highlighter-rouge">_is_selection_valid()</code> 부분을 기반으로 한 미니 패치도 만들어줄 수 있어.</p>
+
+<p class="chat--user">
+
+음 오케이오케이. 결국 내가 원하는건 내부에서 어떻게 동작하든 깔끔하게 isfile 같은 함수를 다 구현해주면 돼. 파일 확인 함수 모두 구현해줘
+
+</p>
+
+<p>좋아. 내부 구현이 어떻게 돌아가든—UI는 몰라도 되도록—파일 확인용 유틸을 한 덩어리로 정리해줄게. 핵심 목표는 다음이야.</p>
+
+<ul>
+  <li>
+    <p>타이핑 중엔 느린 stat 계열 호출을 피한다.</p>
+  </li>
+  <li>
+    <p>부모 디렉터리 나열로 빠르게 추정한다(타임박스).</p>
+  </li>
+  <li>
+    <p>필요하면 멀티프로세싱으로 짧은 타임아웃 내 “확정” 검증을 한다.</p>
+  </li>
+  <li>
+    <p>호출자가 정치(빠름/정확)만 고르면 된다.</p>
+  </li>
+</ul>
+
+<p>아래 모듈은 바로 붙여서 쓸 수 있어. 반환 정책은 세 가지로 나눈다.</p>
+
+<ul>
+  <li>
+    <p>빠른 추정 계열(<code class="language-plaintext highlighter-rouge">quick_…</code>): True/False/None(None=시간 초과/판단 불가)</p>
+  </li>
+  <li>
+    <p>확정 검증 계열(<code class="language-plaintext highlighter-rouge">confirm_…</code>): 멀티프로세싱 + 타임아웃으로 True/False</p>
+  </li>
+  <li>
+    <p>안전 래퍼(<code class="language-plaintext highlighter-rouge">safe_…</code>): quick이 결정 못 하면 confirm을 짧게 시도</p>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># file_checks.py
+# -*- coding: utf-8 -*-
+</span><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="n">concurrent.futures</span> <span class="kn">import</span> <span class="n">ProcessPoolExecutor</span><span class="p">,</span> <span class="nb">TimeoutError</span>
+
+<span class="c1"># ---------------------------------------
+# 내부 설정
+# ---------------------------------------
+# autofs/네트워크 루트 등 "건드리면 느릴" 수 있는 접두사
+</span><span class="n">_RISKY_PREFIXES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">os</span><span class="p">.</span><span class="n">sep</span><span class="p">,</span>                <span class="c1"># "/"
+</span>    <span class="sh">"</span><span class="s">/net</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/nfs</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/afs</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/mnt</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/media</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">/user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/users</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/home</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">/Volumes</span><span class="sh">"</span><span class="p">,</span>            <span class="c1"># macOS
+</span>    <span class="sh">"</span><span class="se">\\\\</span><span class="sh">"</span><span class="p">,</span>                <span class="c1"># Windows UNC
+</span><span class="p">)</span>
+<span class="c1"># Windows 드라이브 루트 후보 (필요시 추가)
+</span><span class="n">_WIN_ROOTS</span> <span class="o">=</span> <span class="nf">tuple</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s">:</span><span class="se">\\</span><span class="sh">"</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="sh">"</span><span class="s">ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_is_risky_root</span><span class="p">(</span><span class="n">path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">path_str</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="se">\\</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">).</span><span class="nf">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nf">any</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">lower</span><span class="p">())</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_RISKY_PREFIXES</span><span class="p">)</span> <span class="ow">or</span> <span class="n">path_str</span> <span class="ow">in</span> <span class="n">_WIN_ROOTS</span>
+
+<span class="c1"># ---------------------------------------
+# 빠른 부모-나열 기반 판정(타임박스)
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    부모 디렉터리를 os.scandir로 짧게 훑어 파일/디렉터리/기타 여부를 추정한다.
+    반환: </span><span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="s"> | </span><span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="s"> | </span><span class="sh">"</span><span class="s">other</span><span class="sh">"</span><span class="s"> | None(판단불가/시간초과)
+    </span><span class="sh">"""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">parent</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+        <span class="c1"># 루트 같은 케이스: 디렉터리 취급
+</span>        <span class="k">return</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">os</span><span class="p">.</span><span class="nf">scandir</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="k">as</span> <span class="n">it</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+                <span class="nf">if </span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&gt;</span> <span class="n">budget_ms</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">None</span>
+                <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span>
+                    <span class="k">elif</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_file</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="sh">"</span><span class="s">file</span><span class="sh">"</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="sh">"</span><span class="s">other</span><span class="sh">"</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="c1"># entry 질의 실패 시 파일로 가정할 수도 있지만 보수적으로 기타 처리
+</span>                    <span class="k">return</span> <span class="sh">"</span><span class="s">other</span><span class="sh">"</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">quick_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    빠른 추정: 부모 나열만으로 파일 여부를 판단.
+    True/False 또는 None(시간초과/판단불가) 반환.
+    </span><span class="sh">"""</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">typ</span> <span class="o">==</span> <span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">)</span> <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">quick_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">typ</span> <span class="o">==</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="p">)</span> <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">quick_exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">typ</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">other</span><span class="sh">"</span><span class="p">))</span> <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+<span class="c1"># ---------------------------------------
+# 멀티프로세싱 확정 검증(타임아웃)
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">_mp_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">_mp_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">_mp_exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">_confirm_with_timeout</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="c1"># 프로세스를 매 호출마다 만드는 방식: 누수 없음, 간결
+</span>    <span class="n">timeout_s</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">with</span> <span class="nc">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">fut</span> <span class="o">=</span> <span class="n">pool</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nf">bool</span><span class="p">(</span><span class="n">fut</span><span class="p">.</span><span class="nf">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout_s</span><span class="p">))</span>
+        <span class="k">except</span> <span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">confirm_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">_confirm_with_timeout</span><span class="p">(</span><span class="n">_mp_isfile</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">confirm_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">_confirm_with_timeout</span><span class="p">(</span><span class="n">_mp_isdir</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">confirm_exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">_confirm_with_timeout</span><span class="p">(</span><span class="n">_mp_exists</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+
+<span class="c1"># ---------------------------------------
+# 안전 래퍼: 빠름→(필요 시)확정
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">safe_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">,</span>
+                <span class="n">risky_skip_minlen</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    권장 사용: 타자 중엔 빠르게, 확정이 필요하면 짧게 confirm.
+    - 위험 루트 + 이름이 짧으면(기본 2) 바로 False로 간주(탐색 회피).
+    </span><span class="sh">"""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nf">_is_risky_root</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">))</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">risky_skip_minlen</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">q</span>
+    <span class="k">return</span> <span class="nf">confirm_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">safe_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+               <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+               <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">,</span>
+               <span class="n">risky_skip_minlen</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nf">_is_risky_root</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">))</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">risky_skip_minlen</span><span class="p">:</span>
+        <span class="c1"># 루트 자체는 디렉터리 취급
+</span>        <span class="k">return</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="sh">""</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">q</span>
+    <span class="k">return</span> <span class="nf">confirm_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">safe_exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">,</span>
+                <span class="n">risky_skip_minlen</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nf">_is_risky_root</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">))</span> <span class="ow">and</span> <span class="nf">len</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">risky_skip_minlen</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_exists</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">q</span>
+    <span class="k">return</span> <span class="nf">confirm_exists</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="c1"># ---------------------------------------
+# 접근/권한 체크(빠른 버전)
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">quick_access</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">R_OK</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    접근 권한 추정. 존재 여부를 확정하지 않고 부모 나열로 보수 판정.
+    파일이면 os.R_OK, os.W_OK, os.X_OK 의미 동일.
+    </span><span class="sh">"""</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="c1"># 존재한다고 가정하고 접근 모드는 낙관적으로 추정할 수도 있지만,
+</span>    <span class="c1"># 네트워크/권한 이슈는 확인 비용이 큼 → None 반환이 안전
+</span>    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">confirm_access</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">R_OK</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_mp_access</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="nf">access</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+    <span class="n">timeout_s</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">with</span> <span class="nc">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">fut</span> <span class="o">=</span> <span class="n">pool</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span><span class="n">_mp_access</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nf">bool</span><span class="p">(</span><span class="n">fut</span><span class="p">.</span><span class="nf">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout_s</span><span class="p">))</span>
+        <span class="k">except</span> <span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">safe_access</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">R_OK</span><span class="p">,</span>
+                <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_exists</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="c1"># q is True/None → 필요 시 짧게 확인
+</span>    <span class="k">return</span> <span class="nf">confirm_access</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="c1"># ---------------------------------------
+# 편의: 파일/폴더 모드에서 OK 활성화 판정
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">can_accept_open_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                         <span class="n">require_filter_match</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                         <span class="n">name_patterns</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+                         <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                         <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    Open+File 모드의 OK 가능 여부.
+    </span><span class="sh">"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nf">safe_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">quick_budget_ms</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">require_filter_match</span> <span class="ow">and</span> <span class="n">name_patterns</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="n">fnmatch</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">name</span>
+        <span class="k">return</span> <span class="nf">any</span><span class="p">(</span><span class="n">fnmatch</span><span class="p">.</span><span class="nf">fnmatch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pat</span><span class="p">)</span> <span class="k">for</span> <span class="n">pat</span> <span class="ow">in</span> <span class="n">name_patterns</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">True</span>
+
+<span class="k">def</span> <span class="nf">can_accept_open_folder</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                           <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                           <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="nf">safe_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">quick_budget_ms</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">can_accept_save_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                         <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                         <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    Save+File: 상위 폴더만 존재하면 OK.
+    </span><span class="sh">"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">parent</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">safe_isdir</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">quick_budget_ms</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>간단 사용 예시는 아래처럼.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 예시
+</span><span class="kn">from</span> <span class="n">file_checks</span> <span class="kn">import</span> <span class="n">safe_isfile</span><span class="p">,</span> <span class="n">safe_isdir</span><span class="p">,</span> <span class="n">safe_exists</span><span class="p">,</span> <span class="n">can_accept_open_file</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">safe_isfile</span><span class="p">(</span><span class="sh">"</span><span class="s">/user/j</span><span class="sh">"</span><span class="p">))</span>                 <span class="c1"># autofs 환경에서도 프리즈 없이 빠른 반환
+</span><span class="nf">print</span><span class="p">(</span><span class="nf">safe_isdir</span><span class="p">(</span><span class="sh">"</span><span class="s">/some/dir</span><span class="sh">"</span><span class="p">))</span>                <span class="c1"># 빠른 추정 → 필요시 150ms 타임아웃으로 확정
+</span><span class="nf">print</span><span class="p">(</span><span class="nf">safe_exists</span><span class="p">(</span><span class="sh">"</span><span class="s">/network/share/file.txt</span><span class="sh">"</span><span class="p">))</span> <span class="c1"># 동일 정책
+</span><span class="nf">print</span><span class="p">(</span><span class="nf">can_accept_open_file</span><span class="p">(</span><span class="sh">"</span><span class="s">/path/a.png</span><span class="sh">"</span><span class="p">,</span>
+                           <span class="n">require_filter_match</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                           <span class="n">name_patterns</span><span class="o">=</span><span class="p">(</span><span class="sh">"</span><span class="s">*.png</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">*.jpg</span><span class="sh">"</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<p>핵심 포인트 정리</p>
+
+<ul>
+  <li>
+    <p>quick 단계는 부모 디렉터리만 짧게 나열해서 추정하므로 autofs/UNC에서도 안전하다.</p>
+  </li>
+  <li>
+    <p>confirm 단계는 별도 프로세스로 <code class="language-plaintext highlighter-rouge">os.path.isfile</code> 같은 “진짜 stat”을 돌리되, 타임아웃을 걸어 GUI가 멈추지 않게 한다.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">safe_*</code>는 quick→confirm 순으로 처리해서 UI 코드가 간단해진다.</p>
+  </li>
+  <li>
+    <p>위험 루트에서 이름이 너무 짧으면(기본 2) 아예 건드리지 않고 False를 돌려 탐욕적 마운트를 피한다. 필요하면 이 기준을 조정하면 된다.</p>
+  </li>
+</ul>
+
+<p>원하면 이 모듈을 너의 <code class="language-plaintext highlighter-rouge">CFileDialog</code>에 바로 끼워 넣을 수 있도록 <code class="language-plaintext highlighter-rouge">_is_selection_valid()</code> 패치 버전도 만들어서 붙여줄게.</p>
+
+<p class="chat--user">
+
+risky root를 하드코딩으로 하는건 별로 안하고 싶네. 그 부분은 빼줘
+
+</p>
+
+<p>좋아. 하드코딩된 “risky root” 판단을 싹 제거한 버전이야.<br />
+정책은 오직 시간 예산(타임박스)과 멀티프로세싱 타임아웃으로만 안전성을 보장해. 필요하면 호출 시 파라미터로 시간 값을 조절해 쓰면 된다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># file_checks.py
+# -*- coding: utf-8 -*-
+</span><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="n">concurrent.futures</span> <span class="kn">import</span> <span class="n">ProcessPoolExecutor</span><span class="p">,</span> <span class="nb">TimeoutError</span>
+
+<span class="c1"># ---------------------------------------
+# 부모-나열 기반 빠른 추정(타임박스)
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    부모 디렉터리를 짧게 나열해 대상이 파일/디렉터리/기타인지 추정.
+    반환: </span><span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="s"> | </span><span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="s"> | </span><span class="sh">"</span><span class="s">other</span><span class="sh">"</span><span class="s"> | None(시간초과/판단불가)
+    </span><span class="sh">"""</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">parent</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+        <span class="c1"># 루트 같은 케이스는 디렉터리로 간주
+</span>        <span class="k">return</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">os</span><span class="p">.</span><span class="nf">scandir</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="k">as</span> <span class="n">it</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+                <span class="nf">if </span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&gt;</span> <span class="n">budget_ms</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">None</span>
+                <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span>
+                    <span class="k">elif</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_file</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="sh">"</span><span class="s">file</span><span class="sh">"</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="sh">"</span><span class="s">other</span><span class="sh">"</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="sh">"</span><span class="s">other</span><span class="sh">"</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">quick_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">typ</span> <span class="o">==</span> <span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">)</span> <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">quick_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">typ</span> <span class="o">==</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="p">)</span> <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">quick_exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">typ</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">other</span><span class="sh">"</span><span class="p">))</span> <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+<span class="c1"># ---------------------------------------
+# 멀티프로세싱 확정 검증(타임아웃)
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">_mp_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">_mp_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">_mp_exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">_confirm_with_timeout</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">timeout_s</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="c1"># 호출 단위 풀 생성: 간단하고 누수 없음
+</span>    <span class="k">with</span> <span class="nc">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">fut</span> <span class="o">=</span> <span class="n">pool</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nf">bool</span><span class="p">(</span><span class="n">fut</span><span class="p">.</span><span class="nf">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout_s</span><span class="p">))</span>
+        <span class="k">except</span> <span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">confirm_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">_confirm_with_timeout</span><span class="p">(</span><span class="n">_mp_isfile</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">confirm_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">_confirm_with_timeout</span><span class="p">(</span><span class="n">_mp_isdir</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">confirm_exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">_confirm_with_timeout</span><span class="p">(</span><span class="n">_mp_exists</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+
+<span class="c1"># ---------------------------------------
+# 안전 래퍼: 빠름→(필요 시)확정
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">safe_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    1) quick(부모 나열, 타임박스)로 결정 시 그 값 사용
+    2) 결정 불가(None)이면 멀티프로세싱으로 짧게 확정
+    </span><span class="sh">"""</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">q</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="nf">confirm_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">safe_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+               <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+               <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">q</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="nf">confirm_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">safe_exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_exists</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">q</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="nf">confirm_exists</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="c1"># ---------------------------------------
+# 접근/권한 체크
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">confirm_access</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">R_OK</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_mp_access</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="nf">access</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+    <span class="n">timeout_s</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">with</span> <span class="nc">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">fut</span> <span class="o">=</span> <span class="n">pool</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span><span class="n">_mp_access</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nf">bool</span><span class="p">(</span><span class="n">fut</span><span class="p">.</span><span class="nf">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout_s</span><span class="p">))</span>
+        <span class="k">except</span> <span class="nb">TimeoutError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">safe_access</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">R_OK</span><span class="p">,</span>
+                <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sh">"""</span><span class="s">
+    접근성은 빠른 추정이 의미가 적으므로 바로 확정 호출을 권장.
+    그래도 호출 시그니처를 맞추기 위해 quick_budget_ms를 남겨둠.
+    </span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="nf">confirm_access</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="c1"># ---------------------------------------
+# OK 활성화 판정(다이얼로그 용)
+# ---------------------------------------
+</span><span class="k">def</span> <span class="nf">can_accept_open_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                         <span class="n">require_filter_match</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                         <span class="n">name_patterns</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(),</span>
+                         <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                         <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nf">safe_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">quick_budget_ms</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">require_filter_match</span> <span class="ow">and</span> <span class="n">name_patterns</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="n">fnmatch</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">name</span>
+        <span class="k">return</span> <span class="nf">any</span><span class="p">(</span><span class="n">fnmatch</span><span class="p">.</span><span class="nf">fnmatch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">pat</span><span class="p">)</span> <span class="k">for</span> <span class="n">pat</span> <span class="ow">in</span> <span class="n">name_patterns</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">True</span>
+
+<span class="k">def</span> <span class="nf">can_accept_open_folder</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                           <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                           <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="nf">safe_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">quick_budget_ms</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">can_accept_save_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                         <span class="n">quick_budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                         <span class="n">confirm_timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">parent</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">safe_isdir</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">quick_budget_ms</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>포인트</p>
+
+<ul>
+  <li>
+    <p>어떤 경로든 하드코딩 규칙 없이 동일하게 다룬다.</p>
+  </li>
+  <li>
+    <p>quick 계열은 부모 디렉터리만 짧게 스캔해서 프리즈를 막고, 판단 불가일 때만 confirm(프로세스, 타임아웃)으로 확정한다.</p>
+  </li>
+  <li>
+    <p>UI에서는 <code class="language-plaintext highlighter-rouge">safe_isfile/safe_isdir/safe_exists</code>만 호출하면 되고, 느려 보이면 <code class="language-plaintext highlighter-rouge">quick_budget_ms</code>를 줄이거나 <code class="language-plaintext highlighter-rouge">confirm_timeout_ms</code>를 늘려 튜닝하면 된다.</p>
+  </li>
+</ul>
+
+<p>원하면 이 모듈을 <code class="language-plaintext highlighter-rouge">CFileDialog</code>의 <code class="language-plaintext highlighter-rouge">_is_selection_valid()</code>에 바로 붙인 예시도 덧붙여줄게.</p>
+
+<p class="chat--user">
+
+worker가 1개인데 만약에 async나 thread로 confirm_isfile이 불려도 상관없나?
+
+</p>
+
+<p>결론부터 말하면, 지금 올려둔 <code class="language-plaintext highlighter-rouge">confirm_isfile()</code>처럼 <strong>호출할 때마다<code class="language-plaintext highlighter-rouge">ProcessPoolExecutor(max_workers=1)</code>를 만들고 닫는 구조</strong>라면,<br />
+여러 스레드·async 컨텍스트에서 동시에 호출되어도 서로 독립적으로 돌아서 문제 없습니다. 각 호출이 자기 전용 프로세스를 잠깐 띄웠다가 타임아웃/완료 후 종료하니까요. 다만 <strong>동시 호출 수만큼 프로세스 생성 오버헤드</strong> 가 생깁니다(특히 Windows/macOS에서 spawn 비용 큼).</p>
+
+<p>원하는 운영 방식에 따라 선택지가 두 가지예요.</p>
+
+<h1 id="옵션-a-지금처럼-호출-단위-풀-생성">옵션 A: 지금처럼 “호출 단위 풀 생성”</h1>
+
+<ul>
+  <li>
+    <p>장점: 동시 호출 안전(완전 독립), 리소스 누수 없음, 구현 간단.</p>
+  </li>
+  <li>
+    <p>단점: 호출이 잦거나 동시에 많이 들어오면 프로세스 생성 오버헤드↑.</p>
+  </li>
+  <li>
+    <p>스레드/async에서 동시에 불러도 OK. 단, async에서는 반드시 이벤트루프를 블로킹하지 않게 감싸야 함(아래 참고).</p>
+  </li>
+</ul>
+
+<h1 id="옵션-b-공용-풀을-하나만-두고-직렬병렬-제어">옵션 B: “공용 풀”을 하나만 두고 직렬/병렬 제어</h1>
+
+<ul>
+  <li>
+    <p>장점: 프로세스 생성/해제 오버헤드↓, 캐시를 얹기도 쉬움.</p>
+  </li>
+  <li>
+    <p>단점: <code class="language-plaintext highlighter-rouge">max_workers=1</code>로 두면 요청이 큐에 쌓여 <strong>직렬 처리</strong> 됩니다. 여러 호출이 동시에 들어오면 뒤에 오는 건 타임아웃될 수 있어요. 병렬을 원하면 2~4로 늘리면 됩니다.</p>
+  </li>
+</ul>
+
+<p>아래는 두 옵션의 안전한 패턴과 async/스레드에서 쓰는 방법입니다.</p>
+
+<h2 id="옵션-a-유지호출-단위-풀--async스레드에서-호출">옵션 A 유지(호출 단위 풀) + async/스레드에서 호출</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 동기 호출은 그대로 사용
+</span><span class="n">ok</span> <span class="o">=</span> <span class="nf">confirm_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="c1"># 스레드에서 호출 (GUI 이벤트 루프 안막음)
+</span><span class="kn">import</span> <span class="n">threading</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nf">confirm_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">daemon</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">t</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+
+<span class="c1"># asyncio에서 호출 (반드시 run_in_executor/to_thread로 감싸기)
+</span><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">confirm_isfile_async</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="mi">150</span><span class="p">):</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">confirm_isfile</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+
+<span class="c1"># 사용
+</span><span class="n">ok</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">confirm_isfile_async</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="옵션-b-공용-풀권장-파라미터-예시-max_workers24">옵션 B: 공용 풀(권장 파라미터 예시: max_workers=2~4)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># file_checks_pool.py
+</span><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">from</span> <span class="n">concurrent.futures</span> <span class="kn">import</span> <span class="n">ProcessPoolExecutor</span><span class="p">,</span> <span class="nb">TimeoutError</span>
+<span class="n">_pool</span> <span class="o">=</span> <span class="nc">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># 병렬 2개
+</span>
+<span class="k">def</span> <span class="nf">_mp_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span> <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span> <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">confirm_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
+    <span class="n">fut</span> <span class="o">=</span> <span class="n">_pool</span><span class="p">.</span><span class="nf">submit</span><span class="p">(</span><span class="n">_mp_isfile</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nf">bool</span><span class="p">(</span><span class="n">fut</span><span class="p">.</span><span class="nf">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout_ms</span><span class="o">/</span><span class="mi">1000</span><span class="p">))</span>
+    <span class="k">except</span> <span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="c1"># 종료 시 정리(앱 종료 훅이나 다이얼로그 closeEvent에서 호출)
+</span><span class="k">def</span> <span class="nf">shutdown_pool</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span> <span class="n">_pool</span><span class="p">.</span><span class="nf">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cancel_futures</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+</code></pre></div></div>
+
+<h3 id="async-래퍼">async 래퍼</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># asyncio에서 블로킹 피하기
+</span><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">from</span> <span class="n">file_checks_pool</span> <span class="kn">import</span> <span class="n">confirm_isfile</span> <span class="k">as</span> <span class="n">_confirm_isfile</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">confirm_isfile_async</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="mi">150</span><span class="p">):</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">_confirm_isfile</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="스레드-안전성">스레드 안전성</h3>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ProcessPoolExecutor</code> 자체는 <strong>스레드 세이프</strong> 한 제출을 지원합니다. 여러 스레드에서 동시에 <code class="language-plaintext highlighter-rouge">submit()</code> 호출 가능.</p>
+  </li>
+  <li>
+    <p>단, <code class="language-plaintext highlighter-rouge">max_workers=1</code>이면 제출은 되지만 실행은 <strong>순차적</strong> 입니다. 여러 곳에서 동시에 타임아웃 짧게 걸고 기다리면, 뒤의 Future들이 타임아웃으로 False를 받게 되는 건 정상 동작입니다. 필요하면 <code class="language-plaintext highlighter-rouge">max_workers</code>를 늘리거나, 호출 측에서 디바운싱/리밋을 두세요.</p>
+  </li>
+</ul>
+
+<h1 id="추가-팁">추가 팁</h1>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">quick_*</code>(부모 나열 기반 추정)는 순수 I/O + 지역 루프이므로 <strong>스레드·async 동시 호출 안전</strong> 합니다. 공유 상태가 없고, GIL로 간단히 보호됩니다.</p>
+  </li>
+  <li>
+    <p>Qt/async 혼합 환경이면, 이벤트 루프를 막지 않도록 <code class="language-plaintext highlighter-rouge">confirm_*</code>를 항상 <code class="language-plaintext highlighter-rouge">run_in_executor</code>(또는 <code class="language-plaintext highlighter-rouge">to_thread</code>)로 감싸세요.</p>
+  </li>
+  <li>
+    <p>Windows/macOS에서 멀티프로세싱은 항상 <code class="language-plaintext highlighter-rouge">if __name__ == "__main__":</code> 가드가 필요합니다. Qt 앱 엔트리도 그 안에서 시작하세요.</p>
+  </li>
+  <li>
+    <p>공용 풀을 쓴다면 앱 종료 시 <code class="language-plaintext highlighter-rouge">shutdown_pool()</code> 호출로 정리하는 습관을 들이면 좋습니다.</p>
+  </li>
+</ul>
+
+<p>정리:</p>
+
+<ul>
+  <li>
+    <p>지금 구조(호출 단위 풀)는 <strong>동시 호출에도 안전</strong> 하지만 오버헤드가 큽니다.</p>
+  </li>
+  <li>
+    <p>공용 풀은 <strong>효율적</strong> 이고 스레드·async 모두 안전하되, <code class="language-plaintext highlighter-rouge">max_workers</code> 설정에 따라 직렬/병렬 특성이 달라지니 호출 패턴에 맞춰 수치만 잡으면 됩니다.</p>
+  </li>
+</ul>
+
+<p class="chat--user">
+
+근데 보니까 aiofiles 라는 패키지가 있네. 멀티프로세싱 대신 이걸 타임아웃 걸어서 쓰는건 어떨까
+
+</p>
+
+<p>좋은 발상인데, 딱 정리하면 이렇습니다.</p>
+
+<ul>
+  <li>
+    <p>aiofiles는 파일 열기/읽기 같은 파일 I/O를 비동기로 다루기 위해 내부적으로 스레드풀을 씁니다. <code class="language-plaintext highlighter-rouge">os.path.isfile</code> 같은 stat 계열은 aiofiles가 감싸주지 않으니 <code class="language-plaintext highlighter-rouge">asyncio.to_thread</code>나 <code class="language-plaintext highlighter-rouge">run_in_executor</code>로 직접 감싸야 합니다.</p>
+  </li>
+  <li>
+    <p>타임아웃은 <code class="language-plaintext highlighter-rouge">asyncio.wait_for</code>로 손쉽게 걸 수 있지만, 커널에서 stat이 오래 블록되면 스레드는 계속 붙잡혀 있고 코루틴만 취소됩니다. 즉, GUI는 살지만 백그라운드 스레드가 “끝날 때까지” 남습니다. 반면 멀티프로세싱은 프로세스를 내려서 정리할 수 있다는 차이가 있어요.</p>
+  </li>
+  <li>
+    <p>정리: 이미 앱에 asyncio 루프(예: qasync 사용)가 있고, 네트워크 환경이 아주 험하지 않다면 aiofiles/스레드 경로가 간단하고 충분합니다. 오랫동안 먹통이 되는 경로가 많다면 멀티프로세싱이 더 안전합니다.</p>
+  </li>
+</ul>
+
+<p>아래는 깔끔한 비동기 버전입니다. 하드코딩 규칙 없이, 타임박스 중심으로 동작합니다.</p>
+
+<h3 id="1-빠른-추정동기-부모-나열-타임박스">1) 빠른 추정(동기, 부모 나열 타임박스)</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="k">def</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nc">Path</span><span class="p">(</span><span class="n">path</span><span class="p">);</span> <span class="n">parent</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">name</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">os</span><span class="p">.</span><span class="nf">scandir</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="k">as</span> <span class="n">it</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+                <span class="nf">if </span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="nf">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&gt;</span> <span class="n">budget_ms</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">None</span>
+                <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_dir</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span>
+                    <span class="k">elif</span> <span class="n">entry</span><span class="p">.</span><span class="nf">is_file</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="sh">"</span><span class="s">file</span><span class="sh">"</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="sh">"</span><span class="s">other</span><span class="sh">"</span>
+                <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="sh">"</span><span class="s">other</span><span class="sh">"</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">quick_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">quick_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">quick_exists</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nf">_parent_scan_type</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="sh">"</span><span class="s">file</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">dir</span><span class="sh">"</span><span class="p">,</span><span class="sh">"</span><span class="s">other</span><span class="sh">"</span><span class="p">))</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<h3 id="2-aiofiles-없이-asyncio로-확정-확인-스레드풀--타임아웃">2) aiofiles 없이 asyncio로 “확정 확인” (스레드풀 + 타임아웃)</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">confirm_isfile_async</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+    <span class="n">coro</span> <span class="o">=</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isfile</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_ms</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">confirm_isdir_async</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+    <span class="n">coro</span> <span class="o">=</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isdir</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_ms</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">confirm_exists_async</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">get_running_loop</span><span class="p">()</span>
+    <span class="n">coro</span> <span class="o">=</span> <span class="n">loop</span><span class="p">.</span><span class="nf">run_in_executor</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">wait_for</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_ms</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="p">.</span><span class="nb">TimeoutError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>참고: aiofiles를 꼭 쓰고 싶다면 <code class="language-plaintext highlighter-rouge">await asyncio.wait_for(asyncio.to_thread(os.path.isfile, path), timeout)</code>처럼 동일하게 감싸면 됩니다. 실질적으로는 위 코드와 같습니다.</p>
+
+<h3 id="3-안전-래퍼-빠른-추정--필요-시-비동기-확정">3) 안전 래퍼: 빠른 추정 → 필요 시 비동기 확정</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="k">def</span> <span class="nf">safe_isfile_async</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">quick_budget_ms</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_isfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">q</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="k">await</span> <span class="nf">confirm_isfile_async</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">safe_isdir_async</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">quick_budget_ms</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_isdir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">q</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="k">await</span> <span class="nf">confirm_isdir_async</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">safe_exists_async</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">quick_budget_ms</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">confirm_timeout_ms</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nf">quick_exists</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">budget_ms</span><span class="o">=</span><span class="n">quick_budget_ms</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">q</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="k">await</span> <span class="nf">confirm_exists_async</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="n">confirm_timeout_ms</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="4-pyside6와-같이-쓰는-방법">4) PySide6와 같이 쓰는 방법</h3>
+
+<ul>
+  <li>
+    <p>Qt 이벤트 루프와 asyncio를 함께 쓰려면 qasync를 쓰는 게 깔끔합니다.</p>
+  </li>
+  <li>
+    <p>버튼 클릭 시 <code class="language-plaintext highlighter-rouge">asyncio.create_task(safe_isfile_async(...))</code>로 던지고, 완료되면 OK 버튼 상태를 갱신합니다.</p>
+  </li>
+  <li>
+    <p>타임아웃이 발생해도 스레드는 죽지 않고 백그라운드에서 끝까지 돌 수 있습니다. 보통 문제 없지만, 호출 폭주를 막으려면 디바운스/동시 실행 제한을 두세요.</p>
+  </li>
+</ul>
+
+<h3 id="5-멀티프로세싱과-비교한-장단점-요약">5) 멀티프로세싱과 비교한 장단점 요약</h3>
+
+<ul>
+  <li>
+    <p>aiofiles/스레드 방식</p>
+
+    <ul>
+      <li>
+        <p>장점: 설정 간단, 프로세스 스폰 오버헤드 없음, UI와 자연스러운 연동.</p>
+      </li>
+      <li>
+        <p>단점: 타임아웃이 걸려도 실제 OS 호출 스레드는 살아 있어 누적될 수 있음. 아주 느린 네트워크/autofs에서 많이 호출하면 스레드풀 고갈 가능성.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>멀티프로세싱</p>
+
+    <ul>
+      <li>
+        <p>장점: 최악의 블로킹에서 격리 안전. 필요시 프로세스 종료로 강제 정리 가능.</p>
+      </li>
+      <li>
+        <p>단점: 스폰 비용, 코드·배포 복잡도 증가.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>실전 추천은 이렇습니다.</p>
+
+<ul>
+  <li>
+    <p>앱이 이미 qasync로 asyncio를 쓰고 있고, 경로 확인 호출 빈도가 낮거나 중간 정도라면 위 비동기 스레드풀+타임아웃 구성이 가장 단순합니다.</p>
+  </li>
+  <li>
+    <p>네트워크 마운트가 “자주” 느려지는 환경이면, 비동기 버전을 기본으로 쓰되, 타임아웃이 일정 횟수 연속 발생할 때만 멀티프로세싱 경로로 자동 폴백하는 하이브리드가 제일 튼튼합니다.</p>
+  </li>
+</ul>]]></content><author><name>hvppyarchive</name></author><category term="python" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">웹 한글 키보드 추가</title><link href="https://hvppyarchive.github.io/misc/web-korean-keyboard/" rel="alternate" type="text/html" title="웹 한글 키보드 추가" /><published>2025-11-07T20:48:31+09:00</published><updated>2025-11-07T20:48:31+09:00</updated><id>https://hvppyarchive.github.io/misc/web-korean-keyboard</id><content type="html" xml:base="https://hvppyarchive.github.io/misc/web-korean-keyboard/"><![CDATA[<p class="chat--user">
 
 &lt;!DOCTYPE HTML&gt; &lt;html&gt; &lt;head&gt; <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <link href="kbd.css" rel="stylesheet" type="text/css" /> <script src="kbd.js"></script> <script> var controller, visible = true; function onPageLoaded() { var input = document.getElementById('t1'); controller = new i18n.input.keyboard.Keyboard(); controller.loadLayout('vi_telex'); controller.loadLayout('vi_vni'); controller.loadLayout('deva_phone'); controller.loadLayout('gu_phone'); controller.loadLayout('ar'); controller.loadLayout('he'); controller.loadLayout('ps'); controller.loadLayout('ur'); controller.loadLayout('fa'); controller.loadLayout('ko'); controller.loadLayout('bg_phone'); controller.loadLayout('yi'); controller.loadLayout('fr'); controller.loadLayout('ml_phone'); controller.loadLayout('kn_phone'); controller.loadLayout('sa_phone'); controller.loadLayout('ca'); controller.loadLayout('th_pattajoti'); controller.loadLayout('th_tis'); controller.loadLayout('ta_typewriter'); controller.loadLayout('ta_itrans'); controller.loadLayout('ne_inscript'); controller.loadLayout('ne_phone'); controller.loadLayout('us_intl'); controller.loadLayout('ethi'); controller.loadLayout('nv'); controller.reposition(input, 5, 4, [5, 0, 0, 0]); controller.activateLayout('ne_inscript'); controller.register(input); controller.addEventListener( 'kc', function() { visible = false; }); input.focus(); } function onLayoutSelected(layoutCode) { controller.activateLayout(layoutCode); document.getElementById('t1').focus(); } function toggle() { if (controller) { controller.setVisible(visible = !visible); } } </script> &lt;/head&gt; &lt;body onload='onPageLoaded()'&gt; <select onchange="onLayoutSelected(this.value)"> <option value="vi_vni">vi_vni</option> <option value="ml_phone">ml_phone</option> <option value="vi_telex">vi_telex</option> <option value="deva_phone">deva_phone</option> <option value="gu_phone">gu_phone</option> <option value="ar">ar</option> <option value="he">he</option> <option value="ps">ps</option> <option value="ur">ur</option> <option value="fa">fa</option> <option value="ko">ko</option> <option value="yi">yi</option> <option value="bg_phone">bg_phone</option> <option value="fr">fr</option> <option value="kn_phone">kn_phone</option> <option value="sa_phone">sa_phone</option> <option value="ca">ca</option> <option value="th_pattajoti">th_pattajoti</option> <option value="th_tis">th_tis</option> <option value="ta_typewriter">ta_typewriter</option> <option value="ta_itrans">ta_itrans</option> <option value="ne_inscript" selected="">ne_inscript</option> <option value="ne_phone">ne_phone</option> <option value="us_intl">us_intl</option> <option value="ethi">ethi</option> <option value="nv">nv</option> </select> <input type="input" id="t1" style="width: 400px" /> <input type="button" value="Toggle show/hide" onclick="javascript:toggle()" /> <br /> &lt;/body&gt; &lt;/html&gt; 이 코드 해석 좀
 
