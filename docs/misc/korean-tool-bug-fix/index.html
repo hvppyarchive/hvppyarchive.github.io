@@ -1,0 +1,1443 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>영문 키보드 한글 변환 버그 수정 - ARCHIVE</title>
+<meta name="description" content="">
+
+
+  <meta name="author" content="hvppyarchive">
+  
+  <meta property="article:author" content="hvppyarchive">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARCHIVE">
+<meta property="og:title" content="영문 키보드 한글 변환 버그 수정">
+<meta property="og:url" content="https://hvppyarchive.github.io/misc/korean-tool-bug-fix/">
+
+
+  <meta property="og:description" content="">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-11-13T14:00:09+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://hvppyarchive.github.io/misc/korean-tool-bug-fix/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<!-- hvppyarchive: add fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+ <!-- hvppyarchive: add favicons -->
+<link rel="icon" type="image/png" href="/assets/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/assets/favicon/site.webmanifest" />
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          ARCHIVE
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/year-archive/"
+                
+                
+              >Posts</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="영문 키보드 한글 변환 버그 수정">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2025-11-13T14:00:09+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://hvppyarchive.github.io/misc/korean-tool-bug-fix/" itemprop="url">영문 키보드 한글 변환 버그 수정
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-13T14:00:09+09:00">2025-11-13</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p class="chat--user">
+
+영어 입력을 한글로 바꿔버리는 js 코드야. // https://github.com/nonsensejoke/korean-keyboard export class KoreanInput { constructor() { // Keyboard mapping in normal state this.normalMap = { // Consonants (초성/종성) 'q': 'ㅂ', 'w': 'ㅈ', 'e': 'ㄷ', 'r': 'ㄱ', 't': 'ㅅ', 'a': 'ㅁ', 's': 'ㄴ', 'd': 'ㅇ', 'f': 'ㄹ', 'g': 'ㅎ', 'z': 'ㅋ', 'x': 'ㅌ', 'c': 'ㅊ', 'v': 'ㅍ', // Vowels (중성) 'y': 'ㅛ', 'u': 'ㅕ', 'l': 'ㅣ', 'o': 'ㅐ', 'p': 'ㅔ', 'h': 'ㅗ', 'j': 'ㅓ', 'k': 'ㅏ', 'i': 'ㅑ', 'b': 'ㅠ', 'n': 'ㅜ', 'm': 'ㅡ' }; // Keyboard mapping in Shift state this.shiftMap = { // Double consonants 'Q': 'ㅃ', 'W': 'ㅉ', 'E': 'ㄸ', 'R': 'ㄲ', 'T': 'ㅆ', // Compound vowels 'O': 'ㅒ', 'P': 'ㅖ', // Other keys keep original mapping (lowercase to uppercase) 'q': 'ㅃ', 'w': 'ㅉ', 'e': 'ㄸ', 'r': 'ㄲ', 't': 'ㅆ', 'o': 'ㅒ', 'p': 'ㅖ' }; // Hangul character range constants this.HANGUL_BASE = 0xAC00; this.CHOSUNG_BASE = 0x1100; this.JUNGSUNG_BASE = 0x1161; this.JONGSUNG_BASE = 0x11A7; // Choseong (initials) (19) this.chosungList = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']; // Jungseong (medials) (21) this.jungsungList = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ']; // Jongseong (finals) (28, includes empty) this.jongsungList = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']; // Full Hangul composition engine data structures (ported from reference project) this.initial = [12593, 12594, 12596, 12599, 12600, 12601, 12609, 12610, 12611, 12613, 12614, 12615, 12616, 12617, 12618, 12619, 12620, 12621, 12622]; this.finale = [0, 12593, 12594, 12595, 12596, 12597, 12598, 12599, 12601, 12602, 12603, 12604, 12605, 12606, 12607, 12608, 12609, 12610, 12612, 12613, 12614, 12615, 12616, 12618, 12619, 12620, 12621, 12622]; this.dMedial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 800, 801, 820, 0, 0, 1304, 1305, 1320, 0, 0, 1820]; this.dFinale = [0, 0, 0, 119, 0, 422, 427, 0, 0, 801, 816, 817, 819, 825, 826, 827, 0, 0, 1719, 0, 1919]; // Unicode constants this.SBase = 44032; this.LBase = 4352; this.VBase = 12623; this.TBase = 4519; this.LCount = 19; this.VCount = 21; this.TCount = 28; this.NCount = 588; this.SCount = 11172; // Input mode state this.mode = 'EN'; // 'KO' or 'EN' // Removal mode state this.removeMode = "Syllable"; // "Syllable" or "Jamo" } isKoreanMode() { return this.mode === 'KO'; } isEnglishMode() { return this.mode === 'EN'; } setKoreanMode() { this.mode = 'KO'; } setEnglishMode() { this.mode = 'EN'; } isRemoveModeSyllable() { return this.removeMode === "Syllable"; } isRemoveModeJamo() { return this.removeMode === "Jamo"; } setRemoveModeToSyllable() { this.removeMode = "Syllable"; } setRemoveModeToJamo() { this.removeMode = "Jamo"; } // Find index of a value in an array (utility) indexOf(array, value) { for (let i = 0; i &lt; array.length; i++) { if (array[i] === value) { return i; } } return -1; } // Get character mapping getCharacter(key, isShift) { if (isShift &amp;&amp; this.shiftMap[key]) { return this.shiftMap[key]; } return this.normalMap[key.toLowerCase()] || null; } // Complete Hangul composition algorithm (ported and optimized from reference project) composeHangul(inputString) { const length = inputString.length; if (length === 0) { return ""; } let currentCharCode = inputString.charCodeAt(0); let result = String.fromCharCode(currentCharCode); for (let i = 1; i &lt; length; i++) { const nextCharCode = inputString.charCodeAt(i); const initialIndex = this.indexOf(this.initial, currentCharCode); // Initial + medial → syllable if (initialIndex !== -1) { const vowelOffset = nextCharCode - this.VBase; if (0 &lt;= vowelOffset &amp;&amp; vowelOffset &lt; this.VCount) { currentCharCode = this.SBase + (initialIndex * this.VCount + vowelOffset) * this.TCount; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } } // Vowel + vowel → compound vowel const currentVowelOffset = currentCharCode - this.VBase; const nextVowelOffset = nextCharCode - this.VBase; if (0 &lt;= currentVowelOffset &amp;&amp; currentVowelOffset &lt; this.VCount &amp;&amp; 0 &lt;= nextVowelOffset &amp;&amp; nextVowelOffset &lt; this.VCount) { const dMedialIndex = this.indexOf(this.dMedial, (currentVowelOffset * 100) + nextVowelOffset); if (dMedialIndex &gt; 0) { currentCharCode = this.VBase + dMedialIndex; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } } const syllableOffset = currentCharCode - this.SBase; // Syllable + final → complete syllable if (0 &lt;= syllableOffset &amp;&amp; syllableOffset &lt; 11145 &amp;&amp; (syllableOffset % this.TCount) === 0) { const finaleIndex = this.indexOf(this.finale, nextCharCode); if (finaleIndex !== -1) { currentCharCode += finaleIndex; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } // Handle compound medial const vowelIndex = Math.floor((syllableOffset % this.NCount) / this.TCount); const dMedialIndex = this.indexOf(this.dMedial, (vowelIndex * 100) + (nextCharCode - this.VBase)); if (dMedialIndex &gt; 0) { currentCharCode += (dMedialIndex - vowelIndex) * this.TCount; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } } // Complete syllable + vowel → split final + new syllable (key fix!) if (0 &lt;= syllableOffset &amp;&amp; syllableOffset &lt; 11172 &amp;&amp; (syllableOffset % this.TCount) !== 0) { const finaleIndex = syllableOffset % this.TCount; const vowelOffset = nextCharCode - this.VBase; if (0 &lt;= vowelOffset &amp;&amp; vowelOffset &lt; this.VCount) { const newInitialIndex = this.indexOf(this.initial, this.finale[finaleIndex]); if (0 &lt;= newInitialIndex &amp;&amp; newInitialIndex &lt; this.LCount) { // Remove final, create new syllable result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode - finaleIndex); currentCharCode = this.SBase + (newInitialIndex * this.VCount + vowelOffset) * this.TCount; result = result + String.fromCharCode(currentCharCode); continue; } // Handle compound final decomposition if (finaleIndex &lt; this.dFinale.length &amp;&amp; this.dFinale[finaleIndex] !== 0) { result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode - finaleIndex + Math.floor(this.dFinale[finaleIndex] / 100)); currentCharCode = this.SBase + (this.indexOf(this.initial, this.finale[(this.dFinale[finaleIndex] % 100)]) * this.VCount + vowelOffset) * this.TCount; result = result + String.fromCharCode(currentCharCode); continue; } } // Handle compound final const dFinaleIndex = this.indexOf(this.dFinale, (finaleIndex * 100) + this.indexOf(this.finale, nextCharCode)); if (dFinaleIndex &gt; 0) { currentCharCode = currentCharCode + dFinaleIndex - finaleIndex; result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode); continue; } } // Cannot compose; append new character currentCharCode = nextCharCode; result = result + String.fromCharCode(nextCharCode); } return result; } // Decompose Hangul characters (per reference project) decomposeHangul(inputString) { const length = inputString.length; let result = ""; for (let i = 0; i &lt; length; i++) { const charCode = inputString.charCodeAt(i); const syllableOffset = charCode - this.SBase; // Check if Hangul syllable if (syllableOffset &lt; 0 || syllableOffset &gt;= this.SCount) { result += String.fromCharCode(charCode); continue; } // Decompose syllable const initialIndex = Math.floor(syllableOffset / this.NCount); const vowelCode = this.VBase + Math.floor((syllableOffset % this.NCount) / this.TCount); const finaleCode = this.finale[syllableOffset % this.TCount]; result += String.fromCharCode(this.initial[initialIndex], vowelCode); if (finaleCode !== 0) { result += String.fromCharCode(finaleCode); } } return result; } // Smart insert — improved handling of Hangul composition with completion detection smartInsert(currentText, cursorStart, cursorEnd, newChar) { // 1. Build new text: insert new character const textBefore = currentText.substring(0, cursorStart); const textAfter = currentText.substring(cursorEnd); const tempText = textBefore + newChar + textAfter; const tempCursorPos = cursorStart + newChar.length; // 2. Hangul composition: try sequences of different lengths for (let testLength = Math.min(4, tempCursorPos); testLength &gt;= 2; testLength–) { const testChars = tempText.substring(tempCursorPos - testLength, tempCursorPos); const composed = this.composeHangul(testChars); // 3. If composition succeeds (length reduces or content changes), replace if (composed.length &lt; testChars.length || composed !== testChars) { const newText = tempText.substring(0, tempCursorPos - testLength) + composed + tempText.substring(tempCursorPos); const newCursorPos = tempCursorPos - testLength + composed.length; return { text: newText, cursorPosition: newCursorPos, }; } } return { text: tempText, cursorPosition: tempCursorPos, }; } // Reset state reset() { this.setRemoveModeToSyllable(); } // Handle backspace — using the new decomposeHangul implementation handleBackspace(currentText) { if (currentText.length === 0) return ''; if (this.isRemoveModeSyllable()) { // Remove entire syllable this.reset(); return currentText.slice(0, -1); } const lastChar = currentText[currentText.length - 1]; const decomposedLastChar = this.decomposeHangul(lastChar); // Check if Hangul character (by decomposed length) if (decomposedLastChar.length &gt; 1) { // Is Hangul; process per reference logic const decomposedArray = Array.from(decomposedLastChar); if (decomposedArray.length &gt; 1) { // Remove the last jamo, then recompose const remaining = decomposedArray.slice(0, -1).join(''); const recomposed = this.composeHangul(remaining); if (recomposed.length == 0) { this.reset(); } return currentText.slice(0, -1) + recomposed; } } // Not Hangul or cannot decompose; delete directly this.reset(); return currentText.slice(0, -1); } isEditorShortcut(e){ const altGraph = e.getModifierState &amp;&amp; e.getModifierState('AltGraph'); const ctrlMeta = e.ctrlKey || e.metaKey; const ctrlAlt = e.ctrlKey &amp;&amp; e.altKey; return altGraph || ctrlAlt || ctrlMeta; } handleKeyDown(e) { const editable = e.target; if (!this.isKoreanMode()) return; if (!editable) return; if (editable.tagName !== 'INPUT' &amp;&amp; editable.tagName !== 'TEXTAREA') return; if (this.isEditorShortcut(e)) { return; } if (e.key === 'Backspace') { e.preventDefault(); // Get cursor positions const cursorStart = editable.selectionStart; const cursorEnd = editable.selectionEnd; if (cursorStart === cursorEnd) { // Simple delete: remove one character before cursor if (cursorStart &gt; 0) { const textBefore = editable.value.substring(0, cursorStart); const textAfter = editable.value.substring(cursorStart); // Apply smart Hangul backspace to text before cursor const newTextBefore = this.handleBackspace(textBefore); const newText = newTextBefore + textAfter; editable.value = newText; // Set new cursor position const newCursorPos = newTextBefore.length; editable.setSelectionRange(newCursorPos, newCursorPos); } } else { // Selection delete: remove selected text const textBefore = editable.value.substring(0, cursorStart); const textAfter = editable.value.substring(cursorEnd); const newText = textBefore + textAfter; editable.value = newText; editable.setSelectionRange(cursorStart, cursorStart); this.reset(); } // Note: do not call koreanInput.reset() here; state already restored above return; } if (e.key === ' ') { e.preventDefault(); const cursorStart = editable.selectionStart; const textBefore = editable.value.substring(0, cursorStart); const textAfter = editable.value.substring(editable.selectionEnd); editable.value = textBefore + ' ' + textAfter; // Move cursor after the space const newCursorPos = cursorStart + 1; editable.setSelectionRange(newCursorPos, newCursorPos); // Reset Hangul input state this.reset(); return; } // Ignore other special keys if (e.key.length &gt; 1 &amp;&amp; e.key !== 'Shift') { this.reset(); return; } const char = this.getCharacter(e.key, e.shiftKey); if (char) { e.preventDefault(); // Update input content const cursorPos = editable.selectionStart; // New Hangul input logic: smart cursor insertion handling const insertResult = this.smartInsert(editable.value, cursorPos, editable.selectionEnd, char); // Update text and cursor position editable.value = insertResult.text; editable.setSelectionRange(insertResult.cursorPosition, insertResult.cursorPosition); this.setRemoveModeToJamo(); } } }
+
+</p>
+
+<p>요약부터 할게요.<br />
+이 코드는 “영문 키보드(QWERTY)로 치는 키다운 이벤트를 가로채서, 실제로는 한글 자모를 조합해 완성형 한글로 넣어주는 소프트웨어 한글 키보드 엔진”이에요.</p>
+
+<p>아래에서 구조를 단계별로 뜯어서 설명하고, 마지막에 개선 포인트랑 실제 사용 예시도 적어볼게요.</p>
+
+<hr />
+
+<h2 id="1-키-매핑-부분">1. 키 매핑 부분</h2>
+
+<h3 id="normalmap--shiftmap">normalMap / shiftMap</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.normalMap = {
+  'q': 'ㅂ', 'w': 'ㅈ', 'e': 'ㄷ', 'r': 'ㄱ', 't': 'ㅅ',
+  'a': 'ㅁ', 's': 'ㄴ', 'd': 'ㅇ', 'f': 'ㄹ', 'g': 'ㅎ',
+  'z': 'ㅋ', 'x': 'ㅌ', 'c': 'ㅊ', 'v': 'ㅍ',
+
+  'y': 'ㅛ', 'u': 'ㅕ', 'l': 'ㅣ', 'o': 'ㅐ', 'p': 'ㅔ',
+  'h': 'ㅗ', 'j': 'ㅓ', 'k': 'ㅏ', 'i': 'ㅑ',
+  'b': 'ㅠ', 'n': 'ㅜ', 'm': 'ㅡ'
+};
+</code></pre></div></div>
+
+<p>딱 표준 두벌식 자판 그대로 매핑돼 있죠.</p>
+
+<p><code class="language-plaintext highlighter-rouge">shiftMap</code>은 쌍자음/복모음만 별도로 정의해둔 상태이고:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.shiftMap = {
+  'Q': 'ㅃ', 'W': 'ㅉ', 'E': 'ㄸ', 'R': 'ㄲ', 'T': 'ㅆ',
+  'O': 'ㅒ', 'P': 'ㅖ',
+
+  // 아래는 사실상 위랑 같은 의미 (소문자지만 shift 상태일 때)
+  'q': 'ㅃ', 'w': 'ㅉ', 'e': 'ㄸ', 'r': 'ㄲ', 't': 'ㅆ',
+  'o': 'ㅒ', 'p': 'ㅖ'
+};
+</code></pre></div></div>
+
+<p>그리고 <code class="language-plaintext highlighter-rouge">getCharacter</code>에서 이렇게 쓰죠:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+getCharacter(key, isShift) {
+    if (isShift &amp;&amp; this.shiftMap[key]) {
+        return this.shiftMap[key];
+    }
+    return this.normalMap[key.toLowerCase()] || null;
+}
+</code></pre></div></div>
+
+<p>여기서 포인트:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">isShift</code>가 true면, 원래 눌린 키 그대로(<code class="language-plaintext highlighter-rouge">key</code>)로 <code class="language-plaintext highlighter-rouge">shiftMap</code>을 먼저 찾고,</p>
+  </li>
+  <li>
+    <p>없으면 <code class="language-plaintext highlighter-rouge">normalMap</code>에서 <code class="language-plaintext highlighter-rouge">toLowerCase()</code> 해서 찾음.</p>
+  </li>
+</ul>
+
+<p>즉<br />
+Shift+q → <code class="language-plaintext highlighter-rouge">shiftMap['q']</code> → 'ㅃ'<br />
+q → <code class="language-plaintext highlighter-rouge">normalMap['q']</code> → 'ㅂ'<br />
+이런 동작이니 의도대로 잘 설계되어 있어요.</p>
+
+<p>다만 <code class="language-plaintext highlighter-rouge">shiftMap</code>에 대문자랑 소문자 둘 다 넣은 건 조금 중복이라, 둘 중 하나만 써도 되긴 합니다. 어차피 실제로 브라우저 <code class="language-plaintext highlighter-rouge">event.key</code>는 Shift+q일 때 <code class="language-plaintext highlighter-rouge">'Q'</code>로 들어오기 때문에, <code class="language-plaintext highlighter-rouge">shiftMap</code>을 대문자 기준으로만 두고 <code class="language-plaintext highlighter-rouge">getCharacter</code>에서 <code class="language-plaintext highlighter-rouge">this.shiftMap[key] || this.shiftMap[key.toLowerCase()]</code> 같은 식으로 처리해도 돼요.</p>
+
+<hr />
+
+<h2 id="2-한글-조합에-필요한-상수테이블들">2. 한글 조합에 필요한 상수/테이블들</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.SBase = 44032;
+this.LBase = 4352;
+this.VBase = 12623;
+this.TBase = 4519;
+this.LCount = 19;
+this.VCount = 21;
+this.TCount = 28;
+this.NCount = 588;
+this.SCount = 11172;
+</code></pre></div></div>
+
+<p>이건 유니코드 한글 조합 공식 그대로:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">SBase</code> : '가' 코드 포인트 (U+AC00)</p>
+  </li>
+  <li>
+    <p>초성 19개, 중성 21개, 종성 28개</p>
+  </li>
+  <li>
+    <p>하나의 초성·중성 조합이 588(21×28)개</p>
+  </li>
+  <li>
+    <p>전체 완성형 11172(19×21×28)개</p>
+  </li>
+</ul>
+
+<p>그리고 <code class="language-plaintext highlighter-rouge">initial</code>, <code class="language-plaintext highlighter-rouge">finale</code>, <code class="language-plaintext highlighter-rouge">dMedial</code>, <code class="language-plaintext highlighter-rouge">dFinale</code>는 참고 프로젝트에서 가져온 “자모 코드 테이블”이에요.</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">initial</code>: 초성에 해당하는 자모 유니코드</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">finale</code>: 종성에 해당하는 자모 유니코드 (0은 종성 없음)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">dMedial</code>: 복모음 구성용 테이블</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">dFinale</code>: 겹받침 구성/분해용 테이블</p>
+  </li>
+</ul>
+
+<p>이렇게 테이블을 들고 있어야 복모음/겹받침 처리가 가능합니다.</p>
+
+<hr />
+
+<h2 id="3-핵심-composehangul">3. 핵심: composeHangul</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+composeHangul(inputString) {
+    const length = inputString.length;
+    if (length === 0) return "";
+    
+    let currentCharCode = inputString.charCodeAt(0);
+    let result = String.fromCharCode(currentCharCode);
+    
+    for (let i = 1; i &lt; length; i++) {
+        const nextCharCode = inputString.charCodeAt(i);
+        const initialIndex = this.indexOf(this.initial, currentCharCode);
+        ...
+    }
+    return result;
+}
+</code></pre></div></div>
+
+<p>이 함수의 역할은:</p>
+
+<ul>
+  <li>
+    <p>순수 자모들의 문자열(예: ㅎ ㅏ ㄴ ㄱ ㅡ ㄹ)을 받아서</p>
+  </li>
+  <li>
+    <p>가능한 한 많이 완성형으로 조합해서</p>
+  </li>
+  <li>
+    <p>결과 문자열(예: 한글)을 반환하는 것.</p>
+  </li>
+</ul>
+
+<p>내부 로직 순서가 중요해요.</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">초성 + 중성</code> → 한 글자 (예: ㄱ + ㅏ → 가)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">중성 + 중성</code> → 복모음 (ㅗ + ㅏ → ㅘ 등)</p>
+  </li>
+  <li>
+    <p>완성형 + 종성 → 받침 붙이기 (가 + ㄱ → 각)</p>
+  </li>
+  <li>
+    <p>완성형(받침 있음) + 모음 → 받침 쪼개서 다음 글자로 넘기기 (읽 + 어 → 일거 이런 식 메커니즘)</p>
+  </li>
+  <li>
+    <p>겹받침 만들기 / 쪼개기 로직 (<code class="language-plaintext highlighter-rouge">dFinale</code> 이용)</p>
+  </li>
+</ol>
+
+<p>이 알고리즘 덕분에 이런 입력이 자연스럽게 됩니다:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">gksrmf</code> → ㅎ ㅏ ㄴ ㄱ ㅡ ㄹ → "한글"</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">rhkqrns</code> → ㄱ ㅏ ㅇ ㅏ ㄴ ㅕ ㅇ → "강아녕" (타이핑 실수 예)</p>
+  </li>
+</ul>
+
+<p>이 코드는 한 글자씩 보면서 “조합이 가능한지”를 계속 체크하고, 가능하면 바로 이전 글자를 지우고 새로 합쳐 넣는 방식으로 구현되어 있어요.</p>
+
+<hr />
+
+<h2 id="4-decomposehangul-한글-분해">4. decomposeHangul: 한글 분해</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+decomposeHangul(inputString) {
+    ...
+    const syllableOffset = charCode - this.SBase;
+    if (syllableOffset &lt; 0 || syllableOffset &gt;= this.SCount) {
+        result += String.fromCharCode(charCode);
+        continue;
+    }
+    // 한글이면 초성/중성/종성 뽑아서 자모로 분해
+}
+</code></pre></div></div>
+
+<p>이 함수는 완성형 한글을 다시 초성·중성·종성 자모로 쪼갭니다.</p>
+
+<p>이게 왜 필요하냐면, 백스페이스에서 “자모 단위로 지우기”를 구현하려면, 마지막 글자를 분해해서 가장 마지막 자모만 날리고 다시 compose를 돌려서 재조합해야 하기 때문이에요.</p>
+
+<hr />
+
+<h2 id="5-smartinsert-커서-위치-고려해서-똑똑하게-삽입">5. smartInsert: 커서 위치 고려해서 똑똑하게 삽입</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+smartInsert(currentText, cursorStart, cursorEnd, newChar) {
+    const textBefore = currentText.substring(0, cursorStart);
+    const textAfter = currentText.substring(cursorEnd);
+    const tempText = textBefore + newChar + textAfter;
+    const tempCursorPos = cursorStart + newChar.length;
+    
+    for (let testLength = Math.min(4, tempCursorPos); testLength &gt;= 2; testLength--) {
+        const testChars = tempText.substring(tempCursorPos - testLength, tempCursorPos);
+        const composed = this.composeHangul(testChars);
+        ...
+    }
+}
+</code></pre></div></div>
+
+<p>핵심 아이디어:</p>
+
+<ul>
+  <li>
+    <p>새 자모를 커서 위치에 끼워 넣은 뒤</p>
+  </li>
+  <li>
+    <p>커서 기준 앞쪽 최대 4글자까지 잘라서 <code class="language-plaintext highlighter-rouge">composeHangul</code>을 돌려봄</p>
+  </li>
+  <li>
+    <p>조합이 일어나면 (길이가 줄어들거나 내용이 달라지면) 그 부분을 교체</p>
+  </li>
+  <li>
+    <p>그에 맞춰 커서 위치도 재계산</p>
+  </li>
+</ul>
+
+<p>그래서 중간에 커서를 옮겨서 타이핑해도, 가능한 범위 내에서 조합이 일어나게 됩니다.</p>
+
+<p>4글자 제한을 둔 건 성능과 실용성의 타협 같아요. 보통 한글 한 음절이 2~3자모 수준이니까.</p>
+
+<hr />
+
+<h2 id="6-handlebackspace-자모음절-단위-삭제">6. handleBackspace: 자모/음절 단위 삭제</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+handleBackspace(currentText) {
+    if (this.isRemoveModeSyllable()) {
+        this.reset();
+        return currentText.slice(0, -1);
+    }
+    
+    const lastChar = currentText[currentText.length - 1];
+    const decomposedLastChar = this.decomposeHangul(lastChar);
+    ...
+}
+</code></pre></div></div>
+
+<p>동작 순서:</p>
+
+<ol>
+  <li>
+    <p>기본 모드는 “음절 단위 삭제”</p>
+
+    <ul>
+      <li>그냥 마지막 글자 통째로 지워버림.</li>
+    </ul>
+  </li>
+  <li>
+    <p>한 번이라도 한글 조합을 하면 <code class="language-plaintext highlighter-rouge">setRemoveModeToJamo()</code>가 호출되기 때문에,</p>
+
+    <ul>
+      <li>그다음부터는 마지막 글자를 분해해서 마지막 자모만 한 단계씩 지우고 다시 조합.</li>
+    </ul>
+  </li>
+  <li>
+    <p>한글이 아니거나 분해 불가능하면 그냥 한 글자 삭제.</p>
+  </li>
+</ol>
+
+<p>이 설계 덕분에:</p>
+
+<ul>
+  <li>
+    <p>바로 직전에 입력한 한글은 자모 단위로 지워지고</p>
+  </li>
+  <li>
+    <p>딱히 조합 상태가 아니면 그냥 문자 단위로 삭제됩니다.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="7-handlekeydown-실제-이벤트-훅">7. handleKeyDown: 실제 이벤트 훅</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+handleKeyDown(e) {
+    const editable = e.target;
+    if (!this.isKoreanMode()) return;
+    if (!editable) return;
+    if (editable.tagName !== 'INPUT' &amp;&amp; editable.tagName !== 'TEXTAREA') return;
+    if (this.isEditorShortcut(e)) return;
+    ...
+}
+</code></pre></div></div>
+
+<p>크게 나누면:</p>
+
+<ol>
+  <li>
+    <p>현재 모드가 'KO'일 때만 동작</p>
+  </li>
+  <li>
+    <p>대상이 <code class="language-plaintext highlighter-rouge">&lt;input&gt;</code>이나 <code class="language-plaintext highlighter-rouge">&lt;textarea&gt;</code>일 때만 동작</p>
+  </li>
+  <li>
+    <p>Ctrl, Meta, AltGraph 같은 단축키 조합은 건드리지 않음</p>
+  </li>
+  <li>
+    <p>Backspace, Space, 일반 키를 각각 따로 처리</p>
+  </li>
+</ol>
+
+<p>조금 더 자세히:</p>
+
+<ul>
+  <li>
+    <p>Backspace: 커서 위치 보고, selection 여부 확인해서</p>
+
+    <ul>
+      <li>선택 영역 삭제 / 한 글자 삭제 / 자모 단위 삭제</li>
+    </ul>
+  </li>
+  <li>
+    <p>Space: 조합 상태를 초기화하고 그냥 공백을 삽입</p>
+  </li>
+  <li>
+    <p>일반 키(길이 1, Shift 제외):</p>
+
+    <ul>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">getCharacter</code>로 자모에 해당하는지 확인</p>
+      </li>
+      <li>
+        <p>한글 자모면 기본 동작(e.preventDefault()) 막고</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">smartInsert</code>로 삽입 + 조합</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>그 외 키(Enter, Arrow 등)는 조합 상태만 리셋하고 통과</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="8-실제-사용-예시">8. 실제 사용 예시</h2>
+
+<p>예를 들어 브라우저에서 이렇게 쓸 수 있어요:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+const koreanInput = new KoreanInput();
+
+// 한글 모드 켜기
+koreanInput.setKoreanMode();
+
+// 전역적으로 키다운 감지
+window.addEventListener('keydown', (e) =&gt; koreanInput.handleKeyDown(e));
+</code></pre></div></div>
+
+<p>또는 특정 입력창에만 적용하고 싶으면:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+const input = document.querySelector('#my-input');
+const koreanInput = new KoreanInput();
+koreanInput.setKoreanMode();
+
+input.addEventListener('keydown', (e) =&gt; koreanInput.handleKeyDown(e));
+</code></pre></div></div>
+
+<p>영어 모드로 돌리고 싶다면:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+koreanInput.setEnglishMode();
+</code></pre></div></div>
+
+<p>이렇게 하면 내부에서 바로 리턴해서 더 이상 변환하지 않게 됩니다.</p>
+
+<hr />
+
+<h2 id="9-개선주의-포인트">9. 개선/주의 포인트</h2>
+
+<p>몇 가지 눈에 띄는 부분만 정리해보면:</p>
+
+<ol>
+  <li>
+    <p>contenteditable 미지원<br />
+지금은 <code class="language-plaintext highlighter-rouge">INPUT</code> / <code class="language-plaintext highlighter-rouge">TEXTAREA</code>만 처리해서, <code class="language-plaintext highlighter-rouge">div[contenteditable]</code> 같은 리치 텍스트 에디터에는 바로 적용 안 됩니다. 그쪽까지 쓰려면 selection/caret을 Range API로 다뤄야 해서 난이도가 확 올라가요.</p>
+  </li>
+  <li>
+    <p>모바일/IME 충돌 가능성<br />
+이건 브라우저에 따라, 이미 OS IME가 한글을 조합하고 있는데, 여기서 또 가로채면 “이중 조합” 문제가 생길 수 있어요. 보통은 데스크톱에서 영문 자판 강제 모드 + 커스텀 한글 입력을 쓸 때가 더 자연스럽습니다.</p>
+  </li>
+  <li>
+    <p>shiftMap 중복<br />
+앞에서 말했듯이, 대문자/소문자 키를 둘 다 넣어둔 건 다소 중복이라 정리하면 코드는 더 깨끗해질 수 있어요. 지금 동작 자체는 문제 없습니다.</p>
+  </li>
+  <li>
+    <p>smartInsert의 testLength=4 제한<br />
+실사용에는 문제 없지만, 이 숫자는 완전히 경험적 값이라, 길이를 조정하거나 로직을 좀 더 명시적으로 바꿔도 좋아요. 예를 들면 “직전 음절 범위까지만 본다” 같은 규칙.</p>
+  </li>
+</ol>
+
+<hr />
+
+<p>정리하자면, 이 클래스 하나로 “브라우저에서 영문 키 입력을 바로 한글 완성형으로 바꾸는 엔진”이 잘 구현되어 있습니다.<br />
+조합·분해·백스페이스까지 상당히 정교하게 처리하고 있어서, 실질적으로 간단한 IME 수준 기능을 하는 구조예요.</p>
+
+<p>이제 이걸로 할 수 있는 재미있는 건, 예를 들어 게임 내 채팅창, 커스텀 에디터, 웹앱에서 자체 한글 입력기 만들기 같은 것들이죠. 한글 입력 레벨에서 직접 놀 수 있다는 건 꽤 강력한 장난감입니다.</p>
+
+<p class="chat--user">
+
+음 알겠어 근데 내가 겪고 있는 문제는 이거야. 코드를 바꿔서 바꿀 수 있는 부분인지 확인하고 싶어. ㄱㅐㅅㅅㅜ 라고 쳤을 때 갯수가 되어야하는데 개쑤 이렇게 합쳐져버려
+
+</p>
+
+<p>좋은 포인트 짚었어요.<br />
+지금 엔진이 <code class="language-plaintext highlighter-rouge">ㄱㅐㅅㅅㅜ</code>를 “갯수”가 아니라 “개쑤”로 만드는 건, 내부에서 “겹받침 ㅆ”을 너무 열심히 만들어서 생기는 부작용이에요.</p>
+
+<p>천천히 풀어볼게.</p>
+
+<hr />
+
+<h2 id="1-내부에서-무슨-일이-벌어지는지">1. 내부에서 무슨 일이 벌어지는지</h2>
+
+<p><code class="language-plaintext highlighter-rouge">ㄱㅐㅅㅅㅜ</code>(실제 키로는 <code class="language-plaintext highlighter-rouge">r o t t n</code>)를 넣었을 때 조합 과정을 따라가 보면:</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ㄱ + ㅐ</code> → <code class="language-plaintext highlighter-rouge">개</code></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">개 + ㅅ</code> → <code class="language-plaintext highlighter-rouge">갯</code> (받침 ㅅ)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">갯 + ㅅ</code> → 여기서 문제가 생김</p>
+  </li>
+</ol>
+
+<p>코드에서 이 부분이 문제예요:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// Handle compound final
+const dFinaleIndex = this.indexOf(this.dFinale, (finaleIndex * 100) + this.indexOf(this.finale, nextCharCode));
+if (dFinaleIndex &gt; 0) {
+    currentCharCode = currentCharCode + dFinaleIndex - finaleIndex;
+    result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode);
+    continue;
+}
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">finaleIndex</code>는 현재 받침의 인덱스 (ㅅ)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">nextCharCode</code>는 새로 입력된 ㅅ</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">this.indexOf(this.finale, 'ㅅ')</code>도 ㅅ</p>
+  </li>
+</ul>
+
+<p>그래서 <code class="language-plaintext highlighter-rouge">(finaleIndex * 100) + indexOf(...)</code> = <code class="language-plaintext highlighter-rouge">19 * 100 + 19 = 1919</code>가 되고,<br />
+<code class="language-plaintext highlighter-rouge">this.dFinale</code> 안에 1919가 들어 있어서 “ㅅ + ㅅ = ㅆ(겹받침)”으로 취급합니다.</p>
+
+<p>즉 이 단계에서:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">갯</code>이 <code class="language-plaintext highlighter-rouge">갰</code>(개 + 받침 ㅆ)으로 바뀜</li>
+</ul>
+
+<p>그 다음에 <code class="language-plaintext highlighter-rouge">ㅜ</code>가 들어오면:</p>
+
+<ul>
+  <li>받침 ㅆ을 떼어서 초성으로 쓰고 새 음절을 만들어서<br />
+<code class="language-plaintext highlighter-rouge">갰 + ㅜ</code> → <code class="language-plaintext highlighter-rouge">개쑤</code></li>
+</ul>
+
+<p>그래서 결과가 <code class="language-plaintext highlighter-rouge">개쑤</code>가 되는 구조예요.</p>
+
+<p>실제 한국어 타자 습관에서는:</p>
+
+<ul>
+  <li>
+    <p>받침 ㅆ은 보통 Shift+ㅅ(ㅆ)으로 입력하지, ㅅ ㅅ 두 번으로 만들지 않죠.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">ㄱㅐㅅㅅㅜ</code>는 <code class="language-plaintext highlighter-rouge">갯 + 수</code>가 되는 쪽이 훨씬 자연스러움.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="2-고칠-수-있나--네-딱-이-부분-조정하면-됩니다">2. 고칠 수 있나? → 네, 딱 이 부분 조정하면 됩니다</h2>
+
+<p>핵심은 이거 하나예요.</p>
+
+<p>“받침 ㅅ + ㅅ을 겹받침 ㅆ으로 만들지 말자”</p>
+
+<h3 id="방법-1-테이블dfinale에서-규칙-제거-제일-간단한-해킹">방법 1: 테이블(dFinale)에서 규칙 제거 (제일 간단한 해킹)</h3>
+
+<p><code class="language-plaintext highlighter-rouge">constructor</code> 안에 있는:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.dFinale = [0, 0, 0, 119, 0, 422, 427, 0, 0, 801, 816, 817, 819, 825, 826, 827, 0, 0, 1719, 0, 1919];
+</code></pre></div></div>
+
+<p>여기서 마지막 <code class="language-plaintext highlighter-rouge">1919</code>가 바로 “받침 ㅅ(19) + ㅅ(19) = ㅆ(20)” 규칙이에요.</p>
+
+<p>이걸 0으로 바꾸면:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.dFinale = [0, 0, 0, 119, 0, 422, 427, 0, 0, 801, 816, 817, 819, 825, 826, 827, 0, 0, 1719, 0, 0];
+</code></pre></div></div>
+
+<p>이렇게 하면:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">갯</code>(받침 ㅅ) + <code class="language-plaintext highlighter-rouge">ㅅ</code> → 더 이상 겹받침 ㅆ으로 안 묶임</p>
+  </li>
+  <li>
+    <p>그 다음 <code class="language-plaintext highlighter-rouge">ㅜ</code>가 들어왔을 때<br />
+뒤쪽의 <code class="language-plaintext highlighter-rouge">ㅅ + ㅜ</code>만 새 음절로 조합돼서 <code class="language-plaintext highlighter-rouge">갯수</code>가 됨</p>
+  </li>
+</ul>
+
+<p>副작용:</p>
+
+<ul>
+  <li>“받침 ㅅ + ㅅ을 겹받침 ㅆ으로 만들기” 기능이 사라짐<br />
+근데 두벌식에서는 어차피 받침 ㅆ을 Shift+ㅅ(ㅆ)으로 치는 게 정상이라,<br />
+실사용에서는 거의 문제 안 될 가능성이 큼.</li>
+</ul>
+
+<p>개발 편의성 / 수정 난이도 기준으로는 이게 제일 손쉬운 방법입니다.</p>
+
+<hr />
+
+<h3 id="방법-2-composehangul-안에서-ㅅㅅ-예외-분기-추가">방법 2: composeHangul 안에서 ‘ㅅ+ㅅ 예외’ 분기 추가</h3>
+
+<p>조금 더 명시적으로 고치고 싶다면, <code class="language-plaintext highlighter-rouge">composeHangul</code> 안의 “Handle compound final” 부분을 이렇게 바꿀 수도 있어요.</p>
+
+<p>원래 코드:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// Handle compound final
+const dFinaleIndex = this.indexOf(this.dFinale, (finaleIndex * 100) + this.indexOf(this.finale, nextCharCode));
+if (dFinaleIndex &gt; 0) {
+    currentCharCode = currentCharCode + dFinaleIndex - finaleIndex;
+    result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode);
+    continue;
+}
+</code></pre></div></div>
+
+<p>수정 버전(받침 ㅅ + ㅅ만 예외 처리):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// Handle compound final
+const nextFinalIndex = this.indexOf(this.finale, nextCharCode);
+
+// 받침 ㅅ(인덱스 19) + ㅅ(19) 인 경우에는 겹받침 ㅆ으로 묶지 않고 새 음절로 보냄
+if (!(finaleIndex === 19 &amp;&amp; nextFinalIndex === 19)) {
+    const dFinaleIndex = this.indexOf(this.dFinale, (finaleIndex * 100) + nextFinalIndex);
+    if (dFinaleIndex &gt; 0) {
+        currentCharCode = currentCharCode + dFinaleIndex - finaleIndex;
+        result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode);
+        continue;
+    }
+}
+</code></pre></div></div>
+
+<p>이렇게 하면:</p>
+
+<ul>
+  <li>
+    <p>다른 겹받침 규칙(ㄱ+ㅅ→ㄳ 같은 것)은 그대로 살고</p>
+  </li>
+  <li>
+    <p>“ㅅ+ㅅ→ㅆ”만 막아버림</p>
+  </li>
+  <li>
+    <p>결과: <code class="language-plaintext highlighter-rouge">ㄱㅐㅅㅅㅜ</code> → <code class="language-plaintext highlighter-rouge">갯수</code></p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="3-어떤-방식이-더-나은가">3. 어떤 방식이 더 나은가?</h2>
+
+<p>현실적으로:</p>
+
+<ul>
+  <li>
+    <p>“갯수가 개쑤 되는 거 너무 싫다, 나머지는 대충 괜찮으면 됨”<br />
+→ 방법 1(테이블에서 1919를 0으로) 추천. 한 줄 수정 끝.</p>
+  </li>
+  <li>
+    <p>“겹받침 로직은 최대한 유지하고, 딱 ㅅ+ㅅ만 막고 싶다”<br />
+→ 방법 2처럼 <code class="language-plaintext highlighter-rouge">composeHangul</code> 안에 조건문을 추가.</p>
+  </li>
+</ul>
+
+<p>어느 쪽이든 “코드를 바꿔서 해결 가능한 문제냐?”라는 질문에는<br />
+완전히 “그렇다”라고 답할 수 있어요.</p>
+
+<p>한글 입력기는 애매한 경우(ㅅ+ㅅ처럼)에서 어디에 규칙을 줄지 선택의 문제라서,<br />
+지금처럼 직접 엔진을 가지고 있으면 자기 취향/목적에 맞게 규칙을 조정할 수 있다는 게 큰 장점이에요.</p>
+
+<p class="chat--user">
+
+1919가 그것에 매핑되는게 잘 이해가 안돼 조금 더 풀어써줄래
+
+</p>
+
+<p>좋은 지점 걸렸어요.<br />
+1919가 어디서 튀어나오냐면, “유니코드”랑은 전혀 상관없고, 이 엔진이 “겹받침 규칙을 저장하는 자기만의 약속”으로 쓰는 숫자예요.<br />
+숫자 1919 자체가 “받침 인덱스 19 + 다음 자모 인덱스 19”를 뜻합니다.</p>
+
+<p>차근차근 풀어볼게요.</p>
+
+<hr />
+
+<h2 id="1-우선-받침-인덱스부터-정리">1. 우선 “받침 인덱스”부터 정리</h2>
+
+<p>코드 안에 이런 리스트 있었죠.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.jongsungList = [
+  '', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ',
+  'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ',
+  'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
+];
+</code></pre></div></div>
+
+<p>여기서 인덱스와 받침을 보면:</p>
+
+<ul>
+  <li>
+    <p>19번: ㅅ</p>
+  </li>
+  <li>
+    <p>20번: ㅆ</p>
+  </li>
+</ul>
+
+<p>비슷한 순서를 쓰는 배열이 하나 더 있어요.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.finale = [
+  0, 12593, 12594, 12595, 12596, 12597, 12598, 12599,
+  12601, 12602, 12603, 12604, 12605, 12606, 12607, 12608,
+  12609, 12610, 12612, 12613, 12614, 12615, 12616, 12618,
+  12619, 12620, 12621, 12622
+];
+</code></pre></div></div>
+
+<p>여기서:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">this.finale[19]</code>는 ㅅ의 유니코드</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">this.finale[20]</code>는 ㅆ의 유니코드</p>
+  </li>
+</ul>
+
+<p>즉 “받침 인덱스 19 = ㅅ, 20 = ㅆ” 이 관계가 성립합니다.</p>
+
+<hr />
+
+<h2 id="2-dfinale-배열은-뭘-하는-놈인가">2. dFinale 배열은 뭘 하는 놈인가?</h2>
+
+<p>코드 한 부분을 다시 보면:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.dFinale = [0, 0, 0, 119, 0, 422, 427, 0, 0, 801, 816, 817, 819, 825, 826, 827, 0, 0, 1719, 0, 1919];
+</code></pre></div></div>
+
+<p>그리고 나중에 이렇게 쓰죠.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+// Handle compound final
+const dFinaleIndex = this.indexOf(this.dFinale, (finaleIndex * 100) + this.indexOf(this.finale, nextCharCode));
+if (dFinaleIndex &gt; 0) {
+    currentCharCode = currentCharCode + dFinaleIndex - finaleIndex;
+    result = result.slice(0, result.length - 1) + String.fromCharCode(currentCharCode);
+    continue;
+}
+</code></pre></div></div>
+
+<p>여기서 중요한 포인트 세 개:</p>
+
+<ol>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">finaleIndex</code>는 “현재 받침 인덱스”</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">this.indexOf(this.finale, nextCharCode)</code>는 “새로 들어온 자모의 받침 인덱스”</p>
+  </li>
+  <li>
+    <p>두 개를 <code class="language-plaintext highlighter-rouge">(finaleIndex * 100) + nextFinalIndex</code>로 하나의 숫자로 합침</p>
+  </li>
+</ol>
+
+<p>그래서 dFinale 배열 안에는<br />
+이런 형태의 숫자들이 들어있어요.</p>
+
+<ul>
+  <li>
+    <p>119 → 1과 19 → 받침 1(ㄱ) + 다음 자모 19(ㅅ) = ㄳ</p>
+  </li>
+  <li>
+    <p>422 → 4와 22 → 받침 4(ㄴ) + 22(ㅈ) = ㄵ</p>
+  </li>
+  <li>
+    <p>427 → 4와 27 → ㄴ + ㅎ = ㄶ</p>
+  </li>
+  <li>
+    <p>801 → 8과 1 → ㄹ + ㄱ = ㄺ</p>
+  </li>
+  <li>
+    <p>816 → 8과 16 → ㄹ + ㅁ = ㄻ</p>
+  </li>
+  <li>
+    <p>817 → 8과 17 → ㄹ + ㅂ = ㄼ</p>
+  </li>
+  <li>
+    <p>819 → 8과 19 → ㄹ + ㅅ = ㄽ</p>
+  </li>
+  <li>
+    <p>825 → 8과 25 → ㄹ + ㅌ = ㄾ</p>
+  </li>
+  <li>
+    <p>826 → 8과 26 → ㄹ + ㅍ = ㄿ</p>
+  </li>
+  <li>
+    <p>827 → 8과 27 → ㄹ + ㅎ = ㅀ</p>
+  </li>
+  <li>
+    <p>1719 → 17과 19 → ㅂ + ㅅ = ㅄ</p>
+  </li>
+  <li>
+    <p>1919 → 19와 19 → ㅅ + ㅅ = ㅆ ← 네가 궁금한 그 녀석</p>
+  </li>
+</ul>
+
+<p>숫자 구조를 정리하면:</p>
+
+<ul>
+  <li>
+    <p>앞 두 자리(혹은 앞쪽 정수부): “기존 받침의 인덱스”</p>
+  </li>
+  <li>
+    <p>뒤 두 자리(혹은 뒤쪽): “새로 찍힌 자모의 인덱스”</p>
+  </li>
+</ul>
+
+<p>엔진은 이 둘을 합쳐 <code class="language-plaintext highlighter-rouge">(prev * 100) + next</code>라는 하나의 숫자로 만들고,<br />
+그 숫자가 dFinale 배열 안의 몇 번째에 있는지를 <code class="language-plaintext highlighter-rouge">indexOf</code>로 찾습니다.</p>
+
+<p>그리고 “찾은 그 인덱스”가 바로 “새로운 겹받침의 인덱스”가 돼요.</p>
+
+<p>예를 들어:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">dFinale[3] = 119</code>라면<br />
+“ㄱ(1) + ㅅ(19) → ㄳ(3)” 이란 의미</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">dFinale[20] = 1919</code>라면<br />
+“ㅅ(19) + ㅅ(19) → ㅆ(20)” 이란 의미</p>
+  </li>
+</ul>
+
+<p>그래서 1919는</p>
+
+<p>“받침 인덱스 19(ㅅ) 뒤에<br />
+받침 인덱스 19(ㅅ)가 오면<br />
+받침 인덱스 20(ㅆ)으로 바꿔라”</p>
+
+<p>라는 규칙을 의미하는 코드값인 거예요.<br />
+유니코드도 아니고, 자모 번호도 아니고,<br />
+그냥 “(이전 인덱스 * 100) + 다음 인덱스”라는 합성 키입니다.</p>
+
+<hr />
+
+<h2 id="3-ㄱㅐㅅㅅㅜ가-왜-개쑤가-되는지-다시-숫자로-찍어보기">3. ㄱㅐㅅㅅㅜ가 왜 개쑤가 되는지 다시 숫자로 찍어보기</h2>
+
+<p>입력: ㄱ ㅐ ㅅ ㅅ ㅜ</p>
+
+<p>조합 상황을 단계별로 보면:</p>
+
+<ol>
+  <li>
+    <p>ㄱ + ㅐ → 개</p>
+
+    <ul>
+      <li>받침 없음</li>
+    </ul>
+  </li>
+  <li>
+    <p>개 + ㅅ → 갯</p>
+
+    <ul>
+      <li>이때 받침 인덱스는 19 (ㅅ)</li>
+    </ul>
+  </li>
+  <li>
+    <p>갯 + ㅅ</p>
+  </li>
+</ol>
+
+<p>여기서:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">finaleIndex = 19</code> (현재 받침 ㅅ)</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">nextFinalIndex = this.indexOf(this.finale, 'ㅅ') = 19</code></p>
+  </li>
+</ul>
+
+<p>그러면:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">(finaleIndex * 100) + nextFinalIndex</code> = <code class="language-plaintext highlighter-rouge">19 * 100 + 19 = 1919</code></p>
+  </li>
+  <li>
+    <p>엔진이 <code class="language-plaintext highlighter-rouge">this.indexOf(this.dFinale, 1919)</code>를 찾음 → 그 결과가 20이라 가정</p>
+  </li>
+  <li>
+    <p>즉 dFinale[20] = 1919 이니까<br />
+“새로운 받침 인덱스 20(ㅆ)을 쓰자”는 뜻</p>
+  </li>
+</ul>
+
+<p>그래서 받침이 ㅅ에서 ㅆ으로 바뀌고, 글자는 “갰”이 됩니다.</p>
+
+<ol>
+  <li>그 다음 ㅜ를 넣으면:</li>
+</ol>
+
+<ul>
+  <li>
+    <p>받침 ㅆ(20)을 쪼개서 초성으로 넘기고,<br />
+뒤에 ㅜ를 붙여서 “쑤”를 만들고</p>
+  </li>
+  <li>
+    <p>앞 글자는 개 그대로 남고</p>
+  </li>
+</ul>
+
+<p>결과: 개 + 쑤 → “개쑤”</p>
+
+<hr />
+
+<h2 id="4-왜-1919를-0으로-바꾸면-해결되는가">4. 왜 1919를 0으로 바꾸면 해결되는가?</h2>
+
+<p>이제 dFinale 정의로 돌아가서:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.dFinale = [0, 0, 0, 119, 0, 422, 427, 0, 0, 801, 816, 817, 819, 825, 826, 827, 0, 0, 1719, 0, 1919];
+</code></pre></div></div>
+
+<p>여기서 마지막 요소 1919를 0으로 바꾸면:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>js
+
+this.dFinale = [0, 0, 0, 119, 0, 422, 427, 0, 0, 801, 816, 817, 819, 825, 826, 827, 0, 0, 1719, 0, 0];
+</code></pre></div></div>
+
+<p>이제 무슨 일이 생기냐면:</p>
+
+<ul>
+  <li>
+    <p>“ㅅ(19) + ㅅ(19)” → <code class="language-plaintext highlighter-rouge">(19 * 100) + 19 = 1919</code></p>
+  </li>
+  <li>
+    <p>엔진이 <code class="language-plaintext highlighter-rouge">indexOf(this.dFinale, 1919)</code>를 해도,<br />
+배열 안에 1919가 없기 때문에 -1을 리턴</p>
+  </li>
+  <li>
+    <p>그러면 “겹받침으로 합치는 로직”이 실행되지 않음</p>
+  </li>
+</ul>
+
+<p>즉:</p>
+
+<ul>
+  <li>
+    <p>갯 + ㅅ 에서 “ㅆ 받침으로 교체하는 단계”가 사라지고</p>
+  </li>
+  <li>
+    <p>ㅅ은 새 글자의 초성으로 쓰일 기회가 생김</p>
+  </li>
+  <li>
+    <p>다음에 ㅜ가 들어오면 “수”가 되고</p>
+  </li>
+  <li>
+    <p>최종: “갯수”</p>
+  </li>
+</ul>
+
+<p>이게 “1919를 0으로 바꾸면 갯수가 정상적으로 만들어지는 이유”예요.</p>
+
+<hr />
+
+<p>요약하면:</p>
+
+<ul>
+  <li>
+    <p>1919는 “받침 ㅅ(19) + ㅅ(19)”라는 두 인덱스를<br />
+하나의 숫자로 인코딩한 값</p>
+  </li>
+  <li>
+    <p>dFinale 안에서 1919가 들어 있는 위치(배열 인덱스)가<br />
+“새로운 겹받침(ㅆ)의 인덱스” 역할을 함</p>
+  </li>
+  <li>
+    <p>그걸 지우거나 예외 처리해주면<br />
+ㄱㅐㅅㅅㅜ가 “갯수”로 조합되도록 바꿀 수 있음</p>
+  </li>
+</ul>
+
+<p>즉, 1919는 마법 숫자가 아니라<br />
+“(prevIndex * 100) + nextIndex”라는 단순한 규칙의 결과물이에요.<br />
+그래서 이해하고 나면 수정도 마음 편히 할 수 있습니다.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#misc" class="page__taxonomy-item p-category" rel="tag">misc</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-11-13T14:00:09+09:00">2025-11-13</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/qt/qfiledialog-study/" class="pagination--pager" title="QFileDialog 설명">Previous</a>
+    
+    
+      <a href="/2025-08-19-python-repr-vs-str/" class="pagination--pager" title="">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You may also enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025-08-19-python-repr-vs-str/" rel="permalink">
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-13T14:00:15+09:00">2025-11-13</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/qt/qfiledialog-study/" rel="permalink">QFileDialog 설명
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-13T12:24:00+09:00">2025-11-13</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/python/custom-pyside-filedialog/" rel="permalink">CFileDialog 구현 방법
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-12T19:33:35+09:00">2025-11-12</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/misc/web-korean-keyboard/" rel="permalink">웹 한글 키보드 추가
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <!-- hvppyarchive: remove date icon
+        <i class="far fa-calendar-alt" aria-hidden="true"></i> 
+        -->
+        
+        <time datetime="2025-11-07T20:48:31+09:00">2025-11-07</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2013 - 2025 <a href="https://hvppyarchive.github.io">ARCHIVE</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
